@@ -16,6 +16,7 @@
         v-if="shouldShowAddWindow"
         :show-window="shouldShowAddWindow"
         @close-add-window="closeAddWindow"
+        @refresh-cases="handleRefreshCases"
       />
       <omegaup-problem-creator-cases-case-edit
         v-if="shouldShowCaseEditWindow"
@@ -69,6 +70,11 @@ export default class CasesTab extends Vue {
   openAddWindow() {
     this.shouldShowCaseEditWindow = false;
     this.shouldShowAddWindow = true;
+  }
+
+  handleRefreshCases() {
+    // Reload the page to refresh test cases after bulk import
+    window.location.reload();
   }
 
   @Watch('activeTabIndex')

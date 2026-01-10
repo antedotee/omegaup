@@ -1278,6 +1278,10 @@ export const Problem = {
     messages.ProblemConvertZipToCdpRequest,
     messages.ProblemConvertZipToCdpResponse
   >('/api/problem/convertZipToCdp/'),
+  bulkImportTestCases: apiCall<
+    messages.ProblemBulkImportTestCasesRequest,
+    messages.ProblemBulkImportTestCasesResponse
+  >('/api/problem/bulkImportTestCases/'),
   create: apiCall<
     messages.ProblemCreateRequest,
     messages.ProblemCreateResponse

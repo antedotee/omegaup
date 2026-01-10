@@ -7928,4 +7928,305 @@ class Problem extends \OmegaUp\Controllers\Controller {
             'cdp' => $cdp
         ];
     }
+
+    /**
+     * Bulk imports test cases from uploaded files.
+     *
+     * @param \OmegaUp\Request $r
+     * @return array{status: 'ok', imported_count: int, errors: list<string>}
+     *
+     * @throws \OmegaUp\Exceptions\ApiException
+     * @throws \OmegaUp\Exceptions\ForbiddenAccessException
+     * @throws \OmegaUp\Exceptions\InvalidParameterException
+     * @throws \OmegaUp\Exceptions\NotFoundException
+     */
+    /**
+     * Bulk imports test cases from uploaded files.
+     *
+     * @param \OmegaUp\Request $r
+     * @return array{status: 'ok', imported_count: int, errors: list<string>}
+     *
+     * @throws \OmegaUp\Exceptions\ApiException
+     * @throws \OmegaUp\Exceptions\ForbiddenAccessException
+     * @throws \OmegaUp\Exceptions\InvalidParameterException
+     * @throws \OmegaUp\Exceptions\NotFoundException
+     *
+     * @omegaup-request-param string $problem_alias
+     * @omegaup-request-param null|string $group_id
+     * @omegaup-request-param null|string $message
+     */
+    public static function apiBulkImportTestCases(\OmegaUp\Request $r): array {
+        $r->ensureIdentity();
+        $problemAlias = $r->ensureString(
+            'problem_alias',
+            fn (string $alias) => \OmegaUp\Validators::alias($alias)
+        );
+        $problem = \OmegaUp\DAO\Problems::getByAlias($problemAlias);
+        if (is_null($problem)) {
+            throw new \OmegaUp\Exceptions\NotFoundException('problemNotFound');
+        }
+
+        if (!\OmegaUp\Authorization::isProblemAdmin($r->identity, $problem)) {
+            throw new \OmegaUp\Exceptions\ForbiddenAccessException(
+                'userNotAllowed'
+            );
+        }
+
+        if (is_null($problem->alias)) {
+            throw new \OmegaUp\Exceptions\NotFoundException('problemNotFound');
+        }
+
+        // Validate that files were uploaded
+        if (!isset($_FILES['test_case_files'])) {
+            throw new \OmegaUp\Exceptions\InvalidParameterException(
+                'parameterEmpty',
+                'test_case_files'
+            );
+        }
+
+        // Handle both single file and array of files
+        $files = $_FILES['test_case_files'];
+        if (!is_array($files['tmp_name'])) {
+            // Single file - convert to array format
+            $files = [
+                'name' => [$files['name']],
+                'type' => [$files['type']],
+                'tmp_name' => [$files['tmp_name']],
+                'error' => [$files['error']],
+                'size' => [$files['size']],
+            ];
+        }
+        $fileCount = count($files['tmp_name']);
+        $groupID = $r->ensureOptionalString('group_id');
+        $message = $r->ensureString('message', required: false) ?? 'Bulk import test cases';
+
+        // Get CDP
+        $problemArtifacts = new \OmegaUp\ProblemArtifacts($problem->alias);
+        $cdp = self::getProblemCDP($problem, strval($problem->commit));
+        if (is_null($cdp)) {
+            // Create empty CDP if it doesn't exist
+            $cdp = [
+                'problemName' => $problem->title ?? '',
+                'problemMarkdown' => '',
+                'problemCodeContent' => '',
+                'problemCodeExtension' => '',
+                'problemSolutionMarkdown' => '',
+                'casesStore' => [
+                    'groups' => [],
+                    'selected' => ['groupID' => null, 'caseID' => null],
+                    'layouts' => [],
+                    'hide' => false,
+                ],
+            ];
+        }
+
+        // Process files and match pairs
+        $inputFiles = [];
+        $outputFiles = [];
+        $errors = [];
+
+        for ($i = 0; $i < $fileCount; $i++) {
+            if ($files['error'][$i] !== UPLOAD_ERR_OK) {
+                $errors[] = "Error uploading file {$files['name'][$i]}";
+                continue;
+            }
+
+            $filename = $files['name'][$i];
+            $tmpName = $files['tmp_name'][$i];
+
+            if (!file_exists($tmpName)) {
+                $errors[] = "File not found: {$filename}";
+                continue;
+            }
+
+            $content = file_get_contents($tmpName);
+            if ($content === false) {
+                $errors[] = "Could not read file: {$filename}";
+                continue;
+            }
+
+            $baseName = self::getBaseName($filename);
+            if (preg_match('/\.(in|txt)$/i', $filename)) {
+                $inputFiles[$baseName] = [
+                    'name' => $baseName,
+                    'content' => $content,
+                    'filename' => $filename,
+                ];
+            } elseif (preg_match('/\.out$/i', $filename)) {
+                $outputFiles[$baseName] = [
+                    'name' => $baseName,
+                    'content' => $content,
+                    'filename' => $filename,
+                ];
+            }
+        }
+
+        // Match pairs
+        $matchedPairs = [];
+        foreach ($inputFiles as $baseName => $inputFile) {
+            if (isset($outputFiles[$baseName])) {
+                $matchedPairs[] = [
+                    'name' => $baseName,
+                    'input' => $inputFile['content'],
+                    'output' => $outputFiles[$baseName]['content'],
+                ];
+                unset($outputFiles[$baseName]);
+            } else {
+                $errors[] = "No matching output file for: {$inputFile['filename']}";
+            }
+        }
+
+        // Report unmatched output files
+        foreach ($outputFiles as $outputFile) {
+            $errors[] = "No matching input file for: {$outputFile['filename']}";
+        }
+
+        if (empty($matchedPairs)) {
+            throw new \OmegaUp\Exceptions\InvalidParameterException(
+                'noMatchedPairs',
+                'test_case_files'
+            );
+        }
+
+        // Import matched pairs
+        $importedCount = 0;
+        $user = \OmegaUp\DAO\Users::getByPK($r->identity->user_id);
+        if (is_null($user)) {
+            throw new \OmegaUp\Exceptions\NotFoundException('userNotExist');
+        }
+
+        // Collect all blob updates and paths to exclude
+        $allBlobUpdates = [];
+        $allPathsToExclude = [];
+
+        foreach ($matchedPairs as $pair) {
+            try {
+                $caseID = \OmegaUp\Uuid::uuid4();
+                $caseName = $pair['name'];
+
+                // Determine group
+                $targetGroupID = $groupID;
+                $isUngrouped = ($targetGroupID === null || $targetGroupID === '');
+
+                if ($isUngrouped) {
+                    $targetGroupID = \OmegaUp\Uuid::uuid4();
+                }
+
+                // Prepare case data
+                $newCaseData = [
+                    'caseID' => $caseID,
+                    'groupID' => $targetGroupID,
+                    'name' => $caseName,
+                    'points' => 0,
+                    'autoPoints' => true,
+                    'lines' => [[
+                        'lineID' => \OmegaUp\Uuid::uuid4(),
+                        'caseID' => $caseID,
+                        'label' => '',
+                        'data' => [
+                            'kind' => 'multiline',
+                            'value' => self::truncateContent($pair['input']),
+                        ],
+                    ]],
+                    'output' => $pair['output'],
+                ];
+
+                // Get group name - if groupID is provided, try to find existing group name
+                $groupName = $caseName; // Default for ungrouped
+                if (!$isUngrouped) {
+                    $groupInfo = self::findGroupInCDP($cdp, $targetGroupID);
+                    if (!is_null($groupInfo)) {
+                        $groupName = $groupInfo['group']['name'] ?? $caseName;
+                    } else {
+                        // Group doesn't exist yet, use a default name
+                        // handleNewCase will create it with this name
+                        $groupName = 'group_' . substr($targetGroupID, 0, 8);
+                    }
+                }
+
+                $groupData = [
+                    'groupID' => $targetGroupID,
+                    'name' => $groupName,
+                    'points' => 0,
+                    'autoPoints' => true,
+                    'ungroupedCase' => $isUngrouped,
+                ];
+
+                // Handle new case
+                $result = self::handleNewCase(
+                    $newCaseData,
+                    $groupData,
+                    $cdp,
+                    $problemArtifacts
+                );
+
+                // Merge blob updates
+                if (isset($result['blobUpdate']) && is_array($result['blobUpdate'])) {
+                    $allBlobUpdates = array_merge($allBlobUpdates, $result['blobUpdate']);
+                }
+                if (isset($result['pathsToExclude']) && is_array($result['pathsToExclude'])) {
+                    $allPathsToExclude = array_merge($allPathsToExclude, $result['pathsToExclude']);
+                }
+
+                $cdp = $result['cdp'];
+                $importedCount++;
+            } catch (\Exception $e) {
+                $errors[] = "Error importing {$pair['name']}: {$e->getMessage()}";
+            }
+        }
+
+        // Commit changes
+        if ($importedCount > 0) {
+            self::commitChanges(
+                $problemArtifacts,
+                $problem,
+                $r->identity,
+                $user,
+                $message,
+                'none',
+                $allBlobUpdates,
+                $allPathsToExclude,
+                []
+            );
+
+            \OmegaUp\Cache::deleteFromCache(
+                \OmegaUp\Cache::PROBLEM_CDP_DATA,
+                "{$problem->alias}-{$problem->commit}"
+            );
+        }
+
+        return [
+            'status' => 'ok',
+            'imported_count' => $importedCount,
+            'errors' => $errors,
+        ];
+    }
+
+    /**
+     * Gets the base name of a file (without extension).
+     *
+     * @param string $filename
+     * @return string
+     */
+    private static function getBaseName(string $filename): string {
+        return preg_replace('/\.(in|out|txt)$/i', '', $filename);
+    }
+
+    /**
+     * Truncates content if it exceeds the limit.
+     *
+     * @param string $content
+     * @param int $limit
+     * @return string
+     */
+    private static function truncateContent(
+        string $content,
+        int $limit = \OmegaUp\Validators::ZIP_CASE_SIZE_LIMIT_BYTES
+    ): string {
+        if (strlen($content) > $limit) {
+            return substr($content, 0, $limit) . ' ...[TRUNCATED]';
+        }
+        return $content;
+    }
+
 }

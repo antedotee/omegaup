@@ -227,4 +227,4 @@ export interface CaseGroupID {
   caseID: GroupID;
 }
 
-export type AddTabTypes = 'case' | 'group' | 'multiplecases';
+export type AddTabTypes = 'case' | 'group' | 'multiplecases' | 'bulkimport';
