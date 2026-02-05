@@ -53,8 +53,8 @@ define('OMEGAUP_ENVIRONMENT', 'production');\n\
 define('TEMPLATE_CACHE_DIR', '/var/lib/omegaup/templates');\n" > frontend/server/config.php
 RUN php frontend/server/cmd/CompileTemplatesCmd.php
 
-FROM alpine:latest AS frontend
-RUN apk add rsync
+FROM alpine:3.20 AS frontend
+RUN apk add --no-cache rsync
 RUN mkdir -p /var/lib/omegaup /opt/omegaup
 COPY --from=build /opt/omegaup /opt/omegaup
 COPY --from=build /opt/omegaup/frontend/www/rekarel/. /opt/omegaup/frontend/www/rekarel/

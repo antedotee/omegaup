@@ -166,7 +166,7 @@ services:
         mode: host
 
   redis:
-    image: redis
+    image: redis:7.2-alpine
     restart: always
     command: ['redis-server', '/etc/redis/redis.conf']
     expose:
