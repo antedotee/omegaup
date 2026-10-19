@@ -65,7 +65,7 @@ module.exports = {
     '.*\\.(mjs|[jt]sx?)$': ['babel-jest', babelConfig],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(vue-.*|bootstrap-vue-next|@vueuse/.*|reka-ui|@voerro/vue-tagsinput|monaco-editor|monaco-editor-core)/)',
+    'node_modules/(?!(vue-.*|bootstrap-vue-next|@vueuse/.*|reka-ui|uuid|intro\\.js|@voerro/vue-tagsinput|monaco-editor|monaco-editor-core)/)',
   ],
   testEnvironmentOptions: {
     url: 'http://localhost:8001/',
