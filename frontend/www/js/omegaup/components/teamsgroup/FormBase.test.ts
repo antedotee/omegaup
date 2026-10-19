@@ -26,7 +26,7 @@ describe('FormBase.vue', () => {
   it('Should handle form base', async () => {
     const wrapper = shallowMount(teamsgroup_FormBase, {
       attachTo: '#root',
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.find('div[class="card"]').text()).not.toContain(
@@ -44,6 +44,6 @@ describe('FormBase.vue', () => {
       ],
     ]);
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 });

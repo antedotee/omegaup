@@ -23,7 +23,7 @@ describe('SchoolRank.vue', () => {
 
   it('Should handle an empty rank', () => {
     const wrapper = shallowMount(schools_Rank, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.find('table').exists()).toBe(true);
@@ -32,7 +32,7 @@ describe('SchoolRank.vue', () => {
 
   it('Should handle a rank with data', () => {
     const wrapper = shallowMount(schools_Rank, {
-      propsData: {
+      props: {
         ...propsData,
         ...{
           rank: [
@@ -54,7 +54,7 @@ describe('SchoolRank.vue', () => {
 
   it('Should show search bar when showHeader is false', () => {
     const wrapper = shallowMount(schools_Rank, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.find('.form-row').exists()).toBe(true);
@@ -63,7 +63,7 @@ describe('SchoolRank.vue', () => {
 
   it('Should hide search bar when showHeader is true', () => {
     const wrapper = shallowMount(schools_Rank, {
-      propsData: {
+      props: {
         ...propsData,
         showHeader: true,
       },

@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Ref } from 'vue-property-decorator';
+import { Component, Vue, Prop, Ref, toNative } from 'vue-facing-decorator';
 import problemCreator_CasesTab from './cases/CasesTab.vue';
 import problemCreator_StatementTab from './statement/StatementTab.vue';
 import problemCreator_CodeTab from './code/CodeTab.vue';
@@ -99,7 +99,7 @@ export enum TabIndex {
     'omegaup-problem-creator-solution-tab': problemCreator_SolutionTab,
   },
 })
-export default class Tabs extends Vue {
+class Tabs extends Vue {
   T = T;
   activeTabIndex = TabIndex.Statement;
 
@@ -123,4 +123,5 @@ export default class Tabs extends Vue {
     this.solutionTabRef?.persistDraft();
   }
 }
+export default toNative(Tabs);
 </script>

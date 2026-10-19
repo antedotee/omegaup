@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -126,7 +126,7 @@ library.add(faLock, faTrashAlt, faSave);
     'omegaup-user-username': user_Username,
   },
 })
-export default class Members extends Vue {
+class Members extends Vue {
   @Prop() searchResultUsers!: types.ListItem[];
   @Prop() teamUsername!: string;
   @Prop({ default: () => [] }) teamsMembers!: types.TeamMember[];
@@ -162,4 +162,5 @@ export default class Members extends Vue {
     this.password = null;
   }
 }
+export default toNative(Members);
 </script>

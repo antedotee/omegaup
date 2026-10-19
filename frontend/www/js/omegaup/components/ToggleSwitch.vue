@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, Emit, toNative } from 'vue-facing-decorator';
 
 export enum ToggleSwitchSize {
   Small = 'small',
@@ -29,13 +29,18 @@ export enum ToggleSwitchSize {
 }
 
 @Component
-export default class ToggleSwitch extends Vue {
+class ToggleSwitch extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentCheckedValue = this.checkedValue;
+  }
   @Prop({ default: 'Check' }) textDescription!: string;
   @Prop({ default: true }) checkedValue!: boolean;
   @Prop({ default: ToggleSwitchSize.Large }) size!: ToggleSwitchSize;
   @Prop({ default: false }) disabled!: boolean;
 
-  currentCheckedValue = this.checkedValue;
+  currentCheckedValue = undefined;
 
   @Watch('currentCheckedValue')
   @Emit('update:value')
@@ -48,6 +53,7 @@ export default class ToggleSwitch extends Vue {
     this.currentCheckedValue = newValue;
   }
 }
+export default toNative(ToggleSwitch);
 </script>
 
 <style scoped lang="scss">

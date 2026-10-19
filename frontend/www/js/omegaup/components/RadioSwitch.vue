@@ -30,11 +30,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, Watch, toNative } from 'vue-facing-decorator';
 import T from '../lang';
 
 @Component
-export default class RadioSwitch extends Vue {
+class RadioSwitch extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.radioValue = this.selectedValue ?? this.valueForFalse;
+  }
   @Prop() name!: string;
   @Prop({ default: false }) readonly!: boolean;
   @Prop() selectedValue!: any;
@@ -43,7 +48,7 @@ export default class RadioSwitch extends Vue {
   @Prop({ default: T.wordsYes }) textForTrue!: string;
   @Prop({ default: T.wordsNo }) textForFalse!: string;
 
-  radioValue = this.selectedValue ?? this.valueForFalse;
+  radioValue = undefined;
 
   @Watch('radioValue')
   @Emit('update:value')
@@ -51,4 +56,5 @@ export default class RadioSwitch extends Vue {
     return newValue;
   }
 }
+export default toNative(RadioSwitch);
 </script>

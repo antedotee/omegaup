@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import omegaup_PasswordInput from '../common/PasswordInput.vue';
 
@@ -51,7 +51,7 @@ import omegaup_PasswordInput from '../common/PasswordInput.vue';
     'omegaup-password-input': omegaup_PasswordInput,
   },
 })
-export default class PasswordRecover extends Vue {
+class PasswordRecover extends Vue {
   @Prop() email?: string;
   @Prop() resetToken?: string;
 
@@ -59,4 +59,5 @@ export default class PasswordRecover extends Vue {
   password = '';
   passwordConfirmation = '';
 }
+export default toNative(PasswordRecover);
 </script>

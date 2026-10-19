@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Prop, Emit, Ref } from 'vue-property-decorator';
+import { Vue, Component, Watch, Prop, Emit, Ref, toNative } from 'vue-facing-decorator';
 
 @Component
-export default class Autocomplete extends Vue {
+class Autocomplete extends Vue {
   @Ref() input!: HTMLInputElement;
   @Prop() value!: string;
   @Prop() placeholder!: string;
@@ -40,6 +40,7 @@ export default class Autocomplete extends Vue {
     this.input.value = newValue;
   }
 }
+export default toNative(Autocomplete);
 </script>
 
 <style lang="scss">

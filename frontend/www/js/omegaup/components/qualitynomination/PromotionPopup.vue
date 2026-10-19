@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import omegaup_OverlayPopup from '../OverlayPopup.vue';
 import { AvailableViews } from './DemotionPopup.vue';
 import T from '../../lang';
@@ -99,7 +99,7 @@ interface QualityLevel {
     'omegaup-overlay-popup': omegaup_OverlayPopup,
   },
 })
-export default class QualityPromotionPopup extends Vue {
+class QualityPromotionPopup extends Vue {
   @Prop({ default: false }) solved!: boolean;
   @Prop({ default: false }) tried!: boolean;
   @Prop({
@@ -157,4 +157,5 @@ export default class QualityPromotionPopup extends Vue {
     setTimeout(() => this.onHide(false), 2000);
   }
 }
+export default toNative(QualityPromotionPopup);
 </script>

@@ -23,15 +23,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Emit, Watch, Prop } from 'vue-property-decorator';
+import { Vue, Component, Emit, Watch, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class FilterQuality extends Vue {
+class FilterQuality extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentQuality = this.quality;
+  }
   @Prop({ default: 'onlyQualityProblems' }) quality!: string;
 
   T = T;
-  currentQuality = this.quality;
+  currentQuality = undefined;
 
   qualityValues: { [key: string]: { name: string; id: string } } = {
     allProblems: {
@@ -50,6 +55,7 @@ export default class FilterQuality extends Vue {
     return val;
   }
 }
+export default toNative(FilterQuality);
 </script>
 
 <style scoped>

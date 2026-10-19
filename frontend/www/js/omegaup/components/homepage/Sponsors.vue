@@ -20,10 +20,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 
 @Component
-export default class Sponsors extends Vue {
+class Sponsors extends Vue {
   @Prop() title!: string;
   @Prop() logos!: {
     src: string;
@@ -32,6 +32,7 @@ export default class Sponsors extends Vue {
     class: string;
   }[];
 }
+export default toNative(Sponsors);
 </script>
 
 <style lang="scss" scoped>

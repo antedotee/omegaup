@@ -417,7 +417,8 @@
 
 <script lang="ts">
 import debounce from 'lodash/debounce';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import T from '../../lang';
@@ -440,10 +441,10 @@ import {
 import infiniteScroll from 'vue-infinite-scroll';
 import ContestCard from './ContestCard.vue';
 import ContestSkeleton from './ContestSkeleton.vue';
-Vue.use(TabsPlugin);
-Vue.use(CardPlugin);
-Vue.use(DropdownPlugin);
-Vue.use(LayoutPlugin);
+VueGlobal.use(TabsPlugin);
+VueGlobal.use(CardPlugin);
+VueGlobal.use(DropdownPlugin);
+VueGlobal.use(LayoutPlugin);
 library.add(fas);
 
 export enum ContestTab {
@@ -488,6 +489,15 @@ export interface UrlParams {
   },
 })
 class ArenaContestList extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentTab = this.tab;
+    this.currentQuery = this.query;
+    this.currentOrder = this.sortOrder;
+    this.currentFilter = this.filter;
+    this.currentPage = this.page;
+  }
   @Prop({ default: null }) countContests!: { [key: string]: number } | null;
   @Prop() contests!: types.ContestList;
   @Prop() query!: string;
@@ -502,11 +512,11 @@ class ArenaContestList extends Vue {
   ContestTab = ContestTab;
   ContestOrder = ContestOrder;
   ContestFilter = ContestFilter;
-  currentTab: ContestTab = this.tab;
-  currentQuery: string = this.query;
-  currentOrder: ContestOrder = this.sortOrder;
-  currentFilter: ContestFilter = this.filter;
-  currentPage: number = this.page;
+  currentTab: ContestTab = undefined;
+  currentQuery: string = '';
+  currentOrder: ContestOrder = undefined;
+  currentFilter: ContestFilter = undefined;
+  currentPage: number = 0;
   refreshing: boolean = false;
   isScrollLoading: boolean = false;
   hasMore: boolean = true;
@@ -538,7 +548,7 @@ class ArenaContestList extends Vue {
       filter: this.currentFilter,
     };
     // Reset the contest list for this tab to avoid stale data
-    Vue.set(this.contests, this.currentTab, []);
+    VueGlobal.set(this.contests, this.currentTab, []);
     this.currentPage = 1;
     this.hasMore = true;
     this.fetchPage(params, urlObj);
@@ -558,7 +568,7 @@ class ArenaContestList extends Vue {
       replaceState: this.isFromBrowserNavigation || this.isInitialLoad,
     };
     // Reset the contest list for this tab to avoid stale data
-    Vue.set(this.contests, this.currentTab, []);
+    VueGlobal.set(this.contests, this.currentTab, []);
     this.currentPage = 1;
     this.hasMore = true;
     // Reset the navigation and initial load flags after using them
@@ -775,7 +785,7 @@ class ArenaContestList extends Vue {
   }
 }
 
-export default ArenaContestList;
+export default toNative(ArenaContestList);
 </script>
 
 <style lang="scss" scoped>

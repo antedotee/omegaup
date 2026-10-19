@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Chart } from 'highcharts-vue';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 
@@ -44,7 +44,7 @@ const ORDERED_VERDICTS = [
     highcharts: Chart,
   },
 })
-export default class Statistics extends Vue {
+class Statistics extends Vue {
   @Prop() course!: types.CourseDetails;
   @Prop() problemStats!: types.CourseProblemStatistics[];
   @Prop() verdicts!: types.CourseProblemVerdict[];
@@ -347,4 +347,5 @@ export default class Statistics extends Vue {
     };
   }
 }
+export default toNative(Statistics);
 </script>

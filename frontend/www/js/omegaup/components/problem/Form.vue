@@ -565,7 +565,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, Ref, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import problem_Settings from './Settings.vue';
 import problem_Tags from './Tags.vue';
 import problem_CreatorWrapper from './CreatorWrapper.vue';
@@ -577,7 +578,7 @@ import { types } from '../../api_types';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 export enum CreationMethods {
   Creator = 'creator',
@@ -591,7 +592,35 @@ export enum CreationMethods {
     'omegaup-problem-creator': problem_CreatorWrapper,
   },
 })
-export default class ProblemForm extends Vue {
+class ProblemForm extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.title = this.data.title;
+    this.alias = this.data.alias;
+    this.timeLimit = this.data.timeLimit;
+    this.extraWallTime = this.data.extraWallTime;
+    this.memoryLimit = this.data.memoryLimit;
+    this.outputLimit = this.data.outputLimit;
+    this.inputLimit = this.data.inputLimit;
+    this.overallWallTimeLimit = this.data.overallWallTimeLimit;
+    this.validatorTimeLimit = this.data.validatorTimeLimit;
+    this.emailClarifications = this.data.emailClarifications;
+    this.visibility = this.data.visibility;
+    this.allowUserAddTags = this.data.allowUserAddTags;
+    this.source = this.data.source;
+    this.validator = this.data.validator;
+    this.languages = this.data.languages;
+    this.tags = this.data.tags;
+    this.problemLevel = this.data.problem_level || '';
+    this.showDiff = this.data.showDiff;
+    this.groupScorePolicy = this.data.groupScorePolicy || 'sum-if-not-zero';
+    this.selectedTags = this.data.selectedTags || [];
+    this.validLanguages = this.data.validLanguages;
+    this.validatorTypes = this.data.validatorTypes;
+    this.currentLanguages = this.data.languages;
+    this.currentCreationMethod = this.creationMethod;
+  }
   @Prop() data!: types.ProblemFormPayload;
   @Prop({ default: () => [] }) errors!: string[];
   @Prop({ default: false }) isUpdate!: boolean;
@@ -609,34 +638,34 @@ export default class ProblemForm extends Vue {
   @Ref('problemCreator') problemCreatorRef!: problem_CreatorWrapper;
 
   T = T;
-  title = this.data.title;
-  alias = this.data.alias;
-  timeLimit = this.data.timeLimit;
-  extraWallTime = this.data.extraWallTime;
-  memoryLimit = this.data.memoryLimit;
-  outputLimit = this.data.outputLimit;
-  inputLimit = this.data.inputLimit;
-  overallWallTimeLimit = this.data.overallWallTimeLimit;
-  validatorTimeLimit = this.data.validatorTimeLimit;
-  emailClarifications = this.data.emailClarifications;
-  visibility = this.data.visibility;
-  allowUserAddTags = this.data.allowUserAddTags;
-  source = this.data.source;
-  validator = this.data.validator;
-  languages = this.data.languages;
-  tags = this.data.tags;
-  problemLevel = this.data.problem_level || '';
-  showDiff = this.data.showDiff;
-  groupScorePolicy = this.data.groupScorePolicy || 'sum-if-not-zero';
-  selectedTags = this.data.selectedTags || [];
+  title = undefined;
+  alias = undefined;
+  timeLimit = undefined;
+  extraWallTime = undefined;
+  memoryLimit = undefined;
+  outputLimit = undefined;
+  inputLimit = undefined;
+  overallWallTimeLimit = undefined;
+  validatorTimeLimit = undefined;
+  emailClarifications = undefined;
+  visibility = undefined;
+  allowUserAddTags = undefined;
+  source = undefined;
+  validator = undefined;
+  languages = undefined;
+  tags = undefined;
+  problemLevel = undefined;
+  showDiff = undefined;
+  groupScorePolicy = undefined;
+  selectedTags = undefined;
   message = '';
   hasFile = false;
   public = false;
-  validLanguages = this.data.validLanguages;
-  validatorTypes = this.data.validatorTypes;
-  currentLanguages = this.data.languages;
+  validLanguages = undefined;
+  validatorTypes = undefined;
+  currentLanguages = undefined;
   CreationMethods = CreationMethods;
-  currentCreationMethod: CreationMethods = this.creationMethod;
+  currentCreationMethod: CreationMethods = undefined;
   showProblemCreator = false;
   creatorGeneratedZipBlob: Blob | null = null;
   isGeneratingCreatorZip = false;
@@ -995,6 +1024,7 @@ export default class ProblemForm extends Vue {
     this.$emit('alias-changed', newValue);
   }
 }
+export default toNative(ProblemForm);
 </script>
 
 <style>

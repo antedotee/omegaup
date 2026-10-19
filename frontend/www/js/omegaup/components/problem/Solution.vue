@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
@@ -125,7 +125,7 @@ class ProblemSolution extends Vue {
   }
 }
 
-export default ProblemSolution;
+export default toNative(ProblemSolution);
 </script>
 
 <style scoped lang="scss">

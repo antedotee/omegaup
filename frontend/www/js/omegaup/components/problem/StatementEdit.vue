@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Emit, Prop, Watch, Ref } from 'vue-property-decorator';
+import { Vue, Component, Emit, Prop, Watch, Ref, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -123,7 +123,13 @@ const markdownConverter = new markdown.Converter({
     'omegaup-markdown': ProblemMarkdown,
   },
 })
-export default class ProblemStatementEdit extends Vue {
+class ProblemStatementEdit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentLanguage = this.statement.language;
+    this.currentMarkdown = this.statement.markdown;
+  }
   @Ref() readonly markdownButtonBar!: HTMLDivElement;
   @Ref() readonly markdownInput!: HTMLTextAreaElement;
   @Prop() alias!: string;
@@ -137,8 +143,8 @@ export default class ProblemStatementEdit extends Vue {
 
   T = T;
   commitMessage = T.updateStatementsCommitMessage;
-  currentLanguage = this.statement.language;
-  currentMarkdown = this.statement.markdown;
+  currentLanguage = undefined;
+  currentMarkdown = undefined;
   errors: string[] = [];
   statements: types.Statements = {};
   markdownEditor: Markdown.Editor | null = null;
@@ -206,6 +212,7 @@ export default class ProblemStatementEdit extends Vue {
     e.preventDefault();
   }
 }
+export default toNative(ProblemStatementEdit);
 </script>
 
 <style lang="scss" scoped>

@@ -118,7 +118,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import teamsgroup_FormUpdate from './FormUpdate.vue';
 import teamsgroup_Upload from './Upload.vue';
 import teamsgroup_Teams from './Teams.vue';
@@ -139,7 +139,13 @@ export enum AvailableTabs {
     'omegaup-teams-group-teams': teamsgroup_Teams,
   },
 })
-export default class TeamsGroupEdit extends Vue {
+class TeamsGroupEdit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.selectedTab = this.tab;
+    this.currentTeamsIdentities = this.teamsIdentities;
+  }
   @Prop() alias!: string;
   @Prop() name!: string;
   @Prop() description!: string;
@@ -157,8 +163,8 @@ export default class TeamsGroupEdit extends Vue {
   T = T;
   ui = ui;
   AvailableTabs = AvailableTabs;
-  selectedTab: AvailableTabs = this.tab;
-  currentTeamsIdentities = this.teamsIdentities;
+  selectedTab: AvailableTabs = undefined;
+  currentTeamsIdentities = undefined;
 
   @Watch('tab')
   onTabChanged(newValue: AvailableTabs): void {
@@ -180,4 +186,5 @@ export default class TeamsGroupEdit extends Vue {
     this.currentTeamsIdentities = newValue;
   }
 }
+export default toNative(TeamsGroupEdit);
 </script>

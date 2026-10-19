@@ -127,7 +127,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -148,14 +148,19 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class CourseFilteredList extends Vue {
+class CourseFilteredList extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.showTab = this.activeTab;
+  }
   @Prop() courses!: types.CoursesByAccessMode;
   @Prop() activeTab!: string;
   @Prop({ default: true }) showPercentage!: boolean;
 
   T = T;
   time = time;
-  showTab = this.activeTab;
+  showTab = undefined;
 
   getTabName(timeType: string): string {
     switch (timeType) {
@@ -172,6 +177,7 @@ export default class CourseFilteredList extends Vue {
     }
   }
 }
+export default toNative(CourseFilteredList);
 </script>
 
 <style>

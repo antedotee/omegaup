@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -63,7 +63,7 @@ import Badge3D from './Badge3D.vue';
     'badge-3d': Badge3D,
   },
 })
-export default class BadgeDetails extends Vue {
+class BadgeDetails extends Vue {
   @Prop() badge!: types.Badge;
 
   T = T;
@@ -102,6 +102,7 @@ export default class BadgeDetails extends Vue {
     return `${this.badge.owners_count}/${this.badge.total_users}`;
   }
 }
+export default toNative(BadgeDetails);
 </script>
 
 <style lang="scss" scoped>

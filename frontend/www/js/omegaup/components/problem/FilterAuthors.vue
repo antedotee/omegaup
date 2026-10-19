@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
@@ -39,18 +39,24 @@ import user_Username from '../user/Username.vue';
     'omegaup-user-username': user_Username,
   },
 })
-export default class FilterAuthors extends Vue {
+class FilterAuthors extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentSelectedAuthors = this.selectedAuthors;
+  }
   @Prop() authors!: types.AuthorsRank;
   @Prop({ default: () => [] }) selectedAuthors!: string[];
 
   T = T;
-  currentSelectedAuthors = this.selectedAuthors;
+  currentSelectedAuthors = undefined;
 
   @Watch('currentSelectedAuthors')
   onNewAuthorSelected(): void {
     this.$emit('new-selected-author', this.currentSelectedAuthors);
   }
 }
+export default toNative(FilterAuthors);
 </script>
 
 <style scoped>

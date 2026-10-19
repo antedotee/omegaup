@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -93,14 +93,19 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class TeachingAssistants extends Vue {
+class TeachingAssistants extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentTeachingAssistants = this.teachingAssistants;
+  }
   @Prop() teachingAssistants!: omegaup.UserRole[];
   @Prop() searchResultUsers!: types.ListItem[];
 
   T = T;
   username: null | types.ListItem = null;
   selected = {};
-  currentTeachingAssistants = this.teachingAssistants;
+  currentTeachingAssistants = undefined;
 
   @Watch('teachingAssistants')
   onTeachingAssistantsChanged(newValue: omegaup.UserRole[]): void {
@@ -116,4 +121,5 @@ export default class TeachingAssistants extends Vue {
     this.$emit('remove-teaching-assistant', teachingAssistant.username);
   }
 }
+export default toNative(TeachingAssistants);
 </script>

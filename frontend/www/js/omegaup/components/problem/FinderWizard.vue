@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 // https://binarcode.github.io/vue-form-wizard/
@@ -106,7 +106,7 @@ interface TagObject {
     VueSlider,
   },
 })
-export default class ProblemFinderWizard extends Vue {
+class ProblemFinderWizard extends Vue {
   @Prop() possibleTags!: { name: string }[];
   @Prop({ default: false }) show!: boolean;
 
@@ -195,6 +195,7 @@ export default class ProblemFinderWizard extends Vue {
     this.$emit('close');
   }
 }
+export default toNative(ProblemFinderWizard);
 </script>
 
 <style lang="scss" scoped>

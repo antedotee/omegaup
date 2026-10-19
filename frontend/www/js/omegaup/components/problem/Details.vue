@@ -385,7 +385,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Emit, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, Emit, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -461,7 +461,16 @@ export enum PopupDisplayed {
     'omegaup-quality-nomination-promotion-popup': qualitynomination_PromotionPopup,
   },
 })
-export default class ProblemDetails extends Vue {
+class ProblemDetails extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.selectedTab = this.activeTab;
+    this.currentClarifications = this.clarifications;
+    this.currentPopupDisplayed = this.popupDisplayed;
+    this.hasUnreadClarifications = this.clarifications?.length > 0 && this.activeTab !== 'clarifications';
+    this.currentRunDetailsData = this.runDetailsData;
+  }
   @Prop({
     default: () => {
       return [];
@@ -519,12 +528,12 @@ export default class ProblemDetails extends Vue {
   T = T;
   ui = ui;
   time = time;
-  selectedTab = this.activeTab;
-  currentClarifications = this.clarifications;
-  currentPopupDisplayed = this.popupDisplayed;
+  selectedTab = undefined;
+  currentClarifications = undefined;
+  currentPopupDisplayed = undefined;
   hasUnreadClarifications =
-    this.clarifications?.length > 0 && this.activeTab !== 'clarifications';
-  currentRunDetailsData = this.runDetailsData;
+    undefined;
+  currentRunDetailsData = undefined;
 
   get isReKarelProblem(): boolean {
     const languages = this.languages ?? this.problem.languages;
@@ -829,6 +838,7 @@ export default class ProblemDetails extends Vue {
     this.currentRunDetailsData = newValue;
   }
 }
+export default toNative(ProblemDetails);
 </script>
 
 <style lang="scss" scoped>

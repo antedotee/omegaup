@@ -107,11 +107,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class Settings extends Vue {
+class Settings extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentOverallWallTimeLimit = this.overallWallTimeLimit;
+  }
   @Prop() timeLimit!: number;
   @Prop() extraWallTime!: number;
   @Prop() memoryLimit!: number;
@@ -125,7 +130,7 @@ export default class Settings extends Vue {
 
   T = T;
 
-  currentOverallWallTimeLimit = this.overallWallTimeLimit;
+  currentOverallWallTimeLimit = undefined;
 
   @Watch('currentOverallWallTimeLimit')
   onOverallWallTimeLimitChanged(newVal: number) {
@@ -134,4 +139,5 @@ export default class Settings extends Vue {
     }
   }
 }
+export default toNative(Settings);
 </script>

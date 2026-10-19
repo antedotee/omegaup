@@ -225,7 +225,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { dao, types } from '../../api_types';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
@@ -247,7 +247,7 @@ library.add(faEdit, faLock, faTrashAlt);
     'omegaup-identity-change-password': identity_ChangePassword,
   },
 })
-export default class Members extends Vue {
+class Members extends Vue {
   @Prop() identities!: types.Identity[];
   @Prop({ default: () => [] }) identitiesCsv!: types.Identity[];
   @Prop() groupAlias!: string;
@@ -303,6 +303,7 @@ export default class Members extends Vue {
     this.searchedUsername = null;
   }
 }
+export default toNative(Members);
 </script>
 
 <style scoped lang="scss">

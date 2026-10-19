@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import teamsgroup_FormBase from './FormBase.vue';
-import { Vue, Component, Watch, Emit, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch, Emit, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { generateAlias } from '../../alias';
 
@@ -28,7 +28,7 @@ import { generateAlias } from '../../alias';
     'omegaup-teams-group-form': teamsgroup_FormBase,
   },
 })
-export default class TeamsGroupFormCreate extends Vue {
+class TeamsGroupFormCreate extends Vue {
   @Prop({ default: 10 }) maxNumberOfContestants!: number;
 
   T = T;
@@ -48,4 +48,5 @@ export default class TeamsGroupFormCreate extends Vue {
     this.alias = generateAlias(newValue);
   }
 }
+export default toNative(TeamsGroupFormCreate);
 </script>

@@ -6,10 +6,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 
 @Component
-export default class OverlayPopup extends Vue {}
+class OverlayPopup extends Vue {}
+export default toNative(OverlayPopup);
 </script>
 
 <style lang="scss" scoped>

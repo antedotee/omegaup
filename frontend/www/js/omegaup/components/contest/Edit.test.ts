@@ -70,7 +70,7 @@ describe('Edit.vue', () => {
   };
   it('Should handle a normal contest', () => {
     const wrapper = shallowMount(contest_Edit, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.text()).toContain(T.contestDetailsGoToContest);
@@ -82,7 +82,7 @@ describe('Edit.vue', () => {
     propsData.details.rerun_id = 2;
     propsData.initialTab = '';
     const wrapper = shallowMount(contest_Edit, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.vm.showTab).toBe('contestants');
@@ -93,7 +93,7 @@ describe('Edit.vue', () => {
     propsData.initialTab = '';
     propsData.originalContestAdmissionMode = 'private';
     const wrapper = shallowMount(contest_Edit, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.vm.showTab).toBe('links');

@@ -90,11 +90,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, Emit, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class TeamsGroupFormBase extends Vue {
+class TeamsGroupFormBase extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentAlias = this.alias;
+    this.currentDescription = this.description;
+    this.currentName = this.name;
+    this.currentNumberOfContestants = this.numberOfContestants;
+  }
   @Prop() alias!: null | string;
   @Prop() description!: null | string;
   @Prop() name!: null | string;
@@ -103,10 +111,10 @@ export default class TeamsGroupFormBase extends Vue {
   @Prop({ default: 1 }) minNumberOfContestants!: number;
 
   T = T;
-  currentAlias: null | string = this.alias;
-  currentDescription: null | string = this.description;
-  currentName: null | string = this.name;
-  currentNumberOfContestants: number = this.numberOfContestants;
+  currentAlias: null | string = '';
+  currentDescription: null | string = '';
+  currentName: null | string = '';
+  currentNumberOfContestants: number = 0;
 
   @Watch('currentAlias')
   @Emit('update:alias')
@@ -132,4 +140,5 @@ export default class TeamsGroupFormBase extends Vue {
     return newValue;
   }
 }
+export default toNative(TeamsGroupFormBase);
 </script>

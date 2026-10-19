@@ -40,11 +40,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class Validation extends Vue {
+class Validation extends Vue {
   @Prop() verificationCode!: string;
   @Prop() isValid!: boolean;
   @Prop() certificate?: string;
@@ -68,6 +68,7 @@ export default class Validation extends Vue {
     this.certificateUrl = window.URL.createObjectURL(blob);
   }
 }
+export default toNative(Validation);
 </script>
 
 <style lang="scss" scoped>

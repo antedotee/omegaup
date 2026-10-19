@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from 'vue-property-decorator';
+import { Vue, Prop, Component, toNative } from 'vue-facing-decorator';
 import store from './GraderStore';
 
 @Component
-export default class TextEditor extends Vue {
+class TextEditor extends Vue {
   // TODO: place more restrictions on value of keys inside storeMapping
   @Prop({ required: true }) storeMapping!: {
     [key: string]: string;
@@ -48,6 +48,7 @@ export default class TextEditor extends Vue {
     return this.filename;
   }
 }
+export default toNative(TextEditor);
 </script>
 
 <style lang="scss" scoped>

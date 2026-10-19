@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import * as ui from '../../ui';
 import T from '../../lang';
@@ -70,7 +70,7 @@ import user_Username from '../user/Username.vue';
     'omegaup-user-username': user_Username,
   },
 })
-export default class StudentProgress extends Vue {
+class StudentProgress extends Vue {
   @Prop() courseAlias!: string;
   @Prop() studentProgress!: types.StudentProgressInCourse;
   @Prop() assignmentsProblems!: types.AssignmentsProblemsPoints[];
@@ -184,6 +184,7 @@ export default class StudentProgress extends Vue {
     return `/course/${this.courseAlias}/student/${this.studentProgress.username}/assignment/${selectedAssignment}/#${selectedProblem}`;
   }
 }
+export default toNative(StudentProgress);
 </script>
 
 <style lang="scss" scoped>

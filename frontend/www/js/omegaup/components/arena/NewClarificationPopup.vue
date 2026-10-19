@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import omegaup_OverlayPopup from '../OverlayPopup.vue';
@@ -83,7 +83,13 @@ import omegaup_OverlayPopup from '../OverlayPopup.vue';
     'omegaup-overlay-popup': omegaup_OverlayPopup,
   },
 })
-export default class ArenaNewClarificationPopup extends Vue {
+class ArenaNewClarificationPopup extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentProblemAlias = this.problemAlias;
+    this.currentUsername = this.username;
+  }
   @Prop({ default: () => [] }) problems!: types.NavbarProblemsetProblem[];
   @Prop({ default: () => [] }) users!: types.ContestUser[];
   @Prop({ default: null }) problemAlias!: null | string;
@@ -91,8 +97,8 @@ export default class ArenaNewClarificationPopup extends Vue {
 
   T = T;
   message: null | string = null;
-  currentProblemAlias = this.problemAlias;
-  currentUsername = this.username;
+  currentProblemAlias = undefined;
+  currentUsername = undefined;
 
   get filteredUsers(): { username: string; name: string }[] {
     return this.users.map((user) => {
@@ -138,4 +144,5 @@ export default class ArenaNewClarificationPopup extends Vue {
     this.$emit('dismiss');
   }
 }
+export default toNative(ArenaNewClarificationPopup);
 </script>

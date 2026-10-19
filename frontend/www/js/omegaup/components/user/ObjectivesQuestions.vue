@@ -114,13 +114,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 import * as ui from '../../ui';
 
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
+VueGlobal.use(ModalPlugin);
 
 import {
   FontAwesomeIcon,
@@ -149,7 +150,7 @@ export enum ObjectivesAnswers {
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class UserObjectivesQuestions extends Vue {
+class UserObjectivesQuestions extends Vue {
   T = T;
   ui = ui;
   objective = ObjectivesAnswers.Learning;
@@ -248,6 +249,7 @@ export default class UserObjectivesQuestions extends Vue {
     });
   }
 }
+export default toNative(UserObjectivesQuestions);
 </script>
 
 <style lang="scss" scoped>

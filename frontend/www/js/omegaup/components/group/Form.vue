@@ -67,21 +67,28 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { generateAlias } from '../../alias';
 
 @Component
-export default class GroupForm extends Vue {
+class GroupForm extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.alias = this.groupAlias;
+    this.description = this.groupDescription;
+    this.name = this.groupName;
+  }
   @Prop({ default: '' }) groupAlias!: string;
   @Prop({ default: '' }) groupDescription!: string;
   @Prop({ default: '' }) groupName!: string;
   @Prop({ default: false }) isUpdate!: boolean;
 
   T = T;
-  alias: string = this.groupAlias;
-  description: string = this.groupDescription;
-  name: string = this.groupName;
+  alias: string = '';
+  description: string = '';
+  name: string = '';
 
   onSubmit(): void {
     if (this.isUpdate) {
@@ -107,4 +114,5 @@ export default class GroupForm extends Vue {
     this.alias = generateAlias(newValue);
   }
 }
+export default toNative(GroupForm);
 </script>

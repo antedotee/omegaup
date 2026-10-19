@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import { types } from '../../api_types';
@@ -77,7 +77,7 @@ import problem_BaseList from './BaseList.vue';
     'omegaup-problem-search-bar': problem_SearchBar,
   },
 })
-export default class List extends Vue {
+class List extends Vue {
   @Prop() problems!: omegaup.Problem;
   @Prop() loggedIn!: boolean;
   @Prop() selectedTags!: string[];
@@ -106,6 +106,7 @@ export default class List extends Vue {
     this.$emit('wizard-search', queryParameters);
   }
 }
+export default toNative(List);
 </script>
 
 <style>

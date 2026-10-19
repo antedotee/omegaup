@@ -125,7 +125,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import confirmation from '../common/Confirmation.vue';
@@ -141,7 +141,12 @@ interface QualityNominationContents {
     'omegaup-common-confirmation': confirmation,
   },
 })
-export default class QualityNominationDetails extends Vue {
+class QualityNominationDetails extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.rationale = this.initialRationale;
+  }
   @Prop() author!: omegaup.User;
   @Prop() contents!: QualityNominationContents;
   @Prop() initialRationale!: string;
@@ -153,7 +158,7 @@ export default class QualityNominationDetails extends Vue {
   @Prop() votes!: omegaup.NominationVote[];
 
   T = T;
-  rationale = this.initialRationale;
+  rationale = undefined;
   showConfirmation = false;
   status = 'banned';
 
@@ -175,6 +180,7 @@ export default class QualityNominationDetails extends Vue {
     this.showConfirmation = true;
   }
 }
+export default toNative(QualityNominationDetails);
 </script>
 
 <style>

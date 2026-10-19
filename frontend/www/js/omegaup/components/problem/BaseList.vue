@@ -229,7 +229,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import { types } from '../../api_types';
@@ -261,7 +261,7 @@ library.add(faEyeSlash, faMedal, faExclamationTriangle, faBan);
     tooltip: VTooltip,
   },
 })
-export default class BaseList extends Vue {
+class BaseList extends Vue {
   @Prop() problems!: omegaup.Problem[];
   @Prop() loggedIn!: boolean;
   @Prop() selectedTags!: string[];
@@ -337,6 +337,7 @@ export default class BaseList extends Vue {
     return `${this.path}?tag[]=${tags.join('&tag[]=')}`;
   }
 }
+export default toNative(BaseList);
 </script>
 
 <style lang="scss" scoped>

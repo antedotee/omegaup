@@ -100,7 +100,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import user_CompareCard from './CompareCard.vue';
@@ -118,7 +118,7 @@ interface UserCompareData {
     'omegaup-common-typeahead': common_Typeahead,
   },
 })
-export default class CompareUsers extends Vue {
+class CompareUsers extends Vue {
   @Prop({ default: null }) user1!: UserCompareData | null;
   @Prop({ default: null }) user2!: UserCompareData | null;
   @Prop({ default: null }) username1!: string | null;
@@ -162,6 +162,7 @@ export default class CompareUsers extends Vue {
     return 'compare-tie';
   }
 }
+export default toNative(CompareUsers);
 </script>
 
 <style lang="scss" scoped>

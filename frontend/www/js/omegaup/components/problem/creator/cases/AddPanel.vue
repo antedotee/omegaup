@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Ref, Vue } from 'vue-property-decorator';
+import { Component, Ref, Vue, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
 import problemCreator_Cases_CaseInput from './CaseInput.vue';
 import problemCreator_Cases_MultipleCasesInput from './MultipleCasesInput.vue';
@@ -112,7 +112,7 @@ const casesStore = namespace('casesStore');
     'omegaup-problem-creator-group-input': problemCreator_Cases_GroupInput,
   },
 })
-export default class AddPanel extends Vue {
+class AddPanel extends Vue {
   tab: AddTabTypes = 'case';
 
   invalidCaseName = false;
@@ -236,4 +236,5 @@ export default class AddPanel extends Vue {
     this.$emit('close-add-window');
   }
 }
+export default toNative(AddPanel);
 </script>

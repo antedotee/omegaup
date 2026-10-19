@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import badge_Badge from '../badge/Badge.vue';
@@ -39,13 +39,18 @@ import badge_Badge from '../badge/Badge.vue';
     'omegaup-badge': badge_Badge,
   },
 })
-export default class BadgeList extends Vue {
+class BadgeList extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.isProfile = this.showAllBadgesLink;
+  }
   @Prop() allBadges!: Set<string>;
   @Prop() visitorBadges!: Set<string>;
   @Prop() showAllBadgesLink!: boolean;
 
   T = T;
-  isProfile = this.showAllBadgesLink;
+  isProfile = undefined;
 
   get badges(): types.Badge[] {
     return Array.from(this.allBadges)
@@ -71,6 +76,7 @@ export default class BadgeList extends Vue {
     return T[`badge_${alias}_name`];
   }
 }
+export default toNative(BadgeList);
 </script>
 
 <style lang="scss" scoped>

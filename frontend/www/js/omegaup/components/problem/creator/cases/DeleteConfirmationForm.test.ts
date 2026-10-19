@@ -1,24 +1,23 @@
-import { createLocalVue, shallowMount, mount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import Vue from 'vue';
 import DeleteConfirmationForm from './DeleteConfirmationForm.vue';
 import T from '../../../../lang';
 import * as ui from '@/js/omegaup/ui';
 
-const localVue = createLocalVue();
 localVue.use(BootstrapVue);
 localVue.use(IconsPlugin);
 
 describe('DeleteConfirmationForm.vue', () => {
   it('Should set commitMessage when visible changes', async () => {
     const wrapper = shallowMount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: false,
         itemName: 'My Item',
         itemId: '42',
         onCancel: () => {},
       },
+
       provide: { problemAlias: 'alias' },
     });
 
@@ -40,13 +39,13 @@ describe('DeleteConfirmationForm.vue', () => {
 
   it('Should display correct button labels', async () => {
     const wrapper = mount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: true,
         itemName: 'Item',
         itemId: '1',
         onCancel: jest.fn(),
       },
+
       provide: { problemAlias: 'alias' },
     });
 
@@ -59,13 +58,13 @@ describe('DeleteConfirmationForm.vue', () => {
 
   it('Should include proper hidden fields (request, alias, contents)', async () => {
     const wrapper = shallowMount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: true,
         itemName: 'Deleted Item',
         itemId: '1234',
         onCancel: () => {},
       },
+
       provide: { problemAlias: 'the-alias' },
     });
 
@@ -96,13 +95,13 @@ describe('DeleteConfirmationForm.vue', () => {
   it('Should prevent submit and show error when commitMessage empty', async () => {
     const errorSpy = jest.spyOn(ui, 'error').mockImplementation(() => {});
     const wrapper = mount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: true,
         itemName: 'to delete',
         itemId: '999',
         onCancel: () => {},
       },
+
       provide: { problemAlias: 'alias' },
     });
 
@@ -121,13 +120,13 @@ describe('DeleteConfirmationForm.vue', () => {
     const onCancel = jest.fn();
 
     const wrapper = mount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: false,
         itemName: 'to delete',
         itemId: '1',
         onCancel,
       },
+
       provide: { problemAlias: 'alias' },
     });
 
@@ -147,13 +146,13 @@ describe('DeleteConfirmationForm.vue', () => {
 
   it('Should disable submit button when commitMessage is empty', async () => {
     const wrapper = mount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: true,
         itemName: 'Item',
         itemId: '1',
         onCancel: jest.fn(),
       },
+
       provide: { problemAlias: 'alias' },
     });
 

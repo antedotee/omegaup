@@ -16,11 +16,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class LogoutConfirmation extends Vue {
+class LogoutConfirmation extends Vue {
   @Prop({ default: false }) value!: boolean;
 
   T = T;
@@ -37,4 +37,5 @@ export default class LogoutConfirmation extends Vue {
     window.location.href = '/logout/';
   }
 }
+export default toNative(LogoutConfirmation);
 </script>

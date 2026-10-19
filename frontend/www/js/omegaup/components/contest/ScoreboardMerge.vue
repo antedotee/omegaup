@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
@@ -114,7 +114,7 @@ import user_Username from '../user/Username.vue';
     'omegaup-user-username': user_Username,
   },
 })
-export default class ScoreboardMerge extends Vue {
+class ScoreboardMerge extends Vue {
   @Prop() availableContests!: types.ContestListItem[];
   @Prop() scoreboard!: types.MergedScoreboardEntry[];
   @Prop() showPenalty!: boolean;
@@ -142,6 +142,7 @@ export default class ScoreboardMerge extends Vue {
     return this.selectedContests;
   }
 }
+export default toNative(ScoreboardMerge);
 </script>
 
 <style lang="scss" scoped>

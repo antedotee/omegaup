@@ -245,7 +245,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 import { types } from '../../api_types';
 import common_Paginator from '../common/Paginator.vue';
@@ -270,7 +271,7 @@ library.add(
   faBan,
 );
 import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
+VueGlobal.use(ModalPlugin);
 
 @Component({
   components: {
@@ -278,7 +279,12 @@ Vue.use(ModalPlugin);
     'omegaup-common-paginator': common_Paginator,
   },
 })
-export default class ProblemMine extends Vue {
+class ProblemMine extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentQuery = this.query ?? '';
+  }
   @Prop() problems!: types.ProblemListItem[];
   @Prop() pagerItems!: types.PageItem[];
   @Prop() privateProblemsAlert!: boolean;
@@ -288,7 +294,7 @@ export default class ProblemMine extends Vue {
 
   T = T;
   ui = ui;
-  currentQuery = this.query ?? '';
+  currentQuery = undefined;
   shouldShowAllProblems = false;
   selectedProblems: types.ProblemListItem[] = [];
   allProblemsVisibilityOption = -1;
@@ -346,4 +352,5 @@ export default class ProblemMine extends Vue {
     this.allProblemsVisibilityOption = -1;
   }
 }
+export default toNative(ProblemMine);
 </script>

@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import user_Username from './Username.vue';
@@ -120,7 +120,7 @@ import { getBlogUrl } from '../../urlHelper';
     'omegaup-user-username': user_Username,
   },
 })
-export default class UserBasicInfo extends Vue {
+class UserBasicInfo extends Vue {
   @Prop() profile!: types.UserProfile;
   @Prop() rank!: string;
   T = T;
@@ -141,6 +141,7 @@ export default class UserBasicInfo extends Vue {
     return this.profile.graduation_date.toLocaleDateString(T.locale);
   }
 }
+export default toNative(UserBasicInfo);
 </script>
 
 <style lang="scss" scoped>

@@ -108,14 +108,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import * as ui from '../../ui';
 
 @Component
-export default class ArenaClarification extends Vue {
+class ArenaClarification extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.isPublic = this.clarification.public;
+  }
   @Prop() clarification!: types.Clarification;
   @Prop({ default: false }) isAdmin!: boolean;
   @Prop({ default: false }) selected!: boolean;
@@ -123,7 +128,7 @@ export default class ArenaClarification extends Vue {
   T = T;
   time = time;
 
-  isPublic = this.clarification.public;
+  isPublic = undefined;
   message = '';
   selectedResponse = 'yes';
   showUpdateAnswer = false;
@@ -190,6 +195,7 @@ export default class ArenaClarification extends Vue {
     this.$emit('clarification-response', response);
   }
 }
+export default toNative(ArenaClarification);
 </script>
 
 <style lang="scss" scoped>

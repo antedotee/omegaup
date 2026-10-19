@@ -39,14 +39,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 
 @Component
-export default class Paginator extends Vue {
+class Paginator extends Vue {
   @Prop() question!: string;
   @Prop() answerYes!: string;
   @Prop() answerNo!: string;
 }
+export default toNative(Paginator);
 </script>
 
 <style lang="scss" scoped>

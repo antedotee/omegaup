@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -88,7 +88,7 @@ import user_Username from '../user/Username.vue';
     'omegaup-common-typeahead': common_Typeahead,
   },
 })
-export default class AuthorsRank extends Vue {
+class AuthorsRank extends Vue {
   @Prop() page!: number;
   @Prop() length!: number;
   @Prop() rankingData!: types.AuthorsRank;
@@ -106,6 +106,7 @@ export default class AuthorsRank extends Vue {
     )}`;
   }
 }
+export default toNative(AuthorsRank);
 </script>
 
 <style scoped>

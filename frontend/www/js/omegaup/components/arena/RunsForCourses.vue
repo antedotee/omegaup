@@ -504,7 +504,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, Emit, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { omegaup } from '../../omegaup';
 import * as ui from '../../ui';
 import T from '../../lang';
@@ -546,7 +547,7 @@ library.add(faCalendarAlt);
 library.add(faCheckCircle);
 library.add(faTimesCircle);
 
-Vue.use(PaginationPlugin);
+VueGlobal.use(PaginationPlugin);
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -606,7 +607,13 @@ export enum PopupDisplayed {
     'omegaup-user-username': user_Username,
   },
 })
-export default class RunsForCourses extends Vue {
+class RunsForCourses extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentRunDetailsData = this.runDetailsData;
+    this.currentPopupDisplayed = this.popupDisplayed;
+  }
   @Prop({ default: false }) isContestFinished!: boolean;
   @Prop({ default: true }) isProblemsetOpened!: boolean;
   @Prop({ default: false }) showContest!: boolean;
@@ -652,8 +659,8 @@ export default class RunsForCourses extends Vue {
   filterExecution: string = '';
   filterOutput: string = '';
   filters: { name: string; value: string }[] = [];
-  currentRunDetailsData = this.runDetailsData;
-  currentPopupDisplayed = this.popupDisplayed;
+  currentRunDetailsData = undefined;
+  currentPopupDisplayed = undefined;
   currentPage: number = 1;
   currentDataPage: number = 1;
   newFieldsLaunchDate: Date = new Date('2023-10-22');
@@ -1159,6 +1166,7 @@ export default class RunsForCourses extends Vue {
     this.$emit('update-search-result-users', { query });
   }
 }
+export default toNative(RunsForCourses);
 </script>
 
 <style lang="scss" scoped>

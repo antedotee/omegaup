@@ -46,11 +46,16 @@ const debounce = (fn: (event: Event) => void, waitTime: number) => {
 };
 
 const WAIT_TIME = 1000;
-import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component({})
-export default class MultiUserAddArea extends Vue {
+class MultiUserAddArea extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.usersList = this.users || [];
+  }
   @Prop() users!: string[];
 
   T = T;
@@ -58,7 +63,7 @@ export default class MultiUserAddArea extends Vue {
   bulkContestants: string | null = null;
 
   // if the users prop is not empty, we need to keep track of those users in the usersList
-  usersList: string[] = this.users || [];
+  usersList: string[] = '';
 
   onBulkContestantsChanged = debounce(this.onTextAreaChange, WAIT_TIME);
 
@@ -109,6 +114,7 @@ export default class MultiUserAddArea extends Vue {
     this.$emit('update-users', this.usersList);
   }
 }
+export default toNative(MultiUserAddArea);
 </script>
 
 <style scoped>

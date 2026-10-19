@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as time from '../../time';
 import user_Username from '../user/Username.vue';
@@ -88,15 +88,21 @@ export interface ArenaCourseFeedback {
     'omegaup-user-username': user_Username,
   },
 })
-export default class Feedback extends Vue {
+class Feedback extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.saved = this.feedback.status == FeedbackStatus.Saved;
+    this.currentFeedback = this.feedback;
+  }
   @Prop() feedback!: ArenaCourseFeedback;
   @Ref('feedback-form') feedbackForm!: HTMLTextAreaElement;
 
   FeedbackStatus = FeedbackStatus;
   T = T;
   time = time;
-  saved: boolean = this.feedback.status == FeedbackStatus.Saved;
-  currentFeedback = this.feedback;
+  saved: boolean = false;
+  currentFeedback = undefined;
 
   get currentFeedbackTimestamp(): string {
     return time.formatDateTimeLocal(this.feedback.timestamp ?? new Date());
@@ -123,4 +129,5 @@ export default class Feedback extends Vue {
     this.$emit('delete', this.currentFeedback);
   }
 }
+export default toNative(Feedback);
 </script>

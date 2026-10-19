@@ -40,7 +40,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 import { types } from '../../api_types';
 import * as time from '../../time';
@@ -53,7 +54,7 @@ import {
 } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-Vue.use(BootstrapVue);
+VueGlobal.use(BootstrapVue);
 
 export enum PopupDisplayed {
   None,
@@ -94,7 +95,7 @@ interface TableRunItem {
     BIconQuestionCircleFill,
   },
 })
-export default class Runs extends Vue {
+class Runs extends Vue {
   @Prop() currentRunDetails!: types.RunDetails | null;
   @Prop({ default: null }) problemAlias!: string | null;
   @Prop() runs!: null | types.Run[];
@@ -303,4 +304,5 @@ export default class Runs extends Vue {
     return `${verdict}: ${verdictHelp}`;
   }
 }
+export default toNative(Runs);
 </script>

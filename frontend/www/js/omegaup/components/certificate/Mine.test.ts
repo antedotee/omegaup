@@ -48,7 +48,7 @@ describe('Mine.vue', () => {
 
   it('Should handle an empty table', () => {
     const wrapper = shallowMount(certificate_Mine, {
-      propsData: {
+      props: {
         certificates: [] as types.CertificateListItem[],
       },
     });
@@ -60,7 +60,7 @@ describe('Mine.vue', () => {
 
   it('Should handle a table with data', () => {
     const wrapper = mount(certificate_Mine, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.text()).toContain(T.certificateListMineTitle);
@@ -90,7 +90,7 @@ describe('Mine.vue', () => {
     );
 
     shallowMount(certificate_Mine, {
-      propsData,
+      props: propsData,
     });
 
     expect(defineSpy).toHaveBeenCalledTimes(
@@ -110,7 +110,7 @@ describe('Mine.vue', () => {
     );
 
     const wrapper = mount(certificate_Mine, {
-      propsData,
+      props: propsData,
     });
 
     await wrapper.findAll('a[download-file]').trigger('click');

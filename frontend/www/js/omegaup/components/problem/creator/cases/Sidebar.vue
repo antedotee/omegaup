@@ -396,7 +396,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import problemCreator_LayoutSidebar from './LayoutSidebar.vue';
 import { namespace } from 'vuex-class';
 import T from '../../../../lang';
@@ -415,7 +415,7 @@ const casesStore = namespace('casesStore');
     'omegaup-problem-creator-layout-sidebar': problemCreator_LayoutSidebar,
   },
 })
-export default class Sidebar extends Vue {
+class Sidebar extends Vue {
   T = T;
   showLayoutSidebar = false;
 
@@ -536,6 +536,7 @@ export default class Sidebar extends Vue {
     });
   }
 }
+export default toNative(Sidebar);
 </script>
 
 <style lang="scss" scoped>

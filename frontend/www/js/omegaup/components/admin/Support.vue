@@ -372,7 +372,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import Clipboard from 'v-clipboard';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -389,7 +390,7 @@ import {
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
 export interface UpdateEmailRequest {
   email: string;
@@ -410,7 +411,18 @@ export enum MaintenanceType {
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
   },
 })
-export default class AdminSupport extends Vue {
+class AdminSupport extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentContestAlias = this.contestAlias;
+    this.currentIsContestRecommended = this.isContestRecommended;
+    this.currentMaintenanceEnabled = this.maintenanceEnabled;
+    this.currentMaintenanceMessageEs = this.maintenanceMessageEs;
+    this.currentMaintenanceMessageEn = this.maintenanceMessageEn;
+    this.currentMaintenanceMessagePt = this.maintenanceMessagePt;
+    this.currentMaintenanceType = this.maintenanceType || 'info';
+  }
   @Prop() username!: string;
   @Prop() email!: string;
   @Prop() verified!: boolean;
@@ -434,13 +446,13 @@ export default class AdminSupport extends Vue {
 
   selectedTemplateId: string = '';
 
-  currentContestAlias = this.contestAlias;
-  currentIsContestRecommended = this.isContestRecommended;
-  currentMaintenanceEnabled = this.maintenanceEnabled;
-  currentMaintenanceMessageEs = this.maintenanceMessageEs;
-  currentMaintenanceMessageEn = this.maintenanceMessageEn;
-  currentMaintenanceMessagePt = this.maintenanceMessagePt;
-  currentMaintenanceType = this.maintenanceType || 'info';
+  currentContestAlias = undefined;
+  currentIsContestRecommended = undefined;
+  currentMaintenanceEnabled = undefined;
+  currentMaintenanceMessageEs = undefined;
+  currentMaintenanceMessageEn = undefined;
+  currentMaintenanceMessagePt = undefined;
+  currentMaintenanceType = undefined;
 
   T = T;
   ui = ui;
@@ -617,6 +629,7 @@ export default class AdminSupport extends Vue {
     this.currentMaintenanceType = 'info';
   }
 }
+export default toNative(AdminSupport);
 </script>
 
 <style lang="scss" scoped>

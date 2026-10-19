@@ -917,7 +917,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
 import DateTimePicker from '../DateTimePicker.vue';
@@ -930,7 +931,7 @@ import VueCookies from 'vue-cookies';
 import 'v-tooltip/dist/v-tooltip.css';
 import { VTooltip } from 'v-tooltip';
 import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
+VueGlobal.use(ModalPlugin);
 
 import {
   FontAwesomeIcon,
@@ -945,7 +946,7 @@ import * as markdownModule from '../../markdown';
 import omegaup_Markdown from '../Markdown.vue';
 library.add(fas);
 
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 export enum ScoreMode {
   AllOrNothing = 'all_or_nothing',
@@ -1115,7 +1116,34 @@ const markdownConverter = new markdownModule.Converter({ preview: true });
     tooltip: VTooltip,
   },
 })
-export default class Form extends Vue {
+class Form extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.alias = this.initialAlias;
+    this.description = this.initialDescription;
+    this.feedback = this.initialFeedback;
+    this.finishTime = this.initialFinishTime;
+    this.languages = this.initialLanguages;
+    this.needsBasicInformation = this.initialNeedsBasicInformation;
+    this.penalty = this.initialPenalty;
+    this.penaltyType = this.initialPenaltyType;
+    this.pointsDecayFactor = this.initialPointsDecayFactor;
+    this.requestsUserInformation = this.initialRequestsUserInformation;
+    this.scoreboard = this.initialScoreboard;
+    this.showScoreboardAfter = this.initialShowScoreboardAfter;
+    this.currentScoreMode = this.scoreMode;
+    this.startTime = this.initialStartTime;
+    this.submissionsGap = this.initialSubmissionsGap
+    ? this.initialSubmissionsGap / 60
+    : 1;
+    this.title = this.initialTitle;
+    this.windowLength = this.initialWindowLength;
+    this.windowLengthEnabled = this.initialWindowLength !== null;
+    this.currentContestForTeams = this.contestForTeams;
+    this.currentTeamsGroupAlias = this.teamsGroupAlias;
+    this.recommended = this.initialRecommended;
+  }
   @Ref() readonly descriptionButtonBar!: HTMLDivElement;
   @Ref() readonly descriptionInput!: HTMLTextAreaElement;
   markdownEditor: Markdown.Editor | null = null;
@@ -1157,30 +1185,28 @@ export default class Form extends Vue {
   @Prop({ default: false }) canSetRecommended!: boolean;
   @Prop({ default: false }) initialRecommended!: boolean;
 
-  alias = this.initialAlias;
-  description = this.initialDescription;
-  feedback = this.initialFeedback;
-  finishTime = this.initialFinishTime;
-  languages = this.initialLanguages;
-  needsBasicInformation = this.initialNeedsBasicInformation;
-  penalty = this.initialPenalty;
-  penaltyType = this.initialPenaltyType;
-  pointsDecayFactor = this.initialPointsDecayFactor;
-  requestsUserInformation = this.initialRequestsUserInformation;
-  scoreboard = this.initialScoreboard;
-  showScoreboardAfter = this.initialShowScoreboardAfter;
-  currentScoreMode = this.scoreMode;
-  startTime = this.initialStartTime;
-  submissionsGap = this.initialSubmissionsGap
-    ? this.initialSubmissionsGap / 60
-    : 1;
-  title = this.initialTitle;
-  windowLength = this.initialWindowLength;
-  windowLengthEnabled = this.initialWindowLength !== null;
-  currentContestForTeams = this.contestForTeams;
-  currentTeamsGroupAlias = this.teamsGroupAlias;
+  alias = undefined;
+  description = undefined;
+  feedback = undefined;
+  finishTime = undefined;
+  languages = undefined;
+  needsBasicInformation = undefined;
+  penalty = undefined;
+  penaltyType = undefined;
+  pointsDecayFactor = undefined;
+  requestsUserInformation = undefined;
+  scoreboard = undefined;
+  showScoreboardAfter = undefined;
+  currentScoreMode = undefined;
+  startTime = undefined;
+  submissionsGap = undefined;
+  title = undefined;
+  windowLength = undefined;
+  windowLengthEnabled = undefined;
+  currentContestForTeams = undefined;
+  currentTeamsGroupAlias = undefined;
   titlePlaceHolder = '';
-  recommended = this.initialRecommended;
+  recommended = undefined;
   isSubmitting = false;
   localErrors: LocalErrors = {};
   hasFormChanged = false;
@@ -1603,6 +1629,7 @@ export default class Form extends Vue {
     this.$emit('update-search-result-teams-groups', query);
   }
 }
+export default toNative(Form);
 </script>
 
 <style lang="scss" scoped>

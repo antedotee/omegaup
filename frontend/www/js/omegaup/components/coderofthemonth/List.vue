@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
 import coderofthemonth_CodersList from './CodersList.vue';
@@ -64,7 +64,12 @@ import { types } from '../../api_types';
     'omegaup-candidates-list': coderofthemonth_CandidatesList,
   },
 })
-export default class CoderOfTheMonthList extends Vue {
+class CoderOfTheMonthList extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentSelectedTab = this.selectedTab;
+  }
   @Prop() codersOfCurrentMonth!: types.CoderOfTheMonthList[];
   @Prop() codersOfPreviousMonth!: types.CoderOfTheMonthList[];
   @Prop() candidatesToCoderOfTheMonth!: types.CoderOfTheMonthList[];
@@ -75,7 +80,7 @@ export default class CoderOfTheMonthList extends Vue {
   @Prop() selectedTab!: string;
 
   T = T;
-  currentSelectedTab = this.selectedTab;
+  currentSelectedTab = undefined;
 
   get availableTabs(): { id: string; component: string; title: string }[] {
     const availableTabs = [
@@ -136,6 +141,7 @@ export default class CoderOfTheMonthList extends Vue {
     return `#${tab.id}`;
   }
 }
+export default toNative(CoderOfTheMonthList);
 </script>
 
 <style scoped>

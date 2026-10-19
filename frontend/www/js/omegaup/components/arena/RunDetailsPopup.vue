@@ -189,7 +189,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import arena_DiffView from './DiffView.vue';
@@ -220,7 +220,7 @@ const EMPTY_FIELD = '∅';
     'omegaup-arena-feedback-code-view': arena_FeedbackCodeView,
   },
 })
-export default class ArenaRunDetailsPopup extends Vue {
+class ArenaRunDetailsPopup extends Vue {
   @Prop() data!: types.RunDetails;
   @Prop({ default: () => new Map<number, ArenaCourseFeedback>() })
   feedbackMap!: Map<number, ArenaCourseFeedback>;
@@ -288,6 +288,7 @@ export default class ArenaRunDetailsPopup extends Vue {
     });
   }
 }
+export default toNative(ArenaRunDetailsPopup);
 </script>
 
 <style lang="scss" scoped>

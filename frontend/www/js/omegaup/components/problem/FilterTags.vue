@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
@@ -35,13 +35,18 @@ import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
     'vue-typeahead-bootstrap': VueTypeaheadBootstrap,
   },
 })
-export default class FilterTags extends Vue {
+class FilterTags extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentSelectedTags = this.selectedTags;
+  }
   @Prop() publicQualityTags!: types.TagWithProblemCount[];
   @Prop({ default: () => [] }) tags!: types.TagWithProblemCount[];
   @Prop({ default: () => [] }) selectedTags!: string[];
 
   T = T;
-  currentSelectedTags = this.selectedTags;
+  currentSelectedTags = undefined;
 
   get publicQualityTagNames(): string[] {
     return this.publicQualityTags.map((x) => x.name);
@@ -65,6 +70,7 @@ export default class FilterTags extends Vue {
     this.$emit('new-selected-tag', this.currentSelectedTags);
   }
 }
+export default toNative(FilterTags);
 </script>
 
 <style scoped>

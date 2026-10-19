@@ -119,7 +119,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import omegaup_Markdown from '../Markdown.vue';
@@ -147,10 +148,10 @@ import {
   BRow,
   BCol,
 } from 'bootstrap-vue';
-Vue.use(TablePlugin);
-Vue.use(ButtonPlugin);
-Vue.use(BadgePlugin);
-Vue.use(CardPlugin);
+VueGlobal.use(TablePlugin);
+VueGlobal.use(ButtonPlugin);
+VueGlobal.use(BadgePlugin);
+VueGlobal.use(CardPlugin);
 
 type TeamIdentity = types.Identity & {
   usernames: { username: string; password?: string }[];
@@ -167,7 +168,7 @@ library.add(faDownload, faUserPlus, faSpinner);
     BCol,
   },
 })
-export default class Upload extends Vue {
+class Upload extends Vue {
   @Prop({ default: null }) userErrorRow!: string | null;
   @Prop() searchResultUsers!: types.ListItem[];
   @Prop() numberOfContestants!: number;
@@ -257,4 +258,5 @@ export default class Upload extends Vue {
     this.$emit('download-teams', participants);
   }
 }
+export default toNative(Upload);
 </script>

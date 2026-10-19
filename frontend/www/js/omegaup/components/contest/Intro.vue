@@ -189,7 +189,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -203,7 +203,7 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class ContestIntro extends Vue {
+class ContestIntro extends Vue {
   @Prop() contest!: types.ContestAdminDetails;
   @Prop() isLoggedIn!: boolean;
   @Prop() requestsUserInformation!: string;
@@ -335,4 +335,5 @@ export default class ContestIntro extends Vue {
     this.$emit('open-contest', request);
   }
 }
+export default toNative(ContestIntro);
 </script>

@@ -114,13 +114,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
 
 @Component
-export default class Report extends Vue {
+class Report extends Vue {
   @Prop() contestReport!: types.ContestReport[];
   @Prop() contestAlias!: string;
 
@@ -137,6 +137,7 @@ export default class Report extends Vue {
     return problem.run_details?.details?.groups ?? [];
   }
 }
+export default toNative(Report);
 </script>
 
 <style lang="scss" scoped>

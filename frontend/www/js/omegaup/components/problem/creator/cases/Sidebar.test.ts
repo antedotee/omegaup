@@ -1,4 +1,4 @@
-import { createLocalVue, shallowMount, mount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 
 import Sidebar from './Sidebar.vue';
 import BootstrapVue, { IconsPlugin, BButton } from 'bootstrap-vue';
@@ -11,7 +11,6 @@ import {
 
 import T from '../../../../lang';
 
-const localVue = createLocalVue();
 localVue.use(BootstrapVue);
 localVue.use(IconsPlugin);
 
@@ -30,7 +29,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('Should contain buttons and Groups text', async () => {
-    const wrapper = shallowMount(Sidebar, { localVue, store });
+    const wrapper = shallowMount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const buttons = wrapper.findAllComponents(BButton);
     expect(buttons.length).toBe(initialButtonsCount);
@@ -43,7 +46,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('should show ungrouped testcases', async () => {
-    const wrapper = shallowMount(Sidebar, { localVue, store });
+    const wrapper = shallowMount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     expect(wrapper.text()).toContain(T.problemCreatorUngrouped);
 
@@ -80,7 +87,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('should show groups and cases inside them', async () => {
-    const wrapper = shallowMount(Sidebar, { localVue, store });
+    const wrapper = shallowMount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const newGroup1 = generateGroup({
       name: 'group1',
@@ -166,7 +177,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('Should modify a group', async () => {
-    const wrapper = mount(Sidebar, { localVue, store: store });
+    const wrapper = mount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const newGroup = generateGroup({
       name: 'group',
@@ -212,7 +227,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('Should download a group', async () => {
-    const wrapper = mount(Sidebar, { localVue, store: store });
+    const wrapper = mount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const newGroup = generateGroup({
       name: 'group',
@@ -239,7 +258,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('Should validate and fix points', async () => {
-    const wrapper = mount(Sidebar, { localVue, store });
+    const wrapper = mount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const fixedPointsGroup1 = generateGroup({
       name: 'fixedPointsGroup',

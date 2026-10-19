@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../lang';
 
 @Component
-export default class CountryFlag extends Vue {
+class CountryFlag extends Vue {
   @Prop() country!: string;
 
   get flagUrl(): string {
@@ -31,4 +31,5 @@ export default class CountryFlag extends Vue {
     return this.country;
   }
 }
+export default toNative(CountryFlag);
 </script>

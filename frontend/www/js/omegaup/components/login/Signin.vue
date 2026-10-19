@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import VueRecaptcha from 'vue-recaptcha';
 import omegaup_Login from './Login.vue';
@@ -83,7 +83,12 @@ export enum AvailableTabs {
     'vue-recaptcha': VueRecaptcha,
   },
 })
-export default class Signin extends Vue {
+class Signin extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.activeTab = this.initialActiveTab;
+  }
   @Prop() validateRecaptcha!: boolean;
   @Prop() facebookUrl!: string;
   @Prop({ default: '' }) githubClientId!: string;
@@ -95,7 +100,7 @@ export default class Signin extends Vue {
 
   T = T;
   AvailableTabs = AvailableTabs;
-  activeTab: AvailableTabs = this.initialActiveTab;
+  activeTab: AvailableTabs = undefined;
 
   @Watch('initialActiveTab')
   onInitialActiveTabChanged(newValue: AvailableTabs): void {
@@ -107,6 +112,7 @@ export default class Signin extends Vue {
     window.location.hash = `#${tab}`;
   }
 }
+export default toNative(Signin);
 </script>
 
 <style scoped lang="scss">

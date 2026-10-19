@@ -117,7 +117,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
@@ -154,7 +154,7 @@ interface Statement {
     'omegaup-radio-switch': omegaup_RadioSwitch,
   },
 })
-export default class CourseIntro extends Vue {
+class CourseIntro extends Vue {
   @Prop() course!: types.CourseDetails;
   @Prop() needsBasicInformation!: boolean;
   @Prop() shouldShowAcceptTeacher!: boolean;
@@ -204,6 +204,7 @@ export default class CourseIntro extends Vue {
     });
   }
 }
+export default toNative(CourseIntro);
 </script>
 
 <style lang="scss" scoped>

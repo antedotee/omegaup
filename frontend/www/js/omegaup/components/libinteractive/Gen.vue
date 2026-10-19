@@ -71,7 +71,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
@@ -81,15 +82,24 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 // Import Only Required Plugins
 import { ButtonPlugin, CardPlugin, BIconCloudDownload } from 'bootstrap-vue';
 import { types } from '../../api_types';
-Vue.use(ButtonPlugin);
-Vue.use(CardPlugin);
+VueGlobal.use(ButtonPlugin);
+VueGlobal.use(CardPlugin);
 
 @Component({
   components: {
     BIconCloudDownload,
   },
 })
-export default class LibinteractiveGen extends Vue {
+class LibinteractiveGen extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentLanguage = this.language;
+    this.currentOs = this.os;
+    this.currentName = this.name;
+    this.currentIdl = this.idl;
+    this.currentError = this.error;
+  }
   @Prop({ default: null }) error!: null | types.LibinteractiveError;
   @Prop() language!: string;
   @Prop() os!: string;
@@ -97,11 +107,11 @@ export default class LibinteractiveGen extends Vue {
   @Prop() idl!: string;
 
   T = T;
-  currentLanguage = this.language;
-  currentOs = this.os;
-  currentName = this.name;
-  currentIdl = this.idl;
-  currentError = this.error;
+  currentLanguage = undefined;
+  currentOs = undefined;
+  currentName = undefined;
+  currentIdl = undefined;
+  currentError = undefined;
 
   get errorDescription(): null | string {
     return this.currentError?.description ?? null;
@@ -111,6 +121,7 @@ export default class LibinteractiveGen extends Vue {
     return this.currentError?.field ?? null;
   }
 }
+export default toNative(LibinteractiveGen);
 </script>
 
 <style lang="scss" scoped>

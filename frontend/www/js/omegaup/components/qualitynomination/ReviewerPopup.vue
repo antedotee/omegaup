@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from 'vue-property-decorator';
+import { Vue, Prop, Component, toNative } from 'vue-facing-decorator';
 import omegaup_OverlayPopup from '../OverlayPopup.vue';
 import { AvailableViews } from './DemotionPopup.vue';
 import omegaup_RadioSwitch from '../RadioSwitch.vue';
@@ -106,7 +106,12 @@ interface ProblemTag {
     FontAwesomeIcon,
   },
 })
-export default class ReviewerPopup extends Vue {
+class ReviewerPopup extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.publicTagsList = this.selectedPublicTags ?? [];
+  }
   @Prop() allowUserAddTags!: boolean;
   @Prop() levelTags!: string[];
   @Prop() problemLevel!: string;
@@ -132,7 +137,7 @@ export default class ReviewerPopup extends Vue {
   T = T;
   currentView: AvailableViews = AvailableViews.Content;
   qualitySeal = true;
-  publicTagsList = this.selectedPublicTags ?? [];
+  publicTagsList = undefined;
 
   get sortedProblemTags(): ProblemTag[] {
     return this.possibleTags
@@ -184,6 +189,7 @@ export default class ReviewerPopup extends Vue {
     setTimeout(() => this.onHide(), 2000);
   }
 }
+export default toNative(ReviewerPopup);
 </script>
 
 <style lang="scss" scoped>

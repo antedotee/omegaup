@@ -308,7 +308,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -344,7 +344,13 @@ import contest_Certificates from './Certificates.vue';
     'omegaup-contest-certificates': contest_Certificates,
   },
 })
-export default class Edit extends Vue {
+class Edit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.virtual = ui.isVirtual(this.details);
+    this.alreadyArchived = this.details.archived;
+  }
   @Prop() admins!: types.ContestAdmin[];
   @Prop() details!: types.ContestAdminDetails;
   @Prop() initialTab!: string;
@@ -364,14 +370,14 @@ export default class Edit extends Vue {
 
   T = T;
   ui = ui;
-  virtual = ui.isVirtual(this.details);
+  virtual = undefined;
   showTab = this.selectedTab();
 
   @Watch('initialTab')
   onInitialTabChanged(newValue: string) {
     this.showTab = newValue !== '' ? newValue : this.selectedTab();
   }
-  alreadyArchived = this.details.archived;
+  alreadyArchived = undefined;
 
   selectedTab(): string {
     if (this.initialTab != '') {
@@ -439,4 +445,5 @@ export default class Edit extends Vue {
     this.alreadyArchived = archive;
   }
 }
+export default toNative(Edit);
 </script>

@@ -111,7 +111,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import store from '../grader/GraderStore';
 import * as Util from '../grader/util';
 import * as monaco from 'monaco-editor';
@@ -122,7 +123,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faClipboard, faCheck } from '@fortawesome/free-solid-svg-icons';
 library.add(faClipboard, faCheck);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
 // ─── Sourced from constants.ts ────────────────────────────────────────────────
 import { EDITOR, TIMING } from '../grader/constants';
@@ -162,7 +163,7 @@ const FALLBACKS = {
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class MonacoEditor extends Vue {
+class MonacoEditor extends Vue {
   @Prop({ required: true }) storeMapping!: { [key: string]: string };
   @Prop({ default: false }) readOnly!: boolean;
 
@@ -398,6 +399,7 @@ export default class MonacoEditor extends Vue {
     }
   }
 }
+export default toNative(MonacoEditor);
 </script>
 
 <style lang="scss" scoped>

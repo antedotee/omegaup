@@ -28,12 +28,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 
 @Component
 class ArenaContestSkeleton extends Vue {}
 
-export default ArenaContestSkeleton;
+export default toNative(ArenaContestSkeleton);
 </script>
 
 <style lang="scss" scoped>

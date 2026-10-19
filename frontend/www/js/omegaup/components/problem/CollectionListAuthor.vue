@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import problem_FilterAuthors from './FilterAuthors.vue';
 import problem_BaseList from './BaseList.vue';
@@ -118,7 +118,12 @@ import { types } from '../../api_types';
     'omegaup-problem-filter-quality': problem_FilterQuality,
   },
 })
-export default class CollectionList extends Vue {
+class CollectionList extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.authors = this.data.authorsRanking;
+  }
   @Prop() data!: types.CollectionDetailsByAuthorPayload;
   @Prop() problems!: omegaup.Problem;
   @Prop() loggedIn!: boolean;
@@ -140,8 +145,9 @@ export default class CollectionList extends Vue {
   @Prop({ default: () => [] }) selectedAuthors!: string;
 
   T = T;
-  authors = this.data.authorsRanking;
+  authors = undefined;
 }
+export default toNative(CollectionList);
 </script>
 
 <style scoped>

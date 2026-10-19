@@ -202,7 +202,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -231,8 +232,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
 // Import Only Required Plugins
 import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
-Vue.use(ButtonPlugin);
-Vue.use(PopoverPlugin);
+VueGlobal.use(ButtonPlugin);
+VueGlobal.use(PopoverPlugin);
 interface Rank {
   country: string;
   classname?: string;
@@ -251,7 +252,12 @@ interface Rank {
     'omegaup-common-paginator': common_Paginator,
   },
 })
-export default class UserRank extends Vue {
+class UserRank extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentFilter = this.filter;
+  }
   @Prop() page!: number;
   @Prop() length!: number;
   @Prop({ default: false }) isIndex!: boolean;
@@ -269,7 +275,7 @@ export default class UserRank extends Vue {
   ui = ui;
   searchedUsername: null | types.ListItem = null;
   showPopover: boolean = false;
-  currentFilter = this.filter;
+  currentFilter = undefined;
   isSelectionMode: boolean = false;
   selectedUsers: string[] = [];
 
@@ -364,6 +370,7 @@ export default class UserRank extends Vue {
     else return `/rank?page=${this.page - 1}`;
   }
 }
+export default toNative(UserRank);
 </script>
 
 <style lang="scss">

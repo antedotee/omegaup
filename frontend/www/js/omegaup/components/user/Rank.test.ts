@@ -26,7 +26,7 @@ describe('Rank.vue', () => {
 
   it('Should handle an empty rank', () => {
     const wrapper = shallowMount(user_Rank, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.find('table').exists()).toBeFalsy;
@@ -35,7 +35,7 @@ describe('Rank.vue', () => {
 
   it('Should handle a rank with data', () => {
     const wrapper = mount(user_Rank, {
-      propsData: {
+      props: {
         ...propsData,
         ...{
           ranking: [

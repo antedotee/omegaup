@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 
@@ -95,7 +95,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class User extends Vue {
+class User extends Vue {
   @Prop() emails!: string[];
   @Prop() username!: string;
   @Prop() verified!: boolean;
@@ -140,4 +140,5 @@ export default class User extends Vue {
     this.$emit('verify-user');
   }
 }
+export default toNative(User);
 </script>

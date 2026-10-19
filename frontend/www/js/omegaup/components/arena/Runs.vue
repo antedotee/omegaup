@@ -451,7 +451,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, Emit, toNative } from 'vue-facing-decorator';
 import infiniteScroll from 'vue-infinite-scroll';
 import T from '../../lang';
 import { types } from '../../api_types';
@@ -518,7 +518,13 @@ export enum PopupDisplayed {
     infiniteScroll,
   },
 })
-export default class Runs extends Vue {
+class Runs extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentRunDetailsData = this.runDetailsData;
+    this.currentPopupDisplayed = this.popupDisplayed;
+  }
   @Prop({ default: false }) isContestFinished!: boolean;
   @Prop({ default: true }) isProblemsetOpened!: boolean;
   @Prop({ default: false }) showContest!: boolean;
@@ -562,8 +568,8 @@ export default class Runs extends Vue {
   filterVerdict: string = '';
   filterContest: string = '';
   filters: { name: string; value: string }[] = [];
-  currentRunDetailsData = this.runDetailsData;
-  currentPopupDisplayed = this.popupDisplayed;
+  currentRunDetailsData = undefined;
+  currentPopupDisplayed = undefined;
 
   get currentPage(): number {
     return this.filterOffset + 1;
@@ -918,6 +924,7 @@ export default class Runs extends Vue {
     this.filterProblem = { key: problemAlias, value: problemAlias };
   }
 }
+export default toNative(Runs);
 </script>
 
 <style lang="scss" scoped>

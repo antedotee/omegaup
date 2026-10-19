@@ -20,7 +20,7 @@ describe('Edit.vue', () => {
 
   it('Should handle edit view with empty teams list', () => {
     const wrapper = shallowMount(teamsgroup_Edit, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.find('div[class="page-header"]').text()).toBe(
@@ -30,7 +30,7 @@ describe('Edit.vue', () => {
 
   it('Should change a valid tab', async () => {
     const wrapper = shallowMount(teamsgroup_Edit, {
-      propsData,
+      props: propsData,
     });
 
     await wrapper.setProps({ tab: AvailableTabs.Edit });
@@ -39,7 +39,7 @@ describe('Edit.vue', () => {
 
   it('Should change an invalid tab', async () => {
     const wrapper = shallowMount(teamsgroup_Edit, {
-      propsData,
+      props: propsData,
     });
 
     await wrapper.setProps({ tab: 'wrong' });
@@ -48,7 +48,7 @@ describe('Edit.vue', () => {
 
   it('Should change teams identities list', async () => {
     const wrapper = shallowMount(teamsgroup_Edit, {
-      propsData,
+      props: propsData,
     });
     const teamsIdentities: types.Identity[] = [
       {
@@ -66,7 +66,7 @@ describe('Edit.vue', () => {
 
   it('Should keep the updated contestants count across tabs', async () => {
     const wrapper = shallowMount(teamsgroup_Edit, {
-      propsData: {
+      props: {
         ...propsData,
         numberOfContestants: 3,
         tab: AvailableTabs.Edit,

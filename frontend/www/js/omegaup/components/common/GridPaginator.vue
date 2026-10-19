@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { LinkableResource } from '../../linkable_resource';
 
@@ -107,7 +107,13 @@ interface SortOption {
  * of items per page, total items and the number of columns.
  */
 @Component
-export default class GridPaginator extends Vue {
+class GridPaginator extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentSortOption = this.sortOptions.length > 0 ? this.sortOptions[0].value : '';
+    this.filteredItems = this.items;
+  }
   @Prop() items!: LinkableResource[];
   @Prop() itemsPerPage!: number;
   @Prop({ default: 3 }) columns!: number;
@@ -119,9 +125,9 @@ export default class GridPaginator extends Vue {
   private T = T;
   private currentPageNumber = 0;
   private currentSortOption =
-    this.sortOptions.length > 0 ? this.sortOptions[0].value : '';
+    undefined;
   filter: null | string = null;
-  filteredItems: LinkableResource[] = this.items;
+  filteredItems: LinkableResource[] = [];
 
   private nextPage(): void {
     this.currentPageNumber++;
@@ -170,6 +176,7 @@ export default class GridPaginator extends Vue {
     this.$emit('sort-option-change', newSelector);
   }
 }
+export default toNative(GridPaginator);
 </script>
 
 <style>

@@ -22,7 +22,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 
 import omegaup_Markdown from '../Markdown.vue';
@@ -34,7 +35,7 @@ import {
 } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-Vue.use(BootstrapVue);
+VueGlobal.use(BootstrapVue);
 
 @Component({
   components: {
@@ -43,10 +44,11 @@ Vue.use(BootstrapVue);
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class UserVerificationParentalToken extends Vue {
+class UserVerificationParentalToken extends Vue {
   @Prop() message!: string;
   @Prop() hasParentalVerificationToken!: boolean;
 
   T = T;
 }
+export default toNative(UserVerificationParentalToken);
 </script>

@@ -232,7 +232,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as Highcharts from 'highcharts/highstock';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import { ContestClarificationType } from '../../arena/clarifications';
 import { SocketStatus } from '../../arena/events_socket';
@@ -272,7 +272,7 @@ library.add(fas);
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class ArenaContest extends Vue {
+class ArenaContest extends Vue {
   @Prop() contest!: types.ContestPublicDetails;
   @Prop({ default: false }) contestAdmin!: boolean;
   @Prop() problems!: types.NavbarProblemsetProblem[];
@@ -470,6 +470,7 @@ export default class ArenaContest extends Vue {
     this.currentRunDetailsData = newValue;
   }
 }
+export default toNative(ArenaContest);
 </script>
 
 <style lang="scss" scoped>

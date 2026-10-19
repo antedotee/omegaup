@@ -278,7 +278,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import problem_Form from './Form.vue';
 import problem_Tags from './Tags.vue';
 import problem_Versions from './Versions.vue';
@@ -291,7 +292,7 @@ import omegaup_Markdown from '../Markdown.vue';
 
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
+VueGlobal.use(ModalPlugin);
 
 @Component({
   components: {
@@ -304,7 +305,21 @@ Vue.use(ModalPlugin);
     'omegaup-common-groupadmins': common_GroupAdmins,
   },
 })
-export default class ProblemEdit extends Vue {
+class ProblemEdit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.alias = this.data.alias;
+    this.showTab = this.initialTab;
+    this.currentStatement = this.statement;
+    this.currentSolution = this.solution ||
+    ({
+      markdown: '',
+      language: 'es',
+      images: {},
+      sources: {},
+    } as types.ProblemStatement);
+  }
   @Prop() data!: types.ProblemEditPayload;
   @Prop() admins!: types.ProblemAdmin[];
   @Prop() initialTab!: string;
@@ -315,17 +330,11 @@ export default class ProblemEdit extends Vue {
   @Prop() searchResultGroups!: types.ListItem[];
 
   T = T;
-  alias = this.data.alias;
-  showTab = this.initialTab;
-  currentStatement: types.ProblemStatement = this.statement;
+  alias = undefined;
+  showTab = undefined;
+  currentStatement: types.ProblemStatement = undefined;
   currentSolution: types.ProblemStatement =
-    this.solution ||
-    ({
-      markdown: '',
-      language: 'es',
-      images: {},
-      sources: {},
-    } as types.ProblemStatement);
+    undefined;
   showConfirmationModal = false;
 
   get activeTab(): string {
@@ -376,4 +385,5 @@ export default class ProblemEdit extends Vue {
     window.location.href = `/arena/problem/${this.alias}/print/`;
   }
 }
+export default toNative(ProblemEdit);
 </script>

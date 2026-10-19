@@ -23,10 +23,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 
 @Component
-export default class Badge3D extends Vue {
+class Badge3D extends Vue {
   private bounds: DOMRect | null = null;
   private tiltStrength = 30;
 
@@ -63,6 +63,7 @@ export default class Badge3D extends Vue {
     this.onMouseLeave();
   }
 }
+export default toNative(Badge3D);
 </script>
 
 <style lang="scss" scoped>

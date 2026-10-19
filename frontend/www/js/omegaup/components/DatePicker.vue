@@ -15,13 +15,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch, Prop, toNative } from 'vue-facing-decorator';
 import T from '../lang';
 import * as time from '../time';
 import '../../../third_party/js/bootstrap-datepicker.js';
 
 @Component
-export default class DatePicker extends Vue {
+class DatePicker extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.stringValue = time.formatDateLocal(this.value);
+  }
   T = T;
 
   @Prop({ default: '' }) name!: string;
@@ -33,7 +38,7 @@ export default class DatePicker extends Vue {
   @Prop({ default: null }) max!: Date | null;
 
   private usedFallback: boolean = false;
-  private stringValue: string = time.formatDateLocal(this.value);
+  private stringValue: string = '';
 
   get minDateStr() {
     return this.min?.toISOString()?.split('T')?.[0];
@@ -82,6 +87,7 @@ export default class DatePicker extends Vue {
     }
   }
 }
+export default toNative(DatePicker);
 </script>
 
 <style>

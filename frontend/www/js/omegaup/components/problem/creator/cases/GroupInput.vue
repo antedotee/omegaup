@@ -44,18 +44,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
 
 @Component
-export default class GroupInput extends Vue {
+class GroupInput extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.groupName = this.name;
+    this.groupPoints = this.points;
+    this.groupAutoPoints = this.autoPoints;
+  }
   @Prop({ default: '' }) name!: string;
   @Prop({ default: 100 }) points!: number;
   @Prop({ default: true }) autoPoints!: boolean;
 
-  groupName = this.name;
-  groupPoints: number = this.points;
-  groupAutoPoints: boolean = this.autoPoints;
+  groupName = undefined;
+  groupPoints: number = 0;
+  groupAutoPoints: boolean = false;
 
   T = T;
 
@@ -74,4 +81,5 @@ export default class GroupInput extends Vue {
     }
   }
 }
+export default toNative(GroupInput);
 </script>

@@ -102,14 +102,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import store from './GraderStore';
 import { types } from '../api_types';
 import { GraderResults, CaseSelectorGroup } from './GraderStore';
 import T from '../lang';
 
 @Component
-export default class CaseSelector extends Vue {
+class CaseSelector extends Vue {
   newCaseWeight: null | number = null;
   newCaseName: string = '';
   T = T;
@@ -225,6 +225,7 @@ export default class CaseSelector extends Vue {
     store.dispatch('removeCase', name);
   }
 }
+export default toNative(CaseSelector);
 </script>
 
 <style lang="scss" scoped>

@@ -5,13 +5,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 
 @Component
-export default class Overlay extends Vue {
+class Overlay extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.isOverlayShown = this.showOverlay;
+  }
   @Prop({ default: false }) showOverlay!: boolean;
 
-  isOverlayShown = this.showOverlay;
+  isOverlayShown = undefined;
 
   onOverlayClicked(evt: Event) {
     if (typeof $(evt.composedPath()[0]).attr('data-overlay') !== 'undefined') {
@@ -25,6 +30,7 @@ export default class Overlay extends Vue {
     this.isOverlayShown = newValue;
   }
 }
+export default toNative(Overlay);
 </script>
 
 <style lang="scss" scoped>

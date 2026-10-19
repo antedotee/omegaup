@@ -152,7 +152,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -165,7 +166,7 @@ import course_StudentProgress from './StudentProgress.vue';
 import common_Paginator from '../common/Paginator.vue';
 import { toCsv, TableCell, Percentage } from '../../csv';
 
-Vue.use(AsyncComputedPlugin);
+VueGlobal.use(AsyncComputedPlugin);
 
 export function escapeXml(cell: TableCell): string {
   if (typeof cell !== 'string') return '';
@@ -212,7 +213,7 @@ export function toOds(courseName: string, table: TableCell[][] | null): string {
     'omegaup-common-paginator': common_Paginator,
   },
 })
-export default class CourseViewProgress extends Vue {
+class CourseViewProgress extends Vue {
   @Prop() course!: types.CourseDetails;
   @Prop({ default: null })
   completeStudentsProgress!: types.StudentProgressInCourse[] | null;
@@ -400,6 +401,7 @@ export default class CourseViewProgress extends Vue {
         : omegaup.SortOrder.Descending;
   }
 }
+export default toNative(CourseViewProgress);
 </script>
 
 <style lang="scss" scoped>

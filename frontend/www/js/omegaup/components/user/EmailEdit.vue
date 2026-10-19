@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import user_MainInfo from './MainInfo.vue';
@@ -52,10 +52,16 @@ import user_MainInfo from './MainInfo.vue';
     'omegaup-user-maininfo': user_MainInfo,
   },
 })
-export default class UserEmailEdit extends Vue {
+class UserEmailEdit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentEmail = this.email;
+  }
   @Prop() email!: string;
   @Prop() profile!: types.UserProfileInfo;
   T = T;
-  currentEmail: string = this.email;
+  currentEmail: string = '';
 }
+export default toNative(UserEmailEdit);
 </script>

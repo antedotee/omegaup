@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import JSZip from 'jszip';
 import { namespace } from 'vuex-class';
 import T from '../../../lang';
@@ -93,7 +93,7 @@ import { Group, CaseGroupID } from '@/js/omegaup/problem/creator/types';
 const casesStore = namespace('casesStore');
 
 @Component
-export default class Header extends Vue {
+class Header extends Vue {
   @Prop({ default: false }) hideHeaderActions!: boolean;
 
   T = T;
@@ -220,4 +220,5 @@ export default class Header extends Vue {
     window.location.reload();
   }
 }
+export default toNative(Header);
 </script>

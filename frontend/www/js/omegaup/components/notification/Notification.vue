@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -53,7 +53,7 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class Notification extends Vue {
+class Notification extends Vue {
   @Prop() notification!: types.Notification;
 
   get iconUrl(): string {
@@ -132,6 +132,7 @@ export default class Notification extends Vue {
     }
   }
 }
+export default toNative(Notification);
 </script>
 
 <style lang="scss" scoped>

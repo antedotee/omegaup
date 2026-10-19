@@ -49,14 +49,22 @@
 
 <script lang="ts">
 import { NIL } from 'uuid';
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, toNative } from 'vue-facing-decorator';
 import { namespace } from 'vuex-class';
 import T from '../../../../lang';
 
 const casesStore = namespace('casesStore');
 
 @Component
-export default class CaseInput extends Vue {
+class CaseInput extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.caseName = this.name;
+    this.caseGroup = this.group;
+    this.casePoints = this.points;
+    this.caseAutoPoints = this.autoPoints;
+  }
   @Prop({ default: '' }) name!: string;
   @Prop({ default: NIL }) group!: string;
   @Prop({ default: 0 }) points!: number;
@@ -69,10 +77,10 @@ export default class CaseInput extends Vue {
     text: string;
   }[];
 
-  caseName = this.name;
-  caseGroup = this.group;
-  casePoints: number = this.points;
-  caseAutoPoints: boolean = this.autoPoints;
+  caseName = undefined;
+  caseGroup = undefined;
+  casePoints: number = 0;
+  caseAutoPoints: boolean = false;
 
   T = T;
 
@@ -106,4 +114,5 @@ export default class CaseInput extends Vue {
     return Math.max(points, 0);
   }
 }
+export default toNative(CaseInput);
 </script>

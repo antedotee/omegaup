@@ -361,7 +361,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -397,7 +397,14 @@ export const EventBus = new Vue();
     'omegaup-logout-confirmation': LogoutConfirmation,
   },
 })
-export default class Navbar extends Vue {
+class Navbar extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.hasTeachingObjective = this.teachingUserTypes.some((teachingType) =>
+    this.userTypes.includes(teachingType),
+  );
+  }
   @Prop() omegaUpLockDown!: boolean;
   @Prop() inContest!: boolean;
   @Prop() isLoggedIn!: boolean;
@@ -431,9 +438,7 @@ export default class Navbar extends Vue {
   logoutModalVisible = false;
   scrollY: number = 0;
   teachingUserTypes = ['teacher', 'coach', 'independent-teacher'];
-  hasTeachingObjective = this.teachingUserTypes.some((teachingType) =>
-    this.userTypes.includes(teachingType),
-  );
+  hasTeachingObjective = undefined;
 
   get formattedLoginURL(): string {
     let path = window.location.pathname;
@@ -547,6 +552,7 @@ export default class Navbar extends Vue {
     }
   }
 }
+export default toNative(Navbar);
 </script>
 
 <style lang="scss">

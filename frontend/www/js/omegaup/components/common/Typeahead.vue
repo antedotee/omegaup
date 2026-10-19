@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import VoerroTagsInput from '@voerro/vue-tagsinput';
 import '@voerro/vue-tagsinput/dist/style.css';
 import T from '../../lang';
@@ -32,7 +32,12 @@ import { types } from '../../api_types';
     'tags-input': VoerroTagsInput,
   },
 })
-export default class Typeahead extends Vue {
+class Typeahead extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.selectedOptions = this.options;
+  }
   @Prop({ default: () => [] }) existingOptions!: types.ListItem[];
   @Prop({ default: () => [] }) options!: types.ListItem[];
   @Prop({ default: 3 }) activationThreshold!: number;
@@ -46,7 +51,7 @@ export default class Typeahead extends Vue {
   @Prop({ default: false }) isInvalid!: boolean;
 
   T = T;
-  selectedOptions = this.options;
+  selectedOptions = undefined;
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   updateExistingOptions(query: string): void {
@@ -91,6 +96,7 @@ export default class Typeahead extends Vue {
     );
   }
 }
+export default toNative(Typeahead);
 </script>
 
 <style lang="scss">

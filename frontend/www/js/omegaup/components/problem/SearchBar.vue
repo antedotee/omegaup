@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -91,7 +91,14 @@ library.add(faTimes);
     'omegaup-common-typeahead': common_Typeahead,
   },
 })
-export default class ProblemSearchBar extends Vue {
+class ProblemSearchBar extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentKeyword = { key: this.keyword, value: this.keyword };
+    this.currentLanguage = this.language;
+    this.currentOnlyQualitySeal = this.onlyQualitySeal;
+  }
   @Prop() tags!: string[];
   @Prop() keyword!: string;
   @Prop() language!: string;
@@ -101,9 +108,9 @@ export default class ProblemSearchBar extends Vue {
 
   T = T;
 
-  currentKeyword: types.ListItem = { key: this.keyword, value: this.keyword };
-  currentLanguage = this.language;
-  currentOnlyQualitySeal = this.onlyQualitySeal;
+  currentKeyword: types.ListItem = undefined;
+  currentLanguage = undefined;
+  currentOnlyQualitySeal = undefined;
 
   getLanguageText(language: string): string {
     if (language === 'all') return T.wordsAll;
@@ -116,6 +123,7 @@ export default class ProblemSearchBar extends Vue {
     return this.currentKeyword?.value ?? null;
   }
 }
+export default toNative(ProblemSearchBar);
 </script>
 
 <style lang="scss" scoped>

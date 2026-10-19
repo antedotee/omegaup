@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
 import * as CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/merge/merge.css';
@@ -19,7 +19,7 @@ const MergeView =
   CodeMirror.MergeView ?? (CodeMirror as any)?.default.MergeView;
 
 @Component
-export default class DiffView extends Vue {
+class DiffView extends Vue {
   @Prop() left!: string;
   @Prop() right!: string;
   @Ref('cm-editor') private readonly cmEditor!: HTMLElement;
@@ -43,4 +43,5 @@ export default class DiffView extends Vue {
     });
   }
 }
+export default toNative(DiffView);
 </script>

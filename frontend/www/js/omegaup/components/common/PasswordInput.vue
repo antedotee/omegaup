@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -41,7 +41,7 @@ library.add(faEye, faEyeSlash);
     FontAwesomeIcon,
   },
 })
-export default class PasswordInput extends Vue {
+class PasswordInput extends Vue {
   @Prop({ required: true }) value!: string;
   @Prop({ default: '' }) name!: string;
   @Prop({ default: '' }) inputClass!: string;
@@ -57,6 +57,7 @@ export default class PasswordInput extends Vue {
     this.showPassword = !this.showPassword;
   }
 }
+export default toNative(PasswordInput);
 </script>
 
 <style lang="scss" scoped>

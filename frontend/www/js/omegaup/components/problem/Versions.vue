@@ -161,13 +161,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
 
 @Component
-export default class ProblemVersions extends Vue {
+class ProblemVersions extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.selectedRevision = this.value;
+  }
   @Prop() log!: types.ProblemVersion[];
   @Prop({ default: null }) publishedRevision!: null | types.ProblemVersion;
   @Prop() showFooter!: boolean;
@@ -176,7 +181,7 @@ export default class ProblemVersions extends Vue {
   T = T;
   time = time;
   diffMode = 'files';
-  selectedRevision: null | types.ProblemVersion = this.value;
+  selectedRevision: null | types.ProblemVersion = null;
   runsDiff: types.CommitRunsDiff = {};
   showOnlyChanges = false;
   updatePublished = 'owned-problemsets';
@@ -266,6 +271,7 @@ export default class ProblemVersions extends Vue {
     }
   }
 }
+export default toNative(ProblemVersions);
 </script>
 
 <style lang="scss" scoped>

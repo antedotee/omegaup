@@ -40,23 +40,27 @@ describe('Signup.vue', () => {
     propsData: Record<string, unknown> = {},
   ): Wrapper<Vue> {
     return shallowMount(login_Signup, {
-      propsData: {
+      props: {
         validateRecaptcha: false,
         hasVisitedSection: true, // suppress intro by default
         useSignupFormWithBirthDate: false,
         activeTab: 'login',
         ...propsData,
       },
-      stubs: {
-        'vue-recaptcha': {
-          template: '<div class="vue-recaptcha-stub"></div>',
+
+      global: {
+        mocks: {
+          $cookies: {
+            set: jest.fn(),
+            get: jest.fn(),
+            remove: jest.fn(),
+          },
         },
-      },
-      mocks: {
-        $cookies: {
-          set: jest.fn(),
-          get: jest.fn(),
-          remove: jest.fn(),
+
+        stubs: {
+          'vue-recaptcha': {
+            template: '<div class="vue-recaptcha-stub"></div>',
+          },
         },
       },
     });
@@ -436,26 +440,31 @@ describe('Signup.vue', () => {
       const container = document.createElement('div');
       document.body.appendChild(container);
       introWrapper = mount(login_Signup, {
-        propsData: {
+        props: {
           validateRecaptcha: false,
           hasVisitedSection: true,
           useSignupFormWithBirthDate: false,
           activeTab: 'login',
           ...propsData,
         },
-        stubs: {
-          'vue-recaptcha': {
-            template: '<div class="vue-recaptcha-stub"></div>',
-          },
-        },
-        mocks: {
-          $cookies: {
-            set: jest.fn(),
-            get: jest.fn(),
-            remove: jest.fn(),
-          },
-        },
+
         attachTo: container,
+
+        global: {
+          mocks: {
+            $cookies: {
+              set: jest.fn(),
+              get: jest.fn(),
+              remove: jest.fn(),
+            },
+          },
+
+          stubs: {
+            'vue-recaptcha': {
+              template: '<div class="vue-recaptcha-stub"></div>',
+            },
+          },
+        },
       });
       return introWrapper;
     }

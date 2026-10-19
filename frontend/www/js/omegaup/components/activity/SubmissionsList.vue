@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 
@@ -73,7 +73,7 @@ interface GroupedCourseProblems {
 }
 
 @Component
-export default class ActivitySubmissionsList extends Vue {
+class ActivitySubmissionsList extends Vue {
   @Prop() solvedProblems!: CourseProblems;
   @Prop() unsolvedProblems!: CourseProblems;
 
@@ -99,4 +99,5 @@ export default class ActivitySubmissionsList extends Vue {
     return groups;
   }
 }
+export default toNative(ActivitySubmissionsList);
 </script>

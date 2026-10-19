@@ -117,7 +117,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -143,7 +143,12 @@ library.add(fas);
     tooltip: VTooltip,
   },
 })
-export default class CourseAssignmentList extends Vue {
+class CourseAssignmentList extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentContent = this.content;
+  }
   @Prop() content!: types.CourseAssignment[];
   @Prop() courseAlias!: string;
   @Prop() assignmentFormMode!: omegaup.AssignmentFormMode;
@@ -151,7 +156,7 @@ export default class CourseAssignmentList extends Vue {
   contentOrderChanged = false;
   T = T;
   AssignmentFormMode = omegaup.AssignmentFormMode;
-  currentContent: types.CourseAssignment[] = this.content;
+  currentContent: types.CourseAssignment[] = [];
 
   assignmentUrl(assignment: omegaup.Assignment): string {
     return `/course/${this.courseAlias}/assignment/${assignment.alias}/`;
@@ -182,6 +187,7 @@ export default class CourseAssignmentList extends Vue {
     this.currentContent = newValue;
   }
 }
+export default toNative(CourseAssignmentList);
 </script>
 
 <style lang="scss" scoped>

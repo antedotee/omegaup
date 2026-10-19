@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import * as ui from '../../ui';
 import T from '../../lang';
@@ -98,7 +98,12 @@ import { sourceTemplates } from '../../grader/GraderTemplates';
     'omegaup-overlay-popup': omegaup_OverlayPopup,
   },
 })
-export default class ArenaRunSubmitPopup extends Vue {
+class ArenaRunSubmitPopup extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.selectedLanguage = this.preferredLanguage;
+  }
   @Ref() inputFile!: HTMLInputElement;
   @Prop() languages!: string[];
   @Prop({ required: true }) nextSubmissionTimestamp!: Date;
@@ -107,7 +112,7 @@ export default class ArenaRunSubmitPopup extends Vue {
 
   T = T;
   omegaup = omegaup;
-  selectedLanguage: null | string = this.preferredLanguage;
+  selectedLanguage: null | string = '';
   code = '';
   now: number = Date.now();
 
@@ -312,4 +317,5 @@ export default class ArenaRunSubmitPopup extends Vue {
     this.inputFile.type = 'file';
   }
 }
+export default toNative(ArenaRunSubmitPopup);
 </script>

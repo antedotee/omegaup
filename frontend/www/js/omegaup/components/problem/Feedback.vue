@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import problemHistogram, { HistogramType } from './Histogram.vue';
 
@@ -31,7 +31,7 @@ import problemHistogram, { HistogramType } from './Histogram.vue';
     'omegaup-problem-histogram': problemHistogram,
   },
 })
-export default class ProblemFeedback extends Vue {
+class ProblemFeedback extends Vue {
   @Prop() qualityHistogram!: number[];
   @Prop() difficultyHistogram!: number[];
   @Prop() qualityScore!: number;
@@ -46,6 +46,7 @@ export default class ProblemFeedback extends Vue {
       : 'col-md-12';
   }
 }
+export default toNative(ProblemFeedback);
 </script>
 
 <style>

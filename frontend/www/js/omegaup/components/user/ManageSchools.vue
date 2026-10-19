@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -78,17 +78,25 @@ import OmegaupRadioSwitch from '../RadioSwitch.vue';
     'omegaup-radio-switch': OmegaupRadioSwitch,
   },
 })
-export default class UserManageSchools extends Vue {
+class UserManageSchools extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.graduationDate = this.profile.graduation_date
+    ? time.convertLocalDateToGMTDate(this.profile.graduation_date)
+    : new Date('');
+    this.school = this.searchResultSchools[0] ?? null;
+    this.scholarDegree = this.profile.scholar_degree;
+    this.isCurrentlyEnrolled = !this.profile.graduation_date;
+  }
   @Prop() profile!: types.UserProfileInfo;
   @Prop() searchResultSchools!: types.SchoolListItem[];
 
   T = T;
-  graduationDate = this.profile.graduation_date
-    ? time.convertLocalDateToGMTDate(this.profile.graduation_date)
-    : new Date('');
-  school: null | types.SchoolListItem = this.searchResultSchools[0] ?? null;
-  scholarDegree = this.profile.scholar_degree;
-  isCurrentlyEnrolled = !this.profile.graduation_date;
+  graduationDate = undefined;
+  school: null | types.SchoolListItem = null;
+  scholarDegree = undefined;
+  isCurrentlyEnrolled = undefined;
 
   onUpdateUserSchools(): void {
     this.$emit('update-user-schools', {
@@ -107,4 +115,5 @@ export default class UserManageSchools extends Vue {
     });
   }
 }
+export default toNative(UserManageSchools);
 </script>

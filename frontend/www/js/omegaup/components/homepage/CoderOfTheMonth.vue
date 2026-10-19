@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
 import { types } from '../../api_types';
@@ -83,7 +83,7 @@ library.add(faInfoCircle);
     'omegaup-user-username': user_Username,
   },
 })
-export default class CoderOfTheMonth extends Vue {
+class CoderOfTheMonth extends Vue {
   @Prop({ default: 'all' }) category!: string;
   @Prop() coderOfTheMonth!: types.UserProfile;
 
@@ -92,6 +92,7 @@ export default class CoderOfTheMonth extends Vue {
     return getBlogUrl('CoderOfTheMonthPolicyURL');
   }
 }
+export default toNative(CoderOfTheMonth);
 </script>
 
 <style lang="scss" scoped>

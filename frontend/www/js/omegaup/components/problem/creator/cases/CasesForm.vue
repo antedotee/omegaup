@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Inject, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop, Inject, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
 import { namespace } from 'vuex-class';
 import { Case, Group, CaseLine } from '@/js/omegaup/problem/creator/types';
@@ -57,7 +57,14 @@ import * as ui from '@/js/omegaup/ui';
 const casesStore = namespace('casesStore');
 
 @Component
-export default class CasesForm extends Vue {
+class CasesForm extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.commitMessage = this.isCaseEdit
+    ? T.problemEditUpdatingCase
+    : T.problemEditUpdatingGroup;
+  }
   @Inject('problemAlias') readonly alias!: string;
   @Prop({ default: false }) readonly isTruncatedInput!: boolean;
   @Prop({ default: false }) readonly isTruncatedOutput!: boolean;
@@ -67,9 +74,7 @@ export default class CasesForm extends Vue {
   @Prop({ default: null }) readonly editGroup!: Group;
 
   T = T;
-  commitMessage = this.isCaseEdit
-    ? T.problemEditUpdatingCase
-    : T.problemEditUpdatingGroup;
+  commitMessage = undefined;
 
   @casesStore.Getter('getSelectedCase') getSelectedCase!: Case;
   @casesStore.Getter('getSelectedGroup') getSelectedGroup!: Group;
@@ -115,4 +120,5 @@ export default class CasesForm extends Vue {
     }
   }
 }
+export default toNative(CasesForm);
 </script>

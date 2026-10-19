@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import teamsgroup_FormBase from './FormBase.vue';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component({
@@ -23,7 +23,14 @@ import T from '../../lang';
     'omegaup-teams-group-form': teamsgroup_FormBase,
   },
 })
-export default class TeamsGroupForm extends Vue {
+class TeamsGroupForm extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentDescription = this.description;
+    this.currentName = this.name;
+    this.currentNumberOfContestants = this.numberOfContestants;
+  }
   @Prop({ default: null }) alias!: null | string;
   @Prop({ default: null }) description!: null | string;
   @Prop({ default: null }) name!: null | string;
@@ -31,8 +38,9 @@ export default class TeamsGroupForm extends Vue {
   @Prop({ default: 10 }) maxNumberOfContestants!: number;
 
   T = T;
-  currentDescription: null | string = this.description;
-  currentName: null | string = this.name;
-  currentNumberOfContestants: number = this.numberOfContestants;
+  currentDescription: null | string = '';
+  currentName: null | string = '';
+  currentNumberOfContestants: number = 0;
 }
+export default toNative(TeamsGroupForm);
 </script>

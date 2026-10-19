@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import omegaup_PasswordInput from '../common/PasswordInput.vue';
 
@@ -63,11 +63,16 @@ import omegaup_PasswordInput from '../common/PasswordInput.vue';
     'omegaup-password-input': omegaup_PasswordInput,
   },
 })
-export default class UserPasswordAdd extends Vue {
+class UserPasswordAdd extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.newUsername = this.username;
+  }
   @Prop() username!: string;
 
   T = T;
-  newUsername = this.username;
+  newUsername = undefined;
   newPassword = '';
   newPassword2 = '';
 
@@ -98,6 +103,7 @@ export default class UserPasswordAdd extends Vue {
     });
   }
 }
+export default toNative(UserPasswordAdd);
 </script>
 
 <style lang="scss" scoped>

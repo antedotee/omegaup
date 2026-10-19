@@ -91,15 +91,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class GettingStarted extends Vue {
+class GettingStarted extends Vue {
   @Prop({ default: false }) isUnder13User!: boolean;
 
   T = T;
 }
+export default toNative(GettingStarted);
 </script>
 
 <style lang="scss" scoped>

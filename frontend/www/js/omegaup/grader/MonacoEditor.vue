@@ -29,7 +29,7 @@
 
 <script lang="ts">
 // TODO: replace all instances of any with correct type
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import store from './GraderStore';
 import * as Util from './util';
 import * as monaco from 'monaco-editor';
@@ -46,7 +46,7 @@ library.add(faUndo);
     FontAwesomeIcon,
   },
 })
-export default class MonacoEditor extends Vue {
+class MonacoEditor extends Vue {
   // TODO: place more restrictions on value of keys inside storeMapping
   @Prop({ required: true }) storeMapping!: {
     [key: string]: string;
@@ -298,6 +298,7 @@ export default class MonacoEditor extends Vue {
     this.contents = templates.sourceTemplates[extension];
   }
 }
+export default toNative(MonacoEditor);
 </script>
 
 <style lang="scss" scoped>

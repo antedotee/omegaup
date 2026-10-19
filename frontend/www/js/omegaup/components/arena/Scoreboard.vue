@@ -130,7 +130,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 
 import * as Highcharts from 'highcharts/highstock';
 import { Chart } from 'highcharts-vue';
@@ -148,7 +148,12 @@ import { SocketStatus } from '../../arena/events_socket';
     'omegaup-countdown': omegaup_Countdown,
   },
 })
-export default class ArenaScoreboard extends Vue {
+class ArenaScoreboard extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.onlyShowExplicitlyInvited = !this.showAllContestants && this.showInvitedUsersFilter;
+  }
   @Prop({ default: 10 }) numberOfPositions!: number;
   @Prop() problems!: omegaup.Problem[];
   @Prop() ranking!: types.ScoreboardRankingEntry[];
@@ -166,7 +171,7 @@ export default class ArenaScoreboard extends Vue {
   ui = ui;
   INF = '∞';
   onlyShowExplicitlyInvited =
-    !this.showAllContestants && this.showInvitedUsersFilter;
+    undefined;
   nameDisplayOptions: ui.NameDisplayOptions =
     ui.NameDisplayOptions.NameAndUsername;
 
@@ -256,6 +261,7 @@ export default class ArenaScoreboard extends Vue {
     return userIsInvited || !this.onlyShowExplicitlyInvited;
   }
 }
+export default toNative(ArenaScoreboard);
 </script>
 
 <style lang="scss" scoped>

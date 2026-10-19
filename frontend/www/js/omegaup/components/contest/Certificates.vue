@@ -64,15 +64,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 
 @Component
-export default class Certificates extends Vue {
+class Certificates extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.certificateCutoff = this.certificatesDetails.certificateCutoff;
+  }
   @Prop() certificatesDetails!: types.ContestCertificatesAdminDetails;
 
   T = T;
-  certificateCutoff = this.certificatesDetails.certificateCutoff;
+  certificateCutoff = undefined;
 }
+export default toNative(Certificates);
 </script>

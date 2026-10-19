@@ -24,14 +24,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class PasswordRecover extends Vue {
+class PasswordRecover extends Vue {
   T = T;
   email: string = '';
 }
+export default toNative(PasswordRecover);
 </script>
 
 <style scoped>

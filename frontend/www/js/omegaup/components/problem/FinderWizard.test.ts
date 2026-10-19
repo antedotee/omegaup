@@ -5,7 +5,7 @@ import finder_wizard from './FinderWizard.vue';
 describe('FinderWizard.vue', () => {
   it('Should emit close on Escape when the wizard is visible', async () => {
     const wrapper = shallowMount(finder_wizard, {
-      propsData: {
+      props: {
         possibleTags: [],
         show: true,
       },
@@ -16,12 +16,12 @@ describe('FinderWizard.vue', () => {
 
     expect(wrapper.emitted('close')).toBeTruthy();
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   it('Should not emit close on Escape when the wizard is hidden', async () => {
     const wrapper = shallowMount(finder_wizard, {
-      propsData: {
+      props: {
         possibleTags: [],
         show: false,
       },
@@ -32,12 +32,12 @@ describe('FinderWizard.vue', () => {
 
     expect(wrapper.emitted('close')).toBeFalsy();
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   it('Should not emit close on Escape while focused inside an input field', async () => {
     const wrapper = shallowMount(finder_wizard, {
-      propsData: {
+      props: {
         possibleTags: [],
         show: true,
       },
@@ -53,6 +53,6 @@ describe('FinderWizard.vue', () => {
     expect(wrapper.emitted('close')).toBeFalsy();
 
     document.body.removeChild(input);
-    wrapper.destroy();
+    wrapper.unmount();
   });
 });

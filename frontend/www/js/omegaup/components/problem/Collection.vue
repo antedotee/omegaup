@@ -133,7 +133,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import * as ui from '../../ui';
@@ -187,7 +187,7 @@ const problemLevelIcons: { [key: string]: string } = {
     'omegaup-problem-finder-wizard': problem_FinderWizard,
   },
 })
-export default class Collection extends Vue {
+class Collection extends Vue {
   @Prop() levelTags!: string[];
   @Prop() problemCount!: { name: string; problems_per_tag: number }[];
   @Prop() allTags!: types.Tag[];
@@ -205,6 +205,7 @@ export default class Collection extends Vue {
     return T[alias];
   }
 }
+export default toNative(Collection);
 </script>
 
 <style>

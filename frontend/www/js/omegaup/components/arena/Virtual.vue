@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import * as time from '../../time';
@@ -65,7 +65,7 @@ import DateTimePicker from '../DateTimePicker.vue';
     'omegaup-datetimepicker': DateTimePicker,
   },
 })
-export default class ArenaVirtual extends Vue {
+class ArenaVirtual extends Vue {
   @Prop() title!: string;
   @Prop() description!: string;
   @Prop() startTime!: Date;
@@ -84,4 +84,5 @@ export default class ArenaVirtual extends Vue {
     });
   }
 }
+export default toNative(ArenaVirtual);
 </script>

@@ -323,7 +323,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types, messages } from '../../api_types';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -334,7 +335,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 import {
   FontAwesomeIcon,
@@ -380,7 +381,24 @@ const DANGER_THRESHOLD_PERCENTAGE = 0.9;
     'vue-multiselect': Multiselect,
   },
 })
-export default class CourseDetails extends Vue {
+class CourseDetails extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.alias = this.course.alias;
+    this.description = this.course.description;
+    this.finishTime = this.course.finish_time || new Date();
+    this.showScoreboard = this.course.show_scoreboard;
+    this.startTime = this.course.start_time;
+    this.name = this.course.name;
+    this.level = this.course.level ?? '';
+    this.objective = this.course.objective;
+    this.school = this.searchResultSchools[0] ?? null;
+    this.needsBasicInformation = this.course.needs_basic_information;
+    this.requestsUserInformation = this.course.requests_user_information;
+    this.unlimitedDuration = this.course.finish_time === null;
+    this.selectedLanguages = this.course.languages;
+  }
   @Prop({ default: false }) update!: boolean;
   @Prop({ default: false }) readOnly!: boolean;
   @Prop() course!: types.CourseDetails;
@@ -390,19 +408,19 @@ export default class CourseDetails extends Vue {
   @Prop({ default: true }) hasVisitedSection!: boolean;
 
   T = T;
-  alias = this.course.alias;
-  description = this.course.description;
-  finishTime = this.course.finish_time || new Date();
-  showScoreboard = this.course.show_scoreboard;
-  startTime = this.course.start_time;
-  name = this.course.name;
-  level = this.course.level ?? '';
-  objective = this.course.objective;
-  school: null | types.SchoolListItem = this.searchResultSchools[0] ?? null;
-  needsBasicInformation = this.course.needs_basic_information;
-  requestsUserInformation = this.course.requests_user_information;
-  unlimitedDuration = this.course.finish_time === null;
-  selectedLanguages = this.course.languages;
+  alias = undefined;
+  description = undefined;
+  finishTime = undefined;
+  showScoreboard = undefined;
+  startTime = undefined;
+  name = undefined;
+  level = undefined;
+  objective = undefined;
+  school: null | types.SchoolListItem = null;
+  needsBasicInformation = undefined;
+  requestsUserInformation = undefined;
+  unlimitedDuration = undefined;
+  selectedLanguages = undefined;
   levelOptions = levelOptions;
   MAX_LENGTH = MAX_LENGTH;
 
@@ -611,6 +629,7 @@ export default class CourseDetails extends Vue {
     this.reset();
   }
 }
+export default toNative(CourseDetails);
 </script>
 
 <style lang="scss" scoped>

@@ -170,7 +170,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -188,7 +188,7 @@ import common_EmptyState from '../common/EmptyState.vue';
     'omegaup-common-empty-state': common_EmptyState,
   },
 })
-export default class QualityNominationList extends Vue {
+class QualityNominationList extends Vue {
   @Prop() pages!: number;
   @Prop() length!: number;
   @Prop() myView!: boolean;
@@ -276,4 +276,5 @@ export default class QualityNominationList extends Vue {
         : omegaup.SortOrder.Descending;
   }
 }
+export default toNative(QualityNominationList);
 </script>

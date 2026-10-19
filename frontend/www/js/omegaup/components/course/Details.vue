@@ -327,7 +327,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import * as time from '../../time';
@@ -358,7 +358,7 @@ export enum Tab {
     'omegaup-assignment-card': course_AssignmentCard,
   },
 })
-export default class CourseDetails extends Vue {
+class CourseDetails extends Vue {
   @Prop() course!: types.CourseDetails;
   @Prop() progress!: types.AssignmentProgress;
   @Prop() currentUsername!: string;
@@ -421,6 +421,7 @@ export default class CourseDetails extends Vue {
     return `${this.course.alias}_${this.currentUsername}`;
   }
 }
+export default toNative(CourseDetails);
 </script>
 
 <style lang="scss" scoped>

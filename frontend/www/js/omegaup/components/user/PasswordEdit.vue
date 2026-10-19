@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import omegaup_PasswordInput from '../common/PasswordInput.vue';
 
@@ -64,7 +64,7 @@ import omegaup_PasswordInput from '../common/PasswordInput.vue';
     'omegaup-password-input': omegaup_PasswordInput,
   },
 })
-export default class UserPasswordEdit extends Vue {
+class UserPasswordEdit extends Vue {
   T = T;
   oldPassword = '';
   newPassword = '';
@@ -97,6 +97,7 @@ export default class UserPasswordEdit extends Vue {
     });
   }
 }
+export default toNative(UserPasswordEdit);
 </script>
 
 <style lang="scss" scoped>

@@ -320,7 +320,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, Ref, toNative } from 'vue-facing-decorator';
 import course_Form from './Form.vue';
 import course_AssignmentList from './AssignmentList.vue';
 import common_Archive from '../common/Archive.vue';
@@ -386,7 +386,15 @@ const emptyAssignment: types.CourseAssignment = {
     'omegaup-course-generate-link-clone': course_GenerateLinkClone,
   },
 })
-export default class CourseEdit extends Vue {
+class CourseEdit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.showTab = this.initialTab;
+    this.alreadyArchived = this.data.course.archived;
+    this.assignmentProblems = this.data.assignmentProblems;
+    this.assignments = this.data.course.assignments;
+  }
   @Ref('assignment-details') readonly assignmentDetails!: Vue;
   @Prop() data!: types.CourseEditPayload;
   @Prop() invalidParameterName!: string;
@@ -400,12 +408,12 @@ export default class CourseEdit extends Vue {
   @Prop() readOnly!: boolean;
 
   T = T;
-  showTab = this.initialTab;
+  showTab = undefined;
   admissionMode = AdmissionMode.Private;
-  alreadyArchived = this.data.course.archived;
+  alreadyArchived = undefined;
 
-  assignmentProblems = this.data.assignmentProblems;
-  assignments = this.data.course.assignments;
+  assignmentProblems = undefined;
+  assignments = undefined;
   assignmentFormMode: omegaup.AssignmentFormMode =
     omegaup.AssignmentFormMode.Default;
   assignment = emptyAssignment;
@@ -472,4 +480,5 @@ export default class CourseEdit extends Vue {
     this.showTab = newValue;
   }
 }
+export default toNative(CourseEdit);
 </script>

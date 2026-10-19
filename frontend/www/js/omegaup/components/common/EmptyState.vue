@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
@@ -39,13 +39,14 @@ library.add(faUsers, faGraduationCap, faClipboardList, faTerminal);
     FontAwesomeIcon,
   },
 })
-export default class EmptyState extends Vue {
+class EmptyState extends Vue {
   @Prop() icon!: string | string[];
   @Prop() title!: string;
   @Prop() description!: string;
   @Prop({ default: '' }) buttonText!: string;
   @Prop({ default: '' }) buttonLink!: string;
 }
+export default toNative(EmptyState);
 </script>
 
 <style lang="scss" scoped>

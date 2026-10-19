@@ -140,7 +140,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { ObjectivesAnswers } from './ObjectivesQuestions.vue';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -153,30 +154,44 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 // Import Only Required Plugins
 import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
-Vue.use(ButtonPlugin);
-Vue.use(PopoverPlugin);
+VueGlobal.use(ButtonPlugin);
+VueGlobal.use(PopoverPlugin);
 
 @Component({
   components: {
     FontAwesomeIcon,
   },
 })
-export default class UserPreferencesEdit extends Vue {
+class UserPreferencesEdit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.email = this.profile.email;
+    this.locale = this.profile.locale;
+    this.preferredLanguage = this.profile.preferred_language ?? '';
+    this.programmingLanguages = this.profile.programming_languages;
+    this.isPrivate = this.profile.is_private;
+    this.hideProblemTags = this.profile.hide_problem_tags;
+    this.hasCompetitiveObjective = this.profile.has_competitive_objective ?? false;
+    this.hasLearningObjective = this.profile.has_learning_objective ?? true;
+    this.hasScholarObjective = this.profile.has_scholar_objective ?? true;
+    this.hasTeachingObjective = this.profile.has_teaching_objective ?? false;
+  }
   @Prop() profile!: types.UserProfileInfo;
 
   show: boolean = false;
   T = T;
   ObjectivesAnswers = ObjectivesAnswers;
-  email = this.profile.email;
-  locale = this.profile.locale;
-  preferredLanguage = this.profile.preferred_language ?? '';
-  programmingLanguages = this.profile.programming_languages;
-  isPrivate = this.profile.is_private;
-  hideProblemTags = this.profile.hide_problem_tags;
-  hasCompetitiveObjective = this.profile.has_competitive_objective ?? false;
-  hasLearningObjective = this.profile.has_learning_objective ?? true;
-  hasScholarObjective = this.profile.has_scholar_objective ?? true;
-  hasTeachingObjective = this.profile.has_teaching_objective ?? false;
+  email = undefined;
+  locale = undefined;
+  preferredLanguage = undefined;
+  programmingLanguages = undefined;
+  isPrivate = undefined;
+  hideProblemTags = undefined;
+  hasCompetitiveObjective = undefined;
+  hasLearningObjective = undefined;
+  hasScholarObjective = undefined;
+  hasTeachingObjective = undefined;
 
   get scholarCompetitiveObjectiveQuestion(): string {
     if (this.hasLearningObjective && this.hasTeachingObjective) {
@@ -286,6 +301,7 @@ export default class UserPreferencesEdit extends Vue {
     this.show = this.isPrivate;
   }
 }
+export default toNative(UserPreferencesEdit);
 </script>
 
 <style lang="scss" scoped>

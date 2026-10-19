@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 
@@ -46,7 +46,7 @@ library.add(faChevronCircleRight);
     FontAwesomeIcon,
   },
 })
-export default class ArenaNavbarAssignments extends Vue {
+class ArenaNavbarAssignments extends Vue {
   @Prop() assignments!: omegaup.Assignment[];
   @Prop() currentAssignment!: omegaup.Assignment;
 
@@ -72,6 +72,7 @@ export default class ArenaNavbarAssignments extends Vue {
     );
   }
 }
+export default toNative(ArenaNavbarAssignments);
 </script>
 
 <style>

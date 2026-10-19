@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { dao, types } from '../../api_types';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
@@ -129,7 +129,7 @@ export enum AvailableForms {
     'omegaup-identity-members': teamsgroup_Members,
   },
 })
-export default class Teams extends Vue {
+class Teams extends Vue {
   @Prop() teams!: types.Identity[];
   @Prop() countries!: Array<dao.Countries>;
   @Prop() searchResultUsers!: types.ListItem[];
@@ -182,4 +182,5 @@ export default class Teams extends Vue {
     this.username = null;
   }
 }
+export default toNative(Teams);
 </script>

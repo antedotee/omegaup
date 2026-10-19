@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import country_Flag from '../CountryFlag.vue';
 import user_Username from './Username.vue';
@@ -81,7 +81,7 @@ import { Problem } from '../../linkable_resource';
     'omegaup-user-username': user_Username,
   },
 })
-export default class UserMainInfo extends Vue {
+class UserMainInfo extends Vue {
   @Prop() data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop() edit!: boolean;
@@ -114,4 +114,5 @@ export default class UserMainInfo extends Vue {
     }
   }
 }
+export default toNative(UserMainInfo);
 </script>

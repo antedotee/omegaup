@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as time from '../../time';
 import * as ui from '../../ui';
@@ -209,7 +209,7 @@ export function describeSchedule(schedule?: string | null): string | null {
 }
 
 @Component
-export default class Crons extends Vue {
+class Crons extends Vue {
   T = T;
   @Prop({ default: () => [] }) jobs!: types.CronJob[];
   @Prop({ default: () => [] }) runs!: types.CronRun[];
@@ -264,6 +264,7 @@ export default class Crons extends Vue {
     return typeof rows === 'number' ? String(rows) : '—';
   }
 }
+export default toNative(Crons);
 </script>
 
 <style lang="scss" scoped>

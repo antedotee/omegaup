@@ -4,8 +4,11 @@ import 'process';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 
-import Vue from 'vue';
+import Vue, { configureCompat } from 'vue';
 import Sortable from 'sortablejs';
+
+// Run the Vue 3 migration build in full Vue 2 compatibility mode for tests.
+configureCompat({ MODE: 2 });
 
 Vue.directive('Sortable', {
   inserted: (el: HTMLElement, binding) => {

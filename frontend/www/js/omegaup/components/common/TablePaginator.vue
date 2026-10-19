@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { LinkableResource } from '../../linkable_resource';
 
@@ -111,7 +111,12 @@ interface SortOption {
  * calculated taking into account the number of items per page, total items.
  */
 @Component
-export default class TablePaginator extends Vue {
+class TablePaginator extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentSortOption = this.sortOptions.length > 0 ? this.sortOptions[0].value : '';
+  }
   @Prop() items!: LinkableResource[];
   @Prop() itemsPerPage!: number;
   @Prop() columnNames!: Array<{ name: string; style: string }>;
@@ -122,7 +127,7 @@ export default class TablePaginator extends Vue {
   private T = T;
   private currentPageNumber = 0;
   private currentSortOption =
-    this.sortOptions.length > 0 ? this.sortOptions[0].value : '';
+    undefined;
 
   private nextPage(): void {
     this.currentPageNumber++;
@@ -159,6 +164,7 @@ export default class TablePaginator extends Vue {
     this.$emit('sort-option-change', newSelector);
   }
 }
+export default toNative(TablePaginator);
 </script>
 
 <style scoped>

@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import * as Util from '../../grader/util';
 import Ephemeral from '../../grader/Ephemeral.vue';
@@ -25,7 +25,7 @@ import Ephemeral from '../../grader/Ephemeral.vue';
     'ephemeral-ide': Ephemeral,
   },
 })
-export default class EphemeralGrader extends Vue {
+class EphemeralGrader extends Vue {
   @Prop({ default: () => ({ ...Util.DUMMY_PROBLEM }) })
   problem!: types.ProblemInfo;
   @Prop({ default: false }) canSubmit!: boolean;
@@ -55,4 +55,5 @@ export default class EphemeralGrader extends Vue {
     return this.preferredLanguage;
   }
 }
+export default toNative(EphemeralGrader);
 </script>

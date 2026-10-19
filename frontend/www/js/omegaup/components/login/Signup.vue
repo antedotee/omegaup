@@ -296,7 +296,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import omegaup_Markdown from '../Markdown.vue';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -305,7 +306,7 @@ import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
 import { getBlogUrl } from '../../urlHelper';
 import omegaup_PasswordInput from '../common/PasswordInput.vue';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 @Component({
   components: {
@@ -313,7 +314,7 @@ Vue.use(VueCookies, { expires: -1 });
     'omegaup-password-input': omegaup_PasswordInput,
   },
 })
-export default class Signup extends Vue {
+class Signup extends Vue {
   @Prop() validateRecaptcha!: boolean;
   @Prop({ default: false }) hasVisitedSection!: boolean;
   @Prop({ default: false }) useSignupFormWithBirthDate!: boolean;
@@ -471,6 +472,7 @@ export default class Signup extends Vue {
     this.isUnder13 = true;
   }
 }
+export default toNative(Signup);
 </script>
 
 <style scoped>

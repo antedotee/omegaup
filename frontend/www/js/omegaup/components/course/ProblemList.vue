@@ -199,7 +199,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -224,7 +224,13 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class CourseProblemList extends Vue {
+class CourseProblemList extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.assignment = this.selectedAssignment;
+    this.problems = this.assignmentProblems;
+  }
   @Prop() assignments!: types.CourseAssignment[];
   @Prop() assignmentProblems!: types.ProblemsetProblem[];
   @Prop() taggedProblems!: omegaup.Problem[];
@@ -232,8 +238,8 @@ export default class CourseProblemList extends Vue {
   @Prop() searchResultProblems!: types.ListItem[];
 
   T = T;
-  assignment: Partial<types.CourseAssignment> = this.selectedAssignment;
-  problems: types.AddedProblem[] = this.assignmentProblems;
+  assignment: Partial<types.CourseAssignment> = undefined;
+  problems: types.AddedProblem[] = [];
   difficulty = 'intro';
   topics: string[] = [];
   taggedProblemAlias = '';
@@ -446,4 +452,5 @@ export default class CourseProblemList extends Vue {
     this.useLatestVersion = true;
   }
 }
+export default toNative(CourseProblemList);
 </script>

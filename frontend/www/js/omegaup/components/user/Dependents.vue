@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
@@ -57,7 +57,7 @@ import user_Username from '../user/Username.vue';
     'omegaup-user-username': user_Username,
   },
 })
-export default class UserDependents extends Vue {
+class UserDependents extends Vue {
   @Prop() dependents!: types.UserDependent[];
 
   T = T;
@@ -132,6 +132,7 @@ export default class UserDependents extends Vue {
     return 'text-white';
   }
 }
+export default toNative(UserDependents);
 </script>
 
 <style lang="scss" scoped>

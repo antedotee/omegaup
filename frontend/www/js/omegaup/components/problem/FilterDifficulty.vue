@@ -23,15 +23,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Emit, Watch, Prop } from 'vue-property-decorator';
+import { Vue, Component, Emit, Watch, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class FilterDifficulty extends Vue {
+class FilterDifficulty extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentDifficulty = this.selectedDifficulty;
+  }
   @Prop() selectedDifficulty!: string;
 
   T = T;
-  currentDifficulty = this.selectedDifficulty;
+  currentDifficulty = undefined;
 
   difficulties: { [key: string]: { name: string; id: string } } = {
     anyDifficulty: {
@@ -58,6 +63,7 @@ export default class FilterDifficulty extends Vue {
     return val;
   }
 }
+export default toNative(FilterDifficulty);
 </script>
 
 <style scoped>

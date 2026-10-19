@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { Chart } from 'highcharts-vue';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
@@ -130,7 +130,7 @@ const emptyPeriodRunCount = {
     highcharts: Chart,
   },
 })
-export default class UserCharts extends Vue {
+class UserCharts extends Vue {
   @Prop() data!: omegaup.RunInfo[];
   @Prop() username!: string;
 
@@ -404,4 +404,5 @@ export default class UserCharts extends Vue {
     };
   }
 }
+export default toNative(UserCharts);
 </script>

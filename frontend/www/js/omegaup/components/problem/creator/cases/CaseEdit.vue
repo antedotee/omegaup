@@ -469,7 +469,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Ref } from 'vue-property-decorator';
+import { Component, Vue, Ref, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../../../lang';
 import problemCreator_Cases_CaseInput from './CaseInput.vue';
 import { namespace } from 'vuex-class';
@@ -496,8 +497,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import draggable from 'vuedraggable';
 library.add(fas);
-Vue.use(FormInputPlugin);
-Vue.use(ModalPlugin);
+VueGlobal.use(FormInputPlugin);
+VueGlobal.use(ModalPlugin);
 
 const casesStore = namespace('casesStore');
 
@@ -510,7 +511,7 @@ const casesStore = namespace('casesStore');
     draggable: draggable,
   },
 })
-export default class CaseEdit extends Vue {
+class CaseEdit extends Vue {
   T = T;
   editCaseModal = false;
 
@@ -834,6 +835,7 @@ export default class CaseEdit extends Vue {
     });
   }
 }
+export default toNative(CaseEdit);
 </script>
 
 <style lang="scss" scoped>

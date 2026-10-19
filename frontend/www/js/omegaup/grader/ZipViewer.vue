@@ -35,14 +35,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import * as Util from './util';
 import T from '../lang';
 import JSZip, { JSZipObject } from 'jszip';
 import store from './GraderStore';
 
 @Component
-export default class ZipViewer extends Vue {
+class ZipViewer extends Vue {
   zip: JSZip | null = null;
   active: string | null = null;
   T = T;
@@ -65,6 +65,7 @@ export default class ZipViewer extends Vue {
     this.active = item.name;
   }
 }
+export default toNative(ZipViewer);
 </script>
 
 <style scoped>

@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -109,7 +109,7 @@ import common_Requests from '../common/Requests.vue';
     'omegaup-common-requests': common_Requests,
   },
 })
-export default class CourseAddStudents extends Vue {
+class CourseAddStudents extends Vue {
   @Prop() courseAlias!: string;
   @Prop() students!: types.CourseStudent[];
   @Prop({ required: false }) identityRequests!: types.IdentityRequest[];
@@ -143,6 +143,7 @@ export default class CourseAddStudents extends Vue {
     this.requests = this.identityRequests;
   }
 }
+export default toNative(CourseAddStudents);
 </script>
 
 <style>

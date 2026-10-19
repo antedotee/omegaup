@@ -25,7 +25,7 @@ describe('RunSubmitPopup.vue', () => {
 
     const wrapper = shallowMount(arena_RunSubmitPopup, {
       attachTo: '#root',
-      propsData: {
+      props: {
         languages: ['py3', 'cpp17-gcc'],
         nextSubmissionTimestamp,
         preferredLanguage: 'cpp17-gcc',
@@ -37,7 +37,7 @@ describe('RunSubmitPopup.vue', () => {
     const vm = wrapper.vm as any;
     expect(vm.selectedLanguage).toBe('py3');
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   it('Should fall back to preferredLanguage when the saved language is not allowed', async () => {
@@ -45,7 +45,7 @@ describe('RunSubmitPopup.vue', () => {
 
     const wrapper = shallowMount(arena_RunSubmitPopup, {
       attachTo: '#root',
-      propsData: {
+      props: {
         languages: ['cpp17-gcc'],
         nextSubmissionTimestamp,
         preferredLanguage: 'cpp17-gcc',
@@ -57,7 +57,7 @@ describe('RunSubmitPopup.vue', () => {
     const vm = wrapper.vm as any;
     expect(vm.selectedLanguage).toBe('cpp17-gcc');
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   it('Should revalidate the restored language after navigating to another problem', async () => {
@@ -65,7 +65,7 @@ describe('RunSubmitPopup.vue', () => {
 
     const wrapper = shallowMount(arena_RunSubmitPopup, {
       attachTo: '#root',
-      propsData: {
+      props: {
         languages: ['java'],
         nextSubmissionTimestamp,
         preferredLanguage: 'java',
@@ -87,7 +87,7 @@ describe('RunSubmitPopup.vue', () => {
 
     expect(vm.selectedLanguage).toBe('cpp17-gcc');
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   it('Should emit submit-run with the current valid language after navigation', async () => {
@@ -95,7 +95,7 @@ describe('RunSubmitPopup.vue', () => {
 
     const wrapper = shallowMount(arena_RunSubmitPopup, {
       attachTo: '#root',
-      propsData: {
+      props: {
         languages: ['java'],
         nextSubmissionTimestamp,
         preferredLanguage: 'java',
@@ -122,13 +122,13 @@ describe('RunSubmitPopup.vue', () => {
     expect(submitRunEvents).toBeDefined();
     expect(submitRunEvents?.[0][1]).toBe('cpp17-gcc');
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   it('Should persist the newly selected language to storage when the user changes it', async () => {
     const wrapper = shallowMount(arena_RunSubmitPopup, {
       attachTo: '#root',
-      propsData: {
+      props: {
         languages: ['py3', 'cpp17-gcc'],
         nextSubmissionTimestamp,
         preferredLanguage: 'py3',
@@ -146,6 +146,6 @@ describe('RunSubmitPopup.vue', () => {
 
     expect(localStorage.getItem('arena:selectedLanguage')).toBe('cpp17-gcc');
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 });

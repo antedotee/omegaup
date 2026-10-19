@@ -92,7 +92,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import * as ui from '../../ui';
@@ -105,8 +106,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import { LayoutPlugin, CollapsePlugin } from 'bootstrap-vue';
-Vue.use(LayoutPlugin);
-Vue.use(CollapsePlugin);
+VueGlobal.use(LayoutPlugin);
+VueGlobal.use(CollapsePlugin);
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -119,7 +120,7 @@ library.add(fas);
     'omegaup-countdown': omegaup_Countdown,
   },
 })
-export default class UserNextRegisteredContest extends Vue {
+class UserNextRegisteredContest extends Vue {
   @Prop() nextRegisteredContest!: types.ContestListItem;
   T = T;
   ui = ui;
@@ -153,6 +154,7 @@ export default class UserNextRegisteredContest extends Vue {
     this.$emit('redirect', this.nextRegisteredContest.alias);
   }
 }
+export default toNative(UserNextRegisteredContest);
 </script>
 
 <style lang="scss" scoped>

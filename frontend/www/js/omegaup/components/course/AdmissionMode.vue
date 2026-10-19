@@ -95,7 +95,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import Clipboard from 'v-clipboard';
 import T from '../../lang';
 import omegaup_Markdown from '../Markdown.vue';
@@ -110,7 +111,7 @@ import {
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
 @Component({
   components: {
@@ -121,7 +122,13 @@ Vue.use(Clipboard);
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
   },
 })
-export default class CourseAdmissionMode extends Vue {
+class CourseAdmissionMode extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentAdmissionMode = this.admissionMode;
+    this.currentShowInPublicCoursesList = this.showInPublicCoursesList;
+  }
   @Prop() admissionMode!: AdmissionMode;
   @Prop() courseAlias!: string;
   @Prop() shouldShowPublicOption!: boolean;
@@ -129,8 +136,8 @@ export default class CourseAdmissionMode extends Vue {
 
   T = T;
   AdmissionMode = AdmissionMode;
-  currentAdmissionMode = this.admissionMode;
-  currentShowInPublicCoursesList = this.showInPublicCoursesList;
+  currentAdmissionMode = undefined;
+  currentShowInPublicCoursesList = undefined;
   copiedToClipboard = false;
 
   onSubmit(): void {
@@ -154,4 +161,5 @@ export default class CourseAdmissionMode extends Vue {
     return `${window.location.origin}/course/${this.courseAlias}/`;
   }
 }
+export default toNative(CourseAdmissionMode);
 </script>

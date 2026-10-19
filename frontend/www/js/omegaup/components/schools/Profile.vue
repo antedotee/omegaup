@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -78,7 +78,7 @@ import { Chart } from 'highcharts-vue';
     highcharts: Chart,
   },
 })
-export default class SchoolProfile extends Vue {
+class SchoolProfile extends Vue {
   @Prop() name!: string;
   @Prop() rank!: number;
   @Prop() country!: omegaup.Country;
@@ -147,6 +147,7 @@ export default class SchoolProfile extends Vue {
     this.sortBy = newSortBy;
   }
 }
+export default toNative(SchoolProfile);
 </script>
 
 <style scoped lang="scss">

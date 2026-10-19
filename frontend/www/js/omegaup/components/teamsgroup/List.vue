@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -110,7 +110,7 @@ library.add(faEdit, faArchive, faBoxOpen);
     FontAwesomeIcon,
   },
 })
-export default class TeamsGroupList extends Vue {
+class TeamsGroupList extends Vue {
   @Prop() teamsGroups!: types.TeamsGroup[];
   T = T;
   showArchiveModal = false;
@@ -159,6 +159,7 @@ export default class TeamsGroupList extends Vue {
     this.selectedTeamsGroup = null;
   }
 }
+export default toNative(TeamsGroupList);
 </script>
 
 <style lang="scss" scoped>

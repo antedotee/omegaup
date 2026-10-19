@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import CountryFlag from '../CountryFlag.vue';
 
 @Component({
@@ -39,7 +39,7 @@ import CountryFlag from '../CountryFlag.vue';
     'omegaup-countryflag': CountryFlag,
   },
 })
-export default class Username extends Vue {
+class Username extends Vue {
   @Prop() username!: string;
   @Prop({ default: null }) name!: string;
   @Prop() classname!: string;
@@ -55,6 +55,7 @@ export default class Username extends Vue {
     return this.username;
   }
 }
+export default toNative(Username);
 </script>
 
 <style lang="scss" scope>

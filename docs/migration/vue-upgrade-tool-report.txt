@@ -1,0 +1,2209 @@
+Processed 640 of 640 matching files with 0 errors
+╔══════════════════════════════════════╤═══════╗
+║ Codemod name                         │ Count ║
+╟──────────────────────────────────────┼───────╢
+║ vue-set                              │ 62    ║
+╟──────────────────────────────────────┼───────╢
+║ vue-delete                           │ 4     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-contextual-h                     │ 106   ║
+╟──────────────────────────────────────┼───────╢
+║ vue-defineComponent                  │ 2     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-v-on-native                      │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-hook-events                      │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-v-bind-sync                      │ 59    ║
+╟──────────────────────────────────────┼───────╢
+║ vue-scoped-slots                     │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-nextTick                         │ 132   ║
+╟──────────────────────────────────────┼───────╢
+║ vue-lifecycle-hooks                  │ 4     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-data-function                    │ 1     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-functional-component             │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-remove-$listeners                │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-v-model                          │ 23    ║
+╟──────────────────────────────────────┼───────╢
+║ vue-v-deep                           │ 9     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-array-watch                      │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-emits-sfc                        │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-emits-non-sfc                    │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-transition-group-root-element    │ 2     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-transition-props                 │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vuex-instantiation                   │ 16    ║
+╟──────────────────────────────────────┼───────╢
+║ test-utils-wrapper-destroy           │ 30    ║
+╟──────────────────────────────────────┼───────╢
+║ test-utils-propsData                 │ 515   ║
+╟──────────────────────────────────────┼───────╢
+║ test-utils-scoped-slots-mount-option │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ test-utils-global-mount-options      │ 67    ║
+╟──────────────────────────────────────┼───────╢
+║ vue-router-instantiation             │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-router-onReady                   │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-router-getMatchedComponents      │ 0     ║
+╟──────────────────────────────────────┼───────╢
+║ vue-router-view-slot-content         │ 0     ║
+╚══════════════════════════════════════╧═══════╝
+
+MANUAL MIGRATIONS:
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/admin/carousel.ts 12:1-12:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 9 | 
+10 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+11 | import { ModalPlugin } from 'bootstrap-vue';
+12 | Vue.use(ModalPlugin);
+   | ^^^^^^^^^^^^^^^^^^^^
+13 | 
+14 | OmegaUp.on('ready', () => {
+15 |   const payload = types.payloadParsers.CarouselManagementPayload();
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/clarificationsStore.ts 5:1-5:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+2 | import Vuex, { createStore } from 'vuex';
+3 | import { types } from '../api_types';
+4 | 
+5 | Vue.use(Vuex);
+  | ^^^^^^^^^^^^^
+6 | 
+7 | export interface ClarificationState {
+8 |   // The list of clarifications
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/contestStore.ts 12:1-12:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 9 |   ContestFilter,
+10 | } from '../components/arena/ContestList.vue';
+11 | 
+12 | Vue.use(Vuex);
+   | ^^^^^^^^^^^^^
+13 | 
+14 | export interface UrlParams {
+15 |   page: number;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/events_socket.test.ts 460:5-460:12
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+457 |     jest.runOnlyPendingTimers();
+458 |     await server?.connected;
+459 | 
+460 |     localVue.use(Vuex);
+    |     ^^^^^^^^
+461 |     const store = createStore(runsStoreConfig);
+462 | 
+463 |     server?.send({
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/events_socket.test.ts 496:5-496:12
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+493 |     jest.runOnlyPendingTimers();
+494 |     await server?.connected;
+495 | 
+496 |     localVue.use(Vuex);
+    |     ^^^^^^^^
+497 |     const clarificationStore = createStore(clarificationStoreConfig);
+498 | 
+499 |     server?.send({
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/navigation.test.ts 212:7-212:14
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+209 |         contestAlias: 'contest_alias',
+210 |         contestMode: getScoreModeEnum('partial'),
+211 |       };
+212 |       localVue.use(Vuex);
+    |       ^^^^^^^^
+213 |       createStore(storeConfig);
+214 |       await navigateToProblem(params);
+215 |       expect(setLocationHash).toHaveBeenCalledWith(
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/navigation.test.ts 230:7-230:14
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+227 |         contestAlias: 'contest_alias',
+228 |         contestMode: getScoreModeEnum('max_per_group'),
+229 |       };
+230 |       localVue.use(Vuex);
+    |       ^^^^^^^^
+231 |       createStore(storeConfig);
+232 |       await navigateToProblem(params);
+233 |       expect(setLocationHash).toHaveBeenCalledWith(
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/problemStore.ts 5:1-5:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+2 | import Vuex, { createStore } from 'vuex';
+3 | import { types } from '../api_types';
+4 | 
+5 | Vue.use(Vuex);
+  | ^^^^^^^^^^^^^
+6 | 
+7 | export interface ProblemState {
+8 |   // The mapping of problem alias to indexes on the problems array
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/ranking.test.ts 260:7-260:14
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+257 |     });
+258 | 
+259 |     it('Should handle onVirtualRankingChanged function', () => {
+260 |       localVue.use(Vuex);
+    |       ^^^^^^^^
+261 |       const store = createStore(rankingStoreConfig);
+262 | 
+263 |       onVirtualRankingChanged({
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/rankingStore.ts 6:1-6:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+3 | import { types } from '../api_types';
+4 | import { omegaup } from '../omegaup';
+5 | 
+6 | Vue.use(Vuex);
+  | ^^^^^^^^^^^^^
+7 | 
+8 | export interface RankingState {
+9 |   miniRankingUsers: omegaup.UserRank[];
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/runsStore.ts 5:1-5:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+2 | import Vuex, { createStore } from 'vuex';
+3 | import { types } from '../api_types';
+4 | 
+5 | Vue.use(Vuex);
+  | ^^^^^^^^^^^^^
+6 | 
+7 | export interface RunFilters {
+8 |   offset?: number;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/singleTabEnforcer.test.ts 79:5-79:20
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+76 |       'omegaup-contest-test-contest',
+77 |     );
+78 | 
+79 |     enforcer.destroy();
+   |     ^^^^^^^^^^^^^^^^
+80 |   });
+81 | 
+82 |   it('should not be blocked when first tab opens', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/singleTabEnforcer.test.ts 94:5-94:20
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+91 |     expect(enforcer.blocked).toBe(false);
+92 |     expect(onBlocked).not.toHaveBeenCalled();
+93 | 
+94 |     enforcer.destroy();
+   |     ^^^^^^^^^^^^^^^^
+95 |   });
+96 | 
+97 |   it('should block second tab when first tab is open', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/singleTabEnforcer.test.ts 123:5-123:21
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+120 |     expect(onBlocked1).not.toHaveBeenCalled();
+121 |     expect(onBlocked2).toHaveBeenCalled();
+122 | 
+123 |     enforcer1.destroy();
+    |     ^^^^^^^^^^^^^^^^^
+124 |     enforcer2.destroy();
+125 |   });
+126 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/singleTabEnforcer.test.ts 124:5-124:21
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+121 |     expect(onBlocked2).toHaveBeenCalled();
+122 | 
+123 |     enforcer1.destroy();
+124 |     enforcer2.destroy();
+    |     ^^^^^^^^^^^^^^^^^
+125 |   });
+126 | 
+127 |   it('should allow tabs for different contests', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/singleTabEnforcer.test.ts 152:5-152:21
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+149 |     expect(onBlocked1).not.toHaveBeenCalled();
+150 |     expect(onBlocked2).not.toHaveBeenCalled();
+151 | 
+152 |     enforcer1.destroy();
+    |     ^^^^^^^^^^^^^^^^^
+153 |     enforcer2.destroy();
+154 |   });
+155 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/singleTabEnforcer.test.ts 153:5-153:21
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+150 |     expect(onBlocked2).not.toHaveBeenCalled();
+151 | 
+152 |     enforcer1.destroy();
+153 |     enforcer2.destroy();
+    |     ^^^^^^^^^^^^^^^^^
+154 |   });
+155 | 
+156 |   it('should clean up on destroy', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/singleTabEnforcer.test.ts 165:5-165:20
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+162 |     enforcer.init();
+163 |     expect(MockBroadcastChannel.instances).toHaveLength(1);
+164 | 
+165 |     enforcer.destroy();
+    |     ^^^^^^^^^^^^^^^^
+166 |     expect(MockBroadcastChannel.instances).toHaveLength(0);
+167 |   });
+168 | });
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/singleTabEnforcer.test.ts 182:5-182:20
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+179 |     expect(enforcer).not.toBeNull();
+180 |     expect(MockBroadcastChannel.instances).toHaveLength(1);
+181 | 
+182 |     enforcer.destroy();
+    |     ^^^^^^^^^^^^^^^^
+183 |   });
+184 | });
+185 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/arena/socketStore.ts 4:1-4:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+1 | import Vue from 'vue';
+2 | import Vuex, { createStore } from 'vuex';
+3 | 
+4 | Vue.use(Vuex);
+  | ^^^^^^^^^^^^^
+5 | 
+6 | export interface SocketState {
+7 |   socketStatus: SocketStatus;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/admin/Support.vue 392:1-392:18
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+389 | import { fas } from '@fortawesome/free-solid-svg-icons';
+390 | import { library } from '@fortawesome/fontawesome-svg-core';
+391 | library.add(fas);
+392 | Vue.use(Clipboard);
+    | ^^^^^^^^^^^^^^^^^^
+393 | 
+394 | export interface UpdateEmailRequest {
+395 |   email: string;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestCard.vue 136:1-136:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+133 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+134 | 
+135 | import { ButtonPlugin, DropdownPlugin, LayoutPlugin } from 'bootstrap-vue';
+136 | Vue.use(ButtonPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+137 | Vue.use(DropdownPlugin);
+138 | Vue.use(LayoutPlugin);
+139 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestCard.vue 137:1-137:23
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+134 | 
+135 | import { ButtonPlugin, DropdownPlugin, LayoutPlugin } from 'bootstrap-vue';
+136 | Vue.use(ButtonPlugin);
+137 | Vue.use(DropdownPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+138 | Vue.use(LayoutPlugin);
+139 | 
+140 | import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestCard.vue 138:1-138:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+135 | import { ButtonPlugin, DropdownPlugin, LayoutPlugin } from 'bootstrap-vue';
+136 | Vue.use(ButtonPlugin);
+137 | Vue.use(DropdownPlugin);
+138 | Vue.use(LayoutPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+139 | 
+140 | import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+141 | import { fas } from '@fortawesome/free-solid-svg-icons';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestCardv2.vue 148:1-148:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+145 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+146 | 
+147 | import { ButtonPlugin, DropdownPlugin, LayoutPlugin } from 'bootstrap-vue';
+148 | Vue.use(ButtonPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+149 | Vue.use(DropdownPlugin);
+150 | Vue.use(LayoutPlugin);
+151 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestCardv2.vue 149:1-149:23
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+146 | 
+147 | import { ButtonPlugin, DropdownPlugin, LayoutPlugin } from 'bootstrap-vue';
+148 | Vue.use(ButtonPlugin);
+149 | Vue.use(DropdownPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+150 | Vue.use(LayoutPlugin);
+151 | 
+152 | import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestCardv2.vue 150:1-150:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+147 | import { ButtonPlugin, DropdownPlugin, LayoutPlugin } from 'bootstrap-vue';
+148 | Vue.use(ButtonPlugin);
+149 | Vue.use(DropdownPlugin);
+150 | Vue.use(LayoutPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+151 | 
+152 | import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+153 | import { fas } from '@fortawesome/free-solid-svg-icons';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestList.vue 490:1-490:19
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+487 | import ContestCard from './ContestCardv2.vue';
+488 | import ContestSkeleton from './ContestSkeleton.vue';
+489 | import infiniteScroll from 'vue-infinite-scroll';
+490 | Vue.use(TabsPlugin);
+    | ^^^^^^^^^^^^^^^^^^^
+491 | Vue.use(CardPlugin);
+492 | Vue.use(DropdownPlugin);
+493 | Vue.use(LayoutPlugin);
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestList.vue 491:1-491:19
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+488 | import ContestSkeleton from './ContestSkeleton.vue';
+489 | import infiniteScroll from 'vue-infinite-scroll';
+490 | Vue.use(TabsPlugin);
+491 | Vue.use(CardPlugin);
+    | ^^^^^^^^^^^^^^^^^^^
+492 | Vue.use(DropdownPlugin);
+493 | Vue.use(LayoutPlugin);
+494 | library.add(fas);
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestList.vue 492:1-492:23
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+489 | import infiniteScroll from 'vue-infinite-scroll';
+490 | Vue.use(TabsPlugin);
+491 | Vue.use(CardPlugin);
+492 | Vue.use(DropdownPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+493 | Vue.use(LayoutPlugin);
+494 | library.add(fas);
+495 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestList.vue 493:1-493:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+490 | Vue.use(TabsPlugin);
+491 | Vue.use(CardPlugin);
+492 | Vue.use(DropdownPlugin);
+493 | Vue.use(LayoutPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+494 | library.add(fas);
+495 | 
+496 | export enum ContestTab {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestListv2.vue 443:1-443:19
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+440 | import infiniteScroll from 'vue-infinite-scroll';
+441 | import ContestCard from './ContestCard.vue';
+442 | import ContestSkeleton from './ContestSkeleton.vue';
+443 | Vue.use(TabsPlugin);
+    | ^^^^^^^^^^^^^^^^^^^
+444 | Vue.use(CardPlugin);
+445 | Vue.use(DropdownPlugin);
+446 | Vue.use(LayoutPlugin);
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestListv2.vue 444:1-444:19
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+441 | import ContestCard from './ContestCard.vue';
+442 | import ContestSkeleton from './ContestSkeleton.vue';
+443 | Vue.use(TabsPlugin);
+444 | Vue.use(CardPlugin);
+    | ^^^^^^^^^^^^^^^^^^^
+445 | Vue.use(DropdownPlugin);
+446 | Vue.use(LayoutPlugin);
+447 | library.add(fas);
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestListv2.vue 445:1-445:23
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+442 | import ContestSkeleton from './ContestSkeleton.vue';
+443 | Vue.use(TabsPlugin);
+444 | Vue.use(CardPlugin);
+445 | Vue.use(DropdownPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+446 | Vue.use(LayoutPlugin);
+447 | library.add(fas);
+448 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/ContestListv2.vue 446:1-446:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+443 | Vue.use(TabsPlugin);
+444 | Vue.use(CardPlugin);
+445 | Vue.use(DropdownPlugin);
+446 | Vue.use(LayoutPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+447 | library.add(fas);
+448 | 
+449 | export enum ContestTab {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/Coursev2.vue 137:1-137:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+134 | } from 'bootstrap-vue';
+135 | import 'bootstrap/dist/css/bootstrap.css';
+136 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+137 | Vue.use(BootstrapVue);
+    | ^^^^^^^^^^^^^^^^^^^^^
+138 | 
+139 | export enum Tabs {
+140 |   Summary = 'summary',
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/RunsForCourses.vue 549:1-549:25
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+546 | library.add(faCheckCircle);
+547 | library.add(faTimesCircle);
+548 | 
+549 | Vue.use(PaginationPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+550 | 
+551 | declare global {
+552 |   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/Runsv2.test.ts 12:1-12:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 9 |   BIconChevronRight,
+10 |   BIconChevronDown,
+11 | } from 'bootstrap-vue';
+12 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+13 | 
+14 | describe('Runsv2.vue', () => {
+15 |   const baseRunData: types.Run = {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/arena/Runsv2.vue 56:1-56:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+53 | } from 'bootstrap-vue';
+54 | import 'bootstrap/dist/css/bootstrap.css';
+55 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+56 | Vue.use(BootstrapVue);
+   | ^^^^^^^^^^^^^^^^^^^^^
+57 | 
+58 | export enum PopupDisplayed {
+59 |   None,
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/certificate/Mine.vue 91:1-91:18
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+88 | import { fas } from '@fortawesome/free-solid-svg-icons';
+89 | import { library } from '@fortawesome/fontawesome-svg-core';
+90 | library.add(fas);
+91 | Vue.use(Clipboard);
+   | ^^^^^^^^^^^^^^^^^^
+92 | 
+93 | @Component({
+94 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/common/GlobalNotifications.test.ts 10:1-10:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 7 | } from '../../notificationsStore';
+ 8 | import GlobalNotifications from './GlobalNotifications.vue';
+ 9 | 
+10 | localVue.use(Vuex);
+   | ^^^^^^^^
+11 | 
+12 | // Simple stub for markdown component that just renders the text
+13 | const MarkdownStub = {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/common/Publish.vue 79:1-79:18
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+76 | import { fas } from '@fortawesome/free-solid-svg-icons';
+77 | import { library } from '@fortawesome/fontawesome-svg-core';
+78 | library.add(fas);
+79 | Vue.use(Clipboard);
+   | ^^^^^^^^^^^^^^^^^^
+80 | 
+81 | export enum AdmissionMode {
+82 |   Private = 'private',
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/common/Requests.vue 94:1-94:24
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+91 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+92 | 
+93 | import { FormInputPlugin, ModalPlugin } from 'bootstrap-vue';
+94 | Vue.use(FormInputPlugin);
+   | ^^^^^^^^^^^^^^^^^^^^^^^^
+95 | Vue.use(ModalPlugin);
+96 | 
+97 | @Component({
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/common/Requests.vue 95:1-95:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+92 | 
+93 | import { FormInputPlugin, ModalPlugin } from 'bootstrap-vue';
+94 | Vue.use(FormInputPlugin);
+95 | Vue.use(ModalPlugin);
+   | ^^^^^^^^^^^^^^^^^^^^
+96 | 
+97 | @Component({
+98 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/contest/Form.vue 935:1-935:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+932 | import 'v-tooltip/dist/v-tooltip.css';
+933 | import { VTooltip } from 'v-tooltip';
+934 | import { ModalPlugin } from 'bootstrap-vue';
+935 | Vue.use(ModalPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^
+936 | 
+937 | import {
+938 |   FontAwesomeIcon,
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/contest/Form.vue 950:1-950:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+947 | import omegaup_Markdown from '../Markdown.vue';
+948 | library.add(fas);
+949 | 
+950 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+951 | 
+952 | export enum ScoreMode {
+953 |   AllOrNothing = 'all_or_nothing',
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/contest/Reportv2.vue 99:1-99:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 96 |   BIconCaretUpSquare,
+ 97 |   BIconPrinter,
+ 98 | } from 'bootstrap-vue';
+ 99 | Vue.use(TablePlugin);
+    | ^^^^^^^^^^^^^^^^^^^^
+100 | Vue.use(ButtonPlugin);
+101 | Vue.use(CardPlugin);
+102 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/contest/Reportv2.vue 100:1-100:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 97 |   BIconPrinter,
+ 98 | } from 'bootstrap-vue';
+ 99 | Vue.use(TablePlugin);
+100 | Vue.use(ButtonPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+101 | Vue.use(CardPlugin);
+102 | 
+103 | interface GroupDetails {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/contest/Reportv2.vue 101:1-101:19
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 98 | } from 'bootstrap-vue';
+ 99 | Vue.use(TablePlugin);
+100 | Vue.use(ButtonPlugin);
+101 | Vue.use(CardPlugin);
+    | ^^^^^^^^^^^^^^^^^^^
+102 | 
+103 | interface GroupDetails {
+104 |   name: string;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/course/AdmissionMode.test.ts 11:3-11:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 8 | import { AdmissionMode } from '../common/Publish.vue';
+ 9 | 
+10 | describe('AdmissionMode.vue', () => {
+11 |   Vue.use(Clipboard);
+   |   ^^^^^^^^^^^^^^^^^^
+12 | 
+13 |   it('Should handle admission mode as curator', () => {
+14 |     const wrapper = mount(course_AdmissionMode, {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/course/AdmissionMode.vue 113:1-113:18
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+110 | import { fas } from '@fortawesome/free-solid-svg-icons';
+111 | import { library } from '@fortawesome/fontawesome-svg-core';
+112 | library.add(fas);
+113 | Vue.use(Clipboard);
+    | ^^^^^^^^^^^^^^^^^^
+114 | 
+115 | @Component({
+116 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/course/Form.vue 337:1-337:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+334 | import 'intro.js/introjs.css';
+335 | import introJs from 'intro.js';
+336 | import VueCookies from 'vue-cookies';
+337 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+338 | 
+339 | import {
+340 |   FontAwesomeIcon,
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/course/GenerateLinkClone.test.ts 10:3-10:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 7 | import course_GenerateLinkClone from './GenerateLinkClone.vue';
+ 8 | 
+ 9 | describe('GenerateLinkClone.vue', () => {
+10 |   Vue.use(Clipboard);
+   |   ^^^^^^^^^^^^^^^^^^
+11 | 
+12 |   it('Should handle a link with valid token', async () => {
+13 |     const wrapper = shallowMount(course_GenerateLinkClone, {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/course/GenerateLinkClone.vue 52:1-52:18
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+49 | import { fas } from '@fortawesome/free-solid-svg-icons';
+50 | import { library } from '@fortawesome/fontawesome-svg-core';
+51 | library.add(fas);
+52 | Vue.use(Clipboard);
+   | ^^^^^^^^^^^^^^^^^^
+53 | 
+54 | @Component({
+55 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/course/Tabs.vue 140:1-140:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+137 | import 'intro.js/introjs.css';
+138 | import introJs from 'intro.js';
+139 | import VueCookies from 'vue-cookies';
+140 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+141 | 
+142 | import omegaup_Markdown from '../Markdown.vue';
+143 | import course_CardPublic from './CardPublic.vue';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/course/ViewProgress.vue 168:1-168:28
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+165 | import common_Paginator from '../common/Paginator.vue';
+166 | import { toCsv, TableCell, Percentage } from '../../csv';
+167 | 
+168 | Vue.use(AsyncComputedPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+169 | 
+170 | export function escapeXml(cell: TableCell): string {
+171 |   if (typeof cell !== 'string') return '';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/group/Identities.vue 108:1-108:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+105 | import 'intro.js/introjs.css';
+106 | import introJs from 'intro.js';
+107 | import VueCookies from 'vue-cookies';
+108 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+109 | 
+110 | import { library } from '@fortawesome/fontawesome-svg-core';
+111 | import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/homepage/Homepage.vue 111:1-111:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+108 | import homepage_Sponsors from './Sponsors.vue';
+109 | import homepage_Cookie from './CookieConsent.vue';
+110 | import VueCookies from 'vue-cookies';
+111 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+112 | 
+113 | @Component({
+114 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/libinteractive/Gen.vue 84:1-84:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+81 | // Import Only Required Plugins
+82 | import { ButtonPlugin, CardPlugin, BIconCloudDownload } from 'bootstrap-vue';
+83 | import { types } from '../../api_types';
+84 | Vue.use(ButtonPlugin);
+   | ^^^^^^^^^^^^^^^^^^^^^
+85 | Vue.use(CardPlugin);
+86 | 
+87 | @Component({
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/libinteractive/Gen.vue 85:1-85:19
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+82 | import { ButtonPlugin, CardPlugin, BIconCloudDownload } from 'bootstrap-vue';
+83 | import { types } from '../../api_types';
+84 | Vue.use(ButtonPlugin);
+85 | Vue.use(CardPlugin);
+   | ^^^^^^^^^^^^^^^^^^^
+86 | 
+87 | @Component({
+88 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/login/Login.vue 110:1-110:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+107 | import introJs from 'intro.js';
+108 | import VueCookies from 'vue-cookies';
+109 | 
+110 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+111 | 
+112 | @Component({
+113 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/login/Signup.test.ts 474:9-474:28
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+471 | 
+472 |     afterEach(() => {
+473 |       if (introWrapper) {
+474 |         introWrapper.destroy();
+    |         ^^^^^^^^^^^^^^^^^^^^
+475 |         introWrapper = null;
+476 |       }
+477 |     });
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/login/Signup.vue 310:1-310:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+307 | import VueCookies from 'vue-cookies';
+308 | import { getBlogUrl } from '../../urlHelper';
+309 | import omegaup_PasswordInput from '../common/PasswordInput.vue';
+310 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+311 | 
+312 | @Component({
+313 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/Detailsv2.test.ts 11:1-11:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 8 | 
+ 9 | import BootstrapVue, { BTab } from 'bootstrap-vue';
+10 | 
+11 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+12 | 
+13 | describe('Detailsv2.vue', () => {
+14 |   const problem: types.ProblemDetails = {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/Detailsv2.vue 144:1-144:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+141 | import { BootstrapVue } from 'bootstrap-vue';
+142 | import 'bootstrap/dist/css/bootstrap.css';
+143 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+144 | Vue.use(BootstrapVue);
+    | ^^^^^^^^^^^^^^^^^^^^^
+145 | 
+146 | export interface Tab {
+147 |   name: string;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/Edit.vue 294:1-294:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+291 | 
+292 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+293 | import { ModalPlugin } from 'bootstrap-vue';
+294 | Vue.use(ModalPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^
+295 | 
+296 | @Component({
+297 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/Form.vue 582:1-582:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+579 | import 'intro.js/introjs.css';
+580 | import introJs from 'intro.js';
+581 | import VueCookies from 'vue-cookies';
+582 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+583 | 
+584 | export enum CreationMethods {
+585 |   Creator = 'creator',
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/Mine.vue 273:1-273:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+270 |   faBan,
+271 | );
+272 | import { ModalPlugin } from 'bootstrap-vue';
+273 | Vue.use(ModalPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^
+274 | 
+275 | @Component({
+276 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/Creator.test.ts 9:1-9:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 6 | 
+ 7 | import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+10 | localVue.use(IconsPlugin);
+11 | 
+12 | describe('Creator.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/Creator.test.ts 10:1-10:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 7 | import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+10 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+11 | 
+12 | describe('Creator.vue', () => {
+13 |   it('Should contain Header and Tabs Components', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/Header.test.ts 14:1-14:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+11 |   generateGroup,
+12 | } from '@/js/omegaup/problem/creator/modules/cases';
+13 | 
+14 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+15 | localVue.use(IconsPlugin);
+16 | 
+17 | describe('Header.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/Header.test.ts 15:1-15:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+12 | } from '@/js/omegaup/problem/creator/modules/cases';
+13 | 
+14 | localVue.use(BootstrapVue);
+15 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+16 | 
+17 | describe('Header.vue', () => {
+18 |   it('Should contain the header buttons and problem name input', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/Tabs.test.ts 10:1-10:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 7 | import T from '../../../lang';
+ 8 | import Vue, { nextTick } from 'vue';
+ 9 | 
+10 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+11 | localVue.use(IconsPlugin);
+12 | 
+13 | describe('Tabs.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/Tabs.test.ts 11:1-11:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 8 | import Vue, { nextTick } from 'vue';
+ 9 | 
+10 | localVue.use(BootstrapVue);
+11 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+12 | 
+13 | describe('Tabs.vue', () => {
+14 |   it('Should contain all 4 tabs', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/AddPanel.test.ts 11:1-11:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 8 | import { StoreState } from '../../../../problem/creator/types';
+ 9 | import { Store } from 'vuex';
+10 | 
+11 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+12 | localVue.use(IconsPlugin);
+13 | 
+14 | describe('AddPanel.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/AddPanel.test.ts 12:1-12:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 9 | import { Store } from 'vuex';
+10 | 
+11 | localVue.use(BootstrapVue);
+12 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+13 | 
+14 | describe('AddPanel.vue', () => {
+15 |   beforeEach(() => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CaseEdit.test.ts 16:1-16:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+13 | import T from '../../../../lang';
+14 | import { MatrixDistinctType } from '@/js/omegaup/problem/creator/types';
+15 | 
+16 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+17 | localVue.use(IconsPlugin);
+18 | 
+19 | describe('CaseEdit.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CaseEdit.test.ts 17:1-17:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+14 | import { MatrixDistinctType } from '@/js/omegaup/problem/creator/types';
+15 | 
+16 | localVue.use(BootstrapVue);
+17 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+18 | 
+19 | describe('CaseEdit.vue', () => {
+20 |   const newUngroupedCasegroup = generateGroup({
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CaseEdit.vue 499:1-499:24
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+496 | import { library } from '@fortawesome/fontawesome-svg-core';
+497 | import draggable from 'vuedraggable';
+498 | library.add(fas);
+499 | Vue.use(FormInputPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+500 | Vue.use(ModalPlugin);
+501 | 
+502 | const casesStore = namespace('casesStore');
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CaseEdit.vue 500:1-500:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+497 | import draggable from 'vuedraggable';
+498 | library.add(fas);
+499 | Vue.use(FormInputPlugin);
+500 | Vue.use(ModalPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^
+501 | 
+502 | const casesStore = namespace('casesStore');
+503 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CaseInput.test.ts 9:1-9:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 6 | import Vue, { nextTick } from 'vue';
+ 7 | import store from '@/js/omegaup/problem/creator/store';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+10 | localVue.use(IconsPlugin);
+11 | 
+12 | describe('CaseInput.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CaseInput.test.ts 10:1-10:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 7 | import store from '@/js/omegaup/problem/creator/store';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+10 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+11 | 
+12 | describe('CaseInput.vue', () => {
+13 |   it('Should contain all 4 inputs', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CasesForm.test.ts 14:1-14:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+11 | } from '@/js/omegaup/problem/creator/modules/cases';
+12 | import * as ui from '@/js/omegaup/ui';
+13 | 
+14 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+15 | localVue.use(IconsPlugin);
+16 | 
+17 | describe('CasesForm.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CasesForm.test.ts 15:1-15:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+12 | import * as ui from '@/js/omegaup/ui';
+13 | 
+14 | localVue.use(BootstrapVue);
+15 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+16 | 
+17 | describe('CasesForm.vue', () => {
+18 |   beforeEach(() => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CasesTab.test.ts 9:1-9:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 6 | import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
+ 7 | import Vue, { nextTick } from 'vue';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+10 | localVue.use(IconsPlugin);
+11 | 
+12 | describe('Tabs.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CasesTab.test.ts 10:1-10:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 7 | import Vue, { nextTick } from 'vue';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+10 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+11 | 
+12 | describe('Tabs.vue', () => {
+13 |   it('Should contain 3 buttons and Groups text', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/CasesTab.vue 43:1-43:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+40 | import T from '../../../../lang';
+41 | import { TabIndex } from '../Tabs.vue';
+42 | 
+43 | Vue.use(VueCookies, { expires: -1 });
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+44 | 
+45 | @Component({
+46 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/DeleteConfirmationForm.test.ts 8:1-8:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 5 | import T from '../../../../lang';
+ 6 | import * as ui from '@/js/omegaup/ui';
+ 7 | 
+ 8 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+ 9 | localVue.use(IconsPlugin);
+10 | 
+11 | describe('DeleteConfirmationForm.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/DeleteConfirmationForm.test.ts 9:1-9:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 6 | import * as ui from '@/js/omegaup/ui';
+ 7 | 
+ 8 | localVue.use(BootstrapVue);
+ 9 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+10 | 
+11 | describe('DeleteConfirmationForm.vue', () => {
+12 |   it('Should set commitMessage when visible changes', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/GroupInput.test.ts 8:1-8:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 5 | import T from '../../../../lang';
+ 6 | import Vue, { nextTick } from 'vue';
+ 7 | 
+ 8 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+ 9 | localVue.use(IconsPlugin);
+10 | 
+11 | describe('GroupInput.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/GroupInput.test.ts 9:1-9:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 6 | import Vue, { nextTick } from 'vue';
+ 7 | 
+ 8 | localVue.use(BootstrapVue);
+ 9 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+10 | 
+11 | describe('GroupInput.vue', () => {
+12 |   it('Should contain all 3 inputs', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/LayoutSidebar.test.ts 13:1-13:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+10 |   generateGroup,
+11 | } from '@/js/omegaup/problem/creator/modules/cases';
+12 | 
+13 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+14 | localVue.use(IconsPlugin);
+15 | 
+16 | describe('LayoutSidebar.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/LayoutSidebar.test.ts 14:1-14:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+11 | } from '@/js/omegaup/problem/creator/modules/cases';
+12 | 
+13 | localVue.use(BootstrapVue);
+14 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+15 | 
+16 | describe('LayoutSidebar.vue', () => {
+17 |   store.commit('casesStore/addNewLayout');
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/MultipleCasesInput.test.ts 11:1-11:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 8 | import { Group } from '@/js/omegaup/problem/creator/types';
+ 9 | import { v4 as uuid } from 'uuid';
+10 | 
+11 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+12 | localVue.use(IconsPlugin);
+13 | 
+14 | const testGroup: Group = {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/MultipleCasesInput.test.ts 12:1-12:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 9 | import { v4 as uuid } from 'uuid';
+10 | 
+11 | localVue.use(BootstrapVue);
+12 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+13 | 
+14 | const testGroup: Group = {
+15 |   groupID: uuid(),
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/Sidebar.test.ts 14:1-14:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+11 | 
+12 | import T from '../../../../lang';
+13 | 
+14 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+15 | localVue.use(IconsPlugin);
+16 | 
+17 | describe('Sidebar.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/cases/Sidebar.test.ts 15:1-15:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+12 | import T from '../../../../lang';
+13 | 
+14 | localVue.use(BootstrapVue);
+15 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+16 | 
+17 | describe('Sidebar.vue', () => {
+18 |   // Total 6 buttons are rendered initially on this page.
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/code/CodeTab.test.ts 7:1-7:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 4 | import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
+ 5 | import store from '@/js/omegaup/problem/creator/store';
+ 6 | 
+ 7 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+ 8 | localVue.use(IconsPlugin);
+ 9 | 
+10 | describe('CodeTab.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/code/CodeTab.test.ts 8:1-8:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 5 | import store from '@/js/omegaup/problem/creator/store';
+ 6 | 
+ 7 | localVue.use(BootstrapVue);
+ 8 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+ 9 | 
+10 | describe('CodeTab.vue', () => {
+11 |   it('Should change code and extension in both wrapper and store after the file is uploaded', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/code/CodeTab.vue 111:1-111:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+108 | 
+109 | library.add(fas);
+110 | 
+111 | Vue.use(VueCookies, { expires: -1 });
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+112 | 
+113 | @Component({
+114 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/solution/SolutionTab.test.ts 8:1-8:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 5 | import store from '@/js/omegaup/problem/creator/store';
+ 6 | import T from '../../../../lang';
+ 7 | 
+ 8 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+ 9 | localVue.use(IconsPlugin);
+10 | 
+11 | describe('SolutionTab.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/solution/SolutionTab.test.ts 9:1-9:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 6 | import T from '../../../../lang';
+ 7 | 
+ 8 | localVue.use(BootstrapVue);
+ 9 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+10 | 
+11 | describe('SolutionTab.vue', () => {
+12 |   it('Should contain markdown buttons and contents and update the store accordingly', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/solution/SolutionTab.vue 60:1-60:36
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+57 | import 'intro.js/introjs.css';
+58 | import VueCookies from 'vue-cookies';
+59 | import ProblemMarkdown from '../../ProblemMarkdown.vue';
+60 | Vue.use(VueCookies, { expires: -1 });
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+61 | 
+62 | const markdownConverter = new markdown.Converter({
+63 |   preview: true,
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/statement/StatementTab.test.ts 9:1-9:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 6 | import * as ui from '../../../../ui';
+ 7 | import StatementTab from './StatementTab.vue';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+10 | localVue.use(IconsPlugin);
+11 | 
+12 | describe('StatementTab.vue', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/problem/creator/statement/StatementTab.test.ts 10:1-10:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 7 | import StatementTab from './StatementTab.vue';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+10 | localVue.use(IconsPlugin);
+   | ^^^^^^^^
+11 | 
+12 | describe('StatementTab.vue', () => {
+13 |   it('Should contain markdown buttons and contents and update the store accordingly', async () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/teamsgroup/List.test.ts 9:1-9:8
+localVue was removed
+See: https://test-utils.vuejs.org/migration/#No-more-createLocalVue
+
+ 6 | 
+ 7 | import teamsgroup_List from './List.vue';
+ 8 | 
+ 9 | localVue.use(BootstrapVue);
+   | ^^^^^^^^
+10 | 
+11 | describe('List.vue', () => {
+12 |   it('Should handle an empty list of teams groups', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/teamsgroup/Upload.vue 150:1-150:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+147 |   BRow,
+148 |   BCol,
+149 | } from 'bootstrap-vue';
+150 | Vue.use(TablePlugin);
+    | ^^^^^^^^^^^^^^^^^^^^
+151 | Vue.use(ButtonPlugin);
+152 | Vue.use(BadgePlugin);
+153 | Vue.use(CardPlugin);
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/teamsgroup/Upload.vue 151:1-151:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+148 |   BCol,
+149 | } from 'bootstrap-vue';
+150 | Vue.use(TablePlugin);
+151 | Vue.use(ButtonPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+152 | Vue.use(BadgePlugin);
+153 | Vue.use(CardPlugin);
+154 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/teamsgroup/Upload.vue 152:1-152:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+149 | } from 'bootstrap-vue';
+150 | Vue.use(TablePlugin);
+151 | Vue.use(ButtonPlugin);
+152 | Vue.use(BadgePlugin);
+    | ^^^^^^^^^^^^^^^^^^^^
+153 | Vue.use(CardPlugin);
+154 | 
+155 | type TeamIdentity = types.Identity & {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/teamsgroup/Upload.vue 153:1-153:19
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+150 | Vue.use(TablePlugin);
+151 | Vue.use(ButtonPlugin);
+152 | Vue.use(BadgePlugin);
+153 | Vue.use(CardPlugin);
+    | ^^^^^^^^^^^^^^^^^^^
+154 | 
+155 | type TeamIdentity = types.Identity & {
+156 |   usernames: { username: string; password?: string }[];
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/Charts.test.ts 356:7-356:22
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+353 |       // B should have its own correct categories
+354 |       expect(countsB.month.categories).toEqual(['2025-06', '2025-07']);
+355 | 
+356 |       wrapperA.destroy();
+    |       ^^^^^^^^^^^^^^^^
+357 |       wrapperB.destroy();
+358 |     });
+359 | 
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/Charts.test.ts 357:7-357:22
+Possibly rename destroy() to unmount()
+See: https://test-utils.vuejs.org/migration/#destroy-is-now-unmount-to-match-Vue-3
+
+354 |       expect(countsB.month.categories).toEqual(['2025-06', '2025-07']);
+355 | 
+356 |       wrapperA.destroy();
+357 |       wrapperB.destroy();
+    |       ^^^^^^^^^^^^^^^^
+358 |     });
+359 | 
+360 |     // Known Bug 3: groupedPeriods only initializes {WA, PA, AC, TLE, RTE} at
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/NextRegisteredContest.vue 108:1-108:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+105 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+106 | 
+107 | import { LayoutPlugin, CollapsePlugin } from 'bootstrap-vue';
+108 | Vue.use(LayoutPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+109 | Vue.use(CollapsePlugin);
+110 | 
+111 | import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/NextRegisteredContest.vue 109:1-109:23
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+106 | 
+107 | import { LayoutPlugin, CollapsePlugin } from 'bootstrap-vue';
+108 | Vue.use(LayoutPlugin);
+109 | Vue.use(CollapsePlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+110 | 
+111 | import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+112 | import { fas } from '@fortawesome/free-solid-svg-icons';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/ObjectivesQuestions.vue 123:1-123:20
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+120 | 
+121 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+122 | import { ModalPlugin } from 'bootstrap-vue';
+123 | Vue.use(ModalPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^
+124 | 
+125 | import {
+126 |   FontAwesomeIcon,
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/PreferencesEdit.vue 156:1-156:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+153 | 
+154 | // Import Only Required Plugins
+155 | import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
+156 | Vue.use(ButtonPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+157 | Vue.use(PopoverPlugin);
+158 | 
+159 | @Component({
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/PreferencesEdit.vue 157:1-157:22
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+154 | // Import Only Required Plugins
+155 | import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
+156 | Vue.use(ButtonPlugin);
+157 | Vue.use(PopoverPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^
+158 | 
+159 | @Component({
+160 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/Rank.vue 234:1-234:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+231 | import 'bootstrap/dist/css/bootstrap.css';
+232 | // Import Only Required Plugins
+233 | import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
+234 | Vue.use(ButtonPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^
+235 | Vue.use(PopoverPlugin);
+236 | interface Rank {
+237 |   country: string;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/Rank.vue 235:1-235:22
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+232 | // Import Only Required Plugins
+233 | import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
+234 | Vue.use(ButtonPlugin);
+235 | Vue.use(PopoverPlugin);
+    | ^^^^^^^^^^^^^^^^^^^^^^
+236 | interface Rank {
+237 |   country: string;
+238 |   classname?: string;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/components/user/VerificationParentalToken.vue 37:1-37:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+34 | } from 'bootstrap-vue';
+35 | import 'bootstrap/dist/css/bootstrap.css';
+36 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+37 | Vue.use(BootstrapVue);
+   | ^^^^^^^^^^^^^^^^^^^^^
+38 | 
+39 | @Component({
+40 |   components: {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/course/edit.ts 11:1-15:2
+Move Vue.directive() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 8 | import { AdmissionMode } from '../components/common/Publish.vue';
+ 9 | import Sortable from 'sortablejs';
+10 | 
+11 | Vue.directive('Sortable', {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+12 |   inserted: (el: HTMLElement, binding) => {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+13 |     new Sortable(el, binding.value || {});
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14 |   },
+   | ^^^^
+15 | });
+   | ^^
+16 | 
+17 | OmegaUp.on('ready', () => {
+18 |   const payload = types.payloadParsers.CourseEditPayload();
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/grader/Ephemeral.vue 218:1-218:18
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+215 |   faCopy,
+216 | } from '@fortawesome/free-solid-svg-icons';
+217 | library.add(faUpload, faFileArchive, faDownload, faSun, faMoon, faUndo, faCopy);
+218 | Vue.use(Clipboard);
+    | ^^^^^^^^^^^^^^^^^^
+219 | 
+220 | import T from '../lang';
+221 | import * as ui from '../ui';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/grader/Ephemeral.vue 862:53-862:61
+$children has been removed.
+See: https://v3-migration.vuejs.org/breaking-changes/children.html#children
+
+859 |             },
+860 |           });
+861 | 
+862 |           const vueComponent: GraderComponent = vue.$children[0];
+    |                                                     ^^^^^^^^^
+863 |           if (vueComponent.title) {
+864 |             container.setTitle(vueComponent.title);
+865 |             vueComponent.$watch('title', function (title: string) {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/grader/GraderStore.ts 105:1-105:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+102 | Object.keys(Util.supportedLanguages).forEach((key) => {
+103 |   languageExtensionMapping[key] = Util.supportedLanguages[key].extension;
+104 | });
+105 | Vue.use(Vuex);
+    | ^^^^^^^^^^^^^
+106 | const storeOptions: StoreOptions<GraderStore> = {
+107 |   state: {
+108 |     alias: '',
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/graderv2/MonacoEditorV2.vue 125:1-125:18
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+122 | import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+123 | import { faClipboard, faCheck } from '@fortawesome/free-solid-svg-icons';
+124 | library.add(faClipboard, faCheck);
+125 | Vue.use(Clipboard);
+    | ^^^^^^^^^^^^^^^^^^
+126 | 
+127 | // ─── Sourced from constants.ts ────────────────────────────────────────────────
+128 | import { EDITOR, TIMING } from '../grader/constants';
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/mainStore.ts 4:1-4:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+1 | import Vue from 'vue';
+2 | import Vuex, { createStore } from 'vuex';
+3 | 
+4 | Vue.use(Vuex);
+  | ^^^^^^^^^^^^^
+5 | 
+6 | export interface MainStoreState {
+7 |   username: string | null;
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/notificationsStore.ts 6:1-6:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+3 | 
+4 | // Vuex plugin registration is required before creating store instances.
+5 | // Vue.use() is idempotent, so multiple registrations are safe.
+6 | Vue.use(Vuex);
+  | ^^^^^^^^^^^^^
+7 | 
+8 | /**
+9 |  * Message types for notifications, matching Bootstrap alert classes.
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/problem/creator/creator.ts 16:3-16:23
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+13 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+14 | 
+15 | OmegaUp.on('ready', () => {
+16 |   Vue.use(BootstrapVue);
+   |   ^^^^^^^^^^^^^^^^^^^^^
+17 |   Vue.use(BootstrapVueIcons);
+18 | 
+19 |   new Vue({
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/problem/creator/creator.ts 17:3-17:28
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+14 | 
+15 | OmegaUp.on('ready', () => {
+16 |   Vue.use(BootstrapVue);
+17 |   Vue.use(BootstrapVueIcons);
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+18 | 
+19 |   new Vue({
+20 |     el: '#main-container',
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/problem/creator/store.ts 7:1-7:13
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 4 | import { casesStore } from './modules/cases';
+ 5 | import T from '../../lang';
+ 6 | 
+ 7 | Vue.use(Vuex);
+   | ^^^^^^^^^^^^^
+ 8 | 
+ 9 | const state: StoreState = {
+10 |   problemName: T.problemCreatorNewProblem,
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/problem/new.ts 18:1-18:21
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+15 | import 'bootstrap/dist/css/bootstrap.css';
+16 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+17 | 
+18 | Vue.use(BootstrapVue);
+   | ^^^^^^^^^^^^^^^^^^^^^
+19 | Vue.use(BootstrapVueIcons);
+20 | 
+21 | OmegaUp.on('ready', () => {
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/problem/new.ts 19:1-19:26
+Move Vue.use() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+16 | import 'bootstrap-vue/dist/bootstrap-vue.css';
+17 | 
+18 | Vue.use(BootstrapVue);
+19 | Vue.use(BootstrapVueIcons);
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+20 | 
+21 | OmegaUp.on('ready', () => {
+22 |   const payload = types.payloadParsers.ProblemFormPayload();
+
+---
+
+
+/Users/kartikyadav/Desktop/Newtypeorgs/bs5-worktrees/pr2-vue3-compat/frontend/www/js/omegaup/test.setup.ts 10:1-14:2
+Move Vue.directive() to chain from createApp()
+See: https://v3-migration.vuejs.org/breaking-changes/global-api.html#global-api-application-instance
+
+ 7 | import Vue from 'vue';
+ 8 | import Sortable from 'sortablejs';
+ 9 | 
+10 | Vue.directive('Sortable', {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |   inserted: (el: HTMLElement, binding) => {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+12 |     new Sortable(el, binding.value || {});
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+13 |   },
+   | ^^^^
+14 | });
+   | ^^
+15 | 
+16 | // Intercept all API calls. Only let `API.Session.currentSession()` work and
+17 | // fail everything else.
+
+---
+
+

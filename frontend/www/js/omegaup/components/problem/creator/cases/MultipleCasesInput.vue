@@ -64,14 +64,14 @@
 <script lang="ts">
 import { GroupID } from '../../../../problem/creator/types';
 import { NIL } from 'uuid';
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, toNative } from 'vue-facing-decorator';
 import { namespace } from 'vuex-class';
 import T from '../../../../lang';
 
 const casesStore = namespace('casesStore');
 
 @Component
-export default class MultipleCasesInput extends Vue {
+class MultipleCasesInput extends Vue {
   multipleCasesPrefix = '';
   multipleCasesSuffix = '';
   multipleCasesCount = 1;
@@ -110,4 +110,5 @@ export default class MultipleCasesInput extends Vue {
     return Math.max(number, 1);
   }
 }
+export default toNative(MultipleCasesInput);
 </script>

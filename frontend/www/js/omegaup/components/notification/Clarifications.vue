@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import type { types } from '../../api_types';
 import T from '../../lang';
 import { SafeStorage } from '../../safe_storage';
@@ -79,14 +79,19 @@ library.add(faBell, faAlignRight);
     FontAwesomeIcon,
   },
 })
-export default class Clarifications extends Vue {
+class Clarifications extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.unreadClarifications = this.clarifications;
+  }
   @Prop({ default: () => [] }) clarifications!: types.Clarification[];
 
   @Prop() isAdmin!: boolean;
   T = T;
 
   flashInterval: number = 0;
-  unreadClarifications = this.clarifications;
+  unreadClarifications = undefined;
 
   beforeDestroy() {
     if (this.flashInterval) {
@@ -151,6 +156,7 @@ export default class Clarifications extends Vue {
     this.unreadClarifications = [];
   }
 }
+export default toNative(Clarifications);
 </script>
 
 <style lang="scss" scoped>

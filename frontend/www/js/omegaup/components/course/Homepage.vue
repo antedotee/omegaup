@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import omegaup_Markdown from '../Markdown.vue';
 
@@ -57,9 +57,10 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class Homepage extends Vue {
+class Homepage extends Vue {
   T = T;
 }
+export default toNative(Homepage);
 </script>
 
 <style lang="scss">

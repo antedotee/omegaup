@@ -166,7 +166,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
 import omegaup_ToggleSwitch from '../ToggleSwitch.vue';
@@ -183,7 +183,13 @@ library.add(faTrash);
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
   },
 })
-export default class ProblemTags extends Vue {
+class ProblemTags extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.allowTags = this.initialAllowTags;
+    this.problemLevelTag = this.problemLevel;
+  }
   @Prop({ default: null }) problemLevel!: string | null;
   @Prop() publicTags!: string[];
   @Prop() selectedPublicTags!: string[];
@@ -198,8 +204,8 @@ export default class ProblemTags extends Vue {
   @Prop() isLecture!: boolean;
 
   T = T;
-  allowTags = this.initialAllowTags;
-  problemLevelTag: string | null = this.problemLevel;
+  allowTags = undefined;
+  problemLevelTag: string | null = '';
   newPrivateTag = '';
   newPublicTag = '';
 
@@ -264,6 +270,7 @@ export default class ProblemTags extends Vue {
     );
   }
 }
+export default toNative(ProblemTags);
 </script>
 
 <style>

@@ -31,11 +31,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch, Inject } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, Inject, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
 import * as ui from '@/js/omegaup/ui';
 @Component
-export default class DeleteConfirmationForm extends Vue {
+class DeleteConfirmationForm extends Vue {
   @Inject('problemAlias') readonly alias!: string;
   @Prop({ required: true }) visible!: boolean;
   @Prop({ required: true }) itemName!: string;
@@ -67,6 +67,7 @@ export default class DeleteConfirmationForm extends Vue {
     this.commitMessage = '';
   }
 }
+export default toNative(DeleteConfirmationForm);
 </script>
 
 <style scoped lang="scss">

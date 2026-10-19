@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -27,11 +27,12 @@ library.add(fas);
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class ViewUnavailable extends Vue {
+class ViewUnavailable extends Vue {
   @Prop({ default: () => T.viewUnavailableTitle }) title!: string;
   @Prop({ default: '' }) description!: string;
   @Prop({ default: 'ban' }) icon!: string;
 }
+export default toNative(ViewUnavailable);
 </script>
 
 <style lang="scss" scoped>

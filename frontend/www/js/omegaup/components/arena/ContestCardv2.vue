@@ -134,7 +134,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from 'vue-property-decorator';
+import { Vue, Prop, Component, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import * as ui from '../../ui';
@@ -145,9 +146,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import { ButtonPlugin, DropdownPlugin, LayoutPlugin } from 'bootstrap-vue';
-Vue.use(ButtonPlugin);
-Vue.use(DropdownPlugin);
-Vue.use(LayoutPlugin);
+VueGlobal.use(ButtonPlugin);
+VueGlobal.use(DropdownPlugin);
+VueGlobal.use(LayoutPlugin);
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -159,7 +160,7 @@ library.add(fas);
     FontAwesomeIcon,
   },
 })
-export default class ContestCardv2 extends Vue {
+class ContestCardv2 extends Vue {
   @Prop({ required: true }) contest!: types.ContestListItem;
 
   T = T;
@@ -188,6 +189,7 @@ export default class ContestCardv2 extends Vue {
     return `/arena/${encodeURIComponent(alias)}/practice/`;
   }
 }
+export default toNative(ContestCardv2);
 </script>
 
 <style lang="scss" scoped>

@@ -28,7 +28,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
+import { Component, Vue, Watch, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import problemCreator_Cases_CaseEdit from './CaseEdit.vue';
 import problemCreator_Cases_Sidebar from './Sidebar.vue';
 import probleCreator_Cases_AddPanel from './AddPanel.vue';
@@ -38,7 +39,7 @@ import VueCookies from 'vue-cookies';
 import T from '../../../../lang';
 import { TabIndex } from '../Tabs.vue';
 
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 @Component({
   components: {
@@ -47,7 +48,7 @@ Vue.use(VueCookies, { expires: -1 });
     'omegaup-problem-creator-cases-case-edit': problemCreator_Cases_CaseEdit,
   },
 })
-export default class CasesTab extends Vue {
+class CasesTab extends Vue {
   @Prop() activeTabIndex!: TabIndex;
   @Prop({ default: false }) hideSaveButton!: boolean;
 
@@ -120,4 +121,5 @@ export default class CasesTab extends Vue {
     }
   }
 }
+export default toNative(CasesTab);
 </script>

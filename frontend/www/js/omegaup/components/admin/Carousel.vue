@@ -239,7 +239,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -264,7 +264,7 @@ interface ModalRef {
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class Carousel extends Vue {
+class Carousel extends Vue {
   @Prop() carouselItems!: types.CarouselItem[];
   @Ref('carouselItemModal') readonly carouselItemModal!: ModalRef;
   @Ref('carouselForm') readonly carouselForm!: HTMLFormElement;
@@ -505,6 +505,7 @@ export default class Carousel extends Vue {
     };
   }
 }
+export default toNative(Carousel);
 </script>
 
 <style scoped>

@@ -311,7 +311,7 @@
 
 <script lang="ts">
 import * as Highcharts from 'highcharts/highstock';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import {
@@ -370,7 +370,25 @@ function getInitialSelectedTab(
     'omegaup-countryflag': country_Flag,
   },
 })
-export default class ViewProfile extends Vue {
+class ViewProfile extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.contests = Object.values(
+    this.data?.contests ?? ({} as types.UserProfileContests),
+  )
+    .map((contest) => {
+      const now = new Date();
+      if (contest.place === null || now <= contest.data.finish_time) {
+        return null;
+      }
+      return new ContestResult(contest);
+    })
+    .filter((contest) => Boolean(contest));
+    this.charts = this.data?.stats ?? [];
+    this.currentSelectedTab = getInitialSelectedTab(this.profile, this.selectedTab);
+    this.currentReadme = this.profile.readme ?? null;
+  }
   @Prop() data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop() profileBadges!: Set<string>;
@@ -388,25 +406,15 @@ export default class ViewProfile extends Vue {
     };
     tags: Array<{ name: string; count: number }>;
   } | null;
-  contests = Object.values(
-    this.data?.contests ?? ({} as types.UserProfileContests),
-  )
-    .map((contest) => {
-      const now = new Date();
-      if (contest.place === null || now <= contest.data.finish_time) {
-        return null;
-      }
-      return new ContestResult(contest);
-    })
-    .filter((contest) => Boolean(contest));
-  charts: types.UserProfileStats[] = this.data?.stats ?? [];
+  contests = undefined;
+  charts: types.UserProfileStats[] = [];
   ViewProfileTabs = ViewProfileTabs;
   T = T;
   ui = ui;
   columns = 3;
-  currentSelectedTab = getInitialSelectedTab(this.profile, this.selectedTab);
+  currentSelectedTab = undefined;
   normalizedRunCounts: Highcharts.PointOptionsObject[] = [];
-  currentReadme: string | null = this.profile.readme ?? null;
+  currentReadme: string | null = '';
   isEditingReadme = false;
   readmeEditContent: string | null = null;
   readmeReportSubmitted = false;
@@ -516,6 +524,7 @@ export default class ViewProfile extends Vue {
     this.$emit('update:selectedTab', newValue);
   }
 }
+export default toNative(ViewProfile);
 </script>
 
 <style lang="scss">

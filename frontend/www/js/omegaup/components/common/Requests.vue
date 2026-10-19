@@ -81,7 +81,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -91,21 +92,26 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import { FormInputPlugin, ModalPlugin } from 'bootstrap-vue';
-Vue.use(FormInputPlugin);
-Vue.use(ModalPlugin);
+VueGlobal.use(FormInputPlugin);
+VueGlobal.use(ModalPlugin);
 
 @Component({
   components: {
     'omegaup-username': omegaup_Username,
   },
 })
-export default class Requests extends Vue {
+class Requests extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.requests = this.data;
+  }
   @Prop() data!: types.IdentityRequest[];
   @Prop() textAddParticipant!: string;
 
   T = T;
   time = time;
-  requests: types.IdentityRequest[] = this.data;
+  requests: types.IdentityRequest[] = [];
   showAllRequests = false;
   resolutionText: null | string = null;
   modalStates: { [key: string]: boolean } = {};
@@ -132,4 +138,5 @@ export default class Requests extends Vue {
     return this.requests.filter((request) => !request.accepted);
   }
 }
+export default toNative(Requests);
 </script>

@@ -41,19 +41,25 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
 
 @Component
-export default class AdminRoles extends Vue {
+class AdminRoles extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentRoles = this.roles;
+    this.currentGroups = this.groups;
+  }
   @Prop() roles!: types.UserRole[];
   @Prop() groups!: types.Group[];
 
   T = T;
-  currentRoles: types.UserRole[] = this.roles;
-  currentGroups: types.Group[] = this.groups;
+  currentRoles: types.UserRole[] = [];
+  currentGroups: types.Group[] = [];
 
   @Emit()
   changeRole(
@@ -74,4 +80,5 @@ export default class AdminRoles extends Vue {
     };
   }
 }
+export default toNative(AdminRoles);
 </script>

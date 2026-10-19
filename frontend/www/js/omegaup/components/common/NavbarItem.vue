@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -44,7 +44,7 @@ library.add(faExternalLinkAlt);
     FontAwesomeIcon,
   },
 })
-export default class NavbarItem extends Vue {
+class NavbarItem extends Vue {
   @Prop({ required: true }) title!: string;
   @Prop({ default: '' }) description!: string;
   @Prop({ default: null }) icon!: string | [string, string] | null;
@@ -73,6 +73,7 @@ export default class NavbarItem extends Vue {
     return this.rel;
   }
 }
+export default toNative(NavbarItem);
 </script>
 
 <style lang="scss" scoped>

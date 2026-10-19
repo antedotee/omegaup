@@ -118,7 +118,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -134,7 +135,7 @@ import {
 } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-Vue.use(BootstrapVue);
+VueGlobal.use(BootstrapVue);
 
 export enum Tabs {
   Summary = 'summary',
@@ -151,7 +152,12 @@ export enum Tabs {
     'omegaup-problem-details': problem_Details,
   },
 })
-export default class ArenaCourse extends Vue {
+class ArenaCourse extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentSelectedTab = this.selectedTab;
+  }
   @Prop() allRuns!: types.Run[];
   @Prop() assignment!: types.ArenaCourseAssignment;
   @Prop() course!: types.ArenaCourseDetails;
@@ -166,7 +172,7 @@ export default class ArenaCourse extends Vue {
   T = T;
   ui = ui;
   Tabs = Tabs;
-  currentSelectedTab: string | null = this.selectedTab;
+  currentSelectedTab: string | null = '';
 
   private get currentAssignmentIndex(): number {
     return this.course.assignments.findIndex(
@@ -193,6 +199,7 @@ export default class ArenaCourse extends Vue {
     this.currentSelectedTab = newValue;
   }
 }
+export default toNative(ArenaCourse);
 </script>
 
 <style lang="scss" scoped>

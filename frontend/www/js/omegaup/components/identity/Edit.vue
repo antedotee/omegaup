@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import type { types } from '../../api_types';
 import T from '../../lang';
 import * as iso3166 from '@/third_party/js/iso-3166-2.js/iso3166.min.js';
@@ -112,13 +112,11 @@ import common_Typeahead from '../common/Typeahead.vue';
     'omegaup-common-typeahead': common_Typeahead,
   },
 })
-export default class IdentityEdit extends Vue {
-  @Prop({ default: null }) identity!: types.Identity | null;
-  @Prop() countries!: iso3166.Country[];
-  @Prop() searchResultSchools!: types.SchoolListItem[];
-
-  T = T;
-  selectedIdentity = Object.assign(
+class IdentityEdit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.selectedIdentity = Object.assign(
     {
       username: '',
       classname: '',
@@ -130,7 +128,15 @@ export default class IdentityEdit extends Vue {
     } as types.Identity,
     this.identity,
   );
-  school: null | types.SchoolListItem = this.searchResultSchools[0] ?? null;
+    this.school = this.searchResultSchools[0] ?? null;
+  }
+  @Prop({ default: null }) identity!: types.Identity | null;
+  @Prop() countries!: iso3166.Country[];
+  @Prop() searchResultSchools!: types.SchoolListItem[];
+
+  T = T;
+  selectedIdentity = undefined;
+  school: null | types.SchoolListItem = null;
 
   get groupName(): string {
     const teamUsername = this.selectedIdentity.username.split(':');
@@ -172,4 +178,5 @@ export default class IdentityEdit extends Vue {
     this.selectedIdentity = newValue;
   }
 }
+export default toNative(IdentityEdit);
 </script>

@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import VoerroTagsInput from '@voerro/vue-tagsinput';
 import '@voerro/vue-tagsinput/dist/style.css';
 import T from '../../lang';
@@ -30,7 +30,7 @@ import { types } from '../../api_types';
     'tags-input': VoerroTagsInput,
   },
 })
-export default class MultiTypeahead extends Vue {
+class MultiTypeahead extends Vue {
   @Prop() existingOptions!: types.ListItem[];
   @Prop({ default: 3 }) activationThreshold!: number;
   @Prop({ default: 10 }) maxResults!: number;
@@ -51,6 +51,7 @@ export default class MultiTypeahead extends Vue {
     );
   }
 }
+export default toNative(MultiTypeahead);
 </script>
 
 <style lang="scss">

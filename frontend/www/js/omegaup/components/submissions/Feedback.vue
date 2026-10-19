@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -48,7 +48,7 @@ import user_Username from '../user/Username.vue';
     'omegaup-user-username': user_Username,
   },
 })
-export default class SubmissionFeedback extends Vue {
+class SubmissionFeedback extends Vue {
   @Prop() guid!: string;
   @Prop({ default: false }) isAdmin!: boolean;
   @Prop({ default: () => [] }) feedbackOptions!: types.SubmissionFeedback[];
@@ -68,6 +68,7 @@ export default class SubmissionFeedback extends Vue {
     return feedback;
   }
 }
+export default toNative(SubmissionFeedback);
 </script>
 
 <style lang="scss">

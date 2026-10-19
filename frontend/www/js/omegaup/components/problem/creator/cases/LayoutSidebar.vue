@@ -219,7 +219,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue, Watch, toNative } from 'vue-facing-decorator';
 import { namespace } from 'vuex-class';
 import T from '../../../../lang';
 import {
@@ -234,7 +234,7 @@ import {
 const casesStore = namespace('casesStore');
 
 @Component
-export default class Sidebar extends Vue {
+class Sidebar extends Vue {
   T = T;
 
   @casesStore.State('groups') groups!: Group[];
@@ -308,6 +308,7 @@ export default class Sidebar extends Vue {
     return this.lineKindOptions.find((line) => line.kind === kind)?.type;
   }
 }
+export default toNative(Sidebar);
 </script>
 
 <style lang="scss" scoped>

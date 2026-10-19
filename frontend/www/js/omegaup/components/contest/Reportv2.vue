@@ -78,7 +78,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -96,9 +97,9 @@ import {
   BIconCaretUpSquare,
   BIconPrinter,
 } from 'bootstrap-vue';
-Vue.use(TablePlugin);
-Vue.use(ButtonPlugin);
-Vue.use(CardPlugin);
+VueGlobal.use(TablePlugin);
+VueGlobal.use(ButtonPlugin);
+VueGlobal.use(CardPlugin);
 
 interface GroupDetails {
   name: string;
@@ -117,7 +118,7 @@ interface GroupDetails {
     BIconPrinter,
   },
 })
-export default class Report extends Vue {
+class Report extends Vue {
   @Prop() contestReport!: types.ContestReport[];
   @Prop() contestAlias!: string;
 
@@ -162,6 +163,7 @@ export default class Report extends Vue {
     }));
   }
 }
+export default toNative(Report);
 </script>
 
 <style lang="scss" scoped>

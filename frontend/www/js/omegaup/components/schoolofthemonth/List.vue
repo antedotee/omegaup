@@ -110,7 +110,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import country_Flag from '../CountryFlag.vue';
@@ -127,7 +127,7 @@ library.add(faCogs);
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class SchoolOfTheMonthList extends Vue {
+class SchoolOfTheMonthList extends Vue {
   @Prop() schoolsOfPreviousMonths!: omegaup.SchoolOfTheMonth[];
   @Prop() schoolsOfPreviousMonth!: omegaup.SchoolOfTheMonth[];
   @Prop() candidatesToSchoolOfTheMonth!: omegaup.SchoolOfTheMonth[];
@@ -151,6 +151,7 @@ export default class SchoolOfTheMonthList extends Vue {
     }
   }
 }
+export default toNative(SchoolOfTheMonthList);
 </script>
 
 <style scoped>

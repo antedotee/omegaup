@@ -1,4 +1,4 @@
-import { createLocalVue, mount, Wrapper } from '@vue/test-utils';
+import { mount, Wrapper } from '@vue/test-utils';
 
 import AddPanel from './AddPanel.vue';
 import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
@@ -8,7 +8,6 @@ import vuexStore from '../../../../problem/creator/store';
 import { StoreState } from '../../../../problem/creator/types';
 import { Store } from 'vuex';
 
-const localVue = createLocalVue();
 localVue.use(BootstrapVue);
 localVue.use(IconsPlugin);
 
@@ -21,8 +20,9 @@ describe('AddPanel.vue', () => {
 
   it('Should add a case to the store', async () => {
     const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
+      global: {
+        plugins: [vuexStore],
+      },
     });
 
     await Vue.nextTick();
@@ -50,8 +50,9 @@ describe('AddPanel.vue', () => {
 
   it('Should add a group to the store and add a case to the group', async () => {
     const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
+      global: {
+        plugins: [vuexStore],
+      },
     });
 
     await wrapper.setData({ tab: 'group' });
@@ -92,8 +93,9 @@ describe('AddPanel.vue', () => {
 
   it('Should add an ungrouped case to the store', async () => {
     const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
+      global: {
+        plugins: [vuexStore],
+      },
     });
 
     await wrapper.setData({ tab: 'case' });
@@ -123,8 +125,9 @@ describe('AddPanel.vue', () => {
 
   it('Should add multiple ungrouped cases to the store', async () => {
     const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
+      global: {
+        plugins: [vuexStore],
+      },
     });
 
     await wrapper.setData({ tab: 'multiplecases' });
@@ -161,9 +164,10 @@ describe('AddPanel.vue', () => {
 
   it('Should contain 3 tabs', async () => {
     const wrapper = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
-      stubs: { transition: false },
+      global: {
+        plugins: [vuexStore],
+        stubs: { transition: false },
+      },
     });
 
     const expectedText = [

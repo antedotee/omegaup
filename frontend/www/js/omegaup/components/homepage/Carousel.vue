@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import homepageSlide from './Slide.vue';
 import { types } from '../../api_types';
@@ -81,7 +81,7 @@ interface SlideData {
     'omegaup-homepage-slide': homepageSlide,
   },
 })
-export default class Carousel extends Vue {
+class Carousel extends Vue {
   @Prop({ default: () => [] }) carouselItems!: types.CarouselItem[];
 
   T = T;
@@ -168,6 +168,7 @@ export default class Carousel extends Vue {
     return slide;
   }
 }
+export default toNative(Carousel);
 </script>
 
 <style lang="scss" scoped>

@@ -8,11 +8,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import T from '../../../lang';
 
 @Component
-export default class OutputOnlyDownload extends Vue {
+class OutputOnlyDownload extends Vue {
   get zipUrl(): string {
     // This should eventually be dynamic
     return '/problem/output-only/files.zip';
@@ -20,4 +20,5 @@ export default class OutputOnlyDownload extends Vue {
 
   T = T;
 }
+export default toNative(OutputOnlyDownload);
 </script>

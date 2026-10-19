@@ -166,7 +166,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 
@@ -212,7 +212,14 @@ export enum SearchTypes {
     tooltip: VTooltip,
   },
 })
-export default class AddProblem extends Vue {
+class AddProblem extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.points = this.initialPoints;
+    this.order = this.initialProblems.length + 1;
+    this.problems = this.initialProblems;
+  }
   @Prop() contestAlias!: string;
   @Prop() initialPoints!: number;
   @Prop() initialProblems!: types.ProblemsetProblemWithVersions[];
@@ -221,9 +228,9 @@ export default class AddProblem extends Vue {
   T = T;
   alias: null | types.ListItem = null;
   title: null | string = null;
-  points = this.initialPoints;
-  order = this.initialProblems.length + 1;
-  problems = this.initialProblems;
+  points = undefined;
+  order = undefined;
+  problems = undefined;
   versionLog: types.ProblemVersion[] = [];
   useLatestVersion = true;
   publishedRevision: null | types.ProblemVersion = null;
@@ -351,4 +358,5 @@ export default class AddProblem extends Vue {
     });
   }
 }
+export default toNative(AddProblem);
 </script>

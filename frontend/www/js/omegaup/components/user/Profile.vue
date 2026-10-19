@@ -104,7 +104,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import { dao, types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -142,7 +142,13 @@ export interface ProfileStatistics {
     'omegaup-user-delete-account': userDeleteAccount,
   },
 })
-export default class Profile extends Vue {
+class Profile extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentSelectedTab = this.selectedTab;
+    this.currentViewProfileSelectedTab = this.viewProfileSelectedTab;
+  }
   @Prop({ default: null }) data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop({ default: 'view-profile' }) selectedTab!: string;
@@ -164,8 +170,8 @@ export default class Profile extends Vue {
 
   T = T;
   ui = ui;
-  currentSelectedTab = this.selectedTab;
-  currentViewProfileSelectedTab = this.viewProfileSelectedTab;
+  currentSelectedTab = undefined;
+  currentViewProfileSelectedTab = undefined;
 
   @Watch('viewProfileSelectedTab')
   onViewProfileSelectedTabChanged(newValue: string | null) {
@@ -187,6 +193,7 @@ export default class Profile extends Vue {
     this.currentSelectedTab = newValue;
   }
 }
+export default toNative(Profile);
 </script>
 
 <style scoped>

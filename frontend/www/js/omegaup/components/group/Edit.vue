@@ -153,7 +153,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import group_Identities from './Identities.vue';
 import group_Form from './Form.vue';
 import group_Members from './Members.vue';
@@ -177,7 +177,15 @@ export enum AvailableTabs {
     'omegaup-group-scoreboards': group_Scoreboards,
   },
 })
-export default class GroupEdit extends Vue {
+class GroupEdit extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.selectedTab = this.tab;
+    this.currentIdentities = this.identities;
+    this.currentIdentitiesCsv = this.identitiesCsv;
+    this.currentScoreboards = this.scoreboards;
+  }
   @Prop() groupAlias!: string;
   @Prop() groupDescription!: string;
   @Prop() groupName!: string;
@@ -195,10 +203,10 @@ export default class GroupEdit extends Vue {
   T = T;
   ui = ui;
   AvailableTabs = AvailableTabs;
-  selectedTab: AvailableTabs = this.tab;
-  currentIdentities = this.identities;
-  currentIdentitiesCsv = this.identitiesCsv;
-  currentScoreboards = this.scoreboards;
+  selectedTab: AvailableTabs = undefined;
+  currentIdentities = undefined;
+  currentIdentitiesCsv = undefined;
+  currentScoreboards = undefined;
 
   @Watch('tab')
   onInitialTabChanged(newValue: AvailableTabs): void {
@@ -229,6 +237,7 @@ export default class GroupEdit extends Vue {
     this.currentScoreboards = newValue;
   }
 }
+export default toNative(GroupEdit);
 </script>
 
 <style scoped lang="scss">

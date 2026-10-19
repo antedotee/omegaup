@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
@@ -39,7 +39,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class CommonDocs extends Vue {
+class CommonDocs extends Vue {
   @Prop() docs!: { [key: string]: types.UserDocument[] };
 
   T = T;
@@ -57,4 +57,5 @@ export default class CommonDocs extends Vue {
     return icon;
   }
 }
+export default toNative(CommonDocs);
 </script>

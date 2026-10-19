@@ -17,13 +17,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import store from '../grader/GraderStore';
 import * as monaco from 'monaco-editor';
 import T from '../lang';
 
 @Component
-export default class DiffEditorV2 extends Vue {
+class DiffEditorV2 extends Vue {
   @Prop({ required: true }) storeMapping!: {
     originalContents: string;
     modifiedContents: string;
@@ -114,6 +114,7 @@ export default class DiffEditorV2 extends Vue {
     this._editor?.layout();
   }
 }
+export default toNative(DiffEditorV2);
 </script>
 
 <style lang="scss" scoped>

@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch, Prop, toNative } from 'vue-facing-decorator';
 import T from '../lang';
 import * as time from '../time';
 import '../../../third_party/js/bootstrap-datetimepicker.min.js';
@@ -22,7 +22,12 @@ import '../../../third_party/js/locales/bootstrap-datetimepicker.es.js';
 import '../../../third_party/js/locales/bootstrap-datetimepicker.pt-BR.js';
 
 @Component
-export default class DateTimePicker extends Vue {
+class DateTimePicker extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.stringValue = time.formatDateTimeLocal(this.value);
+  }
   T = T;
   time = time;
 
@@ -35,7 +40,7 @@ export default class DateTimePicker extends Vue {
   @Prop({ default: false }) isInvalid!: boolean;
 
   private usedFallback: boolean = false;
-  private stringValue: string = time.formatDateTimeLocal(this.value);
+  private stringValue: string = '';
 
   public mounted() {
     if ((this.$el as HTMLInputElement).type === 'text') {
@@ -94,6 +99,7 @@ export default class DateTimePicker extends Vue {
     }
   }
 }
+export default toNative(DateTimePicker);
 </script>
 
 <style>

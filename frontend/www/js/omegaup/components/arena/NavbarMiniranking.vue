@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
@@ -38,11 +38,12 @@ import user_Username from '../user/Username.vue';
     'omegaup-user-username': user_Username,
   },
 })
-export default class ArenaNavbarMiniranking extends Vue {
+class ArenaNavbarMiniranking extends Vue {
   @Prop() showRanking!: boolean;
   @Prop() users!: omegaup.UserRank[];
   T = T;
 }
+export default toNative(ArenaNavbarMiniranking);
 </script>
 
 <style lang="scss" scoped>

@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
 import user_Username from '../user/Username.vue';
@@ -105,7 +105,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class Admins extends Vue {
+class Admins extends Vue {
   @Prop() admins!: types.ContestAdmin[];
   @Prop() searchResultUsers!: types.ListItem[];
 
@@ -118,4 +118,5 @@ export default class Admins extends Vue {
     this.username = null;
   }
 }
+export default toNative(Admins);
 </script>

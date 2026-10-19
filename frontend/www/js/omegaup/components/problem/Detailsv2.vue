@@ -123,7 +123,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -141,7 +142,7 @@ import user_Username from '../user/Username.vue';
 import { BootstrapVue } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-Vue.use(BootstrapVue);
+VueGlobal.use(BootstrapVue);
 
 export interface Tab {
   name: string;
@@ -169,7 +170,7 @@ export enum PopupDisplayed {
     'omegaup-username': user_Username,
   },
 })
-export default class ProblemDetails extends Vue {
+class ProblemDetails extends Vue {
   @Prop() allRuns!: types.Run[];
   @Prop() currentRunDetails!: types.RunDetails | null;
   @Prop({ default: null }) languages!: null | string[];
@@ -325,6 +326,7 @@ export default class ProblemDetails extends Vue {
     }
   }
 }
+export default toNative(ProblemDetails);
 </script>
 
 <style lang="scss" scoped>

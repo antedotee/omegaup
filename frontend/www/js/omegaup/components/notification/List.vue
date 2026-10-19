@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import Notification from './Notification.vue';
@@ -59,7 +59,7 @@ library.add(faBell);
     'omegaup-notification': Notification,
   },
 })
-export default class NotificationList extends Vue {
+class NotificationList extends Vue {
   @Prop() notifications!: types.Notification[];
   T = T;
 
@@ -67,6 +67,7 @@ export default class NotificationList extends Vue {
     this.$emit('read', [notification], url);
   }
 }
+export default toNative(NotificationList);
 </script>
 
 <style scoped>

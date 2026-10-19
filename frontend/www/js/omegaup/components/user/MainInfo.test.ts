@@ -69,7 +69,7 @@ const propsData = {
 describe('MainInfo.vue', () => {
   it('Should display profile edit button', () => {
     const wrapper = shallowMount(user_MainInfo, {
-      propsData,
+      props: propsData,
     });
     expect(
       wrapper.find('a[href="/profile/#edit-basic-information"]').exists(),
@@ -82,7 +82,7 @@ describe('MainInfo.vue', () => {
   it('Should display profile see button', () => {
     propsData.edit = true;
     const wrapper = shallowMount(user_MainInfo, {
-      propsData,
+      props: propsData,
     });
     expect(wrapper.find('a[href="/profile/"]').exists()).toBe(true);
     expect(wrapper.find('a[href="/profile/"]').text()).toBe(
@@ -92,14 +92,14 @@ describe('MainInfo.vue', () => {
 
   it('Should display number of solved problems', () => {
     const wrapper = shallowMount(user_MainInfo, {
-      propsData,
+      props: propsData,
     });
     expect(wrapper.text()).toContain('3');
   });
 
   it('Should display correct rank', () => {
     const wrapper = shallowMount(user_MainInfo, {
-      propsData,
+      props: propsData,
     });
     expect(wrapper.text()).toContain(T.profileRankMaster);
   });

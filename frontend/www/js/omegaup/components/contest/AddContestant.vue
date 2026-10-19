@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -126,7 +126,12 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class AddContestant extends Vue {
+class AddContestant extends Vue {
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so prop-derived fields are assigned here.
+    this.currentUsers = this.users;
+  }
   @Prop() users!: types.ContestUser[];
   @Prop() contest!: types.ContestAdminDetails;
   @Prop() searchResultUsers!: types.ListItem[];
@@ -135,7 +140,7 @@ export default class AddContestant extends Vue {
   time = time;
   bulkContestants = '';
   typeaheadContestants: types.ListItem[] = [];
-  currentUsers = this.users;
+  currentUsers = undefined;
 
   onSubmit(): void {
     let users: string[] = [];
@@ -171,4 +176,5 @@ export default class AddContestant extends Vue {
     this.bulkContestants = '';
   }
 }
+export default toNative(AddContestant);
 </script>
