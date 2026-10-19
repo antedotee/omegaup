@@ -1,5 +1,5 @@
 <template>
-  <b-collapse :visible="visible" class="w-100 mt-2">
+  <b-collapse :model-value="visible" class="w-100 mt-2">
     <form enctype="multipart/form-data" method="post" @submit="onSubmit">
       <div class="p-3 border rounded bg-light item-active-for-delete">
         <div class="form-group">
@@ -36,7 +36,7 @@ import T from '../../../../lang';
 import * as ui from '@/js/omegaup/ui';
 @Component
 class DeleteConfirmationForm extends Vue {
-  @Inject('problemAlias') readonly alias!: string;
+  @Inject({ from: 'problemAlias' }) readonly alias!: string;
   @Prop({ required: true }) visible!: boolean;
   @Prop({ required: true }) itemName!: string;
   @Prop({ required: false }) itemId!: string;

@@ -36,7 +36,7 @@ const babelConfig = {
 
 module.exports = {
   testEnvironment: 'jsdom',
-  moduleFileExtensions: ['js', 'ts', 'vue'],
+  moduleFileExtensions: ['js', 'mjs', 'ts', 'vue'],
   moduleDirectories: ['node_modules'],
   moduleNameMapper: {
     'vue-async-computed-decorator':
@@ -52,12 +52,20 @@ module.exports = {
   },
   setupFilesAfterEnv: ['<rootDir>/frontend/www/js/omegaup/test.setup.ts'],
   transform: {
-    '.*\\.vue$':
+    '.*\\.vue$': [
       '<rootDir>/frontend/www/js/omegaup/vue-compat-jest-transformer.js',
-    '.*\\.[jt]sx?$': ['babel-jest', babelConfig],
+      {
+        compilerOptions: {
+          compatConfig: {
+            MODE: 2,
+          },
+        },
+      },
+    ],
+    '.*\\.(mjs|[jt]sx?)$': ['babel-jest', babelConfig],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(vue-.*|@voerro/vue-tagsinput|monaco-editor|monaco-editor-core)/)',
+    'node_modules/(?!(vue-.*|bootstrap-vue-next|@vueuse/.*|reka-ui|@voerro/vue-tagsinput|monaco-editor|monaco-editor-core)/)',
   ],
   testEnvironmentOptions: {
     url: 'http://localhost:8001/',

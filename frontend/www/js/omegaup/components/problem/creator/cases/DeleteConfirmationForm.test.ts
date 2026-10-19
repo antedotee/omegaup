@@ -1,12 +1,8 @@
 import { shallowMount, mount } from '@vue/test-utils';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import Vue from 'vue';
 import DeleteConfirmationForm from './DeleteConfirmationForm.vue';
 import T from '../../../../lang';
 import * as ui from '@/js/omegaup/ui';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
 
 describe('DeleteConfirmationForm.vue', () => {
   it('Should set commitMessage when visible changes', async () => {
@@ -18,7 +14,7 @@ describe('DeleteConfirmationForm.vue', () => {
         onCancel: () => {},
       },
 
-      provide: { problemAlias: 'alias' },
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     expect((wrapper.vm as any).commitMessage).toBe('');
@@ -46,7 +42,7 @@ describe('DeleteConfirmationForm.vue', () => {
         onCancel: jest.fn(),
       },
 
-      provide: { problemAlias: 'alias' },
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     const submitBtn = wrapper.find('button.btn-danger');
@@ -57,7 +53,10 @@ describe('DeleteConfirmationForm.vue', () => {
   });
 
   it('Should include proper hidden fields (request, alias, contents)', async () => {
-    const wrapper = shallowMount(DeleteConfirmationForm, {
+    // mount (not shallowMount) so the BCollapse default slot renders its
+    // content. Under @vue/test-utils 2 a stubbed child does not render its
+    // slot by default, unlike Vue 2 test-utils.
+    const wrapper = mount(DeleteConfirmationForm, {
       props: {
         visible: true,
         itemName: 'Deleted Item',
@@ -65,7 +64,7 @@ describe('DeleteConfirmationForm.vue', () => {
         onCancel: () => {},
       },
 
-      provide: { problemAlias: 'the-alias' },
+      global: { provide: { problemAlias: 'the-alias' } },
     });
 
     await Vue.nextTick();
@@ -102,7 +101,7 @@ describe('DeleteConfirmationForm.vue', () => {
         onCancel: () => {},
       },
 
-      provide: { problemAlias: 'alias' },
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     wrapper.setData({ commitMessage: '      ' });
@@ -127,7 +126,7 @@ describe('DeleteConfirmationForm.vue', () => {
         onCancel,
       },
 
-      provide: { problemAlias: 'alias' },
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     wrapper.setProps({ visible: true });
@@ -153,14 +152,15 @@ describe('DeleteConfirmationForm.vue', () => {
         onCancel: jest.fn(),
       },
 
-      provide: { problemAlias: 'alias' },
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     wrapper.setData({ commitMessage: '' });
     await Vue.nextTick();
 
     const submitBtn = wrapper.find('button.btn-danger');
-    expect(submitBtn.attributes('disabled')).toBe('disabled');
+    // Vue 3 renders boolean attributes as an empty string, not the name.
+    expect(submitBtn.attributes('disabled')).toBe('');
 
     wrapper.setData({ commitMessage: 'Delete message' });
     await Vue.nextTick();

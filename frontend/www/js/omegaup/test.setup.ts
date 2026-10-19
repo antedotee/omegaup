@@ -5,10 +5,21 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 
 import Vue, { configureCompat } from 'vue';
+import { config } from '@vue/test-utils';
+import { createBootstrap } from 'bootstrap-vue-next';
 import Sortable from 'sortablejs';
 
-// Run the Vue 3 migration build in full Vue 2 compatibility mode for tests.
-configureCompat({ MODE: 2 });
+// Run the Vue 3 migration build in Vue 2 compatibility mode for tests. All
+// templates are compiled to Vue 3 native render functions, so the Vue-2
+// render-function compat shim must stay off; leaving it on makes @vue/compat
+// re-transform already-native render output and corrupts v-for rows
+// ("InvalidCharacterError: '0' did not match the Name production").
+configureCompat({ MODE: 2, RENDER_FUNCTION: false });
+
+// Register BootstrapVueNext globally for every mounted component, mirroring the
+// app bootstrap. This replaces the per-test `Vue.use(BootstrapVue)` calls that
+// bootstrap-vue 2 required, which cannot run under @vue/compat.
+config.global.plugins.push(createBootstrap());
 
 Vue.directive('Sortable', {
   inserted: (el: HTMLElement, binding) => {
