@@ -1,15 +1,12 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 
 import MultipleCasesInput from './MultipleCasesInput.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
+import { BFormSelect } from 'bootstrap-vue-next';
 import T from '../../../../lang';
 import Vue from 'vue';
 import store from '@/js/omegaup/problem/creator/store';
 import { Group } from '@/js/omegaup/problem/creator/types';
 import { v4 as uuid } from 'uuid';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
 
 const testGroup: Group = {
   groupID: uuid(),
@@ -42,7 +39,7 @@ describe('MultipleCasesInput.vue', () => {
 
     expect(inputElements.length).toBe(expectedTextInputText.length);
 
-    inputElements.wrappers.forEach((element, index) => {
+    inputElements.forEach((element, index) => {
       expect(element.attributes('label')).toBe(expectedTextInputText[index]); // We need to make it like this because that's how Vue-Bootstrap input element works
     });
 
@@ -75,15 +72,13 @@ describe('MultipleCasesInput.vue', () => {
   });
 
   it('Should handle choice of groups', () => {
-    const wrapper = shallowMount(MultipleCasesInput, {
+    const wrapper = mount(MultipleCasesInput, {
       global: {
         plugins: [store],
       },
     });
 
-    const formSelect = wrapper.find(
-      'b-form-select-stub[name="multiple-cases-group"]',
-    );
+    const formSelect = wrapper.findComponent(BFormSelect);
     expect(formSelect.props()['options']).toBe(wrapper.vm.options);
   });
 });

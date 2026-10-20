@@ -1,13 +1,9 @@
 import { shallowMount } from '@vue/test-utils';
 
 import CaseInput from './CaseInput.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import T from '../../../../lang';
 import Vue from 'vue';
 import store from '@/js/omegaup/problem/creator/store';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
 
 describe('CaseInput.vue', () => {
   it('Should contain all 4 inputs', async () => {
@@ -30,7 +26,7 @@ describe('CaseInput.vue', () => {
 
     expect(inputElements.length).toBe(expectedTextInputText.length);
 
-    inputElements.wrappers.forEach((element, index) => {
+    inputElements.forEach((element, index) => {
       expect(element.attributes('label')).toBe(expectedTextInputText[index]); // We need to make it like this because that's how Vue-Bootstrap input element works
     });
   });
