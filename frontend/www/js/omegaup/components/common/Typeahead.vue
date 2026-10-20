@@ -1,6 +1,6 @@
 <template>
   <tags-input
-    v-model="selectedOptions"
+    :value="selectedOptions"
     :existing-tags="existingOptions"
     :typeahead="true"
     :typeahead-style="'dropdown'"
@@ -13,6 +13,7 @@
     :only-existing-tags="onlyExistingTags"
     :typeahead-hide-discard="typeaheadHideDiscard"
     :class="{ 'is-invalid': isInvalid }"
+    @input="selectedOptions = $event"
     @change="updateExistingOptions"
     @tag-added="onTagAdded"
     @tag-removed="onTagRemoved"
@@ -77,7 +78,15 @@ class Typeahead extends Vue {
 
   onTagAdded(): void {
     if (this.selectedOptions.length < 1) return;
-    this.$emit('update:value', this.selectedOptions[0]);
+    const selected = this.selectedOptions[0];
+    // The underlying tags-input emits `tag-added` asynchronously (on its own
+    // `$nextTick`), so a `tag-added` queued for an option that is already the
+    // current `value` can arrive after the parent has reset or changed the
+    // model. Re-emitting it then would clobber the parent's update. Skip the
+    // notification when the selected option already matches `value`; a genuine
+    // new selection still differs and is propagated.
+    if (this.value && this.value.key === selected.key) return;
+    this.$emit('update:value', selected);
   }
 
   onTagRemoved(): void {
