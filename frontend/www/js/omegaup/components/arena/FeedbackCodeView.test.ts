@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 
 import arena_FeedbackCodeView from './FeedbackCodeView.vue';
-import { ArenaCourseFeedback, FeedbackStatus } from './Feedback.vue';
+import { ArenaCourseFeedback, FeedbackStatus } from './Feedback_types';
 
 describe('FeedbackCodeView.vue', () => {
   it('Should handle feedback codeview with empty comments list', async () => {

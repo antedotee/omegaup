@@ -5,6 +5,13 @@ import * as api from '../api';
 import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 
+interface ScoreboardMergeInstance {
+  contests: types.ContestListItem[];
+  scoreboard: types.MergedScoreboardEntry[];
+  showPenalty: boolean;
+  aliases: string[];
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.ScoreboardMergePayload();
   const scoreboardMerge = new Vue({
@@ -54,9 +61,9 @@ OmegaUp.on('ready', () => {
                   }
                 }
                 // Update the props values
-                scoreboardMerge.aliases = aliases;
-                scoreboardMerge.showPenalty = showPenalty;
-                scoreboardMerge.scoreboard = scoreboard;
+                (scoreboardMerge as unknown as ScoreboardMergeInstance).aliases = aliases;
+                (scoreboardMerge as unknown as ScoreboardMergeInstance).showPenalty = showPenalty;
+                (scoreboardMerge as unknown as ScoreboardMergeInstance).scoreboard = scoreboard;
               })
               .catch(ui.apiError);
           },

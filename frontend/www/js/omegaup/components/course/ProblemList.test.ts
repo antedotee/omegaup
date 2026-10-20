@@ -6,6 +6,12 @@ import type { types } from '../../api_types';
 
 import course_ProblemLists from './ProblemList.vue';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ProblemListVm {
+  selectedRevision: null | types.ProblemVersion;
+}
+
 describe('ProblemLists.vue', () => {
   const problem: types.ProblemsetProblem = {
     accepted: 1,
@@ -150,7 +156,7 @@ describe('ProblemLists.vue', () => {
 
     await wrapper.setData({ versionLog, selectedRevision, publishedRevision });
 
-    expect(wrapper.vm.selectedRevision?.version).toEqual(versionLog[1].version);
+    expect((wrapper.vm as unknown as ProblemListVm).selectedRevision?.version).toEqual(versionLog[1].version);
 
     expect(
       wrapper.find('input[data-use-latest-version-true]').element,
@@ -171,6 +177,6 @@ describe('ProblemLists.vue', () => {
       wrapper.find('input[data-use-latest-version-false]').element,
     ).not.toBeChecked();
 
-    expect(wrapper.vm.selectedRevision?.version).toEqual(versionLog[0].version);
+    expect((wrapper.vm as unknown as ProblemListVm).selectedRevision?.version).toEqual(versionLog[0].version);
   });
 });

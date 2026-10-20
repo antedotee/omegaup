@@ -2,8 +2,8 @@ import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import { types } from '../api_types';
 import arena_Contest from '../components/arena/Contest.vue';
-import { DisqualificationType } from '../components/arena/Runs.vue';
-import { PopupDisplayed } from '../components/problem/Details.vue';
+import { DisqualificationType } from '../components/arena/Runs_types';
+import { PopupDisplayed } from '../components/problem/Details_types';
 import T from '../lang';
 import { omegaup, OmegaUp } from '../omegaup';
 import * as time from '../time';
@@ -21,6 +21,7 @@ import { getOptionsFromLocation, getProblemAndRunDetails } from './location';
 import {
   getScoreModeEnum,
   navigateToProblem,
+  NavigationTarget,
   NavigationType,
 } from './navigation';
 import { pushLocationHash } from '../location';
@@ -39,6 +40,14 @@ import {
   trackRun,
   updateRunFallback,
 } from './submissions';
+
+interface ContestContestantInstance {
+  activeTab: string;
+  problems: types.NavbarProblemsetProblem[];
+  problem: types.NavbarProblemsetProblem | null;
+  problemInfo: types.ProblemDetails | null;
+  logs: types.ContestProblemChangeLog[];
+}
 
 OmegaUp.on('ready', async () => {
   time.setSugarLocale();
@@ -226,7 +235,7 @@ OmegaUp.on('ready', async () => {
             navigateToProblem({
               type: NavigationType.ForContest,
               problem,
-              target: contestContestant,
+              target: contestContestant as unknown as NavigationTarget,
               problems: this.problems,
               contestAlias: payload.contest.alias,
               contestMode: getScoreModeEnum(payload.contest.score_mode),
@@ -275,7 +284,7 @@ OmegaUp.on('ready', async () => {
           'execute-run': ({
             target,
           }: {
-            target: Vue & { currentNextExecutionTimestamp: Date };
+            target: { currentNextExecutionTimestamp: Date };
           }) => {
             api.Run.execute()
               .then(time.remoteTimeAdapter)
@@ -294,7 +303,7 @@ OmegaUp.on('ready', async () => {
             problem: types.NavbarProblemsetProblem;
             code: string;
             language: string;
-            target: Vue & { currentNextSubmissionTimestamp: Date };
+            target: { currentNextSubmissionTimestamp: Date };
           }) => {
             api.Run.create({
               contest_alias: payload.contest.alias,
@@ -437,7 +446,9 @@ OmegaUp.on('ready', async () => {
               .catch(ui.ignoreError);
           },
           'update:activeTab': (tabName: string) => {
-            contestContestant.activeTab = tabName;
+            (
+              contestContestant as unknown as ContestContestantInstance
+            ).activeTab = tabName;
             pushLocationHash(`#${tabName}`);
           },
           'reset-hash': ({
@@ -482,6 +493,8 @@ OmegaUp.on('ready', async () => {
   });
 
   const onProblemListChanged = (): void => {
+    const instance =
+      contestContestant as unknown as ContestContestantInstance;
     api.Contest.details({
       contest_alias: payload.contest.alias,
     })
@@ -514,7 +527,7 @@ OmegaUp.on('ready', async () => {
 
         // Keep the same array reference so socket consumers stay in sync.
         payload.problems.splice(0, payload.problems.length, ...updatedProblems);
-        contestContestant.problems = payload.problems;
+        instance.problems = payload.problems;
 
         const normalizedRanking = rankingStore.state.ranking.map(
           (entry): types.ScoreboardRankingEntry => {
@@ -538,7 +551,7 @@ OmegaUp.on('ready', async () => {
         );
         rankingStore.commit('updateRanking', normalizedRanking);
 
-        const selectedProblem = contestContestant.problem as types.NavbarProblemsetProblem | null;
+        const selectedProblem = instance.problem;
         if (!selectedProblem) {
           return;
         }
@@ -547,8 +560,8 @@ OmegaUp.on('ready', async () => {
           (problem) => problem.alias === selectedProblem.alias,
         );
         if (!refreshedProblem) {
-          contestContestant.problem = null;
-          contestContestant.problemInfo = null;
+          instance.problem = null;
+          instance.problemInfo = null;
           history.replaceState(
             { selectedTab: 'problems' },
             'resetHash',
@@ -557,7 +570,7 @@ OmegaUp.on('ready', async () => {
           return;
         }
 
-        contestContestant.problem = refreshedProblem;
+        instance.problem = refreshedProblem;
         api.Problem.details({
           problem_alias: refreshedProblem.alias,
           prevent_problemset_open: false,
@@ -566,7 +579,7 @@ OmegaUp.on('ready', async () => {
           .then(time.remoteTimeAdapter)
           .then((problemInfo) => {
             problemInfo.title = refreshedProblem.text ?? '';
-            contestContestant.problemInfo = problemInfo;
+            instance.problemInfo = problemInfo;
             problemsStore.commit('addProblem', problemInfo);
           })
           .catch(ui.ignoreError);
@@ -577,7 +590,7 @@ OmegaUp.on('ready', async () => {
       contest_alias: payload.contest.alias,
     })
       .then((response) => {
-        contestContestant.logs = response.logs;
+        instance.logs = response.logs;
       })
       .catch(ui.ignoreError);
   };
@@ -607,7 +620,8 @@ OmegaUp.on('ready', async () => {
     contest_alias: payload.contest.alias,
   })
     .then((response: { logs: types.ContestProblemChangeLog[] }) => {
-      contestContestant.logs = response.logs;
+      (contestContestant as unknown as ContestContestantInstance).logs =
+        response.logs;
     })
     .catch(ui.ignoreError);
 
@@ -649,8 +663,10 @@ OmegaUp.on('ready', async () => {
     const locationHash = window.location.hash.replace('#', '').split('/');
     const tab = getSelectedValidTab(locationHash[0], contestAdmin);
 
-    if (contestContestant.activeTab !== tab) {
-      contestContestant.activeTab = tab;
+    const instance =
+      contestContestant as unknown as ContestContestantInstance;
+    if (instance.activeTab !== tab) {
+      instance.activeTab = tab;
     }
   }
 

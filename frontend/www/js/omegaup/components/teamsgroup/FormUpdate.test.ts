@@ -41,7 +41,7 @@ describe('FormUpdate.vue', () => {
     await formBase.find('form[data-teams-group]').trigger('submit');
 
     // In edit mode, alias can not change its value
-    expect(wrapper.vm.$props.alias).toBe('Hello');
+    expect((wrapper.vm.$props as { alias: string }).alias).toBe('Hello');
     expect(wrapper.emitted('validate-unused-alias')).toBeFalsy();
     expect(wrapper.emitted('update-teams-group')).toEqual([
       [

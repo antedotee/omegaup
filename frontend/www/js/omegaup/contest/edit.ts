@@ -3,10 +3,29 @@ import { types } from '../api_types';
 import Vue, { type CreateElement } from 'vue';
 import T from '../lang';
 import contest_Edit from '../components/contest/Edit.vue';
-import SearchTypes from '../components/contest/AddProblem.vue';
 import * as ui from '../ui';
 import * as api from '../api';
 import { toCsv, TableCell } from '../csv';
+
+enum SearchTypes {
+  ALL = 'all',
+  TITLE = 'title',
+  ALIAS = 'alias',
+  ID = 'problem_id',
+}
+
+interface ContestEditInstance {
+  admins: types.ContestAdmin[];
+  details: types.ContestAdminDetails;
+  initialTab: string;
+  groupAdmins: types.ContestGroupAdmin[];
+  groups: types.ContestGroup[];
+  problems: types.ProblemsetProblemWithVersions[];
+  requests: types.ContestRequest[];
+  users: types.ContestUser[];
+  certificatesDetails: types.ContestCertificatesAdminDetails;
+  refreshRequests: () => void;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.ContestEditPayload();
@@ -35,9 +54,9 @@ OmegaUp.on('ready', () => {
   const onHashChange = () => {
     const hash = window.location.hash.substring(1).split('#')[0];
     if (validTabs.includes(hash)) {
-      contestEdit.initialTab = hash;
+      (contestEdit as unknown as ContestEditInstance).initialTab = hash;
     } else if (hash === '') {
-      contestEdit.initialTab = '';
+      (contestEdit as unknown as ContestEditInstance).initialTab = '';
     }
   };
 
@@ -84,7 +103,7 @@ OmegaUp.on('ready', () => {
             } else {
               ui.success(T.arbitrateRequestDenySuccessfully);
             }
-            contestEdit.refreshRequests();
+            (contestEdit as unknown as ContestEditInstance).refreshRequests();
           })
           .catch(ui.apiError);
       },
@@ -93,7 +112,7 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            contestEdit.details = response;
+            (contestEdit as unknown as ContestEditInstance).details = response;
           })
           .catch(ui.apiError);
       },
@@ -102,7 +121,7 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            contestEdit.groups = response.groups;
+            (contestEdit as unknown as ContestEditInstance).groups = response.groups;
           })
           .catch(ui.apiError);
       },
@@ -111,20 +130,20 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            contestEdit.problems = response.problems;
+            (contestEdit as unknown as ContestEditInstance).problems = response.problems;
             if (
               problemAdded &&
-              !contestEdit.details.languages.includes('cat') &&
-              contestEdit.problems.some((problem) =>
+              !(contestEdit as unknown as ContestEditInstance).details.languages.includes('cat') &&
+              (contestEdit as unknown as ContestEditInstance).problems.some((problem) =>
                 problem.languages.split(',').includes('cat'),
               )
             ) {
               api.Contest.update({
-                contest_alias: contestEdit.details.alias,
-                languages: contestEdit.details.languages.concat(['cat']),
+                contest_alias: (contestEdit as unknown as ContestEditInstance).details.alias,
+                languages: (contestEdit as unknown as ContestEditInstance).details.languages.concat(['cat']),
               })
                 .then(() => {
-                  contestEdit.details.languages.push('cat');
+                  (contestEdit as unknown as ContestEditInstance).details.languages.push('cat');
                   ui.warning(T.contestEditCatLanguageAddedWarning);
                 })
                 .catch(ui.apiError);
@@ -137,7 +156,7 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            contestEdit.requests = response.users;
+            (contestEdit as unknown as ContestEditInstance).requests = response.users;
           })
           .catch(ui.apiError);
       },
@@ -146,7 +165,7 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            contestEdit.users = response.users;
+            (contestEdit as unknown as ContestEditInstance).users = response.users;
           })
           .catch(ui.apiError);
       },
@@ -155,7 +174,7 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            contestEdit.admins = response.admins;
+            (contestEdit as unknown as ContestEditInstance).admins = response.admins;
           })
           .catch(ui.apiError);
       },
@@ -164,7 +183,7 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            contestEdit.groupAdmins = response.group_admins;
+            (contestEdit as unknown as ContestEditInstance).groupAdmins = response.group_admins;
           })
           .catch(ui.apiError);
       },
@@ -215,7 +234,10 @@ OmegaUp.on('ready', () => {
                 // Problems previously added into the contest should not be
                 // shown in the dropdown
                 const addedProblems = new Set(
-                  this.problems.map((problem) => problem.alias),
+                  this.problems.map(
+                    (problem: types.ProblemsetProblemWithVersions) =>
+                      problem.alias,
+                  ),
                 );
                 this.searchResultProblems = data.results
                   .filter((problem) => !addedProblems.has(problem.key))
@@ -239,7 +261,7 @@ OmegaUp.on('ready', () => {
                 // Groups previously added into the contest should not be
                 // shown in the dropdown
                 const addedGroups = new Set(
-                  this.groups.map((group) => group.alias),
+                  this.groups.map((group: types.ContestGroup) => group.alias),
                 );
                 this.searchResultGroups = data
                   .filter((group) => !addedGroups.has(group.value))
@@ -258,7 +280,7 @@ OmegaUp.on('ready', () => {
                 // Users previously invited to the contest should not be shown
                 // in the dropdown
                 const addedUsers = new Set(
-                  this.users.map((user) => user.username),
+                  this.users.map((user: types.ContestUser) => user.username),
                 );
 
                 this.searchResultUsers = results
@@ -427,8 +449,8 @@ OmegaUp.on('ready', () => {
               default_show_all_contestants_in_scoreboard: defaultShowAllContestantsInScoreboard,
             })
               .then(() => {
-                contestEdit.details.admission_mode = admissionMode;
-                contestEdit.details.default_show_all_contestants_in_scoreboard = defaultShowAllContestantsInScoreboard;
+                (contestEdit as unknown as ContestEditInstance).details.admission_mode = admissionMode;
+                (contestEdit as unknown as ContestEditInstance).details.default_show_all_contestants_in_scoreboard = defaultShowAllContestantsInScoreboard;
                 ui.success(
                   ui.formatString(T.contestEditContestEdited, {
                     alias: payload.details.alias,
@@ -674,8 +696,8 @@ OmegaUp.on('ready', () => {
               contest_alias: payload.details.alias,
             })
               .then(() => {
-                contestEdit.certificatesDetails.certificatesStatus = 'queued';
-                contestEdit.certificatesDetails.certificateCutoff = certificateCutoff;
+                (contestEdit as unknown as ContestEditInstance).certificatesDetails.certificatesStatus = 'queued';
+                (contestEdit as unknown as ContestEditInstance).certificatesDetails.certificateCutoff = certificateCutoff;
                 ui.success(T.contestCertificatesGenerateSuccessfully);
               })
               .catch(ui.apiError);

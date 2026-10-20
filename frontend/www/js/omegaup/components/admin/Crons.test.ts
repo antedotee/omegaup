@@ -56,7 +56,7 @@ const describedSchedule = (schedule: string | null): string | null => {
   const wrapper = mount(Crons, {
     props: { jobs: [{ ...jobs[0], schedule }], runs: [] },
   });
-  const cell = wrapper.findAll('[data-cron-jobs] tbody tr td').at(1);
+  const cell = wrapper.findAll('[data-cron-jobs] tbody tr td')[1];
   return cell.find('small').exists() ? cell.find('small').text() : null;
 };
 
@@ -65,11 +65,11 @@ describe('Crons.vue', () => {
     const wrapper = mount(Crons, { props: { jobs, runs } });
     const cells = wrapper.findAll('[data-cron-jobs] tbody tr td');
 
-    expect(cells.at(0).text()).toBe('update_ranks.py');
-    expect(cells.at(1).find('code').text()).toBe('19 8 * * *');
-    expect(cells.at(2).text()).toBe('success');
-    expect(cells.at(2).find('.badge-success').exists()).toBe(true);
-    expect(cells.at(3).text()).toBe(time.formatDateTime(startedAt));
+    expect(cells[0].text()).toBe('update_ranks.py');
+    expect(cells[1].find('code').text()).toBe('19 8 * * *');
+    expect(cells[2].text()).toBe('success');
+    expect(cells[2].find('.badge-success').exists()).toBe(true);
+    expect(cells[3].text()).toBe(time.formatDateTime(startedAt));
   });
 
   it('Should show one row per run with its status and totals', () => {
@@ -77,31 +77,31 @@ describe('Crons.vue', () => {
     const rows = wrapper.findAll('.cron-run-row');
 
     expect(rows).toHaveLength(2);
-    expect(rows.at(0).findAll('td').at(1).text()).toBe('update_ranks.py');
-    expect(rows.at(0).find('.badge-success').text()).toBe('success');
-    expect(rows.at(0).findAll('td').at(3).text()).toBe(
+    expect(rows[0].findAll('td')[1].text()).toBe('update_ranks.py');
+    expect(rows[0].find('.badge-success').text()).toBe('success');
+    expect(rows[0].findAll('td')[3].text()).toBe(
       time.formatDateTime(startedAt),
     );
-    expect(rows.at(0).findAll('td').at(4).text()).toBe('0.19s');
-    expect(rows.at(0).findAll('td').at(5).text()).toBe('5');
-    expect(rows.at(1).find('.badge-danger').text()).toBe('failure');
+    expect(rows[0].findAll('td')[4].text()).toBe('0.19s');
+    expect(rows[0].findAll('td')[5].text()).toBe('5');
+    expect(rows[1].find('.badge-danger').text()).toBe('failure');
   });
 
   it('Should show phase detail when a run is expanded', async () => {
     const wrapper = mount(Crons, { props: { jobs, runs } });
 
     expect(wrapper.find('[data-cron-phases]').exists()).toBe(false);
-    await wrapper.findAll('.cron-run-row').at(0).trigger('click');
+    await wrapper.findAll('.cron-run-row')[0].trigger('click');
 
     const phase = wrapper.findAll('[data-cron-phases] tbody tr td');
-    expect(phase.at(0).text()).toBe('update_users_stats');
-    expect(phase.at(1).text()).toBe('success');
-    expect(phase.at(2).text()).toBe('0.05s');
+    expect(phase[0].text()).toBe('update_users_stats');
+    expect(phase[1].text()).toBe('success');
+    expect(phase[2].text()).toBe('0.05s');
   });
 
   it('Should collapse an expanded run when it is clicked again', async () => {
     const wrapper = mount(Crons, { props: { jobs, runs } });
-    const row = wrapper.findAll('.cron-run-row').at(0);
+    const row = wrapper.findAll('.cron-run-row')[0];
 
     await row.trigger('click');
     expect(wrapper.find('[data-cron-phases]').exists()).toBe(true);
@@ -112,7 +112,7 @@ describe('Crons.vue', () => {
   it('Should show the error output of a run that recorded no phases', async () => {
     const wrapper = mount(Crons, { props: { jobs, runs } });
 
-    await wrapper.findAll('.cron-run-row').at(1).trigger('click');
+    await wrapper.findAll('.cron-run-row')[1].trigger('click');
 
     const detail = wrapper.find('.cron-run-detail');
     expect(detail.find('.text-danger').text()).toBe('boom');
@@ -143,13 +143,13 @@ describe('Crons.vue', () => {
       },
     });
 
-    expect(wrapper.findAll('[data-cron-jobs] tbody tr td').at(1).text()).toBe(
+    expect(wrapper.findAll('[data-cron-jobs] tbody tr td')[1].text()).toBe(
       '—',
     );
     const cells = wrapper.findAll('.cron-run-row td');
-    expect(cells.at(3).text()).toBe('—');
-    expect(cells.at(4).text()).toBe('—');
-    expect(cells.at(5).text()).toBe('—');
+    expect(cells[3].text()).toBe('—');
+    expect(cells[4].text()).toBe('—');
+    expect(cells[5].text()).toBe('—');
   });
 
   it('Should keep zero as a real value instead of a dash', () => {
@@ -161,21 +161,21 @@ describe('Crons.vue', () => {
     });
 
     const cells = wrapper.findAll('.cron-run-row td');
-    expect(cells.at(4).text()).toBe('0.00s');
-    expect(cells.at(5).text()).toBe('0');
+    expect(cells[4].text()).toBe('0.00s');
+    expect(cells[5].text()).toBe('0');
   });
 
   it('Should report no status for a job that has never run', () => {
     const wrapper = mount(Crons, { props: { jobs, runs: [] } });
     const cells = wrapper.findAll('[data-cron-jobs] tbody tr td');
 
-    expect(cells.at(2).text()).toBe('—');
-    expect(cells.at(3).text()).toBe('—');
+    expect(cells[2].text()).toBe('—');
+    expect(cells[3].text()).toBe('—');
   });
 
   it('Should describe a daily schedule next to the expression', () => {
     const wrapper = mount(Crons, { props: { jobs, runs } });
-    const cell = wrapper.findAll('[data-cron-jobs] tbody tr td').at(1);
+    const cell = wrapper.findAll('[data-cron-jobs] tbody tr td')[1];
 
     expect(cell.find('code').text()).toBe('19 8 * * *');
     expect(cell.find('small').text()).toBe(
@@ -232,7 +232,7 @@ describe('Crons.vue', () => {
       },
     });
 
-    expect(wrapper.findAll('[data-cron-jobs] tbody tr td').at(2).text()).toBe(
+    expect(wrapper.findAll('[data-cron-jobs] tbody tr td')[2].text()).toBe(
       'running',
     );
   });

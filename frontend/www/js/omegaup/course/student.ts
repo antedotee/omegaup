@@ -6,6 +6,12 @@ import * as ui from '../ui';
 import T from '../lang';
 import Vue, { type CreateElement } from 'vue';
 
+interface ViewStudentInstance {
+  problems: types.CourseProblem[];
+  problem: null | types.CourseProblem;
+  refreshStudentProgress: (student: string, assignmentAlias: string) => void;
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.StudentProgressPayload();
 
@@ -34,7 +40,7 @@ OmegaUp.on('ready', () => {
           usernameOrEmail: student,
         })
           .then((data) => {
-            viewStudent.problems = data.problems;
+            (viewStudent as unknown as ViewStudentInstance).problems = data.problems;
           })
           .catch(ui.apiError);
       },
@@ -75,7 +81,7 @@ OmegaUp.on('ready', () => {
                     ? T.feedbackSuccessfullyUpdated
                     : T.feedbackSuccessfullyAdded,
                 );
-                viewStudent.refreshStudentProgress(
+                (viewStudent as unknown as ViewStudentInstance).refreshStudentProgress(
                   studentUsername,
                   assignmentAlias,
                 );
@@ -85,7 +91,7 @@ OmegaUp.on('ready', () => {
                   usernameOrEmail: studentUsername,
                 })
                   .then((data) => {
-                    viewStudent.problems = data.problems;
+                    (viewStudent as unknown as ViewStudentInstance).problems = data.problems;
                   })
                   .catch(ui.apiError);
               })
@@ -98,7 +104,7 @@ OmegaUp.on('ready', () => {
             student: string;
             assignmentAlias: string;
           }) => {
-            viewStudent.refreshStudentProgress(student, assignmentAlias);
+            (viewStudent as unknown as ViewStudentInstance).refreshStudentProgress(student, assignmentAlias);
           },
           'push-state': (student: string, title: string, url: string) => {
             window.history.pushState(student, title, url);

@@ -7,7 +7,7 @@ import * as time from '../../time';
 
 import problem_Details from './Details.vue';
 import arena_EphemeralGrader from '../arena/EphemeralGrader.vue';
-import { DisqualificationType } from '../arena/Runs.vue';
+import { DisqualificationType } from '../arena/Runs_types';
 
 describe('Details.vue', () => {
   const date = new Date();

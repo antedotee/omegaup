@@ -1,4 +1,4 @@
-import { mount, Wrapper } from '@vue/test-utils';
+import { mount, VueWrapper } from '@vue/test-utils';
 
 import AddPanel from './AddPanel.vue';
 import T from '../../../../lang';
@@ -14,7 +14,7 @@ describe('AddPanel.vue', () => {
   const testGroup = 'testgroup';
 
   it('Should add a case to the store', async () => {
-    const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
+    const wrapper: VueWrapper = mount(AddPanel, {
       global: {
         plugins: [vuexStore],
       },
@@ -34,7 +34,7 @@ describe('AddPanel.vue', () => {
     // We need to use any since vue components methods are not stored in vm's type
     await (wrapper.vm as any).addItemToStore();
 
-    const store = wrapper.vm.$store as Store<StoreState>;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> }).$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(1);
@@ -44,7 +44,7 @@ describe('AddPanel.vue', () => {
   });
 
   it('Should add a group to the store and add a case to the group', async () => {
-    const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
+    const wrapper: VueWrapper = mount(AddPanel, {
       global: {
         plugins: [vuexStore],
       },
@@ -61,7 +61,7 @@ describe('AddPanel.vue', () => {
 
     await (wrapper.vm as any).addItemToStore();
 
-    const store = wrapper.vm.$store as Store<StoreState>;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> }).$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(1);
@@ -87,7 +87,7 @@ describe('AddPanel.vue', () => {
   });
 
   it('Should add an ungrouped case to the store', async () => {
-    const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
+    const wrapper: VueWrapper = mount(AddPanel, {
       global: {
         plugins: [vuexStore],
       },
@@ -109,7 +109,7 @@ describe('AddPanel.vue', () => {
 
     await wrapper.find('form').trigger('submit.prevent');
 
-    const store = wrapper.vm.$store as Store<StoreState>;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> }).$store;
     const [ungroupedCase] = store.state.casesStore.groups;
 
     expect(ungroupedCase.name).toBe('testcase');
@@ -119,7 +119,7 @@ describe('AddPanel.vue', () => {
   });
 
   it('Should add multiple ungrouped cases to the store', async () => {
-    const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
+    const wrapper: VueWrapper = mount(AddPanel, {
       global: {
         plugins: [vuexStore],
       },
@@ -146,7 +146,7 @@ describe('AddPanel.vue', () => {
 
     await wrapper.find('form').trigger('submit.prevent');
 
-    const store = wrapper.vm.$store as Store<StoreState>;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> }).$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(10);

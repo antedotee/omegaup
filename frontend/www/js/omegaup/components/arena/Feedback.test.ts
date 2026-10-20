@@ -1,10 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import T from '../../lang';
 
-import arena_Feedback, {
-  FeedbackStatus,
-  ArenaCourseFeedback,
-} from './Feedback.vue';
+import arena_Feedback from './Feedback.vue';
+import { FeedbackStatus, ArenaCourseFeedback } from './Feedback_types';
 
 const feedback: ArenaCourseFeedback = {
   lineNumber: 2,

@@ -6,6 +6,13 @@ import * as ui from '../../../../ui';
 import StatementTab from './StatementTab.vue';
 import ProblemMarkdown from '../../ProblemMarkdown.vue';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface StatementTabVm {
+  currentMarkdown: string;
+  $store: typeof store;
+}
+
 describe('StatementTab.vue', () => {
   it('Should contain markdown buttons and contents and update the store accordingly', async () => {
     const wrapper = shallowMount(StatementTab, {
@@ -21,24 +28,24 @@ describe('StatementTab.vue', () => {
     expect(textArea.exists()).toBe(true);
     textArea.setValue('Hello omegaUp');
 
-    expect(wrapper.vm.currentMarkdown).toBe('Hello omegaUp');
+    expect((wrapper.vm as unknown as StatementTabVm).currentMarkdown).toBe('Hello omegaUp');
 
     const markdownContent = wrapper.findComponent(ProblemMarkdown);
     expect(markdownContent.exists()).toBe(true);
 
     await wrapper.trigger('click');
 
-    expect(markdownContent.props()['markdown']).toBe(
+    expect((markdownContent.props() as { markdown: string }).markdown).toBe(
       T.problemCreatorMarkdownPreviewInitialRender + 'Hello omegaUp',
     );
 
-    expect(wrapper.vm.$store.state.problemMarkdown).toBe('');
+    expect((wrapper.vm as unknown as StatementTabVm).$store.state.problemMarkdown).toBe('');
 
     const markdownSaveButton = wrapper.find('button.btn-primary');
     expect(markdownSaveButton.exists()).toBe(true);
     await markdownSaveButton.trigger('click');
 
-    expect(wrapper.vm.$store.state.problemMarkdown).toBe('Hello omegaUp');
+    expect((wrapper.vm as unknown as StatementTabVm).$store.state.problemMarkdown).toBe('Hello omegaUp');
   });
 
   describe('Image size validation', () => {

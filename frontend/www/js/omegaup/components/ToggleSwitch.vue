@@ -22,10 +22,11 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 
-export enum ToggleSwitchSize {
-  Small = 'small',
-  Large = 'large',
-}
+import { ToggleSwitchSize } from './ToggleSwitch_types';
+// Declared in ./ToggleSwitch_types and re-exported here so existing SFC
+// importers keep working while plain `.ts` modules import it from the `.ts`
+// file.
+export { ToggleSwitchSize };
 
 @Component({ emits: ['update:value'] })
 class ToggleSwitch extends Vue {

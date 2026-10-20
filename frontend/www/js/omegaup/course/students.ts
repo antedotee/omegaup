@@ -5,6 +5,10 @@ import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import * as ui from '../ui';
 
+interface ViewProgressInstance {
+  completeStudentsProgress: types.StudentProgressInCourse[] | null;
+}
+
 OmegaUp.on('ready', function () {
   const payload = types.payloadParsers.StudentsProgressPayload();
 
@@ -54,7 +58,8 @@ OmegaUp.on('ready', function () {
         break;
       }
     }
-    ViewProgress.completeStudentsProgress = completeStudentsProgress;
+    (ViewProgress as unknown as ViewProgressInstance).completeStudentsProgress =
+      completeStudentsProgress;
   };
 
   getCSV();

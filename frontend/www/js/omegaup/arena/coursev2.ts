@@ -14,7 +14,8 @@ import * as api from '../api';
 import * as time from '../time';
 
 import Vue, { type CreateElement } from 'vue';
-import arena_Course, { Tabs } from '../components/arena/Coursev2.vue';
+import arena_Course from '../components/arena/Coursev2.vue';
+import { Tabs } from '../components/arena/Coursev2_types';
 
 OmegaUp.on('ready', async () => {
   const payload = types.payloadParsers.ArenaCoursePayload();

@@ -266,6 +266,12 @@ module.exports = {
         loader: 'file-loader',
         options: { name: '[name].[ext]?[hash]' },
       },
+      {
+        // Font files pulled in by bootstrap-icons' CSS.
+        test: /\.(woff2?|eot|ttf|otf)$/,
+        loader: 'file-loader',
+        options: { name: '[name].[ext]?[hash]' },
+      },
       // inline scss styles on vue components
       {
         test: /\.css$/,

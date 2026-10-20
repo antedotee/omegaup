@@ -8,6 +8,10 @@ import * as ui from '../ui';
 import { types } from '../api_types';
 import { OmegaUp } from '../omegaup';
 
+interface IDEInstance {
+  nextExecutionTimestamp: null | Date;
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.FullIDEPayload();
 
@@ -30,14 +34,15 @@ OmegaUp.on('ready', () => {
           preferredLanguage,
           isEmbedded: false,
           initialTheme: Util.MonacoThemes.VSDark,
-          nextExecutionTimestamp: this.nextExecutionTimestamp,
+          nextExecutionTimestamp: (this as unknown as IDEInstance)
+            .nextExecutionTimestamp,
         },
         on: {
           'execute-run': () => {
             api.Run.executeForIDE()
               .then(time.remoteTimeAdapter)
               .then((response) => {
-                ideComponent.nextExecutionTimestamp =
+                (ideComponent as unknown as IDEInstance).nextExecutionTimestamp =
                   response.nextExecutionTimestamp;
               })
               .catch(ui.apiError);

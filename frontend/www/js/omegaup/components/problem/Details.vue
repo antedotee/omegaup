@@ -418,6 +418,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { SubmissionRequest } from '../../arena/submissions';
 import { ArenaCourseFeedback } from '../arena/Feedback.vue';
+import { PopupDisplayed } from './Details_types';
 library.add(
   faExclamationTriangle,
   faEdit,
@@ -431,14 +432,10 @@ export interface Tab {
   text: string;
 }
 
-export enum PopupDisplayed {
-  None,
-  RunSubmit,
-  RunDetails,
-  Promotion,
-  Demotion,
-  Reviewer,
-}
+// PopupDisplayed is declared in ./Details_types and re-exported here so that
+// existing SFC importers keep working while plain `.ts` entry points import it
+// from the `.ts` module (fork-ts-checker cannot see named SFC exports).
+export { PopupDisplayed };
 
 @Component({
   components: {

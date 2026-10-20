@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import { types } from '../api_types';
 import { omegaup } from '../omegaup';
 
-Vue.use(Vuex);
+Vue.use(Vuex as unknown as Parameters<typeof Vue.use>[0]);
 
 export interface RankingState {
   miniRankingUsers: omegaup.UserRank[];

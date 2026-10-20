@@ -1,11 +1,12 @@
 import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
-import arena_ContestList, {
+import arena_ContestList from '../components/arena/ContestListv2.vue';
+import {
   ContestFilter,
   ContestOrder,
   ContestTab,
   UrlParams,
-} from '../components/arena/ContestListv2.vue';
+} from '../components/arena/ContestListv2_types';
 import { OmegaUp } from '../omegaup';
 import * as time from '../time';
 import contestStore from './contestStore';
@@ -105,6 +106,13 @@ function parseUrlState(): {
   return { tab, page, sortOrder, filter };
 }
 
+interface ContestListInstance {
+  tab: ContestTab;
+  page: number;
+  sortOrder: ContestOrder;
+  filter: ContestFilter;
+}
+
 OmegaUp.on('ready', () => {
   time.setSugarLocale();
   const payload = types.payloadParsers.ContestListv2Payload();
@@ -116,16 +124,17 @@ OmegaUp.on('ready', () => {
   // Handle browser back/forward button navigation
   const onPopState = () => {
     const state = parseUrlState();
-    vueInstance.tab = state.tab;
-    vueInstance.page = state.page;
-    vueInstance.sortOrder = state.sortOrder;
-    vueInstance.filter = state.filter;
+    const instance = vueInstance as unknown as ContestListInstance;
+    instance.tab = state.tab;
+    instance.page = state.page;
+    instance.sortOrder = state.sortOrder;
+    instance.filter = state.filter;
   };
 
   // Handle hash changes (popstate doesn't always fire for hash-only changes)
   const onHashChange = () => {
     const state = parseUrlState();
-    vueInstance.tab = state.tab;
+    (vueInstance as unknown as ContestListInstance).tab = state.tab;
   };
 
   const vueInstance = new Vue({

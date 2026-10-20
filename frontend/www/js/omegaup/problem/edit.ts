@@ -6,6 +6,18 @@ import problem_Edit from '../components/problem/Edit.vue';
 import * as ui from '../ui';
 import * as api from '../api';
 
+interface ProblemEditInstance {
+  admins: types.ProblemAdmin[];
+  groups: types.ProblemGroupAdmin[];
+  statement: types.ProblemStatement;
+  // The solution default built at runtime omits `sources`, so model it as
+  // optional to match the actual reactive value without changing behavior.
+  solution: Omit<types.ProblemStatement, 'sources'> & {
+    sources?: types.ProblemStatement['sources'];
+  };
+  publishedRevision?: types.ProblemVersion;
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.ProblemEditPayload();
   if (payload.statusError) {
@@ -45,8 +57,9 @@ OmegaUp.on('ready', () => {
       refreshProblemAdmins: (): void => {
         api.Problem.admins({ problem_alias: payload.alias })
           .then((data) => {
-            problemEdit.admins = data.admins;
-            problemEdit.groups = data.group_admins;
+            const instance = problemEdit as unknown as ProblemEditInstance;
+            instance.admins = data.admins;
+            instance.groups = data.group_admins;
           })
           .catch(ui.apiError);
       },
@@ -91,10 +104,11 @@ OmegaUp.on('ready', () => {
             // First update markdown contents to current markdown, otherwise
             // component won't detect any change if two different language
             // solutions are the same.
+            const instance = problemEdit as unknown as ProblemEditInstance;
             if (markdownType === 'statements') {
-              problemEdit.statement.markdown = currentMarkdown;
+              instance.statement.markdown = currentMarkdown;
               if (Object.prototype.hasOwnProperty.call(statements, language)) {
-                problemEdit.statement = {
+                instance.statement = {
                   language: language,
                   markdown: statements[language],
                   images: {},
@@ -116,7 +130,7 @@ OmegaUp.on('ready', () => {
                   const statementMarkdown =
                     statement.language === language ? statement.markdown : '';
                   statements[language] = statementMarkdown;
-                  problemEdit.statement = {
+                  instance.statement = {
                     ...statement,
                     language,
                     markdown: statementMarkdown,
@@ -125,8 +139,8 @@ OmegaUp.on('ready', () => {
                 .catch((error) => {
                   if (error.httpStatusCode == 404) {
                     statements[language] = '';
-                    problemEdit.statement = {
-                      ...problemEdit.statement,
+                    instance.statement = {
+                      ...instance.statement,
                       language,
                       markdown: '',
                     };
@@ -135,10 +149,10 @@ OmegaUp.on('ready', () => {
                   ui.apiError(error);
                 });
             } else {
-              problemEdit.solution.markdown = currentMarkdown;
+              instance.solution.markdown = currentMarkdown;
               if (Object.prototype.hasOwnProperty.call(solutions, language)) {
-                problemEdit.solution = {
-                  ...problemEdit.solution,
+                instance.solution = {
+                  ...instance.solution,
                   language,
                   markdown: solutions[language],
                 };
@@ -160,7 +174,7 @@ OmegaUp.on('ready', () => {
                   const solutionMarkdown =
                     solution.language === language ? solution.markdown : '';
                   solutions[language] = solutionMarkdown;
-                  problemEdit.solution = {
+                  instance.solution = {
                     ...solution,
                     language,
                     markdown: solutionMarkdown,
@@ -169,8 +183,8 @@ OmegaUp.on('ready', () => {
                 .catch((error) => {
                   if (error.httpStatusCode == 404) {
                     solutions[language] = '';
-                    problemEdit.solution = {
-                      ...problemEdit.solution,
+                    instance.solution = {
+                      ...instance.solution,
                       language,
                       markdown: '',
                     };
@@ -206,11 +220,11 @@ OmegaUp.on('ready', () => {
                 // FIXME: For some reason this is not being reactive
                 if (isPublic) {
                   this.selectedPublicTags = this.selectedPublicTags.filter(
-                    (tag) => tag !== tagname,
+                    (tag: string) => tag !== tagname,
                   );
                 } else {
                   this.selectedPrivateTags = this.selectedPrivateTags.filter(
-                    (tag) => tag !== tagname,
+                    (tag: string) => tag !== tagname,
                   );
                 }
               })
@@ -286,7 +300,9 @@ OmegaUp.on('ready', () => {
               update_published: updatePublished,
             })
               .then(() => {
-                problemEdit.publishedRevision = selectedRevision;
+                (
+                  problemEdit as unknown as ProblemEditInstance
+                ).publishedRevision = selectedRevision;
                 ui.success(T.problemVersionUpdated);
               })
               .catch(ui.apiError);
@@ -337,7 +353,9 @@ OmegaUp.on('ready', () => {
                 // Groups previously added into the contest should not be
                 // shown in the dropdown
                 const addedGroups = new Set(
-                  this.groups.map((group) => group.alias),
+                  this.groups.map(
+                    (group: types.ProblemGroupAdmin) => group.alias,
+                  ),
                 );
                 this.searchResultGroups = data
                   .filter((group) => !addedGroups.has(group.value))

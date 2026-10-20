@@ -2,6 +2,14 @@ import { shallowMount } from '@vue/test-utils';
 
 import common_SortControls from './SortControls.vue';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface SortControlsVm {
+  selected: boolean;
+  toggleSort: string;
+  iconDisplayed: string;
+}
+
 describe('SortControls.vue', () => {
   it('Should handle the correct sort control', async () => {
     const wrapper = shallowMount(common_SortControls, {
@@ -13,9 +21,9 @@ describe('SortControls.vue', () => {
       },
     });
 
-    expect(wrapper.vm.selected).toBe(false);
-    expect(wrapper.vm.toggleSort).toBe('asc');
-    expect(wrapper.vm.iconDisplayed).toBe('sort-amount-down');
+    expect((wrapper.vm as unknown as SortControlsVm).selected).toBe(false);
+    expect((wrapper.vm as unknown as SortControlsVm).toggleSort).toBe('asc');
+    expect((wrapper.vm as unknown as SortControlsVm).iconDisplayed).toBe('sort-amount-down');
   });
 
   it('Should handle the correct sort icons', async () => {

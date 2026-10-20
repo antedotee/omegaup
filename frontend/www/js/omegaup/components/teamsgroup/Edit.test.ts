@@ -4,9 +4,17 @@ import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
 
-import teamsgroup_Edit, { AvailableTabs } from './Edit.vue';
+import teamsgroup_Edit from './Edit.vue';
+import { AvailableTabs } from './Edit_types';
 import teamsgroup_FormUpdate from './FormUpdate.vue';
 import teamsgroup_Upload from './Upload.vue';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface TeamsGroupEditVm {
+  selectedTab: AvailableTabs;
+  currentTeamsIdentities: types.Identity[];
+}
 
 describe('Edit.vue', () => {
   const propsData = {
@@ -34,7 +42,7 @@ describe('Edit.vue', () => {
     });
 
     await wrapper.setProps({ tab: AvailableTabs.Edit });
-    expect(wrapper.vm.selectedTab).toBe(AvailableTabs.Edit);
+    expect((wrapper.vm as unknown as TeamsGroupEditVm).selectedTab).toBe(AvailableTabs.Edit);
   });
 
   it('Should change an invalid tab', async () => {
@@ -43,7 +51,7 @@ describe('Edit.vue', () => {
     });
 
     await wrapper.setProps({ tab: 'wrong' });
-    expect(wrapper.vm.selectedTab).toBe(AvailableTabs.Teams);
+    expect((wrapper.vm as unknown as TeamsGroupEditVm).selectedTab).toBe(AvailableTabs.Teams);
   });
 
   it('Should change teams identities list', async () => {
@@ -63,7 +71,7 @@ describe('Edit.vue', () => {
     await wrapper.setProps({ teamsIdentities });
     // Vue 3 exposes props through a reactive proxy, so a reference-equality
     // check no longer matches the raw array; compare by structural equality.
-    expect(wrapper.vm.currentTeamsIdentities).toStrictEqual(teamsIdentities);
+    expect((wrapper.vm as unknown as TeamsGroupEditVm).currentTeamsIdentities).toStrictEqual(teamsIdentities);
   });
 
   it('Should keep the updated contestants count across tabs', async () => {

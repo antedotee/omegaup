@@ -1,7 +1,7 @@
 jest.mock('../../../third_party/js/diff_match_patch.js');
 jest.mock('../location');
 
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import arena_ContestPractice from '../components/arena/ContestPractice.vue';
 import { types } from '../api_types';
 import { setLocationHash } from '../location';
@@ -13,7 +13,7 @@ import {
   getMaxScore,
   getMaxPerGroupScore,
 } from './navigation';
-import { PopupDisplayed } from '../components/problem/Details.vue';
+import { PopupDisplayed } from '../components/problem/Details_types';
 import { storeConfig } from './problemStore';
 import Vuex from 'vuex';
 import fetchMock from 'jest-fetch-mock';
@@ -119,15 +119,16 @@ const problemDetails: types.ProblemDetails = {
 
 OmegaUp.username = 'omegaup';
 
-const vueInstance: Vue & {
+interface NavbarVueInstance {
   problemInfo: types.ProblemInfo;
   popupDisplayed?: PopupDisplayed;
   problem: types.NavbarProblemsetProblem | null;
-} = new Vue({
+}
+const vueInstance = (new Vue({
   components: {
     'omegaup-arena-contest-practice': arena_ContestPractice,
   },
-  render: function (createElement) {
+  render: function (createElement: CreateElement) {
     return createElement('omegaup-badge-details', {
       props: {
         problemInfo: problemDetails,
@@ -135,7 +136,7 @@ const vueInstance: Vue & {
       },
     });
   },
-});
+}) as unknown) as NavbarVueInstance;
 vueInstance.problemInfo = problemDetails;
 const navbarProblems: types.NavbarProblemsetProblem[] = [
   {

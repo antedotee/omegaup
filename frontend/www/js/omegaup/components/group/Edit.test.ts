@@ -2,7 +2,7 @@ import { mount, shallowMount } from '@vue/test-utils';
 
 import T from '../../lang';
 
-import { AvailableTabs } from './Edit.vue';
+import { AvailableTabs } from './Edit_types';
 import group_Edit from './Edit.vue';
 
 describe('Edit.vue', () => {

@@ -7,6 +7,17 @@ import { types } from '../api_types';
 import * as ui from '../ui';
 import * as Highcharts from 'highcharts';
 
+interface ChartOptionsWithSeries {
+  series: { data: unknown }[];
+  xAxis: { categories: { [key: number]: number } };
+}
+
+interface StatsChartInstance {
+  stats: types.StatsPayload;
+  verdictChartOptions: ChartOptionsWithSeries;
+  distributionChartOptions: ChartOptionsWithSeries;
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.StatsPayload();
   const callStatsApiTimeout = 10 * 1000;
@@ -149,7 +160,8 @@ OmegaUp.on('ready', () => {
                 .series[0];
               setInterval(() => {
                 const x = new Date().getTime(), // current time
-                  y = statsChart.stats.pending_runs.length;
+                  y = (statsChart as unknown as StatsChartInstance).stats
+                    .pending_runs.length;
                 series.addPoint([x, y], true, true);
               }, updatePendingRunsChartTimeout);
             },
@@ -196,16 +208,15 @@ OmegaUp.on('ready', () => {
         },
         on: {
           'update-series': (series: types.StatsPayload): void => {
-            statsChart.verdictChartOptions.series[0].data = normalizeRunCounts(
+            const inst = statsChart as unknown as StatsChartInstance;
+            inst.verdictChartOptions.series[0].data = normalizeRunCounts(series);
+            inst.distributionChartOptions.series[0].data = getDistribution(
               series,
             );
-            statsChart.distributionChartOptions.series[0].data = getDistribution(
+            inst.distributionChartOptions.xAxis.categories = getCategories(
               series,
             );
-            statsChart.distributionChartOptions.xAxis.categories = getCategories(
-              series,
-            );
-            statsChart.stats.pending_runs = series.pending_runs;
+            inst.stats.pending_runs = series.pending_runs;
           },
         },
       });

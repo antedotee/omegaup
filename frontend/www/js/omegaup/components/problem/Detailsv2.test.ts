@@ -8,6 +8,12 @@ import problem_Details from './Detailsv2.vue';
 
 import { BTab } from 'bootstrap-vue-next';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface Detailsv2Vm {
+  filteredLanguages: string[];
+}
+
 describe('Detailsv2.vue', () => {
   const problem: types.ProblemDetails = {
     accepted: 4,
@@ -115,7 +121,7 @@ describe('Detailsv2.vue', () => {
     const expectedTabs = [T.wordsProblem, T.wordsRuns, T.wordsClarifications];
     expect(expectedTabs.length).toBe(tabs.length);
     for (let i = 0; i < expectedTabs.length; i++) {
-      expect(tabs.at(i).attributes('title')).toBe(expectedTabs[i]);
+      expect(tabs[i].attributes('title')).toBe(expectedTabs[i]);
     }
   });
 
@@ -137,7 +143,7 @@ describe('Detailsv2.vue', () => {
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect(wrapper.vm.filteredLanguages).toEqual(languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(languages);
     expect(wrapper.findComponent(arena_EphemeralGrader).exists()).toBe(true);
     expect(wrapper.find('div[data-markdown-statement]').text()).toContain(
       '#include <iostream>',
@@ -161,7 +167,7 @@ describe('Detailsv2.vue', () => {
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect(wrapper.vm.filteredLanguages).toEqual(problem.languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(problem.languages);
   });
 
   it('Should show the problem languages', () => {
@@ -180,7 +186,7 @@ describe('Detailsv2.vue', () => {
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect(wrapper.vm.filteredLanguages).toEqual(problem.languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(problem.languages);
   });
 
   it('Should handle the user runs', async () => {
@@ -216,7 +222,7 @@ describe('Detailsv2.vue', () => {
     });
 
     const tabsItems = wrapper.findAllComponents(BTab);
-    const runsTab = tabsItems.at(1);
+    const runsTab = tabsItems[1];
     expect(runsTab.text()).toContain(T.wordsSubmissions);
     expect(runsTab.text()).toContain(T.wordsVerdict);
     expect(runsTab.text()).toContain(T.wordsStatus);

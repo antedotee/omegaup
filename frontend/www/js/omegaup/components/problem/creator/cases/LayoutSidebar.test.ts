@@ -8,6 +8,16 @@ import {
   generateCase,
   generateGroup,
 } from '@/js/omegaup/problem/creator/modules/cases';
+import { Group, Layout, LayoutID } from '@/js/omegaup/problem/creator/types';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface LayoutSidebarVm {
+  groups: Group[];
+  getAllLayouts: Layout[];
+  editLayoutName(arg: [LayoutID, string]): void;
+}
+
 describe('LayoutSidebar.vue', () => {
   store.commit('casesStore/addNewLayout');
   const newUngroupedCasegroup = generateGroup({
@@ -54,9 +64,9 @@ describe('LayoutSidebar.vue', () => {
       },
     });
 
-    expect(wrapper.vm.getAllLayouts.length).toBe(1);
+    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length).toBe(1);
     expect(
-      wrapper.vm.getAllLayouts.filter(
+      (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.filter(
         (_layout) => _layout.name === T.problemCreatorLayoutNew,
       ).length,
     ).toBe(1);
@@ -74,13 +84,13 @@ describe('LayoutSidebar.vue', () => {
     expect(wrapper.find('table.table').exists()).toBeTruthy();
 
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as LayoutSidebarVm).groups
         .find((_group) => _group.groupID === ungroupedCaseGroupID)
         ?.cases.find((_case) => _case.caseID === ungroupedCaseCaseID)?.lines
         .length,
     ).toBe(0);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as LayoutSidebarVm).groups
         .find((_group) => _group.groupID === groupedCaseGroupID)
         ?.cases.find((_case) => _case.caseID === groupedCaseCaseID)?.lines
         .length,
@@ -92,13 +102,13 @@ describe('LayoutSidebar.vue', () => {
     await enforceLayoutToSelectedButton.trigger('click');
 
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as LayoutSidebarVm).groups
         .find((_group) => _group.groupID === ungroupedCaseGroupID)
         ?.cases.find((_case) => _case.caseID === ungroupedCaseCaseID)?.lines
         .length,
     ).toBe(1);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as LayoutSidebarVm).groups
         .find((_group) => _group.groupID === groupedCaseGroupID)
         ?.cases.find((_case) => _case.caseID === groupedCaseCaseID)?.lines
         .length,
@@ -110,13 +120,13 @@ describe('LayoutSidebar.vue', () => {
     await enforceLayoutToAllButton.trigger('click');
 
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as LayoutSidebarVm).groups
         .find((_group) => _group.groupID === ungroupedCaseGroupID)
         ?.cases.find((_case) => _case.caseID === ungroupedCaseCaseID)?.lines
         .length,
     ).toBe(1);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as LayoutSidebarVm).groups
         .find((_group) => _group.groupID === groupedCaseGroupID)
         ?.cases.find((_case) => _case.caseID === groupedCaseCaseID)?.lines
         .length,
@@ -127,8 +137,8 @@ describe('LayoutSidebar.vue', () => {
     );
     await copyLayoutButton.trigger('click');
 
-    expect(wrapper.vm.getAllLayouts.length).toBe(2);
-    expect(wrapper.vm.getAllLayouts[1].name).toBe(
+    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length).toBe(2);
+    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts[1].name).toBe(
       T.problemCreatorLayoutNew + T.problemCreatorLayoutWordCopy,
     );
 
@@ -137,16 +147,16 @@ describe('LayoutSidebar.vue', () => {
     );
     await deleteLayoutButton.trigger('click');
 
-    expect(wrapper.vm.getAllLayouts.length).toBe(1);
+    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length).toBe(1);
     expect(
-      wrapper.vm.getAllLayouts.filter(
+      (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.filter(
         (_layout) => _layout.name === T.problemCreatorLayoutNew,
       ).length,
     ).toBe(0);
 
     store.dispatch('casesStore/addNewLine');
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as LayoutSidebarVm).groups
         .find((_group) => _group.groupID === ungroupedCaseGroupID)
         ?.cases.find((_case) => _case.caseID === ungroupedCaseCaseID)?.lines
         .length,
@@ -156,7 +166,7 @@ describe('LayoutSidebar.vue', () => {
     await Vue.nextTick();
     const layoutDropdownNew = wrapper
       .findAll('div[data-layout-dropdown]')
-      .at(1);
+      [1];
     expect(layoutDropdownNew.text()).toContain(
       newUngroupedCasegroup.name + '_' + newUngroupedCase.name,
     );
@@ -171,9 +181,9 @@ describe('LayoutSidebar.vue', () => {
       },
     });
 
-    expect(wrapper.vm.getAllLayouts.length).toBe(1);
+    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length).toBe(1);
     expect(
-      wrapper.vm.getAllLayouts.filter(
+      (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.filter(
         (_layout) => _layout.name === T.problemCreatorLayoutNew,
       ).length,
     ).toBe(1);
@@ -198,8 +208,8 @@ describe('LayoutSidebar.vue', () => {
       layoutName,
     );
 
-    const targetLayout = wrapper.vm.getAllLayouts[0];
-    wrapper.vm.editLayoutName([
+    const targetLayout = (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts[0];
+    (wrapper.vm as unknown as LayoutSidebarVm).editLayoutName([
       targetLayout.layoutID,
       (renameLayoutForm.element as HTMLInputElement).value,
     ]);

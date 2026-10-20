@@ -5,6 +5,10 @@ import * as ui from '../ui';
 import Vue, { type CreateElement } from 'vue';
 import course_Intro from '../components/course/Intro.vue';
 
+interface CourseIntroInstance {
+  userRegistrationRequested: boolean;
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.IntroDetailsPayload();
   const headerPayload = types.payloadParsers.CommonPayload();
@@ -64,7 +68,7 @@ OmegaUp.on('ready', () => {
               share_user_information: shareUserInformation,
             })
               .then(() => {
-                courseIntro.userRegistrationRequested = true;
+                (courseIntro as unknown as CourseIntroInstance).userRegistrationRequested = true;
               })
               .catch(ui.error);
           },

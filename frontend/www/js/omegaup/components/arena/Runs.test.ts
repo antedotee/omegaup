@@ -6,8 +6,15 @@ import { types } from '../../api_types';
 
 import T from '../../lang';
 
-import arena_Runs, { DisqualificationType } from './Runs.vue';
+import arena_Runs from './Runs.vue';
+import { DisqualificationType } from './Runs_types';
 import common_EmptyState from '../common/EmptyState.vue';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface RunsVm {
+  filterUsername: null | types.ListItem;
+}
 
 describe('Runs.vue', () => {
   it('Should handle empty runs', () => {
@@ -156,8 +163,7 @@ describe('Runs.vue', () => {
       });
       await wrapper
         .find(`select[data-select-${filter.filter}]`)
-        .find(`option[value="${filter.value}"]`)
-        .setSelected();
+        .setValue(filter.value);
 
       expect(wrapper.emitted('filter-changed')).toEqual([[filter]]);
     });
@@ -361,10 +367,10 @@ describe('Runs.vue', () => {
     });
 
     await wrapper.setProps({ username: 'username' });
-    expect(wrapper.vm.filterUsername?.key).toBe('username');
+    expect((wrapper.vm as unknown as RunsVm).filterUsername?.key).toBe('username');
 
     await wrapper.setProps({ username: null });
-    expect(wrapper.vm.filterUsername).toBeFalsy();
+    expect((wrapper.vm as unknown as RunsVm).filterUsername).toBeFalsy();
   });
 
   const usernamesToBeFiltered = ['username', 'other_username'];
@@ -390,7 +396,7 @@ describe('Runs.vue', () => {
 
       await wrapper
         .findAll(`td[data-username="${username}"]`)
-        .at(1)
+        [1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -407,7 +413,7 @@ describe('Runs.vue', () => {
 
       await wrapper
         .findAll(`td[data-username="${username}"]`)
-        .at(1)
+        [1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -415,7 +421,7 @@ describe('Runs.vue', () => {
 
       // Now all runs should appear
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
-      expect(wrapper.vm.filterUsername).toBeFalsy();
+      expect((wrapper.vm as unknown as RunsVm).filterUsername).toBeFalsy();
     });
   });
 

@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Vue from 'vue';
+import { type CreateElement } from 'vue';
 import TagsSolvedChart from './TagsSolvedChart.vue';
 
 // Mock Highcharts to avoid actual chart rendering in tests
@@ -8,7 +8,7 @@ import TagsSolvedChart from './TagsSolvedChart.vue';
 jest.mock('highcharts-vue', () => ({
   Chart: {
     name: 'highcharts',
-    render(h: Vue.CreateElement) {
+    render(h: CreateElement) {
       return h('div', { class: 'highcharts-mock' });
     },
   },

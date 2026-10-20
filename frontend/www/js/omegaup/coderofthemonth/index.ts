@@ -6,6 +6,10 @@ import T from '../lang';
 import Vue, { type CreateElement } from 'vue';
 import coderofthemonth_List from '../components/coderofthemonth/List.vue';
 
+interface CoderOfTheMonthInstance {
+  coderIsSelected: boolean;
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CoderOfTheMonthPayload();
   const locationHash = window.location.hash.substring(1).split('/')[0];
@@ -46,7 +50,7 @@ OmegaUp.on('ready', () => {
                     ? T.coderOfTheMonthSelectedSuccessfully
                     : T.coderOfTheMonthFemaleSelectedSuccessfully,
                 );
-                coderOfTheMonthList.coderIsSelected = true;
+                (coderOfTheMonthList as unknown as CoderOfTheMonthInstance).coderIsSelected = true;
               })
               .catch(ui.apiError);
           },

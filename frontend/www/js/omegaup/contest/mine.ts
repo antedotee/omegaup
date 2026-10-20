@@ -7,6 +7,10 @@ import * as ui from '../ui';
 import contest_Mine from '../components/contest/Mine.vue';
 import { downloadCsvFile } from '../groups';
 
+interface ContestMineInstance {
+  contests: types.Contest[];
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.ContestListMinePayload();
   let showAllContests = false;
@@ -96,7 +100,8 @@ OmegaUp.on('ready', () => {
     const param = { show_archived: showArchivedContests };
     (showAllContests ? api.Contest.adminList(param) : api.Contest.myList(param))
       .then((result) => {
-        contestMine.contests = result.contests;
+        (contestMine as unknown as ContestMineInstance).contests =
+          result.contests;
       })
       .catch(ui.apiError);
   }

@@ -7,10 +7,9 @@ import mainStore from '../mainStore';
 import { OmegaUp } from '../omegaup';
 import * as ui from '../ui';
 
-import user_Profile, {
-  ProfileStatistics,
-} from '../components/user/Profile.vue';
-import { ViewProfileTabs } from '../components/user/ViewProfile.vue';
+import user_Profile from '../components/user/Profile.vue';
+import { ProfileStatistics } from '../components/user/Profile_types';
+import { ViewProfileTabs } from '../components/user/ViewProfile_types';
 
 // Heatmap utility interfaces and functions
 export interface HeatmapColors {
@@ -149,7 +148,7 @@ export function getHeatmapChartOptions(
         const day = String(date.getDate()).padStart(2, '0');
         const formattedDate = `${year}-${month}-${day}`;
 
-        const value = this.point.value as number;
+        const value = (this.point as { value?: number }).value as number;
         if (value > 0) {
           return `<b>${formattedDate}</b><br>Total submissions: <b>${value}</b>`;
         }
@@ -192,12 +191,14 @@ export interface HeatmapDataPoint {
   count: number;
 }
 
-// Use type declaration merging to add the methods to Vue
-declare module 'vue/types/vue' {
-  interface Vue {
-    loadInitialData(username: string): void;
-    loadHeatmapDataForYear(username: string, year: number): void;
-  }
+// Describes the reactive data fields read off the captured `new Vue` instance.
+interface UserProfileInstance {
+  profile: types.UserProfileInfo;
+  selectedTab: string;
+  viewProfileSelectedTab: string | null;
+  hasPassword: boolean | undefined;
+  identities: types.AssociatedIdentity[];
+  apiTokens: types.ApiToken[];
 }
 
 OmegaUp.on('ready', () => {
@@ -232,15 +233,16 @@ OmegaUp.on('ready', () => {
   // Handle browser back/forward button navigation for hash-based tabs
   const onHashChange = () => {
     const hash = window.location.hash.substring(1).split('#')[0];
+    const instance = userProfile as unknown as UserProfileInstance;
     for (const viewProfileTab of Object.values(ViewProfileTabs)) {
       if (hash === viewProfileTab) {
-        userProfile.viewProfileSelectedTab = viewProfileTab;
-        userProfile.selectedTab = 'view-profile';
+        instance.viewProfileSelectedTab = viewProfileTab;
+        instance.selectedTab = 'view-profile';
         return;
       }
     }
     if (hash) {
-      userProfile.selectedTab = hash;
+      instance.selectedTab = hash;
     }
   };
 
@@ -376,13 +378,14 @@ OmegaUp.on('ready', () => {
                   'updateUsername',
                   userBasicInformation.username,
                 );
-                userProfile.profile.username = userBasicInformation.username;
-                userProfile.profile.name = userBasicInformation.name;
-                userProfile.profile.gender = userBasicInformation.gender;
-                userProfile.profile.country_id =
-                  userBasicInformation.country_id;
-                userProfile.profile.state_id = userBasicInformation.state_id;
-                userProfile.profile.birth_date =
+                const instance =
+                  userProfile as unknown as UserProfileInstance;
+                instance.profile.username = userBasicInformation.username;
+                instance.profile.name = userBasicInformation.name;
+                instance.profile.gender = userBasicInformation.gender;
+                instance.profile.country_id = userBasicInformation.country_id;
+                instance.profile.state_id = userBasicInformation.state_id;
+                instance.profile.birth_date =
                   userBasicInformation.birth_date ?? undefined;
                 ui.success(T.userEditSuccess);
               })
@@ -472,8 +475,10 @@ OmegaUp.on('ready', () => {
             })
               .then(() => {
                 ui.success(T.passwordAddRequestSuccess);
-                userProfile.hasPassword = true;
-                userProfile.selectedTab = 'change-password';
+                const instance =
+                  userProfile as unknown as UserProfileInstance;
+                instance.hasPassword = true;
+                instance.selectedTab = 'change-password';
               })
               .catch(ui.apiError);
           },
@@ -564,14 +569,15 @@ OmegaUp.on('ready', () => {
   function refreshIdentityList() {
     api.User.listAssociatedIdentities({})
       .then((data) => {
-        userProfile.identities = data.identities;
+        (userProfile as unknown as UserProfileInstance).identities =
+          data.identities;
       })
       .catch(ui.apiError);
   }
   function refreshApiTokensList() {
     api.User.listAPITokens({})
       .then((data) => {
-        userProfile.apiTokens = data.tokens;
+        (userProfile as unknown as UserProfileInstance).apiTokens = data.tokens;
       })
       .catch(ui.apiError);
   }

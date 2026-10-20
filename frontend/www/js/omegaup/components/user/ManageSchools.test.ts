@@ -37,7 +37,7 @@ describe('ManageSchools.vue', () => {
     await wrapper
       .findComponent(omegaupRadioSwitch)
       .find('input[value="false"]')
-      .setChecked();
+      .setValue(true);
     expect(wrapper.findComponent(datePicker).element).toBeEnabled();
   });
 
@@ -50,13 +50,11 @@ describe('ManageSchools.vue', () => {
     });
 
     await wrapper
-      .find('select')
-      .find('option[value="bachelors"]')
-      .setSelected();
+      .find('select').setValue('bachelors');
     await wrapper
       .findComponent(omegaupRadioSwitch)
       .find('input[value="false"]')
-      .setChecked();
+      .setValue(true);
     // Set the value through the inner native date input so the component's own
     // string-to-Date conversion runs and emits a Date, matching how the picker
     // behaves for a user. Calling setValue on the component wrapper would push

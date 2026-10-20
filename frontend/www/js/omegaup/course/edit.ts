@@ -3,16 +3,37 @@ import { messages, types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue, { type CreateElement } from 'vue';
+import Vue, { type CreateElement, type Directive } from 'vue';
 import course_Edit from '../components/course/Edit.vue';
-import { AdmissionMode } from '../components/common/Publish.vue';
 import Sortable from 'sortablejs';
 
-Vue.directive('Sortable', {
-  inserted: (el: HTMLElement, binding) => {
+enum AdmissionMode {
+  Private = 'private',
+  Registration = 'registration',
+  Public = 'public',
+}
+
+interface CourseEditInstance {
+  data: types.CourseEditPayload;
+  initialTab: string;
+  refreshStudentList: () => void;
+}
+
+interface CourseEditComponentRef {
+  assignments: types.CourseAssignment[];
+  assignmentProblems: types.ProblemsetProblem[];
+  assignmentFormMode: omegaup.AssignmentFormMode;
+  token: string;
+  onResetAssignmentForm: () => void;
+}
+
+// @vue/compat maps the legacy `inserted` directive hook at runtime, but the
+// Vue 3 `Directive` type only knows the new hook names, so cast through unknown.
+Vue.directive('Sortable', ({
+  inserted: (el: HTMLElement, binding: { value?: Sortable.Options }) => {
     new Sortable(el, binding.value || {});
   },
-});
+} as unknown) as Directive);
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CourseEditPayload();
@@ -46,18 +67,18 @@ OmegaUp.on('ready', () => {
     methods: {
       refreshCourseAdminDetails: (): void => {
         api.Course.adminDetails({ alias: courseAlias }).then((course) => {
-          courseEdit.data.course = course;
+          (courseEdit as unknown as CourseEditInstance).data.course = course;
         });
       },
       refreshStudentList: (): void => {
         api.Course.listStudents({ course_alias: courseAlias })
           .then((response) => {
-            courseEdit.data.students = response.students;
+            (courseEdit as unknown as CourseEditInstance).data.students = response.students;
           })
           .catch(ui.apiError);
         api.Course.requests({ course_alias: courseAlias })
           .then((response) => {
-            courseEdit.data.identityRequests = response.users;
+            (courseEdit as unknown as CourseEditInstance).data.identityRequests = response.users;
           })
           .catch(ui.apiError);
       },
@@ -82,10 +103,10 @@ OmegaUp.on('ready', () => {
       refreshCourseAdminsAndTeachingAssistants: (): void => {
         api.Course.admins({ course_alias: courseAlias })
           .then((response) => {
-            courseEdit.data.admins = response.admins;
-            courseEdit.data.groupsAdmins = response.group_admins;
-            courseEdit.data.teachingAssistants = response.teaching_assistants;
-            courseEdit.data.groupsTeachingAssistants =
+            (courseEdit as unknown as CourseEditInstance).data.admins = response.admins;
+            (courseEdit as unknown as CourseEditInstance).data.groupsAdmins = response.group_admins;
+            (courseEdit as unknown as CourseEditInstance).data.teachingAssistants = response.teaching_assistants;
+            (courseEdit as unknown as CourseEditInstance).data.groupsTeachingAssistants =
               response.group_teaching_assistants;
           })
           .catch(ui.apiError);
@@ -103,7 +124,7 @@ OmegaUp.on('ready', () => {
             } else {
               ui.success(T.arbitrateRequestDenySuccessfully);
             }
-            courseEdit.refreshStudentList();
+            (courseEdit as unknown as CourseEditInstance).refreshStudentList();
           })
           .catch(ui.apiError);
       },
@@ -130,7 +151,9 @@ OmegaUp.on('ready', () => {
                 // Groups previously added into the contest should not be
                 // shown in the dropdown
                 const addedGroups = new Set(
-                  this.data.groupsAdmins.map((group) => group.alias),
+                  this.data.groupsAdmins.map(
+                    (group: types.CourseGroupAdmin) => group.alias,
+                  ),
                 );
                 this.searchResultGroups = data
                   .filter((group) => !addedGroups.has(group.value))
@@ -152,7 +175,9 @@ OmegaUp.on('ready', () => {
                 // Problems previously added into the assignment should not be
                 // shown in the dropdown
                 const addedProblems = new Set(
-                  component.assignmentProblems.map((problem) => problem.alias),
+                  component.assignmentProblems.map(
+                    (problem: types.ProblemsetProblem) => problem.alias,
+                  ),
                 );
                 this.searchResultProblems = data.results
                   .filter((problem) => !addedProblems.has(problem.key))
@@ -398,7 +423,7 @@ OmegaUp.on('ready', () => {
             admissionMode: AdmissionMode;
             showInPublicCoursesList: boolean;
           }) => {
-            courseEdit.data.course.admission_mode = admissionMode;
+            (courseEdit as unknown as CourseEditInstance).data.course.admission_mode = admissionMode;
             api.Course.update({
               alias: courseAlias,
               admission_mode: admissionMode,
@@ -645,12 +670,13 @@ OmegaUp.on('ready', () => {
       });
     },
   });
-  const component = courseEdit.$refs.component as course_Edit;
+  const component = (courseEdit.$refs
+    .component as unknown) as CourseEditComponentRef;
 
   // Handle browser back/forward navigation for hash-based tabs
   const onHashChange = () => {
     const hash = window.location.hash.substring(1).split('#')[0];
-    courseEdit.$data.initialTab = hash || 'course';
+    (courseEdit as unknown as CourseEditInstance).initialTab = hash || 'course';
   };
 
   window.addEventListener('hashchange', onHashChange);

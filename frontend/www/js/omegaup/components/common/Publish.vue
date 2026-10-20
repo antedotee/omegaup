@@ -79,11 +79,10 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
 VueGlobal.use(Clipboard);
 
-export enum AdmissionMode {
-  Private = 'private',
-  Registration = 'registration',
-  Public = 'public',
-}
+import { AdmissionMode } from './Publish_types';
+// Declared in ./Publish_types and re-exported here so existing SFC importers
+// keep working while plain `.ts` modules import it from the `.ts` file.
+export { AdmissionMode };
 
 @Component({
   components: {

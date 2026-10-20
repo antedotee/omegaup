@@ -71,10 +71,11 @@ import VueRecaptcha from 'vue-recaptcha';
 import omegaup_Login from './Login.vue';
 import omegaup_Signup from './Signup.vue';
 
-export enum AvailableTabs {
-  Login = 'login',
-  Signup = 'signup',
-}
+import { AvailableTabs } from './Signin_types';
+// AvailableTabs is declared in ./Signin_types and re-exported here so existing
+// SFC importers keep working while plain `.ts` entry points import it from the
+// `.ts` module.
+export { AvailableTabs };
 
 @Component({
   components: {

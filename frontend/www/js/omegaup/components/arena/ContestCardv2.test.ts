@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
 import T from '../../lang';
 import ContestCardv2 from './ContestCardv2.vue';
-import { ContestTab } from './ContestList.vue';
+import { ContestTab } from './ContestList_types';
 
 // `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
 // the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with

@@ -436,36 +436,17 @@ import ContestCard from './ContestCard.vue';
 import ContestSkeleton from './ContestSkeleton.vue';
 library.add(fas);
 
-export enum ContestTab {
-  Current = 'current',
-  Future = 'future',
-  Past = 'past',
-}
-
-export enum ContestOrder {
-  None = 'none',
-  Title = 'title',
-  Ends = 'ends',
-  Duration = 'duration',
-  Organizer = 'organizer',
-  Contestants = 'contestants',
-  SignedUp = 'signedup',
-}
-
-export enum ContestFilter {
-  SignedUp = 'signedup',
-  OnlyRecommended = 'recommended',
-  All = 'all',
-}
-
-export interface UrlParams {
-  page: number;
-  tab_name: ContestTab;
-  query: string;
-  sort_order: ContestOrder;
-  filter: ContestFilter;
-  replaceState?: boolean; // When true, use replaceState instead of pushState (for browser navigation)
-}
+import {
+  ContestTab,
+  ContestOrder,
+  ContestFilter,
+  UrlParams,
+} from './ContestListv2_types';
+// These are declared in ./ContestListv2_types and re-exported here so existing
+// SFC importers keep working while plain `.ts` entry points import them from
+// the `.ts` module.
+export { ContestTab, ContestOrder, ContestFilter };
+export type { UrlParams };
 
 @Component({
   components: {

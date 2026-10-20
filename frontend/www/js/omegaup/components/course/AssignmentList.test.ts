@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import Sortable from 'sortablejs';
+import type { DirectiveBinding } from 'vue';
 
 import T from '../../lang';
 import { omegaup } from '../../omegaup';
@@ -18,7 +19,7 @@ describe('AssignmentList.vue', () => {
       global: {
         directives: {
           'Sortable': {
-            inserted: (el: HTMLElement, binding) => {
+            mounted: (el: HTMLElement, binding: DirectiveBinding) => {
               new Sortable(el, binding.value || {});
             },
           },
@@ -56,7 +57,7 @@ describe('AssignmentList.vue', () => {
       global: {
         directives: {
           'Sortable': {
-            inserted: (el: HTMLElement, binding) => {
+            mounted: (el: HTMLElement, binding: DirectiveBinding) => {
               new Sortable(el, binding.value || {});
             },
           },

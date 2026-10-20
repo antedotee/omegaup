@@ -129,10 +129,11 @@ import problem_Details from '../problem/Detailsv2.vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-export enum Tabs {
-  Summary = 'summary',
-  Ranking = 'ranking',
-}
+import { Tabs } from './Coursev2_types';
+// Tabs is declared in ./Coursev2_types and re-exported here so existing SFC
+// importers keep working while plain `.ts` entry points import it from the
+// `.ts` module.
+export { Tabs };
 
 @Component({
   components: {

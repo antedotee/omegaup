@@ -138,9 +138,7 @@ describe('RunSubmitPopup.vue', () => {
     await wrapper.vm.$nextTick();
 
     await wrapper
-      .find('select[name="language"]')
-      .find('option[value="cpp17-gcc"]')
-      .setSelected();
+      .find('select[name="language"]').setValue('cpp17-gcc');
 
     await wrapper.vm.$nextTick();
 

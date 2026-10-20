@@ -4,12 +4,16 @@ import T from '../../lang';
 import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
 
-import arena_ContestList, {
-  ContestOrder,
-  ContestTab,
-  ContestFilter,
-} from './ContestList.vue';
+import arena_ContestList from './ContestList.vue';
+import { ContestOrder, ContestTab, ContestFilter } from './ContestList_types';
 import each from 'jest-each';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ContestListVm {
+  currentFilter: ContestFilter;
+  currentOrder: ContestOrder;
+}
 
 // `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
 // the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
@@ -209,7 +213,7 @@ describe('ContestList.vue', () => {
       global,
     });
 
-    const currentContestTab = wrapper.findAll('.section-container').at(0);
+    const currentContestTab = wrapper.findAll('.section-container')[0];
 
     expect(currentContestTab.exists()).toBe(true);
     expect(currentContestTab.text()).toContain('Current Contest 1');
@@ -224,7 +228,7 @@ describe('ContestList.vue', () => {
       global,
     });
 
-    const futureContestTab = wrapper.findAll('.section-container').at(1);
+    const futureContestTab = wrapper.findAll('.section-container')[1];
 
     expect(futureContestTab.exists()).toBe(true);
     expect(futureContestTab.text()).toContain('Future Contest 1');
@@ -239,7 +243,7 @@ describe('ContestList.vue', () => {
       global,
     });
 
-    const pastContestTab = wrapper.findAll('.section-container').at(2);
+    const pastContestTab = wrapper.findAll('.section-container')[2];
 
     expect(pastContestTab.exists()).toBe(true);
     expect(pastContestTab.text()).toContain('Past Contest 1');
@@ -316,7 +320,7 @@ describe('ContestList.vue', () => {
       global,
     });
 
-    const currentContestTab = wrapper.findAll('.section-container').at(0);
+    const currentContestTab = wrapper.findAll('.section-container')[0];
     expect(currentContestTab.text()).not.toContain(T.contestVirtualMode);
     expect(currentContestTab.text()).not.toContain(T.contestPracticeMode);
   });
@@ -330,7 +334,7 @@ describe('ContestList.vue', () => {
       global,
     });
 
-    const futureContestTab = wrapper.findAll('.section-container').at(1);
+    const futureContestTab = wrapper.findAll('.section-container')[1];
     expect(futureContestTab.text()).not.toContain(T.contestVirtualMode);
     expect(futureContestTab.text()).not.toContain(T.contestPracticeMode);
   });
@@ -347,13 +351,13 @@ describe('ContestList.vue', () => {
       ref: 'dropdownFilterBy',
     });
     // Current filter "By All" is turned on by default
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.All);
+    expect((wrapper.vm as unknown as ContestListVm).currentFilter).toBe(ContestFilter.All);
     await dropdownFilterBy.find('[data-filter-by-signed-up]').trigger('click');
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.SignedUp);
+    expect((wrapper.vm as unknown as ContestListVm).currentFilter).toBe(ContestFilter.SignedUp);
     await dropdownFilterBy
       .find('[data-filter-by-recommended]')
       .trigger('click');
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.OnlyRecommended);
+    expect((wrapper.vm as unknown as ContestListVm).currentFilter).toBe(ContestFilter.OnlyRecommended);
   });
 
   const dropdownMapping = [
@@ -444,18 +448,20 @@ describe('ContestList.vue', () => {
 
         const dropdown = wrapper.findComponent({ ref: 'dropdownOrderBy' });
         expect(dropdown.exists()).toBeTruthy();
-        expect(wrapper.vm.currentOrder).toBe(ContestOrder.None);
+        expect((wrapper.vm as unknown as ContestListVm).currentOrder).toBe(ContestOrder.None);
 
         // Find and click the dropdown item
         await dropdown.find(`[data-order-by-${name}]`).trigger('click');
         await wrapper.vm.$nextTick();
-        expect(wrapper.vm.currentOrder).toBe(field);
+        expect((wrapper.vm as unknown as ContestListVm).currentOrder).toBe(field);
 
         const emittedEvents = wrapper.emitted('fetch-page');
 
         // Instead of checking for specific page numbers, check that the event was emitted
         // with the correct sorting order and that the page was reset to 1
-        const lastEmmitedEvent = emittedEvents?.slice(-1)[0];
+        const lastEmmitedEvent = emittedEvents?.slice(-1)[0] as [
+          { params: { sort_order: ContestOrder; page: number } },
+        ];
         expect(lastEmmitedEvent[0].params.sort_order).toBe(field);
         expect(lastEmmitedEvent[0].params.page).toBe(1);
       });

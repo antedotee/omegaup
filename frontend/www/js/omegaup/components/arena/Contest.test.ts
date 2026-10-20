@@ -183,9 +183,7 @@ describe('Contest.vue', () => {
       .trigger('click');
     expect(wrapper.find('form[data-run-submit')).toBeTruthy();
 
-    await wrapper
-      .find('select[name="language"] option[value="py3"]')
-      .setSelected();
+    await wrapper.find('select[name="language"]').setValue('py3');
 
     const runSubmitWrapper = wrapper.findComponent(arena_RunSubmit);
 

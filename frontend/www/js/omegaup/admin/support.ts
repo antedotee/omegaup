@@ -1,12 +1,29 @@
-import admin_Support, {
-  UpdateEmailRequest,
-} from '../components/admin/Support.vue';
+import admin_Support from '../components/admin/Support.vue';
 import { OmegaUp } from '../omegaup';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
 import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
+
+interface UpdateEmailRequest {
+  email: string;
+  newEmail: string;
+}
+
+interface AdminSupportInstance {
+  username: null | string;
+  link: null | string;
+  verified: boolean;
+  lastLogin: null | Date;
+  birthDate: null | Date;
+  roles: string[];
+  email: null | string;
+  contestAlias: null | string;
+  contestTitle: null | string;
+  contestFound: boolean;
+  isContestRecommended: boolean;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.SupportDetailsPayload();
@@ -33,20 +50,21 @@ OmegaUp.on('ready', () => {
       };
     },
     render: function (createElement: CreateElement) {
+      const self = this as unknown as AdminSupportInstance;
       return createElement('omegaup-admin-support', {
         props: {
-          username: this.username,
-          link: this.link,
-          verified: this.verified,
-          lastLogin: this.lastLogin,
-          birthDate: this.birthDate,
+          username: self.username,
+          link: self.link,
+          verified: self.verified,
+          lastLogin: self.lastLogin,
+          birthDate: self.birthDate,
           roleNamesWithDescription: payload.roleNamesWithDescription,
-          roles: this.roles,
-          email: this.email,
-          contestAlias: this.contestAlias,
-          contestTitle: this.contestTitle,
-          contestFound: this.contestFound,
-          isContestRecommended: this.isContestRecommended,
+          roles: self.roles,
+          email: self.email,
+          contestAlias: self.contestAlias,
+          contestTitle: self.contestTitle,
+          contestFound: self.contestFound,
+          isContestRecommended: self.isContestRecommended,
           maintenanceEnabled: payload.maintenanceMode.enabled,
           maintenanceMessageEs: payload.maintenanceMode.message_es || '',
           maintenanceMessageEn: payload.maintenanceMode.message_en || '',
@@ -58,21 +76,21 @@ OmegaUp.on('ready', () => {
         },
         on: {
           'search-username-or-email': (usernameOrEmail: string): void => {
-            adminSupport.username = null;
-            adminSupport.link = null;
-            adminSupport.lastLogin = null;
-            adminSupport.birthDate = null;
-            adminSupport.verified = false;
-            adminSupport.roles = [];
-            adminSupport.email = null;
+            (adminSupport as unknown as AdminSupportInstance).username = null;
+            (adminSupport as unknown as AdminSupportInstance).link = null;
+            (adminSupport as unknown as AdminSupportInstance).lastLogin = null;
+            (adminSupport as unknown as AdminSupportInstance).birthDate = null;
+            (adminSupport as unknown as AdminSupportInstance).verified = false;
+            (adminSupport as unknown as AdminSupportInstance).roles = [];
+            (adminSupport as unknown as AdminSupportInstance).email = null;
             api.User.extraInformation({ usernameOrEmail })
               .then((data) => {
-                adminSupport.username = data.username;
-                adminSupport.verified = data.verified;
-                adminSupport.lastLogin = data.last_login ?? null;
-                adminSupport.birthDate = data.birth_date ?? null;
-                adminSupport.roles = data.roles ?? [];
-                adminSupport.email = data.email ?? null;
+                (adminSupport as unknown as AdminSupportInstance).username = data.username;
+                (adminSupport as unknown as AdminSupportInstance).verified = data.verified;
+                (adminSupport as unknown as AdminSupportInstance).lastLogin = data.last_login ?? null;
+                (adminSupport as unknown as AdminSupportInstance).birthDate = data.birth_date ?? null;
+                (adminSupport as unknown as AdminSupportInstance).roles = data.roles ?? [];
+                (adminSupport as unknown as AdminSupportInstance).email = data.email ?? null;
               })
               .catch(ui.apiError);
           },
@@ -89,7 +107,7 @@ OmegaUp.on('ready', () => {
           'verify-user': (usernameOrEmail: string): void => {
             api.User.verifyEmail({ usernameOrEmail })
               .then(() => {
-                adminSupport.verified = true;
+                (adminSupport as unknown as AdminSupportInstance).verified = true;
                 ui.success(T.userVerified);
               })
               .catch(ui.apiError);
@@ -98,18 +116,18 @@ OmegaUp.on('ready', () => {
             api.Reset.generateToken({ email })
               .then((data) => {
                 ui.success(T.passwordResetTokenWasGeneratedSuccessfully);
-                adminSupport.link = data.link;
+                (adminSupport as unknown as AdminSupportInstance).link = data.link;
               })
               .catch(ui.apiError);
           },
           reset: () => {
-            adminSupport.username = null;
-            adminSupport.link = null;
-            adminSupport.verified = false;
-            adminSupport.lastLogin = null;
-            adminSupport.birthDate = null;
-            adminSupport.roles = [];
-            adminSupport.email = null;
+            (adminSupport as unknown as AdminSupportInstance).username = null;
+            (adminSupport as unknown as AdminSupportInstance).link = null;
+            (adminSupport as unknown as AdminSupportInstance).verified = false;
+            (adminSupport as unknown as AdminSupportInstance).lastLogin = null;
+            (adminSupport as unknown as AdminSupportInstance).birthDate = null;
+            (adminSupport as unknown as AdminSupportInstance).roles = [];
+            (adminSupport as unknown as AdminSupportInstance).email = null;
           },
           'change-role': (role: {
             selected: boolean;
@@ -117,7 +135,7 @@ OmegaUp.on('ready', () => {
           }): void => {
             if (role.selected) {
               api.User.addRole({
-                username: adminSupport.username,
+                username: (adminSupport as unknown as AdminSupportInstance).username,
                 role: role.value.name,
               })
                 .then(() => {
@@ -126,7 +144,7 @@ OmegaUp.on('ready', () => {
                 .catch(ui.apiError);
             } else {
               api.User.removeRole({
-                username: adminSupport.username,
+                username: (adminSupport as unknown as AdminSupportInstance).username,
                 role: role.value.name,
               })
                 .then(() => {
@@ -136,22 +154,22 @@ OmegaUp.on('ready', () => {
             }
           },
           'search-contest': (contestAlias: string): void => {
-            adminSupport.contestFound = false;
-            adminSupport.contestTitle = null;
-            adminSupport.isContestRecommended = false;
+            (adminSupport as unknown as AdminSupportInstance).contestFound = false;
+            (adminSupport as unknown as AdminSupportInstance).contestTitle = null;
+            (adminSupport as unknown as AdminSupportInstance).isContestRecommended = false;
 
             api.Contest.details({ contest_alias: contestAlias })
               .then((data) => {
-                adminSupport.contestAlias = contestAlias;
-                adminSupport.contestTitle = data.title;
-                adminSupport.contestFound = true;
-                adminSupport.isContestRecommended = data.recommended;
+                (adminSupport as unknown as AdminSupportInstance).contestAlias = contestAlias;
+                (adminSupport as unknown as AdminSupportInstance).contestTitle = data.title;
+                (adminSupport as unknown as AdminSupportInstance).contestFound = true;
+                (adminSupport as unknown as AdminSupportInstance).isContestRecommended = data.recommended;
               })
               .catch(ui.apiError);
           },
           'toggle-recommended': (isNowRecommended: boolean): void => {
             api.Contest.setRecommended({
-              contest_alias: adminSupport.contestAlias,
+              contest_alias: (adminSupport as unknown as AdminSupportInstance).contestAlias,
               value: isNowRecommended,
             })
               .then(() => {
@@ -164,10 +182,10 @@ OmegaUp.on('ready', () => {
               .catch(ui.apiError);
           },
           'reset-contest': () => {
-            adminSupport.contestAlias = null;
-            adminSupport.contestTitle = null;
-            adminSupport.contestFound = false;
-            adminSupport.isContestRecommended = false;
+            (adminSupport as unknown as AdminSupportInstance).contestAlias = null;
+            (adminSupport as unknown as AdminSupportInstance).contestTitle = null;
+            (adminSupport as unknown as AdminSupportInstance).contestFound = false;
+            (adminSupport as unknown as AdminSupportInstance).isContestRecommended = false;
           },
           'toggle-maintenance': (enabled: boolean): void => {
             if (!enabled) {

@@ -461,6 +461,7 @@ import common_Typeahead from '../common/Typeahead.vue';
 import arena_RunDetailsPopup from './RunDetailsPopup.vue';
 import omegaup_Overlay from '../Overlay.vue';
 import common_EmptyState from '../common/EmptyState.vue';
+import { DisqualificationType, PopupDisplayed } from './Runs_types';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -486,24 +487,10 @@ declare global {
   }
 }
 
-export enum DisqualificationType {
-  ByGUID,
-  ByProblem,
-  ByUser,
-  ByUsers,
-  ByUsersAndProblem,
-  ByUserAndProblems,
-  ByUsersAndProblems,
-}
-
-export enum PopupDisplayed {
-  None,
-  RunSubmit,
-  RunDetails,
-  Promotion,
-  Demotion,
-  Reviewer,
-}
+// DisqualificationType and PopupDisplayed are declared in ./Runs_types and
+// re-exported here so existing SFC importers keep working while plain `.ts`
+// entry points import them from the `.ts` module.
+export { DisqualificationType, PopupDisplayed };
 
 @Component({
   components: {

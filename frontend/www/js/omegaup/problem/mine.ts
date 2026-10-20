@@ -6,6 +6,11 @@ import T from '../lang';
 import * as api from '../api';
 import * as ui from '../ui';
 
+interface ProblemsMineInstance {
+  problems: types.ProblemListItem[];
+  pagerItems: types.PageItem[];
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.ProblemsMineInfoPayload();
   let showAllProblems = false;
@@ -122,8 +127,9 @@ OmegaUp.on('ready', () => {
         })
     )
       .then((result) => {
-        problemsMine.pagerItems = result.pagerItems;
-        problemsMine.problems = result.problems;
+        const instance = problemsMine as unknown as ProblemsMineInstance;
+        instance.pagerItems = result.pagerItems;
+        instance.problems = result.problems;
       })
       .catch(ui.apiError);
   }

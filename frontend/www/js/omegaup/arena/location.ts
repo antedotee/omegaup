@@ -1,5 +1,5 @@
 import { types } from '../api_types';
-import { PopupDisplayed } from '../components/problem/Details.vue';
+import { PopupDisplayed } from '../components/problem/Details_types';
 import clarificationsStore from './clarificationsStore';
 import * as api from '../api';
 import * as time from '../time';

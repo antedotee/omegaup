@@ -10,6 +10,15 @@ import {
 } from '@/js/omegaup/problem/creator/modules/cases';
 
 import T from '../../../../lang';
+import { Group, GroupID } from '@/js/omegaup/problem/creator/types';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface SidebarVm {
+  groups: Group[];
+  downloadGroupInput(groupID: GroupID, ext: '.in' | '.txt'): void;
+}
+
 describe('Sidebar.vue', () => {
   // Total 6 buttons are rendered initially on this page.
   // - Layout button
@@ -208,16 +217,16 @@ describe('Sidebar.vue', () => {
     const editAutoPointsInput = editModal.find(
       '[data-sidebar-edit-group-modal="edit autoPoints"]',
     );
-    await editAutoPointsInput.setChecked(false);
+    await editAutoPointsInput.setValue(false);
 
     await editModal.find('button.btn-success').trigger('click');
 
     expect(
-      wrapper.vm.groups.find((_group) => _group.groupID === newGroup.groupID)
+      (wrapper.vm as unknown as SidebarVm).groups.find((_group) => _group.groupID === newGroup.groupID)
         ?.name,
     ).toBe(modifiedName);
     expect(
-      wrapper.vm.groups.find((_group) => _group.groupID === newGroup.groupID)
+      (wrapper.vm as unknown as SidebarVm).groups.find((_group) => _group.groupID === newGroup.groupID)
         ?.points,
     ).toBe(modifiedPoints);
   });
@@ -242,7 +251,7 @@ describe('Sidebar.vue', () => {
       '[data-sidebar-edit-group-dropdown="download .txt"]',
     );
 
-    const mockDownload = jest.spyOn(wrapper.vm, 'downloadGroupInput');
+    const mockDownload = jest.spyOn((wrapper.vm as unknown as SidebarVm), 'downloadGroupInput');
 
     await downloadInButton.trigger('click');
     expect(mockDownload).toHaveBeenCalledWith(newGroup.groupID, '.in');
@@ -404,92 +413,92 @@ describe('Sidebar.vue', () => {
     await validatePointsModal.find('button.btn-success').trigger('click');
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === fixedPointsGroup1.groupID,
       )?.points,
     ).toBe(100);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === fixedPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newCase1.caseID)?.points,
     ).toBe(40);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === fixedPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newCase2.caseID)?.points,
     ).toBe(60);
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === fixedPointsGroup2.groupID,
       )?.points,
     ).toBe(100);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === fixedPointsGroup2.groupID)
         ?.cases.find((_case) => _case.caseID === newCase3.caseID)?.points,
     ).toBe(40);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === fixedPointsGroup2.groupID)
         ?.cases.find((_case) => _case.caseID === newCase4.caseID)?.points,
     ).toBe(60);
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === autoPointsGroup1.groupID,
       )?.points,
     ).toBe(500);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newCase5.caseID)?.points,
     ).toBe(200);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newCase6.caseID)?.points,
     ).toBe(300);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newAutoPointsCase1.caseID)
         ?.points,
     ).toBe(0);
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === autoPointsGroup2.groupID,
       )?.points,
     ).toBe(50);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup2.groupID)
         ?.cases.find((_case) => _case.caseID === newCase7.caseID)?.points,
     ).toBe(20);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup2.groupID)
         ?.cases.find((_case) => _case.caseID === newCase8.caseID)?.points,
     ).toBe(30);
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === autoPointsGroup3.groupID,
       )?.points,
     ).toBe(100);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup3.groupID)
         ?.cases.find((_case) => _case.caseID === newCase9.caseID)?.points,
     ).toBe(20);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup3.groupID)
         ?.cases.find((_case) => _case.caseID === newCase10.caseID)?.points,
     ).toBe(30);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup3.groupID)
         ?.cases.find((_case) => _case.caseID === newAutoPointsCase2.caseID)
         ?.points,

@@ -10,6 +10,17 @@ import {
   generateCase,
   generateGroup,
 } from '@/js/omegaup/problem/creator/modules/cases';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface HeaderVm {
+  $store: typeof store;
+  nameInternal: string;
+  retrieveStore(): Promise<void>;
+  generateProblem(): void;
+  readFile(e: HTMLInputElement): File | null;
+}
+
 describe('Header.vue', () => {
   it('Should contain the header buttons and problem name input', async () => {
     const wrapper = shallowMount(Header, {
@@ -27,7 +38,7 @@ describe('Header.vue', () => {
 
     expect(expectedText.length).toBe(buttons.length);
     for (let i = 0; i < expectedText.length; i++) {
-      expect(buttons.at(i).text()).toBe(expectedText[i]);
+      expect(buttons[i].text()).toBe(expectedText[i]);
     }
 
     expect(wrapper.findComponent(BFormInput).exists()).toBe(true);
@@ -54,11 +65,11 @@ describe('Header.vue', () => {
 
     const testText = 'Hello';
     const emptyText = '';
-    wrapper.vm.$store.state.problemName = testText;
-    wrapper.vm.$store.state.problemMarkdown = testText;
-    wrapper.vm.$store.state.problemCodeContent = testText;
-    wrapper.vm.$store.state.problemCodeExtension = testText;
-    wrapper.vm.$store.state.problemSolutionMarkdown = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemName = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown = testText;
 
     await resetButton.trigger('click');
 
@@ -67,13 +78,13 @@ describe('Header.vue', () => {
 
     expect(window.location.reload).toHaveBeenCalledTimes(1);
 
-    expect(wrapper.vm.$store.state.problemName).toBe(
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemName).toBe(
       T.problemCreatorNewProblem,
     );
-    expect(wrapper.vm.$store.state.problemMarkdown).toBe(emptyText);
-    expect(wrapper.vm.$store.state.problemCodeContent).toBe(emptyText);
-    expect(wrapper.vm.$store.state.problemCodeExtension).toBe(emptyText);
-    expect(wrapper.vm.$store.state.problemSolutionMarkdown).toBe(emptyText);
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown).toBe(emptyText);
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent).toBe(emptyText);
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension).toBe(emptyText);
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown).toBe(emptyText);
 
     jest.restoreAllMocks();
     Object.defineProperty(window, 'location', {
@@ -89,7 +100,7 @@ describe('Header.vue', () => {
       },
     });
 
-    const generateProblemSpy = jest.spyOn(wrapper.vm, 'generateProblem');
+    const generateProblemSpy = jest.spyOn((wrapper.vm as unknown as HeaderVm), 'generateProblem');
 
     const downloadButton = wrapper.find('button[data-download-zip]');
     expect(downloadButton.exists()).toBe(true);
@@ -152,7 +163,9 @@ describe('Header.vue', () => {
 
     const emitted = wrapper.emitted('download-zip-file');
     expect(emitted).toBeTruthy();
-    const { zipContent } = emitted?.slice(-1)[0][0];
+    const { zipContent } = (emitted?.slice(-1)[0][0] as unknown) as {
+      zipContent: JSZip;
+    };
     expect(Object.keys(zipContent.files)).toStrictEqual(fileFolderList);
 
     jest.restoreAllMocks();
@@ -176,7 +189,7 @@ describe('Header.vue', () => {
     });
 
     const mockReadFileMethod = jest
-      .spyOn(wrapper.vm, 'readFile')
+      .spyOn((wrapper.vm as unknown as HeaderVm), 'readFile')
       .mockImplementation(() => testZipFile);
 
     const loadFileButton = wrapper.find('button[data-load-problem-button]');
@@ -189,7 +202,7 @@ describe('Header.vue', () => {
 
     await fileInput.trigger('change');
 
-    wrapper.vm.retrieveStore();
+    (wrapper.vm as unknown as HeaderVm).retrieveStore();
     expect(mockReadFileMethod).toHaveBeenCalled();
 
     const emittedStoreData = {
@@ -275,23 +288,23 @@ describe('Header.vue', () => {
       [emittedStoreData],
     ]);
 
-    expect(wrapper.vm.nameInternal).toBe(emittedStoreData.problemName);
-    expect(wrapper.vm.$store.state.problemName).toBe(
+    expect((wrapper.vm as unknown as HeaderVm).nameInternal).toBe(emittedStoreData.problemName);
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemName).toBe(
       emittedStoreData.problemName,
     );
-    expect(wrapper.vm.$store.state.problemCodeContent).toBe(
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent).toBe(
       emittedStoreData.problemCodeContent,
     );
-    expect(wrapper.vm.$store.state.problemCodeExtension).toBe(
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension).toBe(
       emittedStoreData.problemCodeExtension,
     );
-    expect(wrapper.vm.$store.state.problemMarkdown).toBe(
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown).toBe(
       emittedStoreData.problemMarkdown,
     );
-    expect(wrapper.vm.$store.state.problemSolutionMarkdown).toBe(
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown).toBe(
       emittedStoreData.problemSolutionMarkdown,
     );
-    expect(wrapper.vm.$store.state.casesStore).toStrictEqual(
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.casesStore).toStrictEqual(
       emittedStoreData.casesStore,
     );
   });

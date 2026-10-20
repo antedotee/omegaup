@@ -579,11 +579,12 @@ import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
 VueGlobal.use(VueCookies, { expires: -1 });
+import { CreationMethods } from './Form_types';
 
-export enum CreationMethods {
-  Creator = 'creator',
-  Zip = 'zip',
-}
+// CreationMethods is declared in ./Form_types and re-exported here so existing
+// SFC importers keep working while plain `.ts` entry points import it from the
+// `.ts` module.
+export { CreationMethods };
 
 @Component({
   components: {

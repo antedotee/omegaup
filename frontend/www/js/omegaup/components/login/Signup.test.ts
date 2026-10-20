@@ -10,7 +10,7 @@ jest.mock('intro.js', () => {
   return { __esModule: true, default: introJsMock };
 });
 
-import { mount, shallowMount, Wrapper } from '@vue/test-utils';
+import { mount, shallowMount, VueWrapper } from '@vue/test-utils';
 import Vue from 'vue';
 
 import T from '../../lang';
@@ -38,7 +38,7 @@ describe('Signup.vue', () => {
   // Shared factory for mounting the component
   function createWrapper(
     propsData: Record<string, unknown> = {},
-  ): Wrapper<Vue> {
+  ): VueWrapper {
     return shallowMount(login_Signup, {
       props: {
         validateRecaptcha: false,
@@ -145,7 +145,7 @@ describe('Signup.vue', () => {
     it('Should show regular email when over-13 is checked', async () => {
       const wrapper = createWrapper({ useSignupFormWithBirthDate: true });
 
-      await wrapper.find('input[data-over-thirteen-checkbox]').setChecked(true);
+      await wrapper.find('input[data-over-thirteen-checkbox]').setValue(true);
       // Manually trigger the change handler since setChecked may not fire it
       (wrapper.vm as any).over13Checked = true;
       (wrapper.vm as any).updateDateRestriction();
@@ -432,11 +432,11 @@ describe('Signup.vue', () => {
     // For intro.js tests, we need mount (not shallowMount) with attachTo
     // so that document.querySelector can find real DOM elements with CSS
     // classes like .introjs-username, .introjs-email, etc.
-    let introWrapper: Wrapper<Vue> | null = null;
+    let introWrapper: VueWrapper | null = null;
 
     function createMountedWrapper(
       propsData: Record<string, unknown> = {},
-    ): Wrapper<Vue> {
+    ): VueWrapper {
       const container = document.createElement('div');
       document.body.appendChild(container);
       introWrapper = mount(login_Signup, {

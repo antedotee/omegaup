@@ -18,6 +18,12 @@ const testGroup: Group = {
 };
 store.commit('casesStore/addGroup', testGroup);
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface MultipleCasesInputVm {
+  options: { value: string; text: string }[];
+}
+
 describe('MultipleCasesInput.vue', () => {
   it('Should contain all 4 inputs', async () => {
     const wrapper = shallowMount(MultipleCasesInput, {
@@ -79,6 +85,8 @@ describe('MultipleCasesInput.vue', () => {
     });
 
     const formSelect = wrapper.findComponent(BFormSelect);
-    expect(formSelect.props()['options']).toBe(wrapper.vm.options);
+    expect(formSelect.props('options' as never)).toBe(
+      (wrapper.vm as unknown as MultipleCasesInputVm).options,
+    );
   });
 });

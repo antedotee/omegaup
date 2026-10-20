@@ -2,7 +2,8 @@ import { shallowMount } from '@vue/test-utils';
 import { types } from '../../api_types';
 import T from '../../lang';
 
-import user_SidebarMainInfo, { urlMapping } from './SidebarMainInfo.vue';
+import user_SidebarMainInfo from './SidebarMainInfo.vue';
+import { urlMapping } from './SidebarMainInfo_types';
 
 const profile: types.UserProfileInfo = {
   country: 'Mexico',

@@ -52,7 +52,7 @@ describe('SearchBar.vue', () => {
     expect(
       (checkboxOnlyQualitySeal.element as HTMLInputElement).checked,
     ).toBeFalsy();
-    await checkboxOnlyQualitySeal.setChecked();
+    await checkboxOnlyQualitySeal.setValue(true);
     expect(
       (checkboxOnlyQualitySeal.element as HTMLInputElement).checked,
     ).toBeTruthy();

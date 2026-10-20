@@ -6,6 +6,13 @@ import T from '../../lang';
 
 import common_Requests from './Requests.vue';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface RequestsVm {
+  modalStates: { [key: string]: boolean };
+  resolutionText: null | string;
+}
+
 describe('Requests.vue', () => {
   const data: types.IdentityRequest[] = [
     {
@@ -47,19 +54,19 @@ describe('Requests.vue', () => {
     const buttons = wrapper.findAll('button.text-danger');
     const feedbackModals = wrapper.findAllComponents(BModal);
 
-    expect('test_user_1' in wrapper.vm.modalStates).toBe(false);
-    await buttons.at(0).trigger('click');
-    expect(wrapper.vm.modalStates['test_user_1']).toBe(true);
+    expect('test_user_1' in (wrapper.vm as unknown as RequestsVm).modalStates).toBe(false);
+    await buttons[0].trigger('click');
+    expect((wrapper.vm as unknown as RequestsVm).modalStates['test_user_1']).toBe(true);
 
-    expect('test_user_2' in wrapper.vm.modalStates).toBe(false);
-    await buttons.at(1).trigger('click');
-    expect(wrapper.vm.modalStates['test_user_2']).toBe(true);
+    expect('test_user_2' in (wrapper.vm as unknown as RequestsVm).modalStates).toBe(false);
+    await buttons[1].trigger('click');
+    expect((wrapper.vm as unknown as RequestsVm).modalStates['test_user_2']).toBe(true);
 
-    wrapper.vm.resolutionText = 'Hello';
-    feedbackModals.at(0).vm.$emit('ok');
+    (wrapper.vm as unknown as RequestsVm).resolutionText = 'Hello';
+    feedbackModals[0].vm.$emit('ok');
 
-    wrapper.vm.resolutionText = 'There';
-    feedbackModals.at(1).vm.$emit('ok');
+    (wrapper.vm as unknown as RequestsVm).resolutionText = 'There';
+    feedbackModals[1].vm.$emit('ok');
 
     expect(wrapper.emitted('deny-request')).toBeDefined();
     expect(wrapper.emitted('deny-request')).toEqual([

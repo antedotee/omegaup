@@ -149,13 +149,12 @@
 import { Component, Prop, Vue, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
+import { DifficultyStats } from './ProblemSolvingProgress_types';
 
-export interface DifficultyStats {
-  easy: number;
-  medium: number;
-  hard: number;
-  unlabelled: number;
-}
+// DifficultyStats is declared in ./ProblemSolvingProgress_types and re-exported
+// here so existing SFC importers keep working while plain `.ts` modules import
+// it from the `.ts` module.
+export { DifficultyStats };
 
 @Component
 class ProblemSolvingProgress extends Vue {

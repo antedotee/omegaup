@@ -1,6 +1,13 @@
 import { mount } from '@vue/test-utils';
 import MultiUserAddArea from './MultiUserAddArea.vue';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface MultiUserAddAreaVm {
+  removeUser: (user: string) => void;
+  $nextTick(): Promise<void>;
+}
+
 describe('MultiUserAddArea.vue', () => {
   it('should display textarea when no users are added', async () => {
     const wrapper = mount(MultiUserAddArea, {
@@ -47,7 +54,7 @@ describe('MultiUserAddArea.vue', () => {
       },
     });
 
-    wrapper.vm.removeUser = jest.fn();
+    (wrapper.vm as unknown as MultiUserAddAreaVm).removeUser = jest.fn();
 
     // search for the list item containing the user
     const listItem = wrapper.find('.users-list__item');
@@ -55,9 +62,9 @@ describe('MultiUserAddArea.vue', () => {
 
     // click on the remove button
     await listItem.find('.tags-input-remove').trigger('click');
-    await wrapper.vm.$nextTick();
+    await (wrapper.vm as unknown as MultiUserAddAreaVm).$nextTick();
 
-    expect(wrapper.vm.removeUser).toHaveBeenCalled();
+    expect((wrapper.vm as unknown as MultiUserAddAreaVm).removeUser).toHaveBeenCalled();
   });
 
   it('should parse users when user paste them in the textarea', async () => {
@@ -74,7 +81,7 @@ describe('MultiUserAddArea.vue', () => {
       .setValue('test_user_1,test_user_2,test_user_3');
     // await for a second to let the textarea parse the users
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    await wrapper.vm.$nextTick();
+    await (wrapper.vm as unknown as MultiUserAddAreaVm).$nextTick();
 
     // Then: The users are parsed and added to the list
     expect(wrapper.findAll('.users-list__item').length).toBe(3);
@@ -88,12 +95,12 @@ describe('MultiUserAddArea.vue', () => {
     });
 
     await wrapper.find('.edit-icon').trigger('click');
-    await wrapper.vm.$nextTick();
+    await (wrapper.vm as unknown as MultiUserAddAreaVm).$nextTick();
 
     // TODO: Validate if this is the correct way to add users, otherwise replace it.
     await wrapper.find('textarea').setValue('test_user_2');
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    await wrapper.vm.$nextTick();
+    await (wrapper.vm as unknown as MultiUserAddAreaVm).$nextTick();
 
     expect(wrapper.emitted('update-users')).toBeTruthy();
   });

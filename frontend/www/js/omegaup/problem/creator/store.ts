@@ -4,7 +4,7 @@ import { StoreState } from './types';
 import { casesStore } from './modules/cases';
 import T from '../../lang';
 
-Vue.use(Vuex);
+Vue.use(Vuex as unknown as Parameters<typeof Vue.use>[0]);
 
 const state: StoreState = {
   problemName: T.problemCreatorNewProblem,

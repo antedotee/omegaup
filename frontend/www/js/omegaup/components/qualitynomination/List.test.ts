@@ -29,6 +29,12 @@ const nominations: types.NominationListItem[] = [1, 2, 3].map((x) => ({
   votes: [],
 }));
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface QualityNominationListVm {
+  orderedNominations: types.NominationListItem[];
+}
+
 describe('List.vue', () => {
   it('Should handle list of nominations', async () => {
     const wrapper = shallowMount(qualitynomination_List, {
@@ -143,7 +149,7 @@ describe('List.vue', () => {
         },
       });
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 1');
+      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 1');
     });
 
     it('Should sort by problem title in descending order', async () => {
@@ -164,7 +170,7 @@ describe('List.vue', () => {
         },
       });
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 1');
+      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 1');
 
       const sortControlByTitle = wrapper.findComponent({
         ref: 'sortControlByTitle',
@@ -176,7 +182,7 @@ describe('List.vue', () => {
 
       button.trigger('click');
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 3');
+      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 3');
     });
 
     it('Should sort by time', async () => {
@@ -197,8 +203,8 @@ describe('List.vue', () => {
         },
       });
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 1');
-      expect(wrapper.vm.orderedNominations[0].time.getTime()).toBe(
+      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 1');
+      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].time.getTime()).toBe(
         new Date('2021-02-01 00:00:00').getTime(),
       );
 
@@ -212,8 +218,8 @@ describe('List.vue', () => {
 
       button.trigger('click');
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 3');
-      expect(wrapper.vm.orderedNominations[0].time.getTime()).toBe(
+      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 3');
+      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].time.getTime()).toBe(
         new Date('2021-02-03 00:00:00').getTime(),
       );
     });

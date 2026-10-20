@@ -60,6 +60,6 @@ describe('FormCreate.vue', () => {
     expect(wrapper.emitted('validate-unused-alias')).toEqual([
       ['some-new-name', 'some-new-name', null],
     ]);
-    expect(wrapper.vm.$data.alias).toBe('some-new-name');
+    expect((wrapper.vm.$data as { alias: string }).alias).toBe('some-new-name');
   });
 });

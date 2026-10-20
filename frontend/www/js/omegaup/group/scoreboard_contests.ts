@@ -6,6 +6,14 @@ import * as ui from '../ui';
 import T from '../lang';
 import Vue, { type CreateElement } from 'vue';
 
+interface ScoreboardContestInstance {
+  contests: types.ScoreboardContest[];
+}
+
+interface ScoreboardContestsRef {
+  reset: () => void;
+}
+
 OmegaUp.on('ready', function () {
   const payload = types.payloadParsers.GroupScoreboardContestsPayload();
   const scoreboardContest = new Vue({
@@ -25,7 +33,7 @@ OmegaUp.on('ready', function () {
         },
         on: {
           'add-contest': (
-            source: group_ScoreboardContests,
+            source: ScoreboardContestsRef,
             selectedContest: string,
             onlyAc: boolean,
             weight: number,
@@ -76,7 +84,8 @@ OmegaUp.on('ready', function () {
       scoreboard_alias: scoreboardAlias,
     })
       .then((scoreboard) => {
-        scoreboardContest.contests = scoreboard.contests;
+        (scoreboardContest as unknown as ScoreboardContestInstance).contests =
+          scoreboard.contests;
       })
       .catch(ui.apiError);
   }

@@ -8,6 +8,12 @@ import { Multiselect } from 'vue-multiselect';
 
 import { types } from '../../api_types';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ContestFormVm {
+  currentScoreMode: string;
+}
+
 describe('Form.vue', () => {
   beforeAll(() => {
     const div = document.createElement('div');
@@ -147,14 +153,14 @@ describe('Form.vue', () => {
       },
     });
 
-    expect(wrapper.vm.currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('partial');
     await wrapper.find('[data-contest-icpc]').trigger('click');
-    expect(wrapper.vm.currentScoreMode).toBe('all_or_nothing');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('all_or_nothing');
     await wrapper.find('[data-contest-preioi]').trigger('click');
-    expect(wrapper.vm.currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('partial');
     await wrapper.find('[data-contest-omi]').trigger('click');
-    expect(wrapper.vm.currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('partial');
     await wrapper.find('[data-contest-conacup]').trigger('click');
-    expect(wrapper.vm.currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('partial');
   });
 });

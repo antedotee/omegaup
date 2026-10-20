@@ -24,6 +24,7 @@ import clarificationStore from './clarificationsStore';
 import {
   getScoreModeEnum,
   navigateToProblem,
+  NavigationTarget,
   NavigationType,
 } from './navigation';
 import { myRunsStore } from './runsStore';
@@ -117,7 +118,7 @@ OmegaUp.on('ready', async () => {
             navigateToProblem({
               type: NavigationType.ForContest,
               problem,
-              target: contestPractice,
+              target: contestPractice as unknown as NavigationTarget,
               problems: this.problems,
               contestAlias: payload.contest.alias,
               contestMode: getScoreModeEnum(payload.contest.score_mode),
@@ -142,7 +143,7 @@ OmegaUp.on('ready', async () => {
           'execute-run': ({
             target,
           }: {
-            target: Vue & { currentNextExecutionTimestamp: Date };
+            target: { currentNextExecutionTimestamp: Date };
           }) => {
             api.Run.execute()
               .then(time.remoteTimeAdapter)
@@ -161,7 +162,7 @@ OmegaUp.on('ready', async () => {
             code: string;
             language: string;
             problem: types.NavbarProblemsetProblem;
-            target: Vue & { currentNextSubmissionTimestamp: Date };
+            target: { currentNextSubmissionTimestamp: Date };
           }) => {
             api.Run.create({
               problem_alias: problem.alias,

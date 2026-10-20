@@ -159,7 +159,7 @@ describe('CollectionList.vue', () => {
     ).toBeGreaterThan(0);
 
     // Click the checkbox to toggle off (hide tags)
-    await toggleInput.setChecked(false);
+    await toggleInput.setValue(false);
     expect((toggleInput.element as HTMLInputElement).checked).toBe(false);
     expect(wrapper.findAll('tbody a.badge').length).toBe(0);
     // Check that header badges (tag classification indicators) are hidden
@@ -168,7 +168,7 @@ describe('CollectionList.vue', () => {
     expect(wrapper.findAll('thead .badge.custom-badge-voted').length).toBe(0);
 
     // Click the checkbox to toggle on (show tags)
-    await toggleInput.setChecked(true);
+    await toggleInput.setValue(true);
     expect((toggleInput.element as HTMLInputElement).checked).toBe(true);
     expect(wrapper.findAll('tbody a.badge').length).toBe(1);
     // Check that header badges (tag classification indicators) are visible again

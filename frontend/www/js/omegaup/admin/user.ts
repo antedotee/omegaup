@@ -6,6 +6,12 @@ import T from '../lang';
 import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 
+interface AdminUserInstance {
+  experiments: string[];
+  roles: string[];
+  verified: boolean;
+}
+
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.UserDetailsPayload();
 
@@ -82,7 +88,7 @@ OmegaUp.on('ready', () => {
           'verify-user': (): void => {
             api.User.verifyEmail({ usernameOrEmail: payload.username })
               .then(() => {
-                adminUser.verified = true;
+                (adminUser as unknown as AdminUserInstance).verified = true;
               })
               .catch(ui.apiError);
           },

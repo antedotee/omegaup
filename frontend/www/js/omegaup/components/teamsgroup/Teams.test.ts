@@ -3,8 +3,17 @@ import { mount, shallowMount } from '@vue/test-utils';
 import { dao, types } from '../../api_types';
 import T from '../../lang';
 
-import teamsgroup_Teams, { AvailableForms } from './Teams.vue';
+import teamsgroup_Teams from './Teams.vue';
+import { AvailableForms } from './Teams_types';
 import identity_Edit from '../identity/Edit.vue';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface TeamsVm {
+  identity: null | types.Identity;
+  formToShow: AvailableForms;
+  username: null | string;
+}
 
 describe('Teams.vue', () => {
   beforeEach(() => {
@@ -73,18 +82,18 @@ describe('Teams.vue', () => {
       .find('button[data-edit-identity="omegaUp:user"]')
       .trigger('click');
 
-    expect(wrapper.vm.identity).toEqual({
+    expect((wrapper.vm as unknown as TeamsVm).identity).toEqual({
       username: 'omegaUp:user',
       name: 'user',
     });
-    expect(wrapper.vm.formToShow).toBe(AvailableForms.Edit);
-    expect(wrapper.vm.username).toBe('omegaUp:user');
+    expect((wrapper.vm as unknown as TeamsVm).formToShow).toBe(AvailableForms.Edit);
+    expect((wrapper.vm as unknown as TeamsVm).username).toBe('omegaUp:user');
 
     await wrapper.find('button[type="reset"]').trigger('click');
 
-    expect(wrapper.vm.identity).toBe(null);
-    expect(wrapper.vm.formToShow).toBe(AvailableForms.None);
-    expect(wrapper.vm.username).toBe(null);
+    expect((wrapper.vm as unknown as TeamsVm).identity).toBe(null);
+    expect((wrapper.vm as unknown as TeamsVm).formToShow).toBe(AvailableForms.None);
+    expect((wrapper.vm as unknown as TeamsVm).username).toBe(null);
 
     await wrapper
       .find('button[data-edit-identity="omegaUp:user"]')

@@ -69,8 +69,8 @@ describe('UserHeatmap.vue', () => {
 
     const options = wrapper.findAll('option');
     expect(options.length).toBe(2);
-    expect(options.at(0).attributes('value')).toBe('2024');
-    expect(options.at(1).attributes('value')).toBe('2023');
+    expect(options[0].attributes('value')).toBe('2024');
+    expect(options[1].attributes('value')).toBe('2023');
   });
 
   it('should initialize selectedYear to the first available year', async () => {

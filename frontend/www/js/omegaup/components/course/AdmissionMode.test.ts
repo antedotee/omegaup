@@ -5,7 +5,7 @@ import Clipboard from 'v-clipboard';
 import T from '../../lang';
 
 import course_AdmissionMode from './AdmissionMode.vue';
-import { AdmissionMode } from '../common/Publish.vue';
+import { AdmissionMode } from '../common/Publish_types';
 
 describe('AdmissionMode.vue', () => {
   Vue.use(Clipboard);

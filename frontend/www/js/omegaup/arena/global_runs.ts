@@ -1,6 +1,7 @@
 import Vue, { type CreateElement } from 'vue';
 
-import arena_Runs, { PopupDisplayed } from '../components/arena/Runs.vue';
+import arena_Runs from '../components/arena/Runs.vue';
+import { PopupDisplayed } from '../components/arena/Runs_types';
 import * as api from '../api';
 import T from '../lang';
 import { OmegaUp } from '../omegaup';
@@ -18,6 +19,12 @@ import { types } from '../api_types';
 import { getOptionsFromLocation, getProblemAndRunDetails } from './location';
 
 const rowCount = 100;
+
+interface GlobalRunsData {
+  loading: boolean;
+  endOfResults: boolean;
+  currentOffset: number;
+}
 
 OmegaUp.on('ready', async () => {
   const { guid, popupDisplayed } = getOptionsFromLocation(window.location.hash);
@@ -221,14 +228,14 @@ OmegaUp.on('ready', async () => {
       })
       .catch(ui.apiError)
       .finally(() => {
-        vueInstance.$data.loading = false;
+        (vueInstance.$data as GlobalRunsData).loading = false;
       });
   }
 
   refreshRuns();
   setInterval(() => {
-    vueInstance.$data.currentOffset = 0;
-    vueInstance.$data.endOfResults = false;
+    (vueInstance.$data as GlobalRunsData).currentOffset = 0;
+    (vueInstance.$data as GlobalRunsData).endOfResults = false;
     refreshRuns();
   }, 5 * 60 * 1000);
 });

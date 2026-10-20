@@ -65,7 +65,7 @@ for (const [exportName, exported] of Object.entries(BootstrapVueNext)) {
 config.global.components = {
   ...(config.global.components || {}),
   ...bvnComponents,
-};
+} as typeof config.global.components;
 
 // Vue 2 `@vue/test-utils` rendered a stubbed child's default slot; v2 does not
 // by default. Restoring that behavior keeps `shallowMount` assertions that look
@@ -73,11 +73,13 @@ config.global.components = {
 // working as they did under bootstrap-vue 2.
 config.global.renderStubDefaultSlot = true;
 
-Vue.directive('Sortable', {
-  inserted: (el: HTMLElement, binding) => {
+// @vue/compat maps the Vue 2 `inserted` directive hook at runtime; the Vue 3
+// Directive type does not list it, so cast the definition.
+Vue.directive('Sortable', ({
+  inserted: (el: HTMLElement, binding: { value?: Sortable.Options }) => {
     new Sortable(el, binding.value || {});
   },
-});
+} as unknown) as Parameters<typeof Vue.directive>[1]);
 
 // Intercept all API calls. Only let `API.Session.currentSession()` work and
 // fail everything else.

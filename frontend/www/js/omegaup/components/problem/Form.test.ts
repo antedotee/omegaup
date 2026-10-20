@@ -6,7 +6,7 @@ import * as ui from '../../ui';
 import JSZip from 'jszip';
 
 import Form from './Form.vue';
-import { CreationMethods } from './Form.vue';
+import { CreationMethods } from './Form_types';
 import CreatorWrapper from './CreatorWrapper.vue';
 
 const props: types.ProblemFormPayload = {

@@ -335,14 +335,11 @@ import tags_SolvedChart from './TagsSolvedChart.vue';
 import user_Heatmap from './UserHeatmap.vue';
 import user_Username from './Username.vue';
 
-export enum ViewProfileTabs {
-  Badges = 'badges',
-  Problems = 'problems',
-  Contests = 'contests',
-  CreatedContent = 'created-content',
-  Data = 'data',
-  Charts = 'charts',
-}
+import { ViewProfileTabs } from './ViewProfile_types';
+// ViewProfileTabs is declared in ./ViewProfile_types and re-exported here so
+// existing SFC importers keep working while plain `.ts` entry points import it
+// from the `.ts` module.
+export { ViewProfileTabs };
 
 function getInitialSelectedTab(
   profile: types.UserProfileInfo,

@@ -113,12 +113,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 library.add(faEdit, faLock, faTrashAlt, faUsers);
 
-export enum AvailableForms {
-  None,
-  Edit,
-  ChangePassword,
-  AddMembers,
-}
+import { AvailableForms } from './Teams_types';
+// Declared in ./Teams_types and re-exported here so existing SFC importers keep
+// working while plain `.ts` modules import it from the `.ts` file.
+export { AvailableForms };
 
 @Component({
   components: {

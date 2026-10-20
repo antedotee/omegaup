@@ -6,6 +6,13 @@ import * as ui from '../../ui';
 
 import teamsgroup_Members from './Members.vue';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface MembersVm {
+  username: null | string;
+  password: null | string;
+}
+
 describe('Members.vue', () => {
   beforeEach(() => {
     const div = document.createElement('div');
@@ -122,8 +129,8 @@ describe('Members.vue', () => {
       .find('.input-group input[type="password"]')
       .setValue('new_pass');
 
-    expect(wrapper.vm.username).toBe('user_1');
-    expect(wrapper.vm.password).toBe('new_pass');
+    expect((wrapper.vm as unknown as MembersVm).username).toBe('user_1');
+    expect((wrapper.vm as unknown as MembersVm).password).toBe('new_pass');
 
     await wrapper
       .find('button[data-save-new-password-identity="user_1"]')

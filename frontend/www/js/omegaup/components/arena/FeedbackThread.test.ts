@@ -2,7 +2,7 @@ import { mount, shallowMount } from '@vue/test-utils';
 import T from '../../lang';
 
 import arena_FeedbackThread from './FeedbackThread.vue';
-import { FeedbackStatus, ArenaCourseFeedback } from './Feedback.vue';
+import { FeedbackStatus, ArenaCourseFeedback } from './Feedback_types';
 
 const feedbackThread: ArenaCourseFeedback = {
   lineNumber: 2,

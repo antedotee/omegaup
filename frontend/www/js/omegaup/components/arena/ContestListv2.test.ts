@@ -4,12 +4,20 @@ import T from '../../lang';
 import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
 
-import arena_ContestList, {
+import arena_ContestList from './ContestListv2.vue';
+import {
   ContestOrder,
   ContestTab,
   ContestFilter,
-} from './ContestListv2.vue';
+} from './ContestListv2_types';
 import each from 'jest-each';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ContestListv2Vm {
+  currentFilter: ContestFilter;
+  currentOrder: ContestOrder;
+}
 
 // `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
 // the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
@@ -293,13 +301,13 @@ describe('ContestListv2.vue', () => {
       ref: 'dropdownFilterBy',
     });
     // Current filter "By All" is turned on by default
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.All);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(ContestFilter.All);
     await dropdownFilterBy.find('[data-filter-by-signed-up]').trigger('click');
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.SignedUp);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(ContestFilter.SignedUp);
     await dropdownFilterBy
       .find('[data-filter-by-recommended]')
       .trigger('click');
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.OnlyRecommended);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(ContestFilter.OnlyRecommended);
   });
 
   const dropdownMapping = [
@@ -390,18 +398,20 @@ describe('ContestListv2.vue', () => {
 
         const dropdown = wrapper.findComponent({ ref: 'dropdownOrderBy' });
         expect(dropdown.exists()).toBeTruthy();
-        expect(wrapper.vm.currentOrder).toBe(ContestOrder.None);
+        expect((wrapper.vm as unknown as ContestListv2Vm).currentOrder).toBe(ContestOrder.None);
 
         // Find and click the dropdown item
         await dropdown.find(`[data-order-by-${name}]`).trigger('click');
         await wrapper.vm.$nextTick();
-        expect(wrapper.vm.currentOrder).toBe(field);
+        expect((wrapper.vm as unknown as ContestListv2Vm).currentOrder).toBe(field);
 
         const emittedEvents = wrapper.emitted('fetch-page');
 
         // Instead of checking for specific page numbers, check that the event was emitted
         // with the correct sorting order and that the page was reset to 1
-        const lastEmmitedEvent = emittedEvents?.slice(-1)[0];
+        const lastEmmitedEvent = emittedEvents?.slice(-1)[0] as [
+          { params: { sort_order: ContestOrder; page: number } },
+        ];
         expect(lastEmmitedEvent[0].params.sort_order).toBe(field);
         expect(lastEmmitedEvent[0].params.page).toBe(1);
       });

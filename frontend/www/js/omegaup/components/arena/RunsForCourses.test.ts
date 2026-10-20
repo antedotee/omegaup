@@ -6,7 +6,18 @@ import { types } from '../../api_types';
 import T from '../../lang';
 
 import arena_RunsForCourses from './RunsForCourses.vue';
-import { DisqualificationType } from './Runs.vue';
+import { DisqualificationType } from './Runs_types';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface RunsForCoursesVm {
+  totalPages: number;
+  currentPage: number;
+  filterExecution: string;
+  filterOutput: string;
+  filterUsername: null | types.ListItem;
+  filterProblem: null | types.ListItem;
+}
 
 // `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
 // the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
@@ -181,8 +192,7 @@ describe('RunsForCourses.vue', () => {
       });
       await wrapper
         .find(`select[data-select-${filter.filter}]`)
-        .find(`option[value="${filter.value}"]`)
-        .setSelected();
+        .setValue(filter.value);
 
       expect(wrapper.emitted('filter-changed')).toEqual([[filter]]);
     });
@@ -232,8 +242,8 @@ describe('RunsForCourses.vue', () => {
     // BootstrapVueNext's BPagination no longer exposes bootstrap-vue 2's
     // `$data.localNumberOfPages`/`$data.currentPage`. Assert on the component's
     // own page math that drives the paginator instead.
-    expect(wrapper.vm.totalPages).toBe(5);
-    expect(wrapper.vm.currentPage).toBe(1);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).totalPages).toBe(5);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).currentPage).toBe(1);
   });
 
   it('Should handle paginator in admin view', async () => {
@@ -252,8 +262,8 @@ describe('RunsForCourses.vue', () => {
 
     expect(paginationComponent.exists()).toBe(true);
 
-    expect(wrapper.vm.totalPages).toBe(10);
-    expect(wrapper.vm.currentPage).toBe(1);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).totalPages).toBe(10);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).currentPage).toBe(1);
 
     const pageSlotContent = wrapper.find('[data-page]').text();
 
@@ -274,8 +284,8 @@ describe('RunsForCourses.vue', () => {
     // With no runs BootstrapVueNext's BPagination renders no page button, so the
     // `#page` slot (and its `[data-page]` marker) is never emitted. The intent —
     // "page 1 of 1 total" — is the component's own page math.
-    expect(wrapper.vm.totalPages).toBe(1);
-    expect(wrapper.vm.currentPage).toBe(1);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).totalPages).toBe(1);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).currentPage).toBe(1);
   });
 
   it('Should handle execution filter', async () => {
@@ -295,14 +305,14 @@ describe('RunsForCourses.vue', () => {
     expect(paginationComponent.exists()).toBe(true);
 
     // @vue/test-utils 2 removed `setData`; assign the reactive field directly.
-    wrapper.vm.filterExecution = 'EXECUTION_INTERRUPTED';
+    (wrapper.vm as unknown as RunsForCoursesVm).filterExecution = 'EXECUTION_INTERRUPTED';
     await wrapper.vm.$nextTick();
     expect(wrapper.emitted('filter-changed')).toEqual([
       [{ filter: 'execution', value: 'EXECUTION_INTERRUPTED' }],
     ]);
 
-    expect(wrapper.vm.totalPages).toBe(3);
-    expect(wrapper.vm.currentPage).toBe(1);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).totalPages).toBe(3);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).currentPage).toBe(1);
 
     const pageSlotContent = wrapper.find('[data-page]').text();
 
@@ -325,14 +335,14 @@ describe('RunsForCourses.vue', () => {
 
     expect(paginationComponent.exists()).toBe(true);
 
-    wrapper.vm.filterOutput = 'OUTPUT_CORRECT';
+    (wrapper.vm as unknown as RunsForCoursesVm).filterOutput = 'OUTPUT_CORRECT';
     await wrapper.vm.$nextTick();
     expect(wrapper.emitted('filter-changed')).toEqual([
       [{ filter: 'output', value: 'OUTPUT_CORRECT' }],
     ]);
 
-    expect(wrapper.vm.totalPages).toBe(1);
-    expect(wrapper.vm.currentPage).toBe(1);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).totalPages).toBe(1);
+    expect((wrapper.vm as unknown as RunsForCoursesVm).currentPage).toBe(1);
 
     const pageSlotContent = wrapper.find('[data-page]').text();
 
@@ -349,7 +359,7 @@ describe('RunsForCourses.vue', () => {
       },
     });
 
-    wrapper.vm.filterUsername = {
+    (wrapper.vm as unknown as RunsForCoursesVm).filterUsername = {
       key: 'other_username',
       value: 'other username',
     };
@@ -369,7 +379,7 @@ describe('RunsForCourses.vue', () => {
       },
     });
 
-    wrapper.vm.filterProblem = {
+    (wrapper.vm as unknown as RunsForCoursesVm).filterProblem = {
       key: 'other_problem',
       value: 'other problem',
     };
@@ -473,10 +483,10 @@ describe('RunsForCourses.vue', () => {
     });
 
     await wrapper.setProps({ username: 'username' });
-    expect(wrapper.vm.filterUsername?.key).toBe('username');
+    expect((wrapper.vm as unknown as RunsForCoursesVm).filterUsername?.key).toBe('username');
 
     await wrapper.setProps({ username: null });
-    expect(wrapper.vm.filterUsername).toBeFalsy();
+    expect((wrapper.vm as unknown as RunsForCoursesVm).filterUsername).toBeFalsy();
   });
 
   const usernamesToBeFiltered = ['username', 'other_username'];
@@ -504,7 +514,7 @@ describe('RunsForCourses.vue', () => {
 
       await wrapper
         .findAll(`td[data-username="${username}"]`)
-        .at(1)
+        [1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -521,7 +531,7 @@ describe('RunsForCourses.vue', () => {
 
       await wrapper
         .findAll(`td[data-username="${username}"]`)
-        .at(1)
+        [1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -529,7 +539,7 @@ describe('RunsForCourses.vue', () => {
 
       // Now all runs should appear
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
-      expect(wrapper.vm.filterUsername).toBeFalsy();
+      expect((wrapper.vm as unknown as RunsForCoursesVm).filterUsername).toBeFalsy();
     });
   });
 });

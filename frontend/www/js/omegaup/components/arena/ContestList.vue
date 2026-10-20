@@ -483,35 +483,17 @@ import ContestSkeleton from './ContestSkeleton.vue';
 import infiniteScroll from '../../directives/infiniteScroll';
 library.add(fas);
 
-export enum ContestTab {
-  Current = 'current',
-  Future = 'future',
-  Past = 'past',
-}
-
-export enum ContestOrder {
-  None = 'none',
-  Title = 'title',
-  Ends = 'ends',
-  Duration = 'duration',
-  Organizer = 'organizer',
-  Contestants = 'contestants',
-  SignedUp = 'signedup',
-}
-
-export enum ContestFilter {
-  SignedUp = 'signedup',
-  OnlyRecommended = 'recommended',
-  All = 'all',
-}
-
-export interface UrlParams {
-  page: number;
-  tab_name: ContestTab;
-  query: string;
-  sort_order: ContestOrder;
-  filter: ContestFilter;
-}
+import {
+  ContestTab,
+  ContestOrder,
+  ContestFilter,
+  UrlParams,
+} from './ContestList_types';
+// These are declared in ./ContestList_types and re-exported here so existing
+// SFC importers keep working while plain `.ts` entry points import them from
+// the `.ts` module.
+export { ContestTab, ContestOrder, ContestFilter };
+export type { UrlParams };
 
 @Component({
   components: {
