@@ -1,7 +1,7 @@
 import { OmegaUp } from '../omegaup';
 import * as time from '../time';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import arena_ContestList, {
   ContestTab,
   ContestOrder,
@@ -101,7 +101,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       query: payload.query,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-contestlist', {
         props: {
           contests: contestStore.state.contests,

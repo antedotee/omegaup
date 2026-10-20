@@ -5,7 +5,7 @@ import { OmegaUp } from '../omegaup';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 
 OmegaUp.on('ready', () => {
@@ -32,7 +32,7 @@ OmegaUp.on('ready', () => {
         isContestRecommended: false,
       };
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-admin-support', {
         props: {
           username: this.username,

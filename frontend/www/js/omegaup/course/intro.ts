@@ -2,7 +2,7 @@ import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import course_Intro from '../components/course/Intro.vue';
 
 OmegaUp.on('ready', () => {
@@ -16,7 +16,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       userRegistrationRequested: payload.userRegistrationRequested,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-intro', {
         props: {
           course: payload.course,

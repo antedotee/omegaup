@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import qualitynomination_List from '../components/qualitynomination/List.vue';
 import { OmegaUp } from '../omegaup';
 import * as api from '../api';
@@ -26,7 +26,7 @@ OmegaUp.on('ready', function () {
       searchResultUsers: searchResultEmpty,
       searchResultProblems: searchResultEmpty,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-qualitynomination-list', {
         props: {
           pages: this.pages,

@@ -1,6 +1,6 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import * as ui from '../ui';
 
@@ -14,7 +14,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-course-clarifications': course_Clarifications,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-clarifications', {
         props: {
           isAdmin: payload.is_admin || payload.is_teaching_assistant,

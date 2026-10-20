@@ -1,7 +1,7 @@
 import omegaup_Footer from '../components/common/Footer.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CommonPayload();
@@ -15,7 +15,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-common-footer': omegaup_Footer,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-common-footer', {
         props: {
           isLoggedIn: (payload && payload.isLoggedIn) || false,

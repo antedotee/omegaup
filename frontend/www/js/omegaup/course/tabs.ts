@@ -1,6 +1,6 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import course_Tabs, { Tab } from '../components/course/Tabs.vue';
 
 OmegaUp.on('ready', () => {
@@ -19,7 +19,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-course-tabs': course_Tabs,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-tabs', {
         props: {
           courses: payload.courses,

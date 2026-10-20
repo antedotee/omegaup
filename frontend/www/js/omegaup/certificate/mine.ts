@@ -2,7 +2,7 @@ import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import certificate_Mine from '../components/certificate/Mine.vue';
 
 OmegaUp.on('ready', () => {
@@ -12,7 +12,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-certificate-mine': certificate_Mine,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-certificate-mine', {
         props: {
           certificates: payload.certificates,

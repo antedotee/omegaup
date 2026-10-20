@@ -3,7 +3,7 @@ import { OmegaUp } from '../omegaup';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', function () {
   new Vue({
@@ -11,7 +11,7 @@ OmegaUp.on('ready', function () {
     components: {
       'omegaup-group-new': group_New,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-group-new', {
         props: {
           T: T,

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import grader_EphemeralIDE from '../components/arena/EphemeralGrader.vue';
 
 import * as time from '../time';
@@ -23,7 +23,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       nextExecutionTimestamp: null as null | Date,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement(grader_EphemeralIDE, {
         props: {
           acceptedLanguages,

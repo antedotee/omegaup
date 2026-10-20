@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import problem_Details, {
   PopupDisplayed,
 } from '../components/problem/Details.vue';
@@ -93,7 +93,7 @@ OmegaUp.on('ready', async () => {
       isBookmarked: payload.isBookmarked,
       isLoadingBookmark: false,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-problem-details', {
         props: {
           activeTab: this.activeTab,

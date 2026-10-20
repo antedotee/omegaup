@@ -2,7 +2,7 @@ import contest_ScoreboardMerge from '../components/contest/ScoreboardMerge.vue';
 import { OmegaUp } from '../omegaup';
 import * as ui from '../ui';
 import * as api from '../api';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 
 OmegaUp.on('ready', () => {
@@ -18,7 +18,7 @@ OmegaUp.on('ready', () => {
       showPenalty: false,
       aliases: [] as string[],
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-contest-scoreboardmerge', {
         props: {
           availableContests: this.contests,

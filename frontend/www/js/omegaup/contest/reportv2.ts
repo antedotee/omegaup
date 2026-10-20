@@ -1,6 +1,6 @@
 import contest_Report from '../components/contest/Reportv2.vue';
 import { OmegaUp } from '../omegaup';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 
 OmegaUp.on('ready', () => {
@@ -11,7 +11,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-contest-report': contest_Report,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-contest-report', {
         props: {
           contestReport: payload.contestReport,

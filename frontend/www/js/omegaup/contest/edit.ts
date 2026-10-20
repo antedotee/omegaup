@@ -1,6 +1,6 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import T from '../lang';
 import contest_Edit from '../components/contest/Edit.vue';
 import SearchTypes from '../components/contest/AddProblem.vue';
@@ -179,7 +179,7 @@ OmegaUp.on('ready', () => {
         hiddenElement.click();
       },
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-contest-edit', {
         props: {
           admins: this.admins,

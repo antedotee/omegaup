@@ -3,7 +3,7 @@ import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import schoolOfTheMonth_List from '../components/schoolofthemonth/List.vue';
 
 OmegaUp.on('ready', () => {
@@ -17,7 +17,7 @@ OmegaUp.on('ready', () => {
       schoolIsSelected:
         payload.isMentor && payload.options && payload.options.schoolIsSelected,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('school-of-the-month-list', {
         props: {
           schoolsOfPreviousMonth: payload.schoolsOfPreviousMonth,

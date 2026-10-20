@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import { types } from '../api_types';
 import authors_Rank from '../components/user/AuthorsRank.vue';
@@ -15,7 +15,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       searchResultUsers: [] as types.ListItem[],
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-author-rank', {
         props: {
           page: payload.page,

@@ -3,7 +3,7 @@ import * as time from '../time';
 import { dao, types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import arena_Contest from '../components/arena/Contest.vue';
 import { getOptionsFromLocation, getProblemAndRunDetails } from './location';
 import problemsStore from './problemStore';
@@ -190,7 +190,7 @@ OmegaUp.on('ready', async () => {
       isBlocked,
       blockedMessage,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-contest', {
         props: {
           contest: payload.contest,

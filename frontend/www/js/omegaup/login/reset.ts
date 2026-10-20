@@ -1,7 +1,7 @@
 import { OmegaUp } from '../omegaup';
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import login_PasswordReset from '../components/login/PasswordReset.vue';
 
 OmegaUp.on('ready', () => {
@@ -14,7 +14,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-login-password-reset': login_PasswordReset,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-login-password-reset', {
         props: {
           email: payload.email,

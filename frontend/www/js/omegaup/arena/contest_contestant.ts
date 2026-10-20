@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import { types } from '../api_types';
 import arena_Contest from '../components/arena/Contest.vue';
@@ -180,7 +180,7 @@ OmegaUp.on('ready', async () => {
     beforeDestroy() {
       window.removeEventListener('popstate', syncFromHash);
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-contest', {
         props: {
           lockdown: commonPayload.omegaUpLockDown,

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import common_GlobalNotifications from '../components/common/GlobalNotifications.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
@@ -15,7 +15,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-global-notifications': common_GlobalNotifications,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-global-notifications');
     },
   });

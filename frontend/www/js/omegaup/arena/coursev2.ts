@@ -13,7 +13,7 @@ import {
 import * as api from '../api';
 import * as time from '../time';
 
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import arena_Course, { Tabs } from '../components/arena/Coursev2.vue';
 
 OmegaUp.on('ready', async () => {
@@ -33,7 +33,7 @@ OmegaUp.on('ready', async () => {
         currentRunDetails: null as types.RunDetails | null,
       };
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-course', {
         props: {
           allRuns: runsStore.state.runs,

@@ -4,7 +4,7 @@ import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.StudentProgressPayload();
@@ -39,7 +39,7 @@ OmegaUp.on('ready', () => {
           .catch(ui.apiError);
       },
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-viewstudent', {
         props: {
           assignments: payload.course.assignments,

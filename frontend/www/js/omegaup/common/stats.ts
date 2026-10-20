@@ -1,5 +1,5 @@
 import common_Stats from '../components/common/Stats.vue';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { OmegaUp } from '../omegaup';
 import T from '../lang';
 import * as api from '../api';
@@ -186,7 +186,7 @@ OmegaUp.on('ready', () => {
         },
       },
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-common-stats', {
         props: {
           stats: this.stats,

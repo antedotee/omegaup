@@ -3,7 +3,7 @@ import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import * as ui from '../ui';
 import * as api from '../api';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.SubmissionsListPayload();
@@ -21,7 +21,7 @@ OmegaUp.on('ready', () => {
       loading: false, // Flag to prevent multiple simultaneous requests
       endOfResults: false, // Flag to indicate if all results have been loaded
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-submissions-list', {
         props: {
           includeUser: payload.includeUser,

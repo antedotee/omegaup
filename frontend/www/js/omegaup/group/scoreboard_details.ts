@@ -1,7 +1,7 @@
 import group_ScoreboardDetails from '../components/group/ScoreboardDetails.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', function () {
   const payload = types.payloadParsers.GroupScoreboardDetailsPayload();
@@ -10,7 +10,7 @@ OmegaUp.on('ready', function () {
     components: {
       'omegaup-group-scoreboard-details': group_ScoreboardDetails,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-group-scoreboard-details', {
         props: {
           groupAlias: payload.groupAlias,

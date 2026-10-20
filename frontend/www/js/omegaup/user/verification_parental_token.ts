@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import user_VerificationParentalToken from '../components/user/VerificationParentalToken.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
@@ -11,7 +11,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-verification-parental-token': user_VerificationParentalToken,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-verification-parental-token', {
         props: {
           hasParentalVerificationToken: payload.hasParentalVerificationToken,

@@ -1,5 +1,5 @@
 import * as Highcharts from 'highcharts/highstock';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import { types } from '../api_types';
 import T from '../lang';
@@ -343,7 +343,7 @@ OmegaUp.on('ready', () => {
           });
       },
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-user-profile', {
         props: {
           data: payload.extraProfileDetails,

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import problem_Mine from '../components/problem/Mine.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
@@ -18,7 +18,7 @@ OmegaUp.on('ready', () => {
       problems: [] as types.ProblemListItem[],
       pagerItems: [] as types.PageItem[],
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-problem-mine', {
         props: {
           problems: this.problems,

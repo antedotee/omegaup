@@ -3,7 +3,7 @@ import { OmegaUp } from '../omegaup';
 import * as api from '../api';
 import { types } from '../api_types';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import T from '../lang';
 import clarificationsStore from '../arena/clarificationsStore';
 import mainStore from '../mainStore';
@@ -35,7 +35,7 @@ OmegaUp.on('ready', () => {
       graderQueueLength: -1,
       errorMessage: null as string | null,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-common-navbar', {
         props: {
           omegaUpLockDown: payload.omegaUpLockDown,

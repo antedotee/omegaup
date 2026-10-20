@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 import arena_ContestList, {
   ContestFilter,
@@ -143,7 +143,7 @@ OmegaUp.on('ready', () => {
       window.removeEventListener('popstate', onPopState);
       window.removeEventListener('hashchange', onHashChange);
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-contestlist', {
         props: {
           contests: contestStore.state.contests,

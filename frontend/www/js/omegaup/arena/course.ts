@@ -5,7 +5,7 @@ import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
 
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import arena_Course from '../components/arena/Course.vue';
 import { getOptionsFromLocation, getProblemAndRunDetails } from './location';
 import {
@@ -118,7 +118,7 @@ OmegaUp.on('ready', async () => {
       feedbackMap,
       feedbackThreadMap,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-course', {
         props: {
           clarifications: clarificationStore.state.clarifications,

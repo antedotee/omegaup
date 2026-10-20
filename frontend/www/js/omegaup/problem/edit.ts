@@ -1,7 +1,7 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import problem_Edit from '../components/problem/Edit.vue';
 import * as ui from '../ui';
 import * as api from '../api';
@@ -51,7 +51,7 @@ OmegaUp.on('ready', () => {
           .catch(ui.apiError);
       },
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-problem-edit', {
         props: {
           data: payload,

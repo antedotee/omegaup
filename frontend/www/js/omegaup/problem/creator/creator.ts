@@ -1,6 +1,6 @@
 import problem_creator from '../../components/problem/creator/Creator.vue';
 import { OmegaUp } from '../../omegaup';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue';
 import store from './store';
 import {
@@ -22,7 +22,7 @@ OmegaUp.on('ready', () => {
     components: {
       'creator-main': problem_creator,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('creator-main', {
         on: {
           'show-update-success-message': showUpdateSuccessMessage,

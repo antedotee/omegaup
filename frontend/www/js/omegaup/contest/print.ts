@@ -1,6 +1,6 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import omegaup_ContestPrint from '../components/contest/Print.vue';
 
 OmegaUp.on('ready', () => {
@@ -11,7 +11,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-contest-print': omegaup_ContestPrint,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-contest-print', {
         props: {
           problems: payload.problems,

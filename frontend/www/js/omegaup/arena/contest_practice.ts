@@ -3,7 +3,7 @@ import * as time from '../time';
 import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import T from '../lang';
 import arena_ContestPractice from '../components/arena/ContestPractice.vue';
 import {
@@ -86,7 +86,7 @@ OmegaUp.on('ready', async () => {
       shouldShowFirstAssociatedIdentityRunWarning:
         payload.shouldShowFirstAssociatedIdentityRunWarning,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-contest-practice', {
         props: {
           contest: payload.contest,

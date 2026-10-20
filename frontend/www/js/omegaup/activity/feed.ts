@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import activity_Feed from '../components/activity/Feed.vue';
@@ -11,7 +11,7 @@ OmegaUp.on('ready', function () {
     components: {
       'omegaup-activity-feed': activity_Feed,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-activity-feed', {
         props: {
           page: payload.page,

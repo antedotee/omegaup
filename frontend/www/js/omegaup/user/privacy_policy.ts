@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import user_PrivacyPolicy from '../components/user/PrivacyPolicy.vue';
 import { OmegaUp } from '../omegaup';
 import T from '../lang';
@@ -19,7 +19,7 @@ OmegaUp.on('ready', () => {
         saved: payload.has_accepted,
       };
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-privacy-policy', {
         props: {
           policyMarkdown: payload.policy_markdown,

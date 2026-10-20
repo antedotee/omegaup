@@ -5,7 +5,7 @@ import socketStore from './socketStore';
 import * as api from '../api';
 import * as ui from '../ui';
 import * as time from '../time';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 import { createChart, onRankingChanged, onRankingEvents } from './ranking';
 import rankingStore from './rankingStore';
@@ -63,7 +63,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       problems: payload.problems,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-scoreboard', {
         props: {
           problems: this.problems,

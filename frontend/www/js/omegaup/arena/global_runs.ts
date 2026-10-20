@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 import arena_Runs, { PopupDisplayed } from '../components/arena/Runs.vue';
 import * as api from '../api';
@@ -45,7 +45,7 @@ OmegaUp.on('ready', async () => {
       endOfResults: false,
       currentOffset: 0,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-runs', {
         props: {
           contestAlias: 'admin',

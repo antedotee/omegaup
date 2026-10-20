@@ -1,5 +1,5 @@
 import user_EmailEdit from '../components/user/EmailEdit.vue';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { OmegaUp } from '../omegaup';
 import T from '../lang';
 import * as api from '../api';
@@ -14,7 +14,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-user-email-edit': user_EmailEdit,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-user-email-edit', {
         props: {
           email: payload.email,

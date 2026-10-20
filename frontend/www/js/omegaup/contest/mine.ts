@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import T from '../lang';
@@ -19,7 +19,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       contests: payload.contests,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-contest-mine', {
         props: {
           contests: this.contests,

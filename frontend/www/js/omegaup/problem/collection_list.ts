@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import problem_CollectionList from '../components/problem/CollectionList.vue';
 import { types } from '../api_types';
 import { omegaup, OmegaUp } from '../omegaup';
@@ -57,7 +57,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-problem-collection-list': problem_CollectionList,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-problem-collection-list', {
         props: {
           data: payload,

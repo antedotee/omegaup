@@ -1,7 +1,7 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import problem_New from '../components/problem/Form.vue';
 import { CreationMethods } from '../components/problem/Form.vue';
 import * as ui from '../ui';
@@ -38,7 +38,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       errors: payload.parameter ? [payload.parameter] : [],
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-problem-new', {
         props: {
           data: payload,

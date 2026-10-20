@@ -6,7 +6,7 @@ import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as CSV from '@/third_party/js/csv.js/csv.js';
 import {
   downloadCsvFile,
@@ -62,7 +62,7 @@ OmegaUp.on('ready', () => {
           .catch(ui.apiError);
       },
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-teams-group-edit', {
         props: {
           alias: this.teamGroup.alias,

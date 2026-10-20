@@ -3,7 +3,7 @@ import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.SchoolRankPayload();
@@ -17,7 +17,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       searchResultSchools: [] as types.SchoolListItem[],
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-schools-rank', {
         props: {
           page: payload.page,

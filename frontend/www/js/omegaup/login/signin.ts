@@ -3,7 +3,7 @@ import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import login_Signin, { AvailableTabs } from '../components/login/Signin.vue';
 import { EventBus } from '../components/common/Navbar.vue';
 import VueRecaptcha from 'vue-recaptcha';
@@ -86,7 +86,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       initialActiveTab,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-login-signin', {
         props: {
           validateRecaptcha: payload.validateRecaptcha,

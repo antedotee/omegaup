@@ -1,7 +1,7 @@
 import course_SubmissionsList from '../components/activity/SubmissionsList.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CourseSubmissionsListPayload();
@@ -10,7 +10,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-course-submissions-list': course_SubmissionsList,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-submissions-list', {
         props: {
           solvedProblems: payload.solvedProblems,

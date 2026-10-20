@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import school_Profile from '../components/schools/Profile.vue';
 import { types } from '../api_types';
 import { OmegaUp } from '../omegaup';
@@ -22,7 +22,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-school-profile': school_Profile,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-school-profile', {
         props: {
           codersOfTheMonth: payload.coders_of_the_month.map(

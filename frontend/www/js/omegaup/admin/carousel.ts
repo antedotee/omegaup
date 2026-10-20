@@ -4,7 +4,7 @@ import * as api from '../api';
 import * as ui from '../ui';
 import * as time from '../time';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -22,7 +22,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       carouselItems: payload.carouselItems,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-admin-carousel', {
         props: {
           carouselItems: this.carouselItems,

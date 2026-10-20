@@ -1,6 +1,6 @@
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import arena_Virtual from '../components/arena/Virtual.vue';
 import { types } from '../api_types';
 import { OmegaUp } from '../omegaup';
@@ -11,7 +11,7 @@ OmegaUp.on('ready', () => {
   new Vue({
     el: '#main-container',
     components: { 'omegaup-arena-virtual': arena_Virtual },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-virtual', {
         props: {
           title: payload.contest.title,

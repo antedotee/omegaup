@@ -3,7 +3,7 @@ import { messages, types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import course_Edit from '../components/course/Edit.vue';
 import { AdmissionMode } from '../components/common/Publish.vue';
 import Sortable from 'sortablejs';
@@ -108,7 +108,7 @@ OmegaUp.on('ready', () => {
           .catch(ui.apiError);
       },
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-edit', {
         props: {
           data: this.data,
