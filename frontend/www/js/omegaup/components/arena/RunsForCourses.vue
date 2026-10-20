@@ -1054,21 +1054,22 @@ class RunsForCourses extends Vue {
     this.onEmitFilterChanged({ filter: 'output', value: newValue });
   }
 
-  @Emit('filter-changed')
+  // Not an `@Emit` method: it is also called internally from the filter
+  // watchers for its side effects (keeping the `filters` chip list in sync).
+  // Under vue-facing-decorator an `@Emit`-decorated method called internally is
+  // fragile, so the event is emitted explicitly here instead.
   onEmitFilterChanged({
     filter,
     value,
   }: {
     filter: string;
     value: null | string;
-  }): { filter: string; value: null | string } {
+  }): void {
     this.filterOffset = 0;
     if (!value) {
       this.filters = this.filters.filter((item) => item.name !== filter);
-      // Return the payload so vue-facing-decorator's `@Emit` forwards it as the
-      // event argument (this decorator emits the return value, not the method's
-      // first argument).
-      return { filter, value };
+      this.$emit('filter-changed', { filter, value });
+      return;
     }
     if (filter === 'contest') {
       // This field does not appear as filter
@@ -1080,7 +1081,7 @@ class RunsForCourses extends Vue {
     } else {
       currentFilter.value = value;
     }
-    return { filter, value };
+    this.$emit('filter-changed', { filter, value });
   }
 
   @Watch('createdGuid')

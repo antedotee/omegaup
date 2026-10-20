@@ -480,7 +480,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import ContestCard from './ContestCardv2.vue';
 import ContestSkeleton from './ContestSkeleton.vue';
-import infiniteScroll from 'vue-infinite-scroll';
+import infiniteScroll from '../../directives/infiniteScroll';
 library.add(fas);
 
 export enum ContestTab {

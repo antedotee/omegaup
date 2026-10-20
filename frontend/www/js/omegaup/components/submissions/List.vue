@@ -143,7 +143,7 @@ import * as time from '../../time';
 import UserName from '../user/Username.vue';
 import common_Typeahead from '../common/Typeahead.vue';
 import common_Paginator from '../common/Paginator.vue';
-import infiniteScroll from 'vue-infinite-scroll';
+import infiniteScroll from '../../directives/infiniteScroll';
 
 @Component({
   components: {

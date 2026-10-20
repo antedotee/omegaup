@@ -452,7 +452,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch, Emit, toNative } from 'vue-facing-decorator';
-import infiniteScroll from 'vue-infinite-scroll';
+import infiniteScroll from '../../directives/infiniteScroll';
 import T from '../../lang';
 import { types } from '../../api_types';
 import * as time from '../../time';
@@ -856,11 +856,15 @@ class Runs extends Vue {
   }: {
     filter: string;
     value: null | string;
-  }): void {
+  }): { filter: string; value: null | string } {
     this.filterOffset = 0;
     if (!value) {
       this.filters = this.filters.filter((item) => item.name !== filter);
-      return;
+      // Returning the payload so @Emit forwards it as the event argument.
+      // vue-facing-decorator's @Emit emits the method's return value (and emits
+      // no argument when the method returns undefined), unlike the previous
+      // decorator which forwarded the method's call arguments.
+      return { filter, value };
     }
     if (filter === 'contest') {
       // This field does not appear as filter
@@ -872,6 +876,7 @@ class Runs extends Vue {
     } else {
       currentFilter.value = value;
     }
+    return { filter, value };
   }
 
   onRemoveFilter(filter: string): void {
