@@ -25,7 +25,7 @@ class DatePicker extends Vue {
   created() {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.stringValue = time.formatDateLocal(this.value);
+    this.stringValue = this.value ? time.formatDateLocal(this.value) : '';
   }
   T = T;
 

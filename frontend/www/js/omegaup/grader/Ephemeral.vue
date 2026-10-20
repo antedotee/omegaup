@@ -173,10 +173,10 @@
 <script lang="ts">
 import * as monaco from 'monaco-editor';
 (window as any).monaco = monaco;
-import { Component, Prop, Ref, Watch, toNative } from 'vue-facing-decorator';
+import { Component, Prop, Ref, Watch, Vue, toNative } from 'vue-facing-decorator';
 import VueGlobal from 'vue';
 import { omegaup } from '../omegaup';
-import Vue, { CreateElement } from 'vue';
+import type { CreateElement } from 'vue';
 import Clipboard from 'v-clipboard';
 import omegaup_Countdown from '../components/Countdown.vue';
 import type { Component as VueComponent } from 'vue'; // this is the component type for Vue components
@@ -848,7 +848,7 @@ class Ephemeral extends Vue {
             props[k] = componentState[k];
           }
 
-          const vue = new Vue({
+          const vue = new VueGlobal({
             el: container.getElement()[0],
             components: {
               [componentName]: component,
