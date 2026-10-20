@@ -46,15 +46,11 @@ describe('PreferencesEdit.vue', () => {
     });
 
     await wrapper
-      .find('select[data-locale]')
-      .find('option[value="en"]')
-      .setSelected();
+      .find('select[data-locale]').setValue('en');
     await wrapper
-      .find('select[data-preferred-language]')
-      .find('option[value="rb"]')
-      .setSelected();
-    await wrapper.find('input[data-is-private]').setChecked();
-    await wrapper.find('input[data-hide-problem-tags]').setChecked();
+      .find('select[data-preferred-language]').setValue('rb');
+    await wrapper.find('input[data-is-private]').setValue(true);
+    await wrapper.find('input[data-hide-problem-tags]').setValue(true);
 
     await wrapper.find('button[type="submit"]').trigger('submit');
     expect(wrapper.emitted('update-user-preferences')).toBeDefined();
@@ -82,9 +78,7 @@ describe('PreferencesEdit.vue', () => {
       props: { profile },
     });
     await wrapper
-      .find('select[data-learning-teaching-objective]')
-      .find('option[value="none"]')
-      .setSelected();
+      .find('select[data-learning-teaching-objective]').setValue('none');
     expect(
       wrapper.find('select[data-scholar-competitive-objective]').element,
     ).toBeDisabled();
@@ -122,8 +116,7 @@ describe('PreferencesEdit.vue', () => {
       });
       await wrapper
         .find('select[data-learning-teaching-objective]')
-        .find(`option[value="${objectiveLearningTeaching}"]`)
-        .setSelected();
+        .setValue(objectiveLearningTeaching);
       expect(wrapper.text()).toContain(objectiveScholarCompetitiveQuestion);
     },
   );
@@ -242,12 +235,10 @@ describe('PreferencesEdit.vue', () => {
       });
       await wrapper
         .find('select[data-learning-teaching-objective]')
-        .find(`option[value="${objectiveLearningTeaching}"]`)
-        .setSelected();
+        .setValue(objectiveLearningTeaching);
       await wrapper
         .find('select[data-scholar-competitive-objective]')
-        .find(`option[value="${objectiveScholarCompetitive}"]`)
-        .setSelected();
+        .setValue(objectiveScholarCompetitive);
       await wrapper.find('button[type="submit"]').trigger('submit');
       expect(wrapper.emitted('update-user-preferences')).toBeDefined();
       expect(wrapper.emitted('update-user-preferences')).toEqual([
@@ -275,9 +266,7 @@ describe('PreferencesEdit.vue', () => {
       props: { profile },
     });
     await wrapper
-      .find('select[data-learning-teaching-objective]')
-      .find('option[value="none"]')
-      .setSelected();
+      .find('select[data-learning-teaching-objective]').setValue('none');
     await wrapper.find('button[type="submit"]').trigger('submit');
     expect(wrapper.emitted('update-user-preferences')).toBeDefined();
     expect(wrapper.emitted('update-user-preferences')).toEqual([
