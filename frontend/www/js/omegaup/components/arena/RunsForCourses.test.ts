@@ -8,6 +8,18 @@ import T from '../../lang';
 import arena_RunsForCourses from './RunsForCourses.vue';
 import { DisqualificationType } from './Runs.vue';
 
+// `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
+// the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
+// RENDER_FUNCTION disabled, as required for native SFC templates) cannot patch —
+// it throws `InvalidCharacterError: "0" ...`. Stub the icon so the fully-mounted
+// component can render. These suites assert on behavior, not icon glyphs.
+const faStubs = {
+  stubs: {
+    FontAwesomeIcon: true,
+    'font-awesome-icon': true,
+  },
+};
+
 describe('RunsForCourses.vue', () => {
   it('Should handle empty runs', () => {
     const wrapper = shallowMount(arena_RunsForCourses, {
@@ -137,7 +149,7 @@ describe('RunsForCourses.vue', () => {
       },
     });
     expect(
-      wrapper.findAll('acronym[data-run-guid]').wrappers.map((e) => e.text()),
+      wrapper.findAll('acronym[data-run-guid]').map((e) => e.text()),
     ).toEqual([
       '124500',
       '124000',
@@ -182,10 +194,11 @@ describe('RunsForCourses.vue', () => {
         runs,
         itemsPerPage: 100,
       },
+      global: faStubs,
     });
 
     expect(
-      wrapper.findAll('td[data-run-percentage]').wrappers.map((e) =>
+      wrapper.findAll('td[data-run-percentage]').map((e) =>
         e
           .classes()
           .filter((c) => c !== 'numeric')
@@ -211,12 +224,16 @@ describe('RunsForCourses.vue', () => {
         runs,
         itemsPerPage: 2,
       },
+      global: faStubs,
     });
 
     const paginationComponent = wrapper.findComponent({ name: 'BPagination' });
     expect(paginationComponent.exists()).toBe(true);
-    expect(paginationComponent.vm.$data.localNumberOfPages).toBe(5);
-    expect(paginationComponent.vm.$data.currentPage).toBe(1);
+    // BootstrapVueNext's BPagination no longer exposes bootstrap-vue 2's
+    // `$data.localNumberOfPages`/`$data.currentPage`. Assert on the component's
+    // own page math that drives the paginator instead.
+    expect(wrapper.vm.totalPages).toBe(5);
+    expect(wrapper.vm.currentPage).toBe(1);
   });
 
   it('Should handle paginator in admin view', async () => {
@@ -228,14 +245,15 @@ describe('RunsForCourses.vue', () => {
         showUser: true,
         itemsPerPage: 1,
       },
+      global: faStubs,
     });
 
     const paginationComponent = wrapper.findComponent({ name: 'BPagination' });
 
     expect(paginationComponent.exists()).toBe(true);
 
-    expect(paginationComponent.vm.$data.localNumberOfPages).toBe(10);
-    expect(paginationComponent.vm.$data.currentPage).toBe(1);
+    expect(wrapper.vm.totalPages).toBe(10);
+    expect(wrapper.vm.currentPage).toBe(1);
 
     const pageSlotContent = wrapper.find('[data-page]').text();
 
@@ -250,10 +268,14 @@ describe('RunsForCourses.vue', () => {
         showUser: true,
         itemsPerPage: 1,
       },
+      global: faStubs,
     });
 
-    const pageSlotContent = wrapper.find('[data-page]').text();
-    expect(pageSlotContent).toContain('1 - 1');
+    // With no runs BootstrapVueNext's BPagination renders no page button, so the
+    // `#page` slot (and its `[data-page]` marker) is never emitted. The intent —
+    // "page 1 of 1 total" — is the component's own page math.
+    expect(wrapper.vm.totalPages).toBe(1);
+    expect(wrapper.vm.currentPage).toBe(1);
   });
 
   it('Should handle execution filter', async () => {
@@ -265,19 +287,22 @@ describe('RunsForCourses.vue', () => {
         showUser: true,
         itemsPerPage: 1,
       },
+      global: faStubs,
     });
 
     const paginationComponent = wrapper.findComponent({ name: 'BPagination' });
 
     expect(paginationComponent.exists()).toBe(true);
 
-    await wrapper.setData({ filterExecution: 'EXECUTION_INTERRUPTED' });
+    // @vue/test-utils 2 removed `setData`; assign the reactive field directly.
+    wrapper.vm.filterExecution = 'EXECUTION_INTERRUPTED';
+    await wrapper.vm.$nextTick();
     expect(wrapper.emitted('filter-changed')).toEqual([
       [{ filter: 'execution', value: 'EXECUTION_INTERRUPTED' }],
     ]);
 
-    expect(paginationComponent.vm.$data.localNumberOfPages).toBe(3);
-    expect(paginationComponent.vm.$data.currentPage).toBe(1);
+    expect(wrapper.vm.totalPages).toBe(3);
+    expect(wrapper.vm.currentPage).toBe(1);
 
     const pageSlotContent = wrapper.find('[data-page]').text();
 
@@ -293,19 +318,21 @@ describe('RunsForCourses.vue', () => {
         showUser: true,
         itemsPerPage: 1,
       },
+      global: faStubs,
     });
 
     const paginationComponent = wrapper.findComponent({ name: 'BPagination' });
 
     expect(paginationComponent.exists()).toBe(true);
 
-    await wrapper.setData({ filterOutput: 'OUTPUT_CORRECT' });
+    wrapper.vm.filterOutput = 'OUTPUT_CORRECT';
+    await wrapper.vm.$nextTick();
     expect(wrapper.emitted('filter-changed')).toEqual([
       [{ filter: 'output', value: 'OUTPUT_CORRECT' }],
     ]);
 
-    expect(paginationComponent.vm.$data.localNumberOfPages).toBe(1);
-    expect(paginationComponent.vm.$data.currentPage).toBe(1);
+    expect(wrapper.vm.totalPages).toBe(1);
+    expect(wrapper.vm.currentPage).toBe(1);
 
     const pageSlotContent = wrapper.find('[data-page]').text();
 
@@ -322,9 +349,11 @@ describe('RunsForCourses.vue', () => {
       },
     });
 
-    await wrapper.setData({
-      filterUsername: { key: 'other_username', value: 'other username' },
-    });
+    wrapper.vm.filterUsername = {
+      key: 'other_username',
+      value: 'other username',
+    };
+    await wrapper.vm.$nextTick();
     expect(wrapper.emitted('filter-changed')).toEqual([
       [{ filter: 'username', value: 'other_username' }],
     ]);
@@ -340,9 +369,11 @@ describe('RunsForCourses.vue', () => {
       },
     });
 
-    await wrapper.setData({
-      filterProblem: { key: 'other_problem', value: 'other problem' },
-    });
+    wrapper.vm.filterProblem = {
+      key: 'other_problem',
+      value: 'other problem',
+    };
+    await wrapper.vm.$nextTick();
     expect(wrapper.emitted('filter-changed')).toEqual([
       [{ filter: 'problem', value: 'other_problem' }],
     ]);
@@ -466,6 +497,7 @@ describe('RunsForCourses.vue', () => {
           username: null,
           itemsPerPage: 100,
         },
+      global: faStubs,
       });
 
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);

@@ -33,20 +33,14 @@ describe('NavbarProblems.vue', () => {
         inAssignment: true,
         problems: [],
       },
-      global: {
-        stubs: {
-          'b-breadcrumb': {
-            template: '<div v-bind="$attrs"><slot /></div>',
-          },
-          'b-breadcrumb-item': {
-            template: '<span><slot /></span>',
-          },
-        },
-      },
     });
 
+    // BootstrapVueNext renders breadcrumb separators as CSS `::before` content
+    // (not DOM text), so `wrapper.text()` no longer has characters between the
+    // crumbs the way bootstrap-vue 2 did. Assert the crumbs still render in order
+    // without requiring literal separator text between them.
     expect(wrapper.text()).toMatch(
-      new RegExp(`${T.navCourses}.+?Curso de prueba.+?Tarea de prueba`, 'ms'),
+      new RegExp(`${T.navCourses}.*?Curso de prueba.*?Tarea de prueba`, 'ms'),
     );
   });
 

@@ -11,6 +11,18 @@ import arena_ContestList, {
 } from './ContestListv2.vue';
 import each from 'jest-each';
 
+// `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
+// the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
+// RENDER_FUNCTION disabled, as required for native SFC templates) cannot patch —
+// it throws `InvalidCharacterError: "0" ...`. Stub the icon so the component
+// under test can mount. These suites assert on behavior, not icon glyphs.
+const global = {
+  stubs: {
+    FontAwesomeIcon: true,
+    'font-awesome-icon': true,
+  },
+};
+
 describe('ContestListv2.vue', () => {
   const daySeconds = 24 * 60 * 60 * 1000;
   const today = new Date();
@@ -194,6 +206,7 @@ describe('ContestListv2.vue', () => {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     const currentContestTab = wrapper.findComponent({
@@ -210,6 +223,7 @@ describe('ContestListv2.vue', () => {
         contests,
         tab: ContestTab.Future,
       },
+      global,
     });
 
     const futureContestTab = wrapper.findComponent({
@@ -226,6 +240,7 @@ describe('ContestListv2.vue', () => {
         contests,
         tab: ContestTab.Past,
       },
+      global,
     });
 
     const pastContestTab = wrapper.findComponent({
@@ -242,6 +257,7 @@ describe('ContestListv2.vue', () => {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     // Virtual/Practice actions are inside the contest dropdown. For the Current tab
@@ -256,6 +272,7 @@ describe('ContestListv2.vue', () => {
         contests,
         tab: ContestTab.Future,
       },
+      global,
     });
 
     // Virtual/Practice actions are inside the contest dropdown. For the Future tab
@@ -270,6 +287,7 @@ describe('ContestListv2.vue', () => {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
     const dropdownFilterBy = wrapper.findComponent({
       ref: 'dropdownFilterBy',
@@ -300,6 +318,7 @@ describe('ContestListv2.vue', () => {
         props: {
           contests,
         },
+      global,
       });
 
       const dropdownOrderBy = wrapper.findComponent({
@@ -366,6 +385,7 @@ describe('ContestListv2.vue', () => {
             contests,
             tab,
           },
+      global,
         });
 
         const dropdown = wrapper.findComponent({ ref: 'dropdownOrderBy' });
@@ -394,6 +414,7 @@ describe('ContestListv2.vue', () => {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     const emittedEvents = wrapper.emitted('fetch-page') as Array<
@@ -414,6 +435,7 @@ describe('ContestListv2.vue', () => {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     // Get emitted events from initial mount

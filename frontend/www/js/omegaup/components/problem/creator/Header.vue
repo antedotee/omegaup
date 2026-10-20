@@ -16,7 +16,7 @@
         size="sm"
         @click="uploadZipModal = !uploadZipModal"
       >
-        <BIconUpload class="mr-1" />
+        <i class="bi bi-upload mr-1" />
         <span class="d-none d-md-inline">
           {{ T.problemCreatorLoadProblem }}</span
         >
@@ -28,8 +28,7 @@
         ok-variant="success"
         :cancel-title="T.caseModalBack"
         cancel-variant="danger"
-        static
-        lazy
+        teleport-disabled
         @ok="retrieveStore"
       >
         <div class="mb-4">{{ T.problemCreatorUploadZipMessage }}</div>
@@ -48,7 +47,7 @@
         size="sm"
         @click="generateProblem()"
       >
-        <BIconDownload class="mr-1" />
+        <i class="bi bi-download mr-1" />
         <span class="d-none d-md-inline">
           {{ T.problemCreatorGenerateProblem }}</span
         >
@@ -59,7 +58,7 @@
         size="sm"
         @click="newProblemConfirmationModal = !newProblemConfirmationModal"
       >
-        <BIconPlus class="mr-1" />
+        <i class="bi bi-plus mr-1" />
         <span class="d-none d-md-inline">
           {{ T.problemCreatorNewProblem }}</span
         >
@@ -72,8 +71,7 @@
         ok-variant="danger"
         :cancel-title="T.problemCreatorCreateNewProblemBack"
         cancel-variant="success"
-        static
-        lazy
+        teleport-disabled
         @ok="createNewProblem"
       >
         <div class="mb-4">{{ T.problemCreatorCreateNewProblemWarning }}</div>
@@ -85,12 +83,9 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import JSZip from 'jszip';
-import { namespace } from 'vuex-class';
 import T from '../../../lang';
 import * as ui from '../../../ui';
 import { Group, CaseGroupID } from '@/js/omegaup/problem/creator/types';
-
-const casesStore = namespace('casesStore');
 
 @Component
 class Header extends Vue {
@@ -103,9 +98,18 @@ class Header extends Vue {
 
   nameInternal: string = T.problemCreatorEmpty;
 
-  @casesStore.State('groups') groups!: Group[];
-  @casesStore.Getter('getStringifiedLinesFromCaseGroupID')
-  getStringifiedLinesFromCaseGroupID!: (caseGroupID: CaseGroupID) => string;
+  // The vuex-class namespaced decorators do not bind under vue-facing-decorator,
+  // so the namespaced store state and getters are read directly.
+  get groups(): Group[] {
+    return this.$store.state.casesStore.groups;
+  }
+  get getStringifiedLinesFromCaseGroupID(): (
+    caseGroupID: CaseGroupID,
+  ) => string {
+    return this.$store.getters[
+      'casesStore/getStringifiedLinesFromCaseGroupID'
+    ];
+  }
 
   get name(): string {
     return this.nameInternal;

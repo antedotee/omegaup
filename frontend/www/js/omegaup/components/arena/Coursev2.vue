@@ -2,7 +2,7 @@
   <b-container fluid class="p-5">
     <div>
       <a class="mb-2" :href="`/course/${course.alias}/`">
-        <b-icon-chevron-left></b-icon-chevron-left>
+        <i class="bi bi-chevron-left"></i>
         {{ T.arenaCourseAllContent }}
       </a>
       <h2 class="mb-0">{{ course.name }}</h2>
@@ -58,7 +58,7 @@
               :href="`/course/${encodeURIComponent(
                 course.alias,
               )}/arena/${encodeURIComponent(previousAssignment.alias)}/`"
-              ><b-icon-arrow-left-circle-fill></b-icon-arrow-left-circle-fill>
+              ><i class="bi bi-arrow-left-circle-fill"></i>
               {{ previousAssignment.name }}
             </b-button>
             <b-button
@@ -69,7 +69,7 @@
                 course.alias,
               )}/arena/${encodeURIComponent(nextAssignment.alias)}/`"
               >{{ nextAssignment.name }}
-              <b-icon-arrow-right-circle-fill></b-icon-arrow-right-circle-fill>
+              <i class="bi bi-arrow-right-circle-fill"></i>
             </b-button>
           </div>
         </b-card-header>
@@ -119,7 +119,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -127,15 +126,8 @@ import omegaup_Markdown from '../Markdown.vue';
 import arena_Scoreboard from './Scoreboard.vue';
 import problem_Details from '../problem/Detailsv2.vue';
 
-import {
-  BIconChevronLeft,
-  BIconArrowLeftCircleFill,
-  BIconArrowRightCircleFill,
-  BootstrapVue,
-} from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-VueGlobal.use(BootstrapVue);
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export enum Tabs {
   Summary = 'summary',
@@ -144,9 +136,6 @@ export enum Tabs {
 
 @Component({
   components: {
-    BIconChevronLeft,
-    BIconArrowLeftCircleFill,
-    BIconArrowRightCircleFill,
     'omegaup-markdown': omegaup_Markdown,
     'omegaup-arena-scoreboard': arena_Scoreboard,
     'omegaup-problem-details': problem_Details,

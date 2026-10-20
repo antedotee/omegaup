@@ -81,7 +81,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
 
-import { BBreadcrumb, BBreadcrumbItem } from 'bootstrap-vue';
+import { BBreadcrumb, BBreadcrumbItem } from 'bootstrap-vue-next';
 @Component({
   components: {
     'font-awesome-icon': FontAwesomeIcon,

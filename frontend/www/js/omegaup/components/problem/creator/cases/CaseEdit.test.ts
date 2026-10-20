@@ -1,7 +1,7 @@
 import { shallowMount, mount } from '@vue/test-utils';
+import { BButton } from 'bootstrap-vue-next';
 
 import CaseEdit from './CaseEdit.vue';
-import BootstrapVue, { IconsPlugin, BButton } from 'bootstrap-vue';
 import store from '@/js/omegaup/problem/creator/store';
 import Vue from 'vue';
 import { NIL as UUID_NIL } from 'uuid';
@@ -12,10 +12,6 @@ import {
 
 import T from '../../../../lang';
 import { MatrixDistinctType } from '@/js/omegaup/problem/creator/types';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('CaseEdit.vue', () => {
   const newUngroupedCasegroup = generateGroup({
     name: 'New Ungrouped Case Group',
@@ -73,12 +69,12 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.text()).toContain(newUngroupedCasegroup.name);
 
     expect(
-      wrapper.find('biconpencilfill-stub').element.parentElement?.textContent,
+      wrapper.find('i.bi-pencil-fill').element.parentElement?.textContent,
     ).toContain(T.problemCreatorEditCase);
     expect(
-      wrapper.find('bicontrashfill-stub').element.parentElement?.textContent,
+      wrapper.find('i.bi-trash-fill').element.parentElement?.textContent,
     ).toContain(T.problemCreatorDeleteCase);
-    expect(wrapper.find('b-dropdown-stub').exists()).toBe(true);
+    expect(wrapper.find('[data-menu-dropdown]').exists()).toBe(true);
   });
 
   it('Should show a grouped case', async () => {
@@ -100,12 +96,12 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.text()).toContain(newGroup.name);
 
     expect(
-      wrapper.find('biconpencilfill-stub').element.parentElement?.textContent,
+      wrapper.find('i.bi-pencil-fill').element.parentElement?.textContent,
     ).toContain(T.problemCreatorEditCase);
     expect(
-      wrapper.find('bicontrashfill-stub').element.parentElement?.textContent,
+      wrapper.find('i.bi-trash-fill').element.parentElement?.textContent,
     ).toContain(T.problemCreatorDeleteCase);
-    expect(wrapper.find('b-dropdown-stub').exists()).toBe(true);
+    expect(wrapper.find('[data-menu-dropdown]').exists()).toBe(true);
   });
 
   it('Should delete a case', async () => {
@@ -161,7 +157,9 @@ describe('CaseEdit.vue', () => {
     await Vue.nextTick();
 
     expect(wrapper.find('table').exists()).toBeTruthy();
-    const formInputs = wrapper.findAll('input');
+    // Scope to the line table; the (eagerly rendered) edit-case modal also
+    // contains inputs that would otherwise shift these positional lookups.
+    const formInputs = wrapper.find('table').findAll('input');
 
     formInputs.at(0).setValue('testLabel');
     formInputs.at(1).setValue('testValue');
@@ -178,7 +176,7 @@ describe('CaseEdit.vue', () => {
     // - Matrix
     const dropdownItemCount = 4;
 
-    const dropdowns = wrapper.findAll('a.dropdown-item');
+    const dropdowns = wrapper.findAll('button.dropdown-item');
     expect(dropdowns.length).toBe(dropdownItemCount);
 
     await dropdowns.at(1).trigger('click');
@@ -193,7 +191,7 @@ describe('CaseEdit.vue', () => {
     wrapper.vm.deleteLine(wrapper.vm.getLinesFromSelectedCase[0].lineID);
     await Vue.nextTick();
 
-    const formInputsUpdated = wrapper.findAll('input');
+    const formInputsUpdated = wrapper.find('table').findAll('input');
 
     // The input element should be replaced by textarea element
     expect(formInputsUpdated.length).toBe(0);
@@ -494,12 +492,12 @@ describe('CaseEdit.vue', () => {
     wrapper.vm.addNewLine();
     await Vue.nextTick();
 
-    const dropdowns = wrapper.findAll('a.dropdown-item');
+    const dropdowns = wrapper.findAll('button.dropdown-item');
 
     await dropdowns.at(2).trigger('click');
     expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('array');
 
-    const editSVG = wrapper.find('svg.bi-pencil-square');
+    const editSVG = wrapper.find('i.bi-pencil-square');
     expect(editSVG.exists()).toBeTruthy();
 
     const editIcon = wrapper.find(`button[data-line-edit-button]`);
@@ -538,7 +536,9 @@ describe('CaseEdit.vue', () => {
         .element as HTMLInputElement).value,
     ).toBe('10 10 10 10 10');
 
-    const modalFooter = wrapper.find('footer.modal-footer');
+    // Scope to the array modal's own footer; other modals are now rendered in
+    // place too, so an unscoped lookup could match the wrong modal.
+    const modalFooter = modalBody.find('div.modal-footer');
 
     // There should be two footer buttons: Save and Cancel.
     const footerButtonsCount = 2;
@@ -571,13 +571,13 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.text()).toContain(newCase.name);
     expect(wrapper.text()).toContain(newGroup.name);
 
-    const dropdowns = wrapper.findAll('a.dropdown-item');
+    const dropdowns = wrapper.findAll('button.dropdown-item');
     expect(dropdowns.length).toBe(4);
 
     await dropdowns.at(3).trigger('click');
     expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('matrix');
 
-    const editSVG = wrapper.find('svg.bi-pencil-square');
+    const editSVG = wrapper.find('i.bi-pencil-square');
     expect(editSVG.exists()).toBeTruthy();
 
     const editIcon = wrapper.find(`button[data-line-edit-button]`);
@@ -608,7 +608,7 @@ describe('CaseEdit.vue', () => {
         .element as HTMLInputElement).value,
     ).toBe('20 20 20\n20 20 20\n20 20 20');
 
-    const modalFooter = wrapper.find('footer.modal-footer');
+    const modalFooter = modalBody.find('div.modal-footer');
 
     const footerButtons = modalFooter.findAll('button');
     expect(footerButtons.length).toBe(2);
@@ -662,7 +662,15 @@ describe('CaseEdit.vue', () => {
           caseID,
         });
         await Vue.nextTick();
-        const dropdowns = wrapper.findAll('a.dropdown-item');
+
+        // Start from a single, clean line. The group/case fixtures are shared by
+        // reference across the suite, so clear any lines leaked by earlier tests
+        // before adding the one this test exercises.
+        store.dispatch('casesStore/deleteLinesForSelectedCase');
+        wrapper.vm.addNewLine();
+        await Vue.nextTick();
+
+        const dropdowns = wrapper.findAll('button.dropdown-item');
         expect(dropdowns.length).toBe(4);
 
         await dropdowns.at(3).trigger('click');
@@ -681,7 +689,7 @@ describe('CaseEdit.vue', () => {
         const mockGenerateMatrix = jest.spyOn(wrapper.vm, 'getMatrixContent');
 
         await modalBody
-          .find(`a[data-matrix-modal-dropdown="${matrixDistinctType}"]`)
+          .find(`button[data-matrix-modal-dropdown="${matrixDistinctType}"]`)
           .trigger('click');
         await modalButton.trigger('click');
         expect(mockGenerateMatrix).toHaveBeenCalledWith(
@@ -753,7 +761,7 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.vm.getLinesFromSelectedCase.length).toBe(2);
 
     const dropdownsMultiline = wrapper.findAll(
-      `a[data-array-modal-dropdown-kind]`,
+      `button[data-array-modal-dropdown-kind]`,
     );
 
     // There are two dropdown items for multiline, one for each line.
@@ -766,8 +774,10 @@ describe('CaseEdit.vue', () => {
 
     await filteredDropdowns.at(1).trigger('click');
 
-    const formInputs = wrapper.findAll('input');
-    const formTextArea = wrapper.find('textarea');
+    // Scope to the line table; the eagerly rendered edit-case modal also
+    // contains inputs that would otherwise shift these positional lookups.
+    const formInputs = wrapper.find('table').findAll('input');
+    const formTextArea = wrapper.find('table').findAll('textarea').at(0);
 
     await formInputs.at(0).setValue('testLabel');
     await formInputs.at(1).setValue('ome g a');

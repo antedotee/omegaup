@@ -1,7 +1,7 @@
 <template>
-  <b-container fluid>
-    <b-tabs content-class="mt-3" align="center">
-      <b-tab :title="T.wordsProblem" active>
+  <BContainer fluid>
+    <BTabs content-class="mt-3" align="center">
+      <BTab :title="T.wordsProblem" active>
         <omegaup-problem-settings-summary
           :problem="problem"
           :show-edit-link="user.admin"
@@ -96,8 +96,8 @@
             </template>
           </omegaup-arena-runs-v2>
         </template>
-      </b-tab>
-      <b-tab v-if="user.admin" :title="T.wordsRuns" data-runs-tab>
+      </BTab>
+      <BTab v-if="user.admin" :title="T.wordsRuns" data-runs-tab>
         <omegaup-arena-runs
           :runs="allRuns"
           :show-all-runs="true"
@@ -116,15 +116,15 @@
             <div></div>
           </template>
         </omegaup-arena-runs>
-      </b-tab>
-      <b-tab :title="T.wordsClarifications">a</b-tab>
-    </b-tabs>
-  </b-container>
+      </BTab>
+      <BTab :title="T.wordsClarifications">a</BTab>
+    </BTabs>
+  </BContainer>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
+import { BContainer, BTabs, BTab } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -139,10 +139,7 @@ import omegaup_problemMarkdown from './ProblemMarkdown.vue';
 import omegaup_Overlay from '../Overlay.vue';
 import user_Username from '../user/Username.vue';
 
-import { BootstrapVue } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-VueGlobal.use(BootstrapVue);
 
 export interface Tab {
   name: string;
@@ -160,6 +157,9 @@ export enum PopupDisplayed {
 
 @Component({
   components: {
+    BContainer,
+    BTabs,
+    BTab,
     'omegaup-arena-ephemeral-grader': arena_EphemeralGrader,
     'omegaup-arena-runsubmit-popup': arena_RunSubmitPopup,
     'omegaup-arena-runs': arena_Runs,

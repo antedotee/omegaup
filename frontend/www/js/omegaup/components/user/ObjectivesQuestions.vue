@@ -1,6 +1,6 @@
 <template>
-  <b-modal v-model="showModal" hide-footer>
-    <template #modal-title>
+  <b-modal v-model="showModal" no-footer>
+    <template #title>
       <h5 class="modal-title font-weight-bold">
         {{ T.userObjectivesModalTitle }}
       </h5>
@@ -115,13 +115,8 @@
 
 <script lang="ts">
 import { Vue, Component, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import T from '../../lang';
 import * as ui from '../../ui';
-
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-import { ModalPlugin } from 'bootstrap-vue';
-VueGlobal.use(ModalPlugin);
 
 import {
   FontAwesomeIcon,

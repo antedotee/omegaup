@@ -93,7 +93,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import * as ui from '../../ui';
@@ -103,11 +102,6 @@ import { omegaup } from '../../omegaup';
 import { getExternalUrl } from '../../urlHelper';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
-import { LayoutPlugin, CollapsePlugin } from 'bootstrap-vue';
-VueGlobal.use(LayoutPlugin);
-VueGlobal.use(CollapsePlugin);
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';

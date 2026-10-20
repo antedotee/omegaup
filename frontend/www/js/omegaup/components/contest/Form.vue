@@ -901,7 +901,7 @@
         </div>
       </form>
     </div>
-    <b-modal
+    <BModal
       v-model="showModal"
       :title="T.contestNewFormPresetOverwriteWarningModalTitle"
       :ok-title="T.wordsConfirm"
@@ -912,7 +912,7 @@
       "
     >
       {{ T.contestNewFormPresetOverwriteWarning }}
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
@@ -930,8 +930,7 @@ import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
 import 'v-tooltip/dist/v-tooltip.css';
 import { VTooltip } from 'v-tooltip';
-import { ModalPlugin } from 'bootstrap-vue';
-VueGlobal.use(ModalPlugin);
+import { BModal } from 'bootstrap-vue-next';
 
 import {
   FontAwesomeIcon,
@@ -1104,6 +1103,7 @@ const markdownConverter = new markdownModule.Converter({ preview: true });
 
 @Component({
   components: {
+    BModal,
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-datetimepicker': DateTimePicker,
     'font-awesome-icon': FontAwesomeIcon,

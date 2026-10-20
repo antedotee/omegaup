@@ -135,7 +135,7 @@
               </b-button>
               <!-- id-lint on -->
               <b-popover
-                :show.sync="showPopover"
+                v-model="showPopover"
                 target="popover-solved-problems"
                 placement="right"
               >
@@ -203,7 +203,6 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -227,13 +226,8 @@ library.add(faCheckSquare, faExchangeAlt, faQuestionCircle, faTimes, faUser);
 
 import { getBlogUrl } from '../../urlHelper';
 
-// Import Bootstrap and BootstrapVue CSS files (order is important: base before overrides)
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+// Import Bootstrap CSS file.
 import 'bootstrap/dist/css/bootstrap.css';
-// Import Only Required Plugins
-import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
-VueGlobal.use(ButtonPlugin);
-VueGlobal.use(PopoverPlugin);
 interface Rank {
   country: string;
   classname?: string;

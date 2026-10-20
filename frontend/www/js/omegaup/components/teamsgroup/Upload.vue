@@ -53,35 +53,42 @@
       </div>
       <template v-if="identities.length > 0">
         <h3 class="card-header">{{ T.teamsGroupEditTeams }}</h3>
-        <b-table responsive striped hover :items="items" :fields="columns">
+        <BTable
+          v-model:expanded-items="expandedItems"
+          responsive
+          striped
+          hover
+          :items="items"
+          :fields="columns"
+        >
           <template #cell(usernames)="row">
-            <b-button
+            <BButton
               :title="T.groupEditMembersAddMembers"
               class="d-inline-block mb-2"
               variant="primary"
-              @click="row.toggleDetails"
+              @click="row.toggleExpansion"
             >
               <font-awesome-icon
                 :icon="['fas', 'user-plus']"
                 class="mr-2"
               ></font-awesome-icon>
-              <b-badge variant="light">{{ row.item.usernames.length }}</b-badge>
-            </b-button>
+              <BBadge variant="light">{{ row.item.usernames.length }}</BBadge>
+            </BButton>
           </template>
-          <template #row-details="row">
-            <b-form @submit.prevent="onAddUsers(row)">
-              <b-card>
-                <b-table
+          <template #row-expansion="row">
+            <BForm @submit.prevent="onAddUsers(row)">
+              <BCard>
+                <BTable
                   responsive
                   striped
                   hover
                   :items="row.item.usernames"
                   :fields="identitiesColumns"
-                ></b-table>
-              </b-card>
-            </b-form>
+                ></BTable>
+              </BCard>
+            </BForm>
           </template>
-        </b-table>
+        </BTable>
         <div class="card-footer">
           <button
             class="btn btn-primary d-inline-block mb-2"
@@ -120,7 +127,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import omegaup_Markdown from '../Markdown.vue';
@@ -134,24 +140,16 @@ import {
 import common_MultiTypeahead from '../common/MultiTypeahead.vue';
 import { getBlogUrl } from '../../urlHelper';
 
-// Import Bootstrap an BootstrapVue CSS files (order is important)
+// Import Bootstrap CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-// Import Only Required Plugins
 import {
-  TablePlugin,
-  ButtonPlugin,
-  BadgePlugin,
-  CardPlugin,
+  BTable,
+  BButton,
+  BBadge,
+  BCard,
   BForm,
-  BRow,
-  BCol,
-} from 'bootstrap-vue';
-VueGlobal.use(TablePlugin);
-VueGlobal.use(ButtonPlugin);
-VueGlobal.use(BadgePlugin);
-VueGlobal.use(CardPlugin);
+} from 'bootstrap-vue-next';
 
 type TeamIdentity = types.Identity & {
   usernames: { username: string; password?: string }[];
@@ -163,9 +161,11 @@ library.add(faDownload, faUserPlus, faSpinner);
     FontAwesomeIcon,
     'omegaup-common-multi-typeahead': common_MultiTypeahead,
     'omegaup-markdown': omegaup_Markdown,
+    BTable,
+    BButton,
+    BBadge,
+    BCard,
     BForm,
-    BRow,
-    BCol,
   },
 })
 class Upload extends Vue {
@@ -184,6 +184,7 @@ class Upload extends Vue {
   } = {};
   humanReadable = false;
   selfGeneratedIdentities = false;
+  expandedItems: TeamIdentity[] = [];
   typeaheadUsers: types.ListItem[] = [];
   columns = [
     {

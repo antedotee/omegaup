@@ -6,6 +6,18 @@ import T from '../../lang';
 import arena_ContestCard from './ContestCard.vue';
 import { ContestTab } from './ContestListv2.vue';
 
+// `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
+// the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
+// RENDER_FUNCTION disabled, as required for native SFC templates) cannot patch —
+// it throws `InvalidCharacterError: "0" ...`. Stub the icon so the components
+// under test can mount. The arena suites assert on behavior, not icon glyphs.
+const global = {
+  stubs: {
+    FontAwesomeIcon: true,
+    'font-awesome-icon': true,
+  },
+};
+
 describe('ContestCard.vue', () => {
   const daySeconds = 24 * 60 * 60 * 1000;
   const today = new Date();
@@ -79,6 +91,7 @@ describe('ContestCard.vue', () => {
         contest: currentContest,
         contestTab: currentTab,
       },
+      global,
     });
 
     const contestEnrollStatus = wrapper.findComponent({
@@ -99,6 +112,7 @@ describe('ContestCard.vue', () => {
         contest: futureContest,
         contestTab: futureTab,
       },
+      global,
     });
 
     const contestEnrollStatus = wrapper.findComponent({
@@ -126,6 +140,7 @@ describe('ContestCard.vue', () => {
         contest: pastContest,
         contestTab: pastTab,
       },
+      global,
     });
 
     const contestButtonScoreboard = wrapper.findComponent({

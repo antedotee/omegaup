@@ -2,16 +2,16 @@
   <div class="card">
     <h1 class="card-header">{{ T.omegaupTitleParentalVerificationToken }}</h1>
     <div class="card-body">
-      <b-icon-check-circle-fill
+      <i
         v-if="hasParentalVerificationToken"
-        scale="2"
-        variant="success"
-      ></b-icon-check-circle-fill>
-      <b-icon-x-circle-fill
+        class="bi bi-check-circle-fill text-success"
+        style="font-size: 2em"
+      ></i>
+      <i
         v-else
-        scale="2"
-        variant="danger"
-      ></b-icon-x-circle-fill>
+        class="bi bi-x-circle-fill text-danger"
+        style="font-size: 2em"
+      ></i>
       <omegaup-markdown :markdown="message"></omegaup-markdown>
 
       <a href="/dependents/">{{
@@ -23,24 +23,15 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import T from '../../lang';
 
 import omegaup_Markdown from '../Markdown.vue';
 
-import {
-  BIconCheckCircleFill,
-  BIconXCircleFill,
-  BootstrapVue,
-} from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-VueGlobal.use(BootstrapVue);
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 @Component({
   components: {
-    BIconCheckCircleFill,
-    BIconXCircleFill,
     'omegaup-markdown': omegaup_Markdown,
   },
 })

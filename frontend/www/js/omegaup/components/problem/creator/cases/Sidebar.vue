@@ -10,11 +10,11 @@
           class="mr-2"
           @click="showLayoutSidebar = !showLayoutSidebar"
         >
-          <BIconLayoutSidebar />
+          <i class="bi bi-layout-sidebar" />
         </b-button>
-        <b-sidebar
+        <b-offcanvas
           v-model="showLayoutSidebar"
-          right
+          placement="end"
           :title="T.problemCreatorLayoutWordLayouts"
           shadow
           no-header-close
@@ -54,7 +54,7 @@
               </b-row>
             </b-container>
           </div>
-        </b-sidebar>
+        </b-offcanvas>
         <b-button
           data-add-window
           size="sm"
@@ -64,18 +64,18 @@
           @click="$emit('open-add-window')"
         >
           <span class="d-none d-xl-inline">{{ T.problemCreatorAdd }}</span>
-          <BIconPlusCircle class="d-inline d-xl-none" />
+          <i class="bi bi-plus-circle d-inline d-xl-none" />
         </b-button>
         <b-dropdown variant="light" size="sm" right no-caret>
           <template #button-content>
-            <BIconThreeDotsVertical />
+            <i class="bi bi-three-dots-vertical" />
           </template>
           <b-dropdown-item
             data-sidebar-validate-points-dropdown-item
             @click="validateAndFixPointsModal = !validateAndFixPointsModal"
             ><b-row>
               <div class="ml-6">
-                <BIconBroadcast variant="info" font-scale="1.05" />
+                <i class="bi bi-broadcast text-info" />
               </div>
               <div class="ml-8">{{ T.problemCreatorValidatePointsButton }}</div>
             </b-row>
@@ -91,8 +91,7 @@
       ok-variant="success"
       :cancel-title="T.problemCreatorValidatePointsBack"
       cancel-variant="danger"
-      static
-      lazy
+      teleport-disabled
       @ok="validateAndFixPoints"
     >
       {{ T.problemCreatorValidatePointsWarning }}
@@ -129,12 +128,12 @@
             </b-button>
             <b-dropdown variant="light" size="sm" right no-caret>
               <template #button-content>
-                <BIconThreeDotsVertical />
+                <i class="bi bi-three-dots-vertical" />
               </template>
               <b-dropdown-item disabled
                 ><b-row>
                   <div class="ml-6">
-                    <BIconTrash variant="danger" font-scale=".95" />
+                    <i class="bi bi-trash text-danger" />
                   </div>
                   <div class="ml-8">
                     {{ T.problemCreatorDeleteGroup }}
@@ -144,7 +143,7 @@
               <b-dropdown-item @click="deleteUngroupedCases()"
                 ><b-row>
                   <div class="ml-6">
-                    <BIconTrash variant="danger" font-scale=".95" />
+                    <i class="bi bi-trash text-danger" />
                   </div>
                   <div class="ml-8">
                     {{ T.problemCreatorDeleteCases }}
@@ -180,12 +179,12 @@
                 </b-button>
                 <b-dropdown variant="light" size="sm" right no-caret>
                   <template #button-content>
-                    <BIconThreeDotsVertical />
+                    <i class="bi bi-three-dots-vertical" />
                   </template>
                   <b-dropdown-item @click="deleteCase({ groupID, caseID: '' })"
                     ><b-row>
                       <div class="ml-6">
-                        <BIconTrash variant="danger" font-scale=".95" />
+                        <i class="bi bi-trash text-danger" />
                       </div>
                       <div class="ml-8">
                         {{ T.problemCreatorDeleteCase }}
@@ -234,14 +233,14 @@
             no-caret
           >
             <template #button-content>
-              <BIconThreeDotsVertical />
+              <i class="bi bi-three-dots-vertical" />
             </template>
             <b-dropdown-item
               data-sidebar-edit-group-dropdown="edit group"
               @click="editGroupModal[groupID] = !editGroupModal[groupID]"
               ><b-row>
                 <div class="ml-6">
-                  <BIconPencil variant="info" font-scale=".95" />
+                  <i class="bi bi-pencil text-info" />
                 </div>
                 <div class="ml-8">{{ T.omegaupTitleGroupsEdit }}</div>
               </b-row>
@@ -251,7 +250,7 @@
               @click="deleteGroup(groupID)"
               ><b-row>
                 <div class="ml-6">
-                  <BIconTrash variant="danger" font-scale=".95" />
+                  <i class="bi bi-trash text-danger" />
                 </div>
                 <div class="ml-8">
                   {{ T.problemCreatorDeleteGroup }}
@@ -263,7 +262,7 @@
               @click="deleteGroupCases(groupID)"
               ><b-row>
                 <div class="ml-6">
-                  <BIconTrash variant="danger" font-scale=".95" />
+                  <i class="bi bi-trash text-danger" />
                 </div>
                 <div class="ml-8">
                   {{ T.problemCreatorDeleteCases }}
@@ -275,7 +274,7 @@
               @click="downloadGroupInput(groupID, '.in')"
               ><b-row>
                 <div class="ml-6">
-                  <BIconBoxArrowDown variant="info" font-scale=".95" />
+                  <i class="bi bi-box-arrow-down text-info" />
                 </div>
                 <div class="ml-8">
                   {{ T.problemCraetorGroupDownloadIn }}
@@ -287,7 +286,7 @@
               @click="downloadGroupInput(groupID, '.txt')"
               ><b-row>
                 <div class="ml-6">
-                  <BIconTextLeft variant="info" font-scale=".95" />
+                  <i class="bi bi-text-left text-info" />
                 </div>
                 <div class="ml-8">
                   {{ T.problemCraetorGroupDownloadTxt }}
@@ -321,12 +320,12 @@
                 </b-button>
                 <b-dropdown variant="light" size="sm" right no-caret>
                   <template #button-content>
-                    <BIconThreeDotsVertical />
+                    <i class="bi bi-three-dots-vertical" />
                   </template>
                   <b-dropdown-item @click="deleteCase({ groupID, caseID })"
                     ><b-row>
                       <div class="ml-6">
-                        <BIconTrash variant="danger" font-scale=".95" />
+                        <i class="bi bi-trash text-danger" />
                       </div>
                       <div class="ml-8">
                         {{ T.problemCreatorDeleteCase }}
@@ -345,8 +344,7 @@
             ok-variant="success"
             :cancel-title="T.groupModalBack"
             cancel-variant="danger"
-            static
-            lazy
+            teleport-disabled
             @ok="updateGroupInfo(groupID)"
           >
             <div class="mt-3">
@@ -356,11 +354,12 @@
                 class="mb-4"
               >
                 <b-form-input
-                  v-model="editGroupName[groupID]"
+                  :model-value="editGroupName[groupID]"
                   data-sidebar-edit-group-modal="edit name"
                   :formatter="formatter"
                   required
                   autocomplete="off"
+                  @update:model-value="editGroupName[groupID] = $event"
                 />
               </b-form-group>
               <b-form-group
@@ -368,12 +367,13 @@
                 :label="T.problemCreatorPoints"
               >
                 <b-form-input
-                  v-model="editGroupPoints[groupID]"
+                  :model-value="editGroupPoints[groupID]"
                   data-sidebar-edit-group-modal="edit points"
                   :formatter="pointsFormatter"
                   type="number"
                   number
                   min="0"
+                  @update:model-value="editGroupPoints[groupID] = $event"
                 />
               </b-form-group>
               <b-form-group
@@ -398,7 +398,6 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import problemCreator_LayoutSidebar from './LayoutSidebar.vue';
-import { namespace } from 'vuex-class';
 import T from '../../../../lang';
 import {
   Group,
@@ -407,8 +406,6 @@ import {
   CaseGroupID,
 } from '@/js/omegaup/problem/creator/types';
 import JSZip from 'jszip';
-
-const casesStore = namespace('casesStore');
 
 @Component({
   components: {
@@ -421,38 +418,57 @@ class Sidebar extends Vue {
 
   @Prop() showWindow!: boolean;
 
-  @casesStore.State('groups') groups!: Group[];
-  @casesStore.Getter('getUngroupedCases') ungroupedCases!: Group[];
-  @casesStore.Getter('getGroupsButUngroupedCases')
-  groupsButUngroupedCases!: Group[];
-  @casesStore.Getter('getTotalPointsForUngroupedCases')
-  getTotalPointsForUngroupedCases!: number;
-  @casesStore.Mutation('deleteGroup') deleteGroup!: (groupID: GroupID) => void;
-  @casesStore.Mutation('addLayoutFromSelectedCase')
-  addLayoutFromSelectedCase!: () => void;
-  @casesStore.Mutation('addNewLayout')
-  addNewLayout!: () => void;
-  @casesStore.Mutation('validateAndFixPoints')
-  validateAndFixPoints!: () => void;
-  @casesStore.Mutation('deleteCase') deleteCase!: ({
-    groupID,
-    caseID,
-  }: CaseGroupID) => void;
-  @casesStore.Mutation('deleteGroupCases') deleteGroupCases!: (
-    groupID: GroupID,
-  ) => void;
-  @casesStore.Mutation('deleteUngroupedCases')
-  deleteUngroupedCases!: () => void;
-  @casesStore.Mutation('setSelected') setSelected!: (
-    CaseGroupsIDToBeSelected: CaseGroupID,
-  ) => void;
-  @casesStore.Mutation('updateGroup') updateGroup!: ([
-    groupID,
-    newName,
-    newPoints,
-  ]: [GroupID, string, number]) => void;
-  @casesStore.Getter('getStringifiedLinesFromCaseGroupID')
-  getStringifiedLinesFromCaseGroupID!: (caseGroupID: CaseGroupID) => string;
+  // The vuex-class namespaced decorators do not bind under
+  // vue-facing-decorator, so the store module is accessed directly through
+  // native getters and method wrappers.
+  get groups(): Group[] {
+    return this.$store.state.casesStore.groups;
+  }
+  get ungroupedCases(): Group[] {
+    return this.$store.getters['casesStore/getUngroupedCases'];
+  }
+  get groupsButUngroupedCases(): Group[] {
+    return this.$store.getters['casesStore/getGroupsButUngroupedCases'];
+  }
+  get getTotalPointsForUngroupedCases(): number {
+    return this.$store.getters['casesStore/getTotalPointsForUngroupedCases'];
+  }
+  deleteGroup(groupID: GroupID): void {
+    this.$store.commit('casesStore/deleteGroup', groupID);
+  }
+  addLayoutFromSelectedCase(): void {
+    this.$store.commit('casesStore/addLayoutFromSelectedCase');
+  }
+  addNewLayout(): void {
+    this.$store.commit('casesStore/addNewLayout');
+  }
+  validateAndFixPoints(): void {
+    this.$store.commit('casesStore/validateAndFixPoints');
+  }
+  deleteCase({ groupID, caseID }: CaseGroupID): void {
+    this.$store.commit('casesStore/deleteCase', { groupID, caseID });
+  }
+  deleteGroupCases(groupID: GroupID): void {
+    this.$store.commit('casesStore/deleteGroupCases', groupID);
+  }
+  deleteUngroupedCases(): void {
+    this.$store.commit('casesStore/deleteUngroupedCases');
+  }
+  setSelected(CaseGroupsIDToBeSelected: CaseGroupID): void {
+    this.$store.commit('casesStore/setSelected', CaseGroupsIDToBeSelected);
+  }
+  updateGroup([groupID, newName, newPoints]: [
+    GroupID,
+    string,
+    number,
+  ]): void {
+    this.$store.commit('casesStore/updateGroup', [groupID, newName, newPoints]);
+  }
+  getStringifiedLinesFromCaseGroupID(caseGroupID: CaseGroupID): string {
+    return this.$store.getters['casesStore/getStringifiedLinesFromCaseGroupID'](
+      caseGroupID,
+    );
+  }
 
   validateAndFixPointsModal: boolean = false;
   showUngroupedCases = false;

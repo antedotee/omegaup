@@ -10,12 +10,13 @@
           class="mb-4"
         >
           <b-form-input
-            v-model="multipleCasesPrefix"
+            :model-value="multipleCasesPrefix"
             data-problem-creator-multiple-cases-input="prefix"
             lazy-formatter
             :formatter="formatter"
             name="multiple-cases-prefix"
             autocomplete="off"
+            @update:model-value="multipleCasesPrefix = $event"
           />
         </b-form-group>
       </b-col>
@@ -26,12 +27,13 @@
           class="mb-4"
         >
           <b-form-input
-            v-model="multipleCasesSuffix"
+            :model-value="multipleCasesSuffix"
             data-problem-creator-multiple-cases-input="suffix"
             lazy-formatter
             :formatter="formatter"
             name="multiple-cases-suffix"
             autocomplete="off"
+            @update:model-value="multipleCasesSuffix = $event"
           />
         </b-form-group>
       </b-col>
@@ -42,20 +44,22 @@
       label-for="case-points"
     >
       <b-form-input
-        v-model="multipleCasesCount"
+        :model-value="multipleCasesCount"
         data-problem-creator-multiple-cases-input="count"
         lazy-formatter
         :formatter="numberFormatter"
         name="multiple-cases-count"
         type="number"
         number
+        @update:model-value="multipleCasesCount = $event"
       />
     </b-form-group>
     <b-form-group :label="T.problemCreatorGroupName" label-for="case-group">
       <b-form-select
-        v-model="multipleCasesGroup"
+        :model-value="multipleCasesGroup"
         :options="options"
         name="multiple-cases-group"
+        @update:model-value="multipleCasesGroup = $event"
       />
     </b-form-group>
   </div>
@@ -65,10 +69,7 @@
 import { GroupID } from '../../../../problem/creator/types';
 import { NIL } from 'uuid';
 import { Component, Vue, toNative } from 'vue-facing-decorator';
-import { namespace } from 'vuex-class';
 import T from '../../../../lang';
-
-const casesStore = namespace('casesStore');
 
 @Component
 class MultipleCasesInput extends Vue {
@@ -79,10 +80,14 @@ class MultipleCasesInput extends Vue {
 
   T = T;
 
-  @casesStore.Getter('getGroupIdsAndNames') storedGroups!: {
+  // The vuex-class namespaced getter decorator does not bind under
+  // vue-facing-decorator, so the store getter is read directly.
+  get storedGroups(): {
     value: string;
     text: string;
-  }[];
+  }[] {
+    return this.$store.getters['casesStore/getGroupIdsAndNames'];
+  }
 
   get options() {
     const noGroup = { value: NIL, text: T.problemCreatorNoGroup };

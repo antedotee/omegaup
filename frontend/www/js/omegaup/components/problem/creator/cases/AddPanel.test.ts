@@ -1,16 +1,11 @@
 import { mount, Wrapper } from '@vue/test-utils';
 
 import AddPanel from './AddPanel.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import T from '../../../../lang';
 import Vue from 'vue';
 import vuexStore from '../../../../problem/creator/store';
 import { StoreState } from '../../../../problem/creator/types';
 import { Store } from 'vuex';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('AddPanel.vue', () => {
   beforeEach(() => {
     vuexStore.commit('casesStore/resetStore');
@@ -180,7 +175,7 @@ describe('AddPanel.vue', () => {
 
     const tabs = wrapper.findAll('.nav-link');
     expect(tabs.length).toBe(expectedText.length);
-    tabs.wrappers.forEach((tab, index) => {
+    tabs.forEach((tab, index) => {
       expect(tab.text()).toBe(expectedText[index]);
     });
   });

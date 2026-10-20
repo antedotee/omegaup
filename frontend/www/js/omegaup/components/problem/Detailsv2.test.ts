@@ -6,9 +6,7 @@ import T from '../../lang';
 import arena_EphemeralGrader from '../arena/EphemeralGrader.vue';
 import problem_Details from './Detailsv2.vue';
 
-import BootstrapVue, { BTab } from 'bootstrap-vue';
-
-localVue.use(BootstrapVue);
+import { BTab } from 'bootstrap-vue-next';
 
 describe('Detailsv2.vue', () => {
   const problem: types.ProblemDetails = {

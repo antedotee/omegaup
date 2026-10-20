@@ -7,12 +7,13 @@
       class="mb-4"
     >
       <b-form-input
-        v-model="groupName"
+        :model-value="groupName"
         data-problem-creator-group-input="name"
         :formatter="formatter"
         required
         autocomplete="off"
         name="group-name"
+        @update:model-value="groupName = $event"
       />
     </b-form-group>
     <b-form-group
@@ -21,12 +22,13 @@
       label-for="case-points"
     >
       <b-form-input
-        v-model="groupPoints"
+        :model-value="groupPoints"
         name="group-points"
         :formatter="pointsFormatter"
         type="number"
         number
         min="0"
+        @update:model-value="groupPoints = $event"
       />
     </b-form-group>
     <b-form-group

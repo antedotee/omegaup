@@ -1,4 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils';
+import { BModal } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 
 import T from '../../lang';
@@ -44,7 +45,7 @@ describe('Requests.vue', () => {
     const wrapper = shallowMount(common_Requests, { props: propsData });
 
     const buttons = wrapper.findAll('button.text-danger');
-    const feedbackModals = wrapper.findAll('b-modal-stub');
+    const feedbackModals = wrapper.findAllComponents(BModal);
 
     expect('test_user_1' in wrapper.vm.modalStates).toBe(false);
     await buttons.at(0).trigger('click');
@@ -109,7 +110,7 @@ describe('Requests.vue', () => {
     expect(wrapper.find('table tbody').text()).toContain('test_user_1');
     expect(wrapper.find('table tbody').text()).not.toContain('test_user_2');
 
-    await wrapper.find('div[data-requests] input').trigger('click');
+    await wrapper.find('div[data-requests] input').setValue(true);
     expect(wrapper.find('table tbody').text()).toContain('test_user_2');
   });
 });

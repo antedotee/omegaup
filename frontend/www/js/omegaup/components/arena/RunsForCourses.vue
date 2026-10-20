@@ -127,7 +127,7 @@
                 <omegaup-common-typeahead
                   data-search-problem
                   :existing-options="searchResultProblems"
-                  :value.sync="filterProblem"
+                  v-model:value="filterProblem"
                   @update-existing-options="
                     (query) => $emit('update-search-result-problems', query)
                   "
@@ -141,7 +141,7 @@
                 <omegaup-common-typeahead
                   data-search-username
                   :existing-options="searchResultUsers"
-                  :value.sync="filterUsername"
+                  v-model:value="filterUsername"
                   :max-results="10"
                   @update-existing-options="updateSearchResultUsers"
                 ></omegaup-common-typeahead>
@@ -505,7 +505,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch, Emit, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import { omegaup } from '../../omegaup';
 import * as ui from '../../ui';
 import T from '../../lang';
@@ -518,7 +517,6 @@ import { DisqualificationType } from './Runs.vue';
 import omegaup_Countdown from '../Countdown.vue';
 import omegaup_Overlay from '../Overlay.vue';
 
-import { PaginationPlugin } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
@@ -546,8 +544,6 @@ library.add(faClock);
 library.add(faCalendarAlt);
 library.add(faCheckCircle);
 library.add(faTimesCircle);
-
-VueGlobal.use(PaginationPlugin);
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1065,11 +1061,14 @@ class RunsForCourses extends Vue {
   }: {
     filter: string;
     value: null | string;
-  }): void {
+  }): { filter: string; value: null | string } {
     this.filterOffset = 0;
     if (!value) {
       this.filters = this.filters.filter((item) => item.name !== filter);
-      return;
+      // Return the payload so vue-facing-decorator's `@Emit` forwards it as the
+      // event argument (this decorator emits the return value, not the method's
+      // first argument).
+      return { filter, value };
     }
     if (filter === 'contest') {
       // This field does not appear as filter
@@ -1081,6 +1080,7 @@ class RunsForCourses extends Vue {
     } else {
       currentFilter.value = value;
     }
+    return { filter, value };
   }
 
   @Watch('createdGuid')

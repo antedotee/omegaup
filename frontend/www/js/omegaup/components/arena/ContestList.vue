@@ -471,27 +471,16 @@ import * as ui from '../../ui';
 import T from '../../lang';
 import { getExternalUrl } from '../../urlHelper';
 
-// Import Bootstrap an BootstrapVue CSS files (order is important)
+// Import Bootstrap CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 // Import Only Required Plugins
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  TabsPlugin,
-  CardPlugin,
-  DropdownPlugin,
-  LayoutPlugin,
-} from 'bootstrap-vue';
 import ContestCard from './ContestCardv2.vue';
 import ContestSkeleton from './ContestSkeleton.vue';
 import infiniteScroll from 'vue-infinite-scroll';
-VueGlobal.use(TabsPlugin);
-VueGlobal.use(CardPlugin);
-VueGlobal.use(DropdownPlugin);
-VueGlobal.use(LayoutPlugin);
 library.add(fas);
 
 export enum ContestTab {

@@ -1,15 +1,10 @@
 import { mount } from '@vue/test-utils';
 
 import Tabs from './Tabs.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import store from '@/js/omegaup/problem/creator/store';
 
 import T from '../../../lang';
 import Vue from 'vue';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('Tabs.vue', () => {
   it('Should contain all 4 tabs', async () => {
     const wrapper = mount(Tabs, {

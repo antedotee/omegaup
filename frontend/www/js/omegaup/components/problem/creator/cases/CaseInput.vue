@@ -7,16 +7,22 @@
       class="mb-4"
     >
       <b-form-input
-        v-model="caseName"
+        :model-value="caseName"
         data-problem-creator-case-input="name"
         name="case-name"
         :formatter="formatter"
         required
         autocomplete="off"
+        @update:model-value="caseName = $event"
       />
     </b-form-group>
     <b-form-group :label="T.problemCreatorGroupName" label-for="case-group">
-      <b-form-select v-model="caseGroup" :options="options" name="case-group" />
+      <b-form-select
+        :model-value="caseGroup"
+        :options="options"
+        name="case-group"
+        @update:model-value="caseGroup = $event"
+      />
     </b-form-group>
 
     <b-form-group
@@ -25,12 +31,13 @@
       label-for="case-points"
     >
       <b-form-input
-        v-model="casePoints"
+        :model-value="casePoints"
         name="case-points"
         :formatter="pointsFormatter"
         type="number"
         number
         min="0"
+        @update:model-value="casePoints = $event"
       />
     </b-form-group>
     <b-form-group
@@ -50,10 +57,7 @@
 <script lang="ts">
 import { NIL } from 'uuid';
 import { Component, Vue, Prop, toNative } from 'vue-facing-decorator';
-import { namespace } from 'vuex-class';
 import T from '../../../../lang';
-
-const casesStore = namespace('casesStore');
 
 @Component
 class CaseInput extends Vue {
@@ -71,11 +75,16 @@ class CaseInput extends Vue {
   @Prop({ default: true }) autoPoints!: boolean;
   @Prop({ default: false }) editMode!: boolean;
 
-  // This return the group name, and the group ID of all groups in the store. Matching the required type for the select component./
-  @casesStore.Getter('getGroupIdsAndNames') storedGroups!: {
+  // This returns the group name and group ID of all groups in the store,
+  // matching the required type for the select component. The vuex-class
+  // namespaced getter decorator does not bind under vue-facing-decorator, so
+  // the store getter is read directly.
+  get storedGroups(): {
     value: string;
     text: string;
-  }[];
+  }[] {
+    return this.$store.getters['casesStore/getGroupIdsAndNames'];
+  }
 
   caseName = undefined;
   caseGroup = undefined;

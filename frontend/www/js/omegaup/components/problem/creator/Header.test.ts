@@ -2,7 +2,7 @@ import { shallowMount, mount } from '@vue/test-utils';
 import JSZip from 'jszip';
 
 import Header from './Header.vue';
-import BootstrapVue, { IconsPlugin, BButton, BFormInput } from 'bootstrap-vue';
+import { BButton, BFormInput } from 'bootstrap-vue-next';
 import store from '@/js/omegaup/problem/creator/store';
 import T from '../../../lang';
 import Vue from 'vue';
@@ -10,10 +10,6 @@ import {
   generateCase,
   generateGroup,
 } from '@/js/omegaup/problem/creator/modules/cases';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('Header.vue', () => {
   it('Should contain the header buttons and problem name input', async () => {
     const wrapper = shallowMount(Header, {
@@ -51,10 +47,9 @@ describe('Header.vue', () => {
       },
     });
 
-    const buttonsList = wrapper.findAll('button');
-    expect(buttonsList.length).toBe(3);
-
-    const resetButton = buttonsList.at(2);
+    const resetButton = wrapper.find(
+      'button[data-create-new-problem-button]',
+    );
     expect(resetButton.exists()).toBe(true);
 
     const testText = 'Hello';

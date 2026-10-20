@@ -193,7 +193,7 @@
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </button>
               </td>
-              <b-modal
+              <BModal
                 v-if="problemCanBeDeleted(problem)"
                 v-model="confirmationModal[problem.alias]"
                 :title="
@@ -212,12 +212,12 @@
                 "
               >
                 <p>{{ T.problemEditDeleteConfirmationMessage }}</p>
-              </b-modal>
+              </BModal>
             </tr>
           </tbody>
         </table>
       </div>
-      <b-modal
+      <BModal
         v-model="showConfirmationModalDeleteAll"
         :title="T.problemEditDeleteSelectedProblemsRequireConfirmation"
         :ok-title="T.problemEditDeleteOk"
@@ -233,7 +233,7 @@
         "
       >
         <p>{{ T.problemEditDeleteSelectedProblemsConfirmationMessage }}</p>
-      </b-modal>
+      </BModal>
       <div class="card-footer">
         <omegaup-common-paginator
           :pager-items="pagerItems"
@@ -246,7 +246,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import T from '../../lang';
 import { types } from '../../api_types';
 import common_Paginator from '../common/Paginator.vue';
@@ -270,11 +269,11 @@ library.add(
   faExclamationTriangle,
   faBan,
 );
-import { ModalPlugin } from 'bootstrap-vue';
-VueGlobal.use(ModalPlugin);
+import { BModal } from 'bootstrap-vue-next';
 
 @Component({
   components: {
+    BModal,
     FontAwesomeIcon,
     'omegaup-common-paginator': common_Paginator,
   },
@@ -322,11 +321,9 @@ class ProblemMine extends Vue {
   }
 
   toggleConfirmationModal(problemAlias: string): void {
-    this.$set(
-      this.confirmationModal,
-      problemAlias,
-      !this.confirmationModal[problemAlias],
-    );
+    this.confirmationModal[problemAlias] = !this.confirmationModal[
+      problemAlias
+    ];
   }
 
   onChangeVisibility(): void {

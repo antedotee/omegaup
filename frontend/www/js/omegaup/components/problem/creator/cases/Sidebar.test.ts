@@ -1,7 +1,7 @@
 import { shallowMount, mount } from '@vue/test-utils';
+import { BButton } from 'bootstrap-vue-next';
 
 import Sidebar from './Sidebar.vue';
-import BootstrapVue, { IconsPlugin, BButton } from 'bootstrap-vue';
 import store from '@/js/omegaup/problem/creator/store';
 import Vue from 'vue';
 import {
@@ -10,10 +10,6 @@ import {
 } from '@/js/omegaup/problem/creator/modules/cases';
 
 import T from '../../../../lang';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('Sidebar.vue', () => {
   // Total 6 buttons are rendered initially on this page.
   // - Layout button
@@ -38,7 +34,7 @@ describe('Sidebar.vue', () => {
     const buttons = wrapper.findAllComponents(BButton);
     expect(buttons.length).toBe(initialButtonsCount);
     let shouldContainAddText = false;
-    buttons.wrappers.forEach((button) => {
+    buttons.forEach((button) => {
       if (button.text() === T.problemCreatorAdd) shouldContainAddText = true;
     });
     expect(shouldContainAddText).toBe(true);
@@ -63,7 +59,7 @@ describe('Sidebar.vue', () => {
       ungroupedCase: true,
     });
     store.commit('casesStore/addGroup', newGroup1);
-    expect(store.state.casesStore.groups[0]).toBe(newGroup1);
+    expect(store.state.casesStore.groups[0]).toStrictEqual(newGroup1);
 
     await Vue.nextTick();
 

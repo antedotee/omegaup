@@ -82,18 +82,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
 import omegaup_Username from '../user/Username.vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
-import { FormInputPlugin, ModalPlugin } from 'bootstrap-vue';
-VueGlobal.use(FormInputPlugin);
-VueGlobal.use(ModalPlugin);
 
 @Component({
   components: {
@@ -128,7 +122,7 @@ class Requests extends Vue {
   }
 
   toggleFeedbackModal(username: string): void {
-    this.$set(this.modalStates, username, !this.modalStates[username]);
+    this.modalStates[username] = !this.modalStates[username];
   }
 
   get filteredRequests(): types.IdentityRequest[] {

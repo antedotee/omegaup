@@ -11,6 +11,18 @@ import arena_ContestList, {
 } from './ContestList.vue';
 import each from 'jest-each';
 
+// `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
+// the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
+// RENDER_FUNCTION disabled, as required for native SFC templates) cannot patch —
+// it throws `InvalidCharacterError: "0" ...`. Stub the icon so the component
+// under test can mount. These suites assert on behavior, not icon glyphs.
+const global = {
+  stubs: {
+    FontAwesomeIcon: true,
+    'font-awesome-icon': true,
+  },
+};
+
 describe('ContestList.vue', () => {
   const daySeconds = 24 * 60 * 60 * 1000;
   const today = new Date();
@@ -194,6 +206,7 @@ describe('ContestList.vue', () => {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     const currentContestTab = wrapper.findAll('.section-container').at(0);
@@ -208,6 +221,7 @@ describe('ContestList.vue', () => {
         contests,
         tab: ContestTab.Future,
       },
+      global,
     });
 
     const futureContestTab = wrapper.findAll('.section-container').at(1);
@@ -222,6 +236,7 @@ describe('ContestList.vue', () => {
         contests,
         tab: ContestTab.Past,
       },
+      global,
     });
 
     const pastContestTab = wrapper.findAll('.section-container').at(2);
@@ -241,6 +256,7 @@ describe('ContestList.vue', () => {
         contests: contestsWithOnlyPast,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     const sections = wrapper.findAll('.section-container');
@@ -261,6 +277,7 @@ describe('ContestList.vue', () => {
         contests: emptyContests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     expect(wrapper.findAll('.section-container').length).toBe(0);
@@ -278,6 +295,7 @@ describe('ContestList.vue', () => {
         contests: contestsWithOnlyPast,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     // Hidden tabs have no scrollContainer ref. onScroll previously did
@@ -295,6 +313,7 @@ describe('ContestList.vue', () => {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     const currentContestTab = wrapper.findAll('.section-container').at(0);
@@ -308,6 +327,7 @@ describe('ContestList.vue', () => {
         contests,
         tab: ContestTab.Future,
       },
+      global,
     });
 
     const futureContestTab = wrapper.findAll('.section-container').at(1);
@@ -321,6 +341,7 @@ describe('ContestList.vue', () => {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
     const dropdownFilterBy = wrapper.findComponent({
       ref: 'dropdownFilterBy',
@@ -351,6 +372,7 @@ describe('ContestList.vue', () => {
         props: {
           contests,
         },
+      global,
       });
 
       const dropdownOrderBy = wrapper.findComponent({
@@ -417,6 +439,7 @@ describe('ContestList.vue', () => {
             contests,
             tab,
           },
+      global,
         });
 
         const dropdown = wrapper.findComponent({ ref: 'dropdownOrderBy' });

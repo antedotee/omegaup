@@ -8,7 +8,7 @@
     cancel-variant="secondary"
     footer-class="logout-confirmation-modal"
     body-class="p-0"
-    static
+    teleport-disabled
     lazy
     @ok="confirmLogout"
   >

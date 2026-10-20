@@ -1,14 +1,14 @@
 <template>
-  <b-card
+  <BCard
     class="mb-5"
     :header="ui.formatString(T.contestReport, { contest_alias: contestAlias })"
   >
-    <b-card-text class="text-right">
+    <BCardText class="text-right">
       <a :href="`/contest/${contestAlias}/report/print/`">
-        <b-icon-printer></b-icon-printer>
+        <i class="bi bi-printer"></i>
       </a>
-    </b-card-text>
-    <b-card-text
+    </BCardText>
+    <BCardText
       v-for="contestantData in contestReport"
       :key="contestantData.username"
       class="pb-2"
@@ -42,64 +42,53 @@
         </h3>
         <h3>{{ T.wordsPoints }}: {{ item.points }}</h3>
         <div v-if="item.run_details">
-          <b-table
+          <BTable
             striped
             hover
             :items="getGroupsByProblemAndUser(item.run_details.details.groups)"
             :fields="groupColumns"
           >
             <template #cell(details)="row">
-              <b-button
+              <BButton
                 :title="T.wordsDetails"
                 variant="link"
-                @click="row.toggleDetails"
+                @click="row.toggleExpansion"
               >
-                <b-icon-caret-down-square
-                  v-if="row.detailsShowing"
-                ></b-icon-caret-down-square>
-                <b-icon-caret-up-square v-else></b-icon-caret-up-square>
-              </b-button>
+                <i
+                  v-if="row.expansionShowing"
+                  class="bi bi-caret-down-square"
+                ></i>
+                <i v-else class="bi bi-caret-up-square"></i>
+              </BButton>
             </template>
-            <template #row-details="row">
-              <b-table
+            <template #row-expansion="row">
+              <BTable
                 responsive
                 striped
                 hover
                 :items="row.item.details"
                 :fields="casesColumns"
-              ></b-table>
+              ></BTable>
             </template>
-          </b-table>
+          </BTable>
         </div>
       </div>
       <hr />
-    </b-card-text>
-  </b-card>
+    </BCardText>
+  </BCard>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
-import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
 
-// Import Bootstrap an BootstrapVue CSS files (order is important)
+// Import Bootstrap CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-// Import Only Required Plugins
-import {
-  TablePlugin,
-  ButtonPlugin,
-  CardPlugin,
-  BIconCaretDownSquare,
-  BIconCaretUpSquare,
-  BIconPrinter,
-} from 'bootstrap-vue';
-VueGlobal.use(TablePlugin);
-VueGlobal.use(ButtonPlugin);
-VueGlobal.use(CardPlugin);
+import { BCard, BCardText, BTable, BButton } from 'bootstrap-vue-next';
 
 interface GroupDetails {
   name: string;
@@ -113,9 +102,10 @@ interface GroupDetails {
 
 @Component({
   components: {
-    BIconCaretDownSquare,
-    BIconCaretUpSquare,
-    BIconPrinter,
+    BCard,
+    BCardText,
+    BTable,
+    BButton,
   },
 })
 class Report extends Vue {

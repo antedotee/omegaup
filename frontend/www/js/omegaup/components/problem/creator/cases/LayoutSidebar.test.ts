@@ -1,7 +1,6 @@
 import { mount } from '@vue/test-utils';
 
 import LayoutSidebar from './LayoutSidebar.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import T from '../../../../lang';
 import Vue from 'vue';
 import store from '@/js/omegaup/problem/creator/store';
@@ -9,10 +8,6 @@ import {
   generateCase,
   generateGroup,
 } from '@/js/omegaup/problem/creator/modules/cases';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('LayoutSidebar.vue', () => {
   store.commit('casesStore/addNewLayout');
   const newUngroupedCasegroup = generateGroup({
@@ -69,7 +64,7 @@ describe('LayoutSidebar.vue', () => {
     const layoutDropdown = wrapper.find('div[data-layout-dropdown]');
     expect(layoutDropdown.text()).toContain(T.problemCreatorLayoutNew);
 
-    const dropdownButtons = layoutDropdown.findAll('a.dropdown-item');
+    const dropdownButtons = layoutDropdown.findAll('button.dropdown-item');
     expect(dropdownButtons.length).toBe(layoutDropdownButtonCounts);
 
     const addLineInfoButton = wrapper.find('button[data-layout-add-line-info]');
@@ -92,7 +87,7 @@ describe('LayoutSidebar.vue', () => {
     ).toBe(0);
 
     const enforceLayoutToSelectedButton = layoutDropdown.find(
-      'a[data-layout-dropdown-enforce-to-selected]',
+      'button[data-layout-dropdown-enforce-to-selected]',
     );
     await enforceLayoutToSelectedButton.trigger('click');
 
@@ -110,7 +105,7 @@ describe('LayoutSidebar.vue', () => {
     ).toBe(0);
 
     const enforceLayoutToAllButton = layoutDropdown.find(
-      'a[data-layout-dropdown-enforce-to-all]',
+      'button[data-layout-dropdown-enforce-to-all]',
     );
     await enforceLayoutToAllButton.trigger('click');
 
@@ -128,7 +123,7 @@ describe('LayoutSidebar.vue', () => {
     ).toBe(1);
 
     const copyLayoutButton = layoutDropdown.find(
-      'a[data-layout-dropdown-copy]',
+      'button[data-layout-dropdown-copy]',
     );
     await copyLayoutButton.trigger('click');
 
@@ -138,7 +133,7 @@ describe('LayoutSidebar.vue', () => {
     );
 
     const deleteLayoutButton = layoutDropdown.find(
-      'a[data-layout-dropdown-delete]',
+      'button[data-layout-dropdown-delete]',
     );
     await deleteLayoutButton.trigger('click');
 

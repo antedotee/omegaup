@@ -3,13 +3,7 @@ import { types } from '../../api_types';
 import T from '../../lang';
 import arena_Runs from './Runsv2.vue';
 
-import BootstrapVue, {
-  BTable,
-  BIconQuestionCircleFill,
-  BIconChevronRight,
-  BIconChevronDown,
-} from 'bootstrap-vue';
-localVue.use(BootstrapVue);
+import { BTable } from 'bootstrap-vue-next';
 
 describe('Runsv2.vue', () => {
   const baseRunData: types.Run = {
@@ -106,7 +100,7 @@ describe('Runsv2.vue', () => {
     const tableComponent = wrapper.findComponent(BTable);
     expect(tableComponent.findAll('table tbody tr').length).toBe(runs.length);
     expect(tableComponent.find('td.table-success').exists()).toBe(true);
-    expect(tableComponent.findComponent(BIconQuestionCircleFill).exists()).toBe(
+    expect(tableComponent.find('.bi-question-circle-fill').exists()).toBe(
       false,
     );
     for (const run of runs) {
@@ -148,9 +142,9 @@ describe('Runsv2.vue', () => {
     const tableComponent = wrapper.findComponent(BTable);
     expect(tableComponent.findAll('table tbody tr').length).toBe(runs.length);
     expect(tableComponent.find('td.table-success').exists()).toBe(false);
-    expect(
-      tableComponent.findAllComponents(BIconQuestionCircleFill).length,
-    ).toBe(runs.length);
+    expect(tableComponent.findAll('.bi-question-circle-fill').length).toBe(
+      runs.length,
+    );
 
     // MLE run
     expect(tableComponent.text()).toContain(runs[0].guid);
@@ -189,9 +183,9 @@ describe('Runsv2.vue', () => {
 
     const tableComponent = wrapper.findComponent(BTable);
     expect(tableComponent.findAll('table tbody tr').length).toBe(runs.length);
-    expect(
-      tableComponent.findAllComponents(BIconQuestionCircleFill).length,
-    ).toBe(runs.length);
+    expect(tableComponent.findAll('.bi-question-circle-fill').length).toBe(
+      runs.length,
+    );
     expect(tableComponent.find('td.table-warning').exists()).toBe(true);
     expect(tableComponent.find('td.table-danger').exists()).toBe(true);
   });
@@ -209,14 +203,14 @@ describe('Runsv2.vue', () => {
 
     // Run details should be hidden
     expect(tableComponent.text()).not.toContain(runDetails.source);
-    expect(tableComponent.findComponent(BIconChevronRight).exists()).toBe(true);
-    expect(tableComponent.findComponent(BIconChevronDown).exists()).toBe(false);
+    expect(tableComponent.find('.bi-chevron-right').exists()).toBe(true);
+    expect(tableComponent.find('.bi-chevron-down').exists()).toBe(false);
 
     // Click to show the details
-    await tableComponent.findComponent(BIconChevronRight).trigger('click');
+    await tableComponent.find('.bi-chevron-right').trigger('click');
 
     // Run details should be shown
     expect(tableComponent.text()).toContain(runDetails.source);
-    expect(tableComponent.findComponent(BIconChevronDown).exists()).toBe(true);
+    expect(tableComponent.find('.bi-chevron-down').exists()).toBe(true);
   });
 });
