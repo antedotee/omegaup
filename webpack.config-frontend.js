@@ -166,7 +166,14 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         extensions: {
-          vue: true,
+          vue: {
+            enabled: true,
+            compiler: '@vue/compiler-sfc',
+          },
+        },
+        diagnosticOptions: {
+          semantic: true,
+          syntactic: false,
         },
       },
       formatter: 'codeframe',

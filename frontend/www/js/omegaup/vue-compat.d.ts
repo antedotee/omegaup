@@ -1,17 +1,15 @@
-// Vue 3 migration build (@vue/compat) type augmentation.
+// Type definitions for the Vue 3 migration build (@vue/compat) exposed under
+// the bare `vue` specifier.
 //
-// Vue 3 removed the default export that Vue 2 code relies on (`import Vue from
-// 'vue'`). The migration build still provides it at runtime, so re-expose it to
-// TypeScript along with `configureCompat`. This module declaration must sit in a
-// `.d.ts` that has at least one other top-level import/export so it augments the
-// `vue` module instead of overwriting it.
-export {};
+// @vue/compat ships types at dist/vue-compat.d.ts but has no `types` field in
+// its package.json, so TypeScript treats `vue` as untyped. The repo's code
+// imports Vue both as a default (`import Vue from 'vue'`) and as named helpers.
+// This module re-exports the compat runtime types and adds the default export
+// that Vue 2 code relies on. It is wired in via tsconfig `paths` ("vue" -> this
+// file).
+import { CompatVue } from '@vue/runtime-dom';
 
-declare module 'vue' {
-  import { CompatVue } from '@vue/runtime-dom';
-  const Vue: CompatVue;
-  export default Vue;
-  export * from '@vue/runtime-dom';
-  const { configureCompat } = Vue;
-  export { configureCompat };
-}
+declare const Vue: CompatVue;
+export default Vue;
+export * from '@vue/runtime-dom';
+export const configureCompat: CompatVue['configureCompat'];

@@ -1,90 +1,75 @@
 // Jest transformer for Vue single-file components under the Vue 3 migration
 // build (@vue/compat).
 //
-// Why this exists: both @vue/vue3-jest and vue-jest@5 hardcode a TypeScript
-// transpile target of ES5 for `<script lang="ts">`, and their babel fallback
-// ignores custom presets so it cannot even parse decorators. ES5 down-levels
-// native classes to functions, which breaks vue-facing-decorator (a
-// down-leveled class cannot `extends Vue` and throws "Class constructors cannot
-// be invoked without 'new'"). This transformer compiles the template with
-// @vue/compiler-sfc in compat (MODE 2) mode and the script with Babel using a
-// class-preserving target (Node current), the same pipeline the .ts tests use.
+// The hard constraint: @vue/vue3-jest and vue-jest@5 both compile a
+// `<script lang="ts">` block with a TypeScript transpile hardcoded to an ES5
+// target. ES5 down-levels native classes to functions, which breaks
+// vue-facing-decorator (a down-leveled class cannot `extends Vue` and throws
+// "Class constructors cannot be invoked without 'new'"). But @vue/vue3-jest
+// also does the template + @vue/compat wiring correctly, matching the
+// production vue-loader path. We want its template handling without its ES5
+// script handling.
 //
-// It supports what this project uses: `<script lang="ts">` Options-API class
-// components (vue-facing-decorator) plus a `<template>`.
-const crypto = require('crypto');
-const { parse, compileTemplate } = require('@vue/compiler-sfc');
+// Strategy: pre-transpile only the <script> block with TypeScript at a
+// class-preserving target (ES2019), rewrite the SFC so the script is now plain
+// JavaScript (drop lang="ts"), and delegate the whole SFC to @vue/vue3-jest.
+// vue3-jest then compiles the template and wires compat exactly as in
+// production, and skips its ES5 TypeScript pass because the script is no longer
+// TypeScript.
+const typescript = require('typescript');
 const babel = require('@babel/core');
+const { parse } = require('@vue/compiler-sfc');
+const vue3jest = require('@vue/vue3-jest').default || require('@vue/vue3-jest');
 
-const COMPAT_CONFIG = { MODE: 2 };
+function transpileScript(code, filename) {
+  return typescript.transpileModule(code, {
+    fileName: filename,
+    compilerOptions: {
+      target: typescript.ScriptTarget.ES2019,
+      module: typescript.ModuleKind.ESNext,
+      experimentalDecorators: true,
+      useDefineForClassFields: false,
+      importHelpers: false,
+      verbatimModuleSyntax: false,
+      isolatedModules: true,
+    },
+  }).outputText;
+}
 
-const babelOptions = {
-  babelrc: false,
-  configFile: false,
-  presets: [
-    [
-      '@babel/preset-env',
-      { targets: { node: 'current' }, modules: 'commonjs' },
-    ],
-    ['@babel/preset-typescript', { allowNamespaces: true }],
-  ],
-  plugins: [
-    '@babel/plugin-transform-async-to-generator',
-    ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
-  ],
-};
-
-function process(sourceText, sourcePath) {
+function process(sourceText, sourcePath, options) {
   const { descriptor } = parse(sourceText, { filename: sourcePath });
-  const id = crypto
-    .createHash('md5')
-    .update(sourcePath)
-    .digest('hex')
-    .slice(0, 8);
+  const block = descriptor.script || descriptor.scriptSetup;
 
-  const scriptBlock = descriptor.script || descriptor.scriptSetup;
-  const scriptSource = scriptBlock ? scriptBlock.content : 'export default {}';
-
-  // Compile the <template> to a compat-mode render function.
-  let templateCode = '';
-  if (descriptor.template) {
-    const compiled = compileTemplate({
-      id,
-      source: descriptor.template.content,
-      filename: sourcePath,
-      compilerOptions: { compatConfig: COMPAT_CONFIG },
-    });
-    templateCode = compiled.code.replace(
-      'export function render',
-      'function render',
+  let rewritten = sourceText;
+  if (block && /tsx?/.test(block.lang || '')) {
+    const js = transpileScript(block.content, sourcePath + '.ts');
+    // The descriptor offsets bound the script *content* (between the tags).
+    // Swap the content for its transpiled JavaScript, then drop lang="ts" from
+    // the enclosing <script> tag so vue3-jest treats the block as JavaScript and
+    // skips its ES5 TypeScript pass.
+    const before = sourceText.slice(0, block.loc.start.offset);
+    const after = sourceText.slice(block.loc.end.offset);
+    const beforeNoLang = before.replace(
+      /(<script\b[^>]*?)\s+lang=(?:"tsx?"|'tsx?'|tsx?)([^>]*>)(\s*)$/,
+      '$1$2$3',
     );
+    rewritten = `${beforeNoLang}\n${js}\n${after}`;
   }
 
-  // The script exports the component options as its default export. Capture it,
-  // attach the render function, and re-export.
-  const combined = [
-    scriptSource,
-    templateCode,
-    descriptor.template
-      ? 'if (typeof __default__ !== "undefined" && __default__) { __default__.render = render; }'
-      : '',
-    'export default __default__;',
-  ].join('\n');
+  const result = vue3jest.process(rewritten, sourcePath, options);
+  const code = typeof result === 'string' ? result : result.code;
 
-  // Rename the SFC's `export default X` to a capturable binding before Babel
-  // turns ESM into CommonJS, so the template render function can be attached.
-  const normalized = combined.replace(
-    /export default (?!__default__)/,
-    'const __default__ = ',
-  );
-
-  const { code } = babel.transform(normalized, {
-    ...babelOptions,
-    filename: sourcePath + '.ts',
+  // vue3-jest may leave ES module syntax (import/export) in place. Jest runs on
+  // CommonJS, so normalize the combined script + render output to CJS.
+  const { code: cjs } = babel.transform(code, {
+    babelrc: false,
+    configFile: false,
+    filename: sourcePath + '.js',
+    sourceType: 'module',
+    plugins: ['@babel/plugin-transform-modules-commonjs'],
   });
 
-  return { code };
+  return { code: cjs };
 }
 
 module.exports = { process };
