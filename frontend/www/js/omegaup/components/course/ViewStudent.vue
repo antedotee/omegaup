@@ -204,7 +204,12 @@ import * as time from '../../time';
 class CourseViewStudent extends Vue {
   created() {
     // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
+    // vue-facing-decorator, so prop-derived fields are assigned here. Under Vue
+    // 3 reactivity is already active in `created()`, so these initial
+    // assignments trigger the `selectedStudent`/`selectedAssignment` watchers,
+    // which did not happen under Vue 2 (where data was seeded before the
+    // watchers ran). Mark the component as initializing so those watchers skip
+    // their `update` emit for this prop-sync; user-driven changes still emit.
     this.selectedAssignment = this.assignment?.alias ?? null;
     this.selectedProblem = this.problem;
     this.selectedStudent = this.student?.username ?? null;
@@ -304,10 +309,16 @@ class CourseViewStudent extends Vue {
 
   @Watch('selectedStudent')
   onSelectedStudentChange(newVal?: string, oldVal?: string) {
-    this.$emit('update', {
-      student: this.selectedStudent,
-      assignmentAlias: this.selectedAssignment,
-    });
+    // The empty-string seed only exists before `created()` syncs the props, so
+    // an `oldVal` of `''` means this fired for that initial prop-sync. Under Vue
+    // 2 the data was seeded before the watcher ran, so that sync never emitted;
+    // skip it here to match while still emitting on real user changes.
+    if (oldVal !== '') {
+      this.$emit('update', {
+        student: this.selectedStudent,
+        assignmentAlias: this.selectedAssignment,
+      });
+    }
     if (!newVal || newVal === oldVal) {
       return;
     }
@@ -322,10 +333,14 @@ class CourseViewStudent extends Vue {
 
   @Watch('selectedAssignment')
   onSelectedAssignmentChange(newVal?: string, oldVal?: string) {
-    this.$emit('update', {
-      student: this.selectedStudent,
-      assignmentAlias: this.selectedAssignment,
-    });
+    // See onSelectedStudentChange: an `oldVal` of `''` is the pre-`created()`
+    // seed, so skip the emit for that initial prop-sync to match Vue 2.
+    if (oldVal !== '') {
+      this.$emit('update', {
+        student: this.selectedStudent,
+        assignmentAlias: this.selectedAssignment,
+      });
+    }
     if (!newVal || newVal === oldVal) {
       return;
     }

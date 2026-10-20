@@ -14,7 +14,7 @@ describe('FormUpdate.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -38,7 +38,7 @@ describe('FormUpdate.vue', () => {
       currentNumberOfContestants: 8,
     });
 
-    await formBase.find('button[type="submit"]').trigger('click');
+    await formBase.find('form[data-teams-group]').trigger('submit');
 
     // In edit mode, alias can not change its value
     expect(wrapper.vm.$props.alias).toBe('Hello');

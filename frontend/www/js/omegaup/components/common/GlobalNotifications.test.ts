@@ -1,13 +1,11 @@
 import { shallowMount } from '@vue/test-utils';
-import Vuex, { Store } from 'vuex';
+import { Store } from 'vuex';
 import {
   createNotificationsStore,
   MessageType,
   NotificationsState,
 } from '../../notificationsStore';
 import GlobalNotifications from './GlobalNotifications.vue';
-
-localVue.use(Vuex);
 
 // Simple stub for markdown component that just renders the text
 const MarkdownStub = {

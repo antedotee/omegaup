@@ -12,7 +12,6 @@ import { SocketOptions, SocketStatus, EventsSocket } from './events_socket';
 import WS from 'jest-websocket-mock';
 import { runsStoreConfig } from './runsStore';
 import { clarificationStoreConfig } from './clarificationsStore';
-import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import fetchMock from 'jest-fetch-mock';
 import {
@@ -22,8 +21,14 @@ import {
   onVirtualRankingChanged,
 } from './ranking';
 import rankingStore from './rankingStore';
-import { mocked } from 'ts-jest/utils';
 import { ScoreMode } from './navigation';
+
+// `ts-jest/utils` was removed; Jest 27+ ships `jest.mocked`. The former
+// `mocked(fn, deep)` second argument was a type-only hint, so this wrapper
+// preserves the existing call sites and their runtime behavior.
+function mocked<T>(item: T, _deep = false): jest.MockedFunction<any> {
+  return jest.mocked(item) as unknown as jest.MockedFunction<any>;
+}
 
 const navbarProblems: types.NavbarProblemsetProblem[] = [
   {
@@ -457,8 +462,6 @@ describe('EventsSocket', () => {
     jest.runOnlyPendingTimers();
     await server?.connected;
 
-    const localVue = createLocalVue();
-    localVue.use(Vuex);
     const store = new Vuex.Store(runsStoreConfig);
 
     server?.send({
@@ -494,8 +497,6 @@ describe('EventsSocket', () => {
     jest.runOnlyPendingTimers();
     await server?.connected;
 
-    const localVue = createLocalVue();
-    localVue.use(Vuex);
     const clarificationStore = new Vuex.Store(clarificationStoreConfig);
 
     server?.send({

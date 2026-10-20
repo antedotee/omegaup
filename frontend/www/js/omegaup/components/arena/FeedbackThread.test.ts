@@ -31,7 +31,7 @@ describe('FeedbackThread.vue', () => {
     expect(wrapper.html()).not.toContain('input');
 
     const addFeedbackButton = wrapper.find('button[data-button-submit]');
-    expect(addFeedbackButton.attributes().disabled).toBe('disabled');
+    expect(addFeedbackButton.attributes().disabled).toBe('');
 
     await wrapper.setData({
       currentFeedbackThread: {

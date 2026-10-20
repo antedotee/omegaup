@@ -14,7 +14,7 @@ describe('FeedbackCodeView.vue', () => {
     });
 
     expect(wrapper.text()).toContain('four lines;');
-    expect(wrapper.find('button').attributes().disabled).toBe('disabled');
+    expect(wrapper.find('button').attributes().disabled).toBe('');
   });
 
   it('Should handle feedback codeview with comments', async () => {

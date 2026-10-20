@@ -1,4 +1,9 @@
 jest.mock('../../../../third_party/js/diff_match_patch.js');
+// vue-infinite-scroll is a Vue 2 directive that registers listeners via the
+// removed `vm.$on` API; mounting the Runs table (which this component embeds)
+// invokes it and throws under Vue 3. Stub it to a no-op directive, matching
+// Runs.test.ts.
+jest.mock('vue-infinite-scroll', () => ({}));
 
 import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
@@ -19,7 +24,7 @@ describe('Contest.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -153,7 +158,7 @@ describe('Contest.vue', () => {
     expect(wrapper.find('a[data-problem=otherProblemOmegaUp]').text()).toBe(
       'B. hello other problem omegaUp',
     );
-    expect(wrapper.text()).toContain(problemInfo.points);
+    expect(wrapper.text()).toContain(`${problemInfo.points}`);
     expect(wrapper.text()).toContain(time.formatDateLocal(currentDate));
 
     await wrapper.find('a[data-problem=problemOmegaUp]').trigger('click');

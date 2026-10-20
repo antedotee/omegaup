@@ -217,14 +217,18 @@ class QualityNominationList extends Vue {
   get orderedNominations(): types.NominationListItem[] {
     const order = this.sortOrder === omegaup.SortOrder.Ascending ? 1 : -1;
 
+    // Sort a copy: `Array.prototype.sort` mutates in place, and mutating the
+    // reactive `nominations` array inside a computed getter re-triggers the
+    // getter under Vue 3 reactivity ("Maximum recursive updates exceeded").
+    // Vue 2 tolerated the in-place sort; copying first preserves the result.
     switch (this.columnName) {
       case 'time':
-        return this.nominations.sort(
+        return [...this.nominations].sort(
           (a, b) => order * (a.time.getTime() - b.time.getTime()),
         );
       case 'title':
       default:
-        return this.nominations.sort(
+        return [...this.nominations].sort(
           (a, b) => order * a.problem.title.localeCompare(b.problem.title),
         );
     }

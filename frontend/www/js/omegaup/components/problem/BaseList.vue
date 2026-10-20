@@ -238,8 +238,7 @@ import * as ui from '../../ui';
 import common_Paginator from '../common/Paginator.vue';
 import common_SortControls from '../common/SortControls.vue';
 
-import 'v-tooltip/dist/v-tooltip.css';
-import { VTooltip } from 'v-tooltip';
+import { vBTooltip } from 'bootstrap-vue-next';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -258,7 +257,7 @@ library.add(faEyeSlash, faMedal, faExclamationTriangle, faBan);
     'omegaup-common-sort-controls': common_SortControls,
   },
   directives: {
-    tooltip: VTooltip,
+    tooltip: vBTooltip,
   },
 })
 class BaseList extends Vue {

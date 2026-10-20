@@ -6,7 +6,6 @@
     <div class="switch">
       <input
         v-model="currentCheckedValue"
-        :value="currentCheckedValue"
         :disabled="disabled"
         type="checkbox"
       />
@@ -21,14 +20,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit, toNative } from 'vue-facing-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 
 export enum ToggleSwitchSize {
   Small = 'small',
   Large = 'large',
 }
 
-@Component
+@Component({ emits: ['update:value'] })
 class ToggleSwitch extends Vue {
   created() {
     // Props are not bound when class field initializers run under
@@ -43,9 +42,8 @@ class ToggleSwitch extends Vue {
   currentCheckedValue = undefined;
 
   @Watch('currentCheckedValue')
-  @Emit('update:value')
-  onUpdateInput(newValue: boolean): boolean {
-    return newValue;
+  onUpdateInput(newValue: boolean): void {
+    this.$emit('update:value', newValue);
   }
 
   @Watch('checkedValue')

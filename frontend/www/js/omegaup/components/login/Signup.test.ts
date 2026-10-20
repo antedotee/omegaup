@@ -471,7 +471,7 @@ describe('Signup.vue', () => {
 
     afterEach(() => {
       if (introWrapper) {
-        introWrapper.destroy();
+        introWrapper.unmount();
         introWrapper = null;
       }
     });

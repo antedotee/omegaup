@@ -9,8 +9,12 @@ describe('Countdown.vue', () => {
   let dateNowSpy: jest.SpyInstance<number, []> | null = null;
 
   beforeEach(() => {
-    dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => now);
+    // Jest's modern fake timers install their own fake `Date`, so the
+    // `Date.now` spy must be applied AFTER `useFakeTimers()` to win; otherwise
+    // the fake clock drifts 1ms past the mocked `now` and the floor-based
+    // delta formatter reports one second short.
     jest.useFakeTimers();
+    dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => now);
   });
 
   afterEach(() => {

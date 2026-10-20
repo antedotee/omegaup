@@ -86,7 +86,14 @@ describe('BasicInformationEdit.vue', () => {
 
     await wrapper.find('input[data-username]').setValue('omegaup_modified');
     await wrapper.find('input[data-name]').setValue('omegaUp admin modified');
-    await wrapper.findComponent(date_Picker).setValue('2001-01-01');
+    // Set the value through the inner native date input so the picker's own
+    // string-to-Date conversion runs, matching real user interaction. Calling
+    // setValue on the component wrapper would push the raw string into the model
+    // and skip that conversion.
+    await wrapper
+      .findComponent(date_Picker)
+      .find('input')
+      .setValue('2001-01-01');
     await wrapper
       .find('select[data-gender]')
       .find('option[value="other"]')

@@ -135,7 +135,7 @@
         <omegaup-problem-versions
           :log="data.log"
           :published-revision="data.publishedRevision"
-          :value="data.publishedRevision"
+          :model-value="data.publishedRevision"
           :show-footer="true"
           @emit-select-version="
             (selectedRevision, updatePublished) =>

@@ -24,13 +24,12 @@
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
-import 'v-tooltip/dist/v-tooltip.css';
-import { VTooltip } from 'v-tooltip';
+import { vBTooltip } from 'bootstrap-vue-next';
 import Badge3D from './Badge3D.vue';
 
 @Component({
   directives: {
-    tooltip: VTooltip,
+    tooltip: vBTooltip,
   },
   components: {
     'badge-3d': Badge3D,

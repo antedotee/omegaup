@@ -30,10 +30,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch, toNative } from 'vue-facing-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../lang';
 
-@Component
+@Component({ emits: ['update:value'] })
 class RadioSwitch extends Vue {
   created() {
     // Props are not bound when class field initializers run under
@@ -51,9 +51,13 @@ class RadioSwitch extends Vue {
   radioValue = undefined;
 
   @Watch('radioValue')
-  @Emit('update:value')
-  onUpdateInput(newValue: any): any {
-    return newValue;
+  onUpdateInput(): void {
+    // Both the `radioValue` watcher and the input `@change` handler route here.
+    // Emit the model value itself, not the handler argument, so the DOM change
+    // event object is never mistaken for the selected value. Emit explicitly
+    // rather than stacking an `@Emit` decorator on a `@Watch`, which does not
+    // fire the emit under vue-facing-decorator.
+    this.$emit('update:value', this.radioValue);
   }
 }
 export default toNative(RadioSwitch);

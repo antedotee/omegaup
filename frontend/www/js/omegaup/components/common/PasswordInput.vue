@@ -2,7 +2,7 @@
   <div class="password-input-wrapper">
     <input
       v-bind="$attrs"
-      :value="value"
+      :value="modelValue"
       :type="showPassword ? 'text' : 'password'"
       :name="name"
       :class="['form-control', inputClass]"
@@ -10,7 +10,7 @@
       :autocomplete="autocomplete"
       :size="size"
       :required="required"
-      @input="$emit('input', $event.target.value)"
+      @input="$emit('update:modelValue', $event.target.value)"
     />
     <button
       type="button"
@@ -37,12 +37,13 @@ library.add(faEye, faEyeSlash);
 
 @Component({
   inheritAttrs: false,
+  emits: ['update:modelValue'],
   components: {
     FontAwesomeIcon,
   },
 })
 class PasswordInput extends Vue {
-  @Prop({ required: true }) value!: string;
+  @Prop({ required: true }) modelValue!: string;
   @Prop({ default: '' }) name!: string;
   @Prop({ default: '' }) inputClass!: string;
   @Prop({ default: null }) tabindex!: number | null;

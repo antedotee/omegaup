@@ -65,7 +65,7 @@ class Countdown extends Vue {
     this.$emit('finish');
   }
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = 0;

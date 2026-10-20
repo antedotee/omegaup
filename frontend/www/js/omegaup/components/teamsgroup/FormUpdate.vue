@@ -1,9 +1,9 @@
 <template>
   <omegaup-teams-group-form
     :alias="alias"
-    :description.sync="currentDescription"
-    :name.sync="currentName"
-    :number-of-contestants.sync="currentNumberOfContestants"
+    v-model:description="currentDescription"
+    v-model:name="currentName"
+    v-model:number-of-contestants="currentNumberOfContestants"
     :max-number-of-contestants="maxNumberOfContestants"
     @submit="(request) => $emit('update-teams-group', request)"
   >
@@ -22,6 +22,7 @@ import T from '../../lang';
   components: {
     'omegaup-teams-group-form': teamsgroup_FormBase,
   },
+  emits: ['update-teams-group'],
 })
 class TeamsGroupForm extends Vue {
   created() {

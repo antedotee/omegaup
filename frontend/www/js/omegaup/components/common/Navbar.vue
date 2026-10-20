@@ -362,6 +362,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueRuntime from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -381,7 +382,13 @@ import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import LogoutConfirmation from './LogoutConfirmation.vue';
 library.add(faSignOutAlt, faUser);
 
-export const EventBus = new Vue();
+// `Vue` from vue-facing-decorator is the decorator base class, not the Vue
+// runtime, so `new Vue()` here would hit the decorator's instance constructor
+// and throw. The legacy global event bus still needs the Vue 2
+// `$on`/`$emit`/`$off` surface (see login/signin.ts), which the Vue 3 migration
+// build keeps on a runtime instance under INSTANCE_EVENT_EMITTER compat, so
+// build the bus from the actual runtime import instead.
+export const EventBus = new VueRuntime();
 
 @Component({
   components: {
@@ -534,7 +541,7 @@ class Navbar extends Vue {
     this.updateScroll();
   }
 
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('click', this.handleDocumentClick);
     window.removeEventListener('scroll', this.updateScroll);
   }

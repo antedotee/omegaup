@@ -16,7 +16,7 @@ describe('Teams.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -55,9 +55,12 @@ describe('Teams.vue', () => {
       props: propsData,
     });
 
-    expect(wrapper.find('table[data-table-identities]').text()).toContain(
-      'omegaUp:user user',
-    );
+    const identitiesTable = wrapper.find('table[data-table-identities]');
+    // Vue 3 condenses the inter-element whitespace that Vue 2 preserved, so the
+    // concatenated table text no longer has a space between the username and
+    // the team name cell. Assert each cell renders its own value instead.
+    expect(identitiesTable.text()).toContain('omegaUp:user');
+    expect(identitiesTable.find('[data-group-team-name]').text()).toBe('user');
   });
 
   it('Should handle edit identity form', async () => {

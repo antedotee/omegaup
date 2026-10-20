@@ -849,6 +849,15 @@ class Ephemeral extends Vue {
           }
 
           const vue = new VueGlobal({
+            // This instance is created dynamically for a golden-layout panel
+            // and still relies on the Vue 2 render signature (a `createElement`
+            // argument) and `$children`. The global test/app compat level turns
+            // RENDER_FUNCTION off, so opt this specific instance back into the
+            // Vue 2 behaviors it needs.
+            compatConfig: {
+              RENDER_FUNCTION: true,
+              INSTANCE_CHILDREN: true,
+            },
             el: container.getElement()[0],
             components: {
               [componentName]: component,

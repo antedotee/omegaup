@@ -159,10 +159,10 @@ describe('ProblemLists.vue', () => {
       wrapper.find('input[data-use-latest-version-false]').element,
     ).toBeChecked();
 
-    const radio = wrapper.find('input[name="use-latest-version"]')
-      .element as HTMLOptionElement;
-    radio.selected = true;
-    await radio.click();
+    // @vue/test-utils 2 does not propagate a radio's bound model from a raw
+    // `element.click()`; drive the v-model through setValue, which selects the
+    // "use latest version" radio and fires `change`.
+    await wrapper.find('input[data-use-latest-version-true]').setValue(true);
 
     expect(
       wrapper.find('input[data-use-latest-version-true]').element,

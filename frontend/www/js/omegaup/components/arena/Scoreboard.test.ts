@@ -95,9 +95,12 @@ describe('Scoreboard.vue', () => {
       wrapper.find('.omegaup-scoreboard table tbody').text(),
     ).not.toContain('test_user_0');
 
+    // Uncheck the "only invited" filter. Under @vue/test-utils 2, triggering a
+    // raw `click` on a checkbox no longer fires the `change` event that a native
+    // `v-model` listens for, so use `setValue(false)` to simulate unchecking it.
     await wrapper
       .find('input[type="checkbox"].toggle-contestants')
-      .trigger('click');
+      .setValue(false);
 
     expect(wrapper.find('.omegaup-scoreboard table tbody').text()).toContain(
       'test_user_0',

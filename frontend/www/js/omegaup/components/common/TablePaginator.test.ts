@@ -62,10 +62,10 @@ describe('TablePaginator.vue', () => {
     // Only one page is shown
     expect(
       wrapper.find('button[data-button-previous]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
     expect(
       wrapper.find('button[data-button-next]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
   });
 
   it('Should handle a table with rows and several pages', async () => {
@@ -85,7 +85,7 @@ describe('TablePaginator.vue', () => {
     // should be enabled
     expect(
       wrapper.find('button[data-button-previous]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
     expect(
       wrapper.find('button[data-button-next]').attributes('disabled'),
     ).toBeUndefined();

@@ -14,7 +14,7 @@ describe('FormCreate.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -32,7 +32,7 @@ describe('FormCreate.vue', () => {
       currentName: 'Hello omegaUp',
       currentDescription: 'Hello omegaUp Description',
     });
-    await formBase.find('button[type="submit"]').trigger('click');
+    await formBase.find('form[data-teams-group]').trigger('submit');
     expect(wrapper.emitted('create-teams-group')).toEqual([
       [
         {
@@ -51,7 +51,7 @@ describe('FormCreate.vue', () => {
     const wrapper = mount(teamsgroup_FormCreate);
 
     const formBase = wrapper.findComponent(teamsgroup_FormBase);
-    formBase.setData({
+    await formBase.setData({
       currentName: 'some new name',
     });
 

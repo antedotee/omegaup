@@ -20,17 +20,19 @@ import T from '../lang';
 import * as time from '../time';
 import '../../../third_party/js/bootstrap-datepicker.js';
 
-@Component
+@Component({ emits: ['update:modelValue'] })
 class DatePicker extends Vue {
   created() {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.stringValue = this.value ? time.formatDateLocal(this.value) : '';
+    this.stringValue = this.isValidDate(this.modelValue)
+      ? time.formatDateLocal(this.modelValue)
+      : '';
   }
   T = T;
 
   @Prop({ default: '' }) name!: string;
-  @Prop() value!: Date;
+  @Prop({ default: null }) modelValue!: Date | null;
   @Prop({ default: true }) enabled!: boolean;
   @Prop({ default: T.datePickerFormat }) format!: string;
   @Prop({ default: false }) isInvalid!: boolean;
@@ -57,6 +59,10 @@ class DatePicker extends Vue {
     }
   }
 
+  private isValidDate(value: Date | null): value is Date {
+    return value instanceof Date && !isNaN(value.getTime());
+  }
+
   private mountedFallback() {
     this.usedFallback = true;
     $(this.$el)
@@ -65,9 +71,9 @@ class DatePicker extends Vue {
         format: this.format,
       })
       .on('changeDate', (ev) => {
-        this.$emit('input', ev.date);
+        this.$emit('update:modelValue', ev.date);
       })
-      .datepicker('setValue', this.value);
+      .datepicker('setValue', this.modelValue);
   }
 
   @Watch('stringValue')
@@ -76,12 +82,14 @@ class DatePicker extends Vue {
       // If the fallback was used, we don't need to update anything.
       return;
     }
-    this.$emit('input', time.parseDateLocal(newStringValue));
+    this.$emit('update:modelValue', time.parseDateLocal(newStringValue));
   }
 
-  @Watch('value')
-  onPropertyChanged(newValue: Date) {
-    this.stringValue = time.formatDateLocal(newValue);
+  @Watch('modelValue')
+  onPropertyChanged(newValue: Date | null) {
+    this.stringValue = this.isValidDate(newValue)
+      ? time.formatDateLocal(newValue)
+      : '';
     if (this.usedFallback) {
       $(this.$el).datepicker('setValue', newValue);
     }

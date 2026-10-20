@@ -135,7 +135,7 @@ describe('Runs.vue', () => {
       },
     });
     expect(
-      wrapper.findAll('acronym[data-run-guid]').wrappers.map((e) => e.text()),
+      wrapper.findAll('acronym[data-run-guid]').map((e) => e.text()),
     ).toEqual(['122000', '121500', '121000', '120500', '120000']);
   });
 
@@ -173,12 +173,14 @@ describe('Runs.vue', () => {
       },
     });
 
+    // Vue 3 renders a bound-true boolean attribute as an empty string and omits
+    // it entirely when false, so presence is checked with (un)defined.
     expect(
       wrapper.find('button[data-button-page-previous]').attributes('disabled'),
-    ).toBeTruthy();
+    ).toBeDefined();
     expect(
       wrapper.find('button[data-button-page-next]').attributes('disabled'),
-    ).toBeFalsy();
+    ).toBeUndefined();
     expect(wrapper.find('.pager-controls').text()).toContain('1');
     await wrapper.find('button[data-button-page-next]').trigger('click');
 
@@ -188,10 +190,10 @@ describe('Runs.vue', () => {
 
     expect(
       wrapper.find('button[data-button-page-previous]').attributes('disabled'),
-    ).toBeFalsy();
+    ).toBeUndefined();
     expect(
       wrapper.find('button[data-button-page-next]').attributes('disabled'),
-    ).toBeFalsy();
+    ).toBeUndefined();
     expect(wrapper.find('.pager-controls').text()).toContain('2');
   });
 

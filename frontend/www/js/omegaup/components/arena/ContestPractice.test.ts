@@ -122,7 +122,7 @@ describe('ContestPractice.vue', () => {
     expect(wrapper.find('a[data-problem=otherProblemOmegaUp]').text()).toBe(
       'B. hello other problem omegaUp',
     );
-    expect(wrapper.text()).toContain(problemInfo.points);
+    expect(wrapper.text()).toContain(`${problemInfo.points}`);
     expect(wrapper.text()).toContain(time.formatDateLocal(date));
 
     await wrapper.find('a[data-problem=problemOmegaUp]').trigger('click');

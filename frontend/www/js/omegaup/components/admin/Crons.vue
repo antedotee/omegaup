@@ -49,9 +49,8 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="run in runs">
+          <template v-for="run in runs" :key="run.run_id">
             <tr
-              :key="run.run_id"
               class="cron-run-row"
               :class="{ 'table-active': expandedRunId === run.run_id }"
               @click="toggle(run.run_id)"
@@ -71,11 +70,7 @@
               <td>{{ formatDuration(run.duration_seconds) }}</td>
               <td>{{ formatRows(run.rows_affected) }}</td>
             </tr>
-            <tr
-              v-if="expandedRunId === run.run_id"
-              :key="`detail-${run.run_id}`"
-              class="cron-run-detail"
-            >
+            <tr v-if="expandedRunId === run.run_id" class="cron-run-detail">
               <td></td>
               <td colspan="5">
                 <div v-if="run.error_text" class="text-danger mb-2">

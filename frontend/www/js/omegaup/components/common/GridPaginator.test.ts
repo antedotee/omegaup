@@ -63,10 +63,10 @@ describe('GridPaginator.vue', () => {
     // Only one page is shown
     expect(
       wrapper.find('button[data-button-previous]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
     expect(
       wrapper.find('button[data-button-next]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
   });
 
   it('Should handle a grid with information divided in multiple pages', async () => {
@@ -86,7 +86,7 @@ describe('GridPaginator.vue', () => {
     // should be enabled
     expect(
       wrapper.find('button[data-button-previous]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
     expect(
       wrapper.find('button[data-button-next]').attributes('disabled'),
     ).toBeUndefined();

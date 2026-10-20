@@ -62,7 +62,7 @@ describe('AddProblem.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -243,7 +243,7 @@ describe('AddProblem.vue', () => {
 
     await wrapper
       .find('input[name="use-latest-version"][value="true"]')
-      .trigger('click');
+      .setValue();
 
     await wrapper.find('button.add-problem').trigger('submit');
     expect(wrapper.emitted('add-problem')).toEqual([

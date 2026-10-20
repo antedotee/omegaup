@@ -47,7 +47,7 @@
               >{{ T.contestAddproblemChooseVersion }}
             </label>
             <omegaup-radio-switch
-              :value.sync="useLatestVersion"
+              v-model:value="useLatestVersion"
               :selected-value="useLatestVersion"
               :name="'use-latest-version'"
               :text-for-true="T.contestAddproblemLatestVersion"
@@ -173,8 +173,7 @@ import T from '../../lang';
 import problem_Versions from '../problem/Versions.vue';
 import common_Typeahead from '../common/Typeahead.vue';
 import omegaup_RadioSwitch from '../RadioSwitch.vue';
-import 'v-tooltip/dist/v-tooltip.css';
-import { VTooltip } from 'v-tooltip';
+import { vBTooltip } from 'bootstrap-vue-next';
 
 import {
   FontAwesomeIcon,
@@ -209,7 +208,7 @@ export enum SearchTypes {
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
   directives: {
-    tooltip: VTooltip,
+    tooltip: vBTooltip,
   },
 })
 class AddProblem extends Vue {

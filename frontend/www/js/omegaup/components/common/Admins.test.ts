@@ -27,7 +27,9 @@ describe('Admins.vue', () => {
       },
     });
     expect(wrapper.find('table tbody').text()).toContain('owner');
-    await wrapper.find('input[name="toggle-site-admins"]').trigger('click');
+    // @vue/test-utils 2 no longer toggles a checkbox's bound model from a raw
+    // `click`; drive the v-model through setValue, which fires `change`.
+    await wrapper.find('input[name="toggle-site-admins"]').setValue(true);
     expect(wrapper.find('table tbody').text()).toContain('site-admin');
   });
 });

@@ -178,7 +178,9 @@ Here we can add code.
       },
     });
 
-    expect(wrapper.text()).toContain(problem.points);
+    // Jest's string `toContain` requires a string argument; `problem.points` is
+    // a number, so stringify it to assert the rendered points text.
+    expect(wrapper.text()).toContain(String(problem.points));
     expect(wrapper.text()).toContain(time.formatDate(date));
   });
 

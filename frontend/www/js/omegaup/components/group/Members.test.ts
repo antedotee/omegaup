@@ -42,8 +42,12 @@ describe('Members.vue', () => {
     expect(wrapper.find('table[data-table-members] tbody').text()).toContain(
       'hello',
     );
+    // Username and name live in two separate `<td>` cells. Vue 3's default
+    // whitespace:'condense' drops the whitespace-only text node between them, so
+    // `.text()` concatenates the cell contents with no separating space. The
+    // rendered DOM (two cells) is unchanged.
     expect(wrapper.find('table[data-table-identities] tbody').text()).toContain(
-      'omegaUp:user user',
+      'omegaUp:useruser',
     );
   });
 });

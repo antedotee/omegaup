@@ -5,7 +5,7 @@
       <omegaup-common-typeahead
         :existing-options="searchResultSchools"
         :options="searchResultSchools"
-        :value.sync="school"
+        v-model:value="school"
         data-school-name
         @update-existing-options="
           (query) => $emit('update-search-result-schools', query)
@@ -37,7 +37,7 @@
     <div class="form-group">
       <label>{{ T.userEditManageSchoolsUserCurrentlyEnrolled }}</label>
       <omegaup-radio-switch
-        :value.sync="isCurrentlyEnrolled"
+        v-model:value="isCurrentlyEnrolled"
         :selected-value="isCurrentlyEnrolled"
       ></omegaup-radio-switch>
     </div>

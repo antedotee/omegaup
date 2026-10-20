@@ -24,7 +24,7 @@ describe('Feedback.vue', () => {
 
     const button = wrapper.find('button[data-button-submit]');
     expect(button.attributes().disabled).toBeDefined();
-    expect(button.attributes().disabled).toBe('disabled');
+    expect(button.attributes().disabled).toBe('');
 
     await wrapper.setData({
       currentFeedback: {

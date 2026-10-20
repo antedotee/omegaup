@@ -21,6 +21,6 @@ describe('Settings.vue', () => {
 
     expect(
       wrapper.find('input[name="validator_time_limit"]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
   });
 });

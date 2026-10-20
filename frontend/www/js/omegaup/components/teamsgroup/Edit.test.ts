@@ -61,7 +61,9 @@ describe('Edit.vue', () => {
     ];
 
     await wrapper.setProps({ teamsIdentities });
-    expect(wrapper.vm.currentTeamsIdentities).toBe(teamsIdentities);
+    // Vue 3 exposes props through a reactive proxy, so a reference-equality
+    // check no longer matches the raw array; compare by structural equality.
+    expect(wrapper.vm.currentTeamsIdentities).toStrictEqual(teamsIdentities);
   });
 
   it('Should keep the updated contestants count across tabs', async () => {

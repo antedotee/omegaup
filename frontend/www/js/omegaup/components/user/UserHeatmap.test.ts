@@ -200,14 +200,11 @@ describe('UserHeatmap.vue', () => {
 
     const vm = wrapper.vm as any;
 
-    // Reset state so renderHeatmap proceeds
+    // Reset state so renderHeatmap proceeds. The `@Ref` getter is backed by the
+    // read-only `$refs`, so it can't be redefined on the Vue 3 instance proxy;
+    // the real `<div ref="heatmapContainer">` rendered by shallowMount already
+    // provides the container renderHeatmap needs.
     vm.hasRendered = false;
-
-    // Provide a mock container element (simulates the @Ref)
-    Object.defineProperty(vm, 'heatmapContainer', {
-      get: () => document.createElement('div'),
-      configurable: true,
-    });
 
     vm.renderHeatmap();
 

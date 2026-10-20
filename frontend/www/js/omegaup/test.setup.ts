@@ -25,7 +25,18 @@ import Sortable from 'sortablejs';
 // breaks. Turning the flag off restores Vue 3 `modelValue`/`update:modelValue`
 // semantics. Verified against the full components test tree: the same 94 suites
 // pass with the flag on or off, so this regresses nothing.
-configureCompat({ MODE: 2, RENDER_FUNCTION: false, COMPONENT_V_MODEL: false });
+// INSTANCE_EVENT_HOOKS must also stay off. The Vue 2 shim re-emits every
+// lifecycle hook as a `hook:mounted`/`hook:beforeMount`/... component event.
+// Real Vue 3 never emits those, and no component in this repo listens for them,
+// but @vue/test-utils records them in `wrapper.emitted()`, which breaks any
+// test asserting the full emitted-event map (e.g. the typeahead suites).
+// Turning the flag off restores Vue 3 behavior without changing any component.
+configureCompat({
+  MODE: 2,
+  RENDER_FUNCTION: false,
+  COMPONENT_V_MODEL: false,
+  INSTANCE_EVENT_HOOKS: false,
+});
 
 // Register BootstrapVueNext globally for every mounted component, mirroring the
 // app bootstrap. This replaces the per-test `Vue.use(BootstrapVue)` calls that

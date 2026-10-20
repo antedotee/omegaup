@@ -1,6 +1,6 @@
 <template>
   <tags-input
-    v-model="selectedOptions"
+    :value="selectedOptions"
     :existing-tags="existingOptions"
     :typeahead="true"
     :typeahead-style="'dropdown'"
@@ -11,6 +11,7 @@
     :hide-input-on-limit="true"
     :only-existing-tags="true"
     :typeahead-hide-discard="true"
+    @input="onInput"
     @change="updateExistingOptions"
     @tag-added="$emit('update:value', selectedOptions)"
     @tag-removed="$emit('update:value', selectedOptions)"
@@ -38,6 +39,29 @@ class MultiTypeahead extends Vue {
 
   T = T;
   selectedOptions: types.ListItem[] = [];
+
+  onInput(options: types.ListItem[]): void {
+    // VoerroTagsInput is a Vue 2 `value`/`input` model component. Under the old
+    // Vue 2 build its `input` event flowed back through `v-model`, so the parent
+    // observed the selection as soon as a tag was added. With `v-model` remapped
+    // to `modelValue` under @vue/compat the library's `input` no longer reaches
+    // the parent, so apply the selection and forward it here. Bail out when the
+    // payload matches the current selection: the library re-emits `input` after
+    // the one-way `:value` prop updates, and re-processing it would both loop
+    // and duplicate the forwarded event.
+    if (
+      options.length === this.selectedOptions.length &&
+      options.every((opt, i) => opt.key === this.selectedOptions[i]?.key)
+    ) {
+      return;
+    }
+    this.selectedOptions = options;
+    // A removal is reported by `tag-removed`, so only forward additions here to
+    // avoid duplicating the empty-selection event.
+    if (options.length > 0) {
+      this.$emit('update:value', this.selectedOptions);
+    }
+  }
 
   updateExistingOptions(query: string): void {
     if (query.length < this.activationThreshold) return;

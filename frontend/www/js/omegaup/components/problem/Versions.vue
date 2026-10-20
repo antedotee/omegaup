@@ -171,12 +171,12 @@ class ProblemVersions extends Vue {
   created() {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.selectedRevision = this.value;
+    this.selectedRevision = this.modelValue;
   }
   @Prop() log!: types.ProblemVersion[];
   @Prop({ default: null }) publishedRevision!: null | types.ProblemVersion;
   @Prop() showFooter!: boolean;
-  @Prop({ default: null }) value!: null | types.ProblemVersion;
+  @Prop({ default: null }) modelValue!: null | types.ProblemVersion;
 
   T = T;
   time = time;
@@ -250,14 +250,14 @@ class ProblemVersions extends Vue {
     return result;
   }
 
-  @Watch('value')
+  @Watch('modelValue')
   onValueChange(newValue: types.ProblemVersion) {
     this.selectedRevision = newValue;
   }
 
   @Watch('selectedRevision')
   onSelectedRevisionChange(newValue: types.ProblemVersion) {
-    this.$emit('input', this.selectedRevision);
+    this.$emit('update:modelValue', this.selectedRevision);
     if (
       !newValue ||
       Object.prototype.hasOwnProperty.call(this.runsDiff, newValue.version)
