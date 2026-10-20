@@ -269,11 +269,11 @@ module.exports = {
       // inline scss styles on vue components
       {
         test: /\.css$/,
-        use: ['vue-style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.ttf$/,
