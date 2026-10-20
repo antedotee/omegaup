@@ -65,7 +65,7 @@ OmegaUp.on('ready', () => {
       searchResultUsers: [] as types.ListItem[],
       searchResultSchools: searchResultSchools,
     }),
-    beforeDestroy() {
+    beforeUnmount() {
       window.removeEventListener('hashchange', onHashChange);
     },
     methods: {

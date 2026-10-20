@@ -186,7 +186,7 @@ OmegaUp.on('ready', async () => {
       blockedMessage,
       logs: [] as types.ContestProblemChangeLog[],
     }),
-    beforeDestroy() {
+    beforeUnmount() {
       window.removeEventListener('popstate', syncFromHash);
     },
     render: function (createElement: CreateElement) {

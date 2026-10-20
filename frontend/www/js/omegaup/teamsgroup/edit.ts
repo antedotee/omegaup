@@ -51,7 +51,7 @@ OmegaUp.on('ready', () => {
       isLoading: false,
       searchResultSchools: searchResultSchools,
     }),
-    beforeDestroy() {
+    beforeUnmount() {
       window.removeEventListener('hashchange', onHashChange);
     },
     methods: {
