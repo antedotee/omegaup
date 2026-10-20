@@ -1,12 +1,9 @@
 import { shallowMount } from '@vue/test-utils';
 
 import SolutionTab from './SolutionTab.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import store from '@/js/omegaup/problem/creator/store';
 import T from '../../../../lang';
-
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
+import ProblemMarkdown from '../../ProblemMarkdown.vue';
 
 describe('SolutionTab.vue', () => {
   it('Should contain markdown buttons and contents and update the store accordingly', async () => {
@@ -25,7 +22,7 @@ describe('SolutionTab.vue', () => {
 
     expect(wrapper.vm.currentSolutionMarkdown).toBe('Hello omegaUp');
 
-    const markdownContent = wrapper.find('omegaup-markdown-stub');
+    const markdownContent = wrapper.findComponent(ProblemMarkdown);
     expect(markdownContent.exists()).toBe(true);
 
     await wrapper.trigger('click');
