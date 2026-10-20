@@ -1,7 +1,6 @@
 import { shallowMount, mount } from '@vue/test-utils';
 
 import CasesForm from './CasesForm.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import store from '@/js/omegaup/problem/creator/store';
 import Vue from 'vue';
 import T from '../../../../lang';
@@ -11,9 +10,6 @@ import {
 } from '@/js/omegaup/problem/creator/modules/cases';
 import * as ui from '@/js/omegaup/ui';
 
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('CasesForm.vue', () => {
   beforeEach(() => {
     store.commit('casesStore/resetStore');
@@ -21,11 +17,11 @@ describe('CasesForm.vue', () => {
 
   it('Should render commit message input and hidden fields', async () => {
     const wrapper = shallowMount(CasesForm, {
-      provide: { problemAlias: 'problem-alias' },
       props: { isCaseEdit: true },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'problem-alias' },
       },
     });
 
@@ -58,11 +54,11 @@ describe('CasesForm.vue', () => {
 
   it('Should show input and output file fields when truncated', async () => {
     const wrapper = shallowMount(CasesForm, {
-      provide: { problemAlias: 'alias' },
       props: { isTruncatedInput: true, isTruncatedOutput: true },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'alias' },
       },
     });
 
@@ -86,11 +82,11 @@ describe('CasesForm.vue', () => {
     });
 
     const wrapper = shallowMount(CasesForm, {
-      provide: { problemAlias: 'alias' },
       props: { isCaseEdit: true },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'alias' },
       },
     });
     await Vue.nextTick();
@@ -113,11 +109,11 @@ describe('CasesForm.vue', () => {
     });
 
     const wrapper = shallowMount(CasesForm, {
-      provide: { problemAlias: 'alias' },
       props: { isCaseEdit: false, editGroup: editGroup },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'alias' },
       },
     });
     await Vue.nextTick();
@@ -138,11 +134,11 @@ describe('CasesForm.vue', () => {
     const errorSpy = jest.spyOn(ui, 'error').mockImplementation(() => {});
 
     const wrapper = mount(CasesForm, {
-      provide: { problemAlias: 'alias' },
       props: { isCaseEdit: false },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'alias' },
       },
     });
 
@@ -150,7 +146,8 @@ describe('CasesForm.vue', () => {
     await Vue.nextTick();
 
     const submitBtn = wrapper.find('button[type="submit"]');
-    expect(submitBtn.attributes('disabled')).toBe('disabled');
+    // Vue 3 renders boolean attributes as an empty string, not the name.
+    expect(submitBtn.attributes('disabled')).toBe('');
 
     const form = wrapper.find('form');
     await form.trigger('submit');
@@ -162,11 +159,11 @@ describe('CasesForm.vue', () => {
 
   it('Should hide submit button when isEmbedded is true', async () => {
     const wrapper = mount(CasesForm, {
-      provide: { problemAlias: 'alias' },
       props: { isEmbedded: true },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'alias' },
       },
     });
 
@@ -176,11 +173,11 @@ describe('CasesForm.vue', () => {
 
   it('Should initialize commitMessage for Case edit', () => {
     const wrapper = shallowMount(CasesForm, {
-      provide: { problemAlias: 'alias' },
       props: { isCaseEdit: true },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'alias' },
       },
     });
     expect((wrapper.vm as any).commitMessage).toBe(T.problemEditUpdatingCase);
@@ -188,11 +185,11 @@ describe('CasesForm.vue', () => {
 
   it('Should initialize commitMessage for Group edit', () => {
     const wrapper = shallowMount(CasesForm, {
-      provide: { problemAlias: 'alias' },
       props: { isCaseEdit: false },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'alias' },
       },
     });
     expect((wrapper.vm as any).commitMessage).toBe(T.problemEditUpdatingGroup);
@@ -200,11 +197,11 @@ describe('CasesForm.vue', () => {
 
   it('Should render submit button with correct text', async () => {
     const wrapper = shallowMount(CasesForm, {
-      provide: { problemAlias: 'alias' },
       props: { isCaseEdit: true },
 
       global: {
         plugins: [store],
+        provide: { problemAlias: 'alias' },
       },
     });
 

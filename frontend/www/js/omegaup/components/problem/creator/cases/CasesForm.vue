@@ -50,22 +50,12 @@
 <script lang="ts">
 import { Component, Vue, Prop, Inject, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
-import { namespace } from 'vuex-class';
 import { Case, Group, CaseLine } from '@/js/omegaup/problem/creator/types';
 import * as ui from '@/js/omegaup/ui';
 
-const casesStore = namespace('casesStore');
-
 @Component
 class CasesForm extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.commitMessage = this.isCaseEdit
-    ? T.problemEditUpdatingCase
-    : T.problemEditUpdatingGroup;
-  }
-  @Inject('problemAlias') readonly alias!: string;
+  @Inject({ from: 'problemAlias' }) readonly alias!: string;
   @Prop({ default: false }) readonly isTruncatedInput!: boolean;
   @Prop({ default: false }) readonly isTruncatedOutput!: boolean;
   @Prop({ default: false }) readonly isCaseEdit!: boolean;
@@ -74,12 +64,27 @@ class CasesForm extends Vue {
   @Prop({ default: null }) readonly editGroup!: Group;
 
   T = T;
-  commitMessage = undefined;
+  commitMessage: string = '';
 
-  @casesStore.Getter('getSelectedCase') getSelectedCase!: Case;
-  @casesStore.Getter('getSelectedGroup') getSelectedGroup!: Group;
-  @casesStore.Getter('getLinesFromSelectedCase')
-  getLinesFromSelectedCase!: CaseLine[];
+  created() {
+    // Props are not bound when class field initializers run under
+    // vue-facing-decorator, so this prop-derived field is assigned here.
+    this.commitMessage = this.isCaseEdit
+      ? T.problemEditUpdatingCase
+      : T.problemEditUpdatingGroup;
+  }
+
+  // The vuex-class namespaced getter decorators do not bind under
+  // vue-facing-decorator, so read the store directly through native getters.
+  get getSelectedCase(): Case {
+    return this.$store?.getters['casesStore/getSelectedCase'];
+  }
+  get getSelectedGroup(): Group {
+    return this.$store?.getters['casesStore/getSelectedGroup'];
+  }
+  get getLinesFromSelectedCase(): CaseLine[] {
+    return this.$store?.getters['casesStore/getLinesFromSelectedCase'];
+  }
 
   get inputText(): string {
     return (this.getLinesFromSelectedCase || [])
