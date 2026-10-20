@@ -138,3 +138,9 @@ CLAUDE.md
 
 # Ignore Cursor Code plan instruction
 .cursor/plans/*
+
+# Webpack-emitted font artifacts (bootstrap-icons, monaco codicon) from the dev build
+frontend/www/*.woff
+frontend/www/*.woff2
+frontend/www/*.ttf
+frontend/www/*.eot
