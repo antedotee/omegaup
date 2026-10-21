@@ -125,9 +125,9 @@
               <label class="col-6 col-sm pr-1 font-weight-bold"
                 >{{ T.wordsProblem }}:
                 <omegaup-common-typeahead
+                  v-model:value="filterProblem"
                   data-search-problem
                   :existing-options="searchResultProblems"
-                  v-model:value="filterProblem"
                   @update-existing-options="
                     (query) => $emit('update-search-result-problems', query)
                   "
@@ -139,9 +139,9 @@
               <label class="col-5 col-sm font-weight-bold"
                 >{{ T.contestParticipant }}:
                 <omegaup-common-typeahead
+                  v-model:value="filterUsername"
                   data-search-username
                   :existing-options="searchResultUsers"
-                  v-model:value="filterUsername"
                   :max-results="10"
                   @update-existing-options="updateSearchResultUsers"
                 ></omegaup-common-typeahead>
