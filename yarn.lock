@@ -9772,12 +9772,8 @@ jest@^29.7.0:
     import-local "^3.0.2"
     jest-cli "^29.7.0"
 
-jquery@*:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-4.0.0.tgz#95c33ac29005ff72ec444c5ba1cf457e61404fbb"
-  integrity sha512-TXCHVR3Lb6TZdtw1l3RTLf8RBWVGexdxL6AC8/e0xZKEpBflBsjh9/8LXw+dkNFuOyW9B7iB3O1sP7hS0Kiacg==
 
-jquery@^3.5.1:
+jquery@*, jquery@^3.5.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
   integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
@@ -14778,12 +14774,11 @@ vue-slider-component@^3.0.25:
     core-js "^3.6.5"
     vue-property-decorator "^8.0.0"
 
-vue-typeahead-bootstrap@^2.1.2:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/vue-typeahead-bootstrap/-/vue-typeahead-bootstrap-2.12.0.tgz#7d7301abbc9535d8954a6155113f3b11e02be3b2"
-  integrity sha512-8TAe6UkR796oZA1xVuKlEqSBfg4YpZ3tCO5RNUHexxlOl2N3x5HpOOMqQp/qbRSzuwal2n/hKLjUkYaifgGSxQ==
+vue-typeahead-bootstrap@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/vue-typeahead-bootstrap/-/vue-typeahead-bootstrap-2.1.2.tgz#c482d5bbb7854b13f563830fd0ab78f70077b75d"
+  integrity sha512-VUZLGQ0fUUyAQlR9bWY1B6jDx8zTUI70bXJS660sYBK4OdxjldI5XWlzwWY+lDQO3uP4nFqmveyYnlFZtyOHnQ==
   dependencies:
-    lodash "^4.17.20"
     resize-observer-polyfill "^1.5.0"
     vue "^2.5.17"
 
