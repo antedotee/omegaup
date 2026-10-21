@@ -75,9 +75,9 @@
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
-// https://binarcode.github.io/vue-form-wizard/
-import { FormWizard, TabContent } from 'vue-form-wizard';
-import 'vue-form-wizard/dist/vue-form-wizard.min.css';
+// https://github.com/parsajiravand/vue3-form-wizard
+import { FormWizard, TabContent } from 'vue3-form-wizard';
+import 'vue3-form-wizard/dist/vue3-form-wizard.css';
 // https://www.npmjs.com/package/vue-js-toggle-button
 import { ToggleButton } from 'vue-js-toggle-button';
 // https://github.com/voerro/vue-tagsinput

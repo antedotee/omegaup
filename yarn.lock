@@ -9772,7 +9772,6 @@ jest@^29.7.0:
     import-local "^3.0.2"
     jest-cli "^29.7.0"
 
-
 jquery@*, jquery@^3.5.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
@@ -14708,11 +14707,6 @@ vue-facing-decorator@^3.0.4:
   resolved "https://registry.yarnpkg.com/vue-facing-decorator/-/vue-facing-decorator-3.0.4.tgz#e005a8371aa4e3b4241fc20e7d8e8706dda209f6"
   integrity sha512-Lk90PevJllB6qRRdLvLFjATZrv00nof1Ob6afavKL7Pc7V3eEin3vhdvEDRORdWKVvNoXhJbHejngWVuT0Pt0g==
 
-vue-form-wizard@^0.8.4:
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/vue-form-wizard/-/vue-form-wizard-0.8.4.tgz#ddf864c9709b7ba2a6323f59e5d6d17536b7800e"
-  integrity sha512-/Zk1+B7bz7qHFJ16mwu021lpPXWf/9Tlr2mTNG3J7M0Hdy3rgA802lWsbKYySns0B0qtsD8BYGjQ2Wyxgg+4uw==
-
 vue-functional-data-merge@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-3.1.0.tgz#08a7797583b7f35680587f8a1d51d729aa1dc657"
@@ -14781,6 +14775,11 @@ vue-typeahead-bootstrap@2.1.2:
   dependencies:
     resize-observer-polyfill "^1.5.0"
     vue "^2.5.17"
+
+vue3-form-wizard@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue3-form-wizard/-/vue3-form-wizard-1.2.0.tgz#5bd2e350b06ed8138d5641531c0aa6ba99385b81"
+  integrity sha512-9/FBJhuLnV5uHSJns13A+FZUsuAGwQZOa4OTiVVfiA/MQ4AKFfmDbGxeZX/rzoZJkecRaRu/ZB4QhAR3skmEZQ==
 
 vue@^2.5.17:
   version "2.7.16"
