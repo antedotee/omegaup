@@ -128,9 +128,6 @@ import * as time from '../../time';
 import * as ui from '../../ui';
 import T from '../../lang';
 
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
-
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';

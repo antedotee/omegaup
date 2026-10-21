@@ -146,9 +146,6 @@ import T from '../../lang';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { getExternalUrl } from '../../urlHelper';
 
-// Import Bootstrap CSS file.
-import 'bootstrap/dist/css/bootstrap.css';
-
 @Component({
   emits: ['update-user-preferences'],
   components: {

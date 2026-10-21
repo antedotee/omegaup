@@ -424,9 +424,6 @@ import * as time from '../../time';
 import T from '../../lang';
 import { getExternalUrl } from '../../urlHelper';
 
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
-
 // Import Only Required Plugins
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';

@@ -52,7 +52,6 @@ import T from '../../lang';
 import { types } from '../../api_types';
 import * as time from '../../time';
 
-import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export enum PopupDisplayed {

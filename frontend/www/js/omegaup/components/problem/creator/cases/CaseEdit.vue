@@ -467,7 +467,6 @@ import {
   CaseRequest,
   GroupID,
 } from '@/js/omegaup/problem/creator/types';
-import 'bootstrap/dist/css/bootstrap.css';
 import draggable from 'vuedraggable';
 
 // vuedraggable 2.x is a Vue 2 component whose render function reads

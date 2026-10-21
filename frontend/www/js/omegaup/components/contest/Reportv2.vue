@@ -84,8 +84,7 @@ import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
 
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
+// Import Bootstrap Icons
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import { BCard, BCardText, BTable, BButton } from 'bootstrap-vue-next';

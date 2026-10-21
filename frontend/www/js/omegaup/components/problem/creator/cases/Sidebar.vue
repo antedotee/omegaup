@@ -411,7 +411,6 @@ import {
   CaseGroupID,
 } from '@/js/omegaup/problem/creator/types';
 import JSZip from 'jszip';
-import '../../../../../../css/bootstrap5-offcanvas.css';
 
 @Component({
   components: {

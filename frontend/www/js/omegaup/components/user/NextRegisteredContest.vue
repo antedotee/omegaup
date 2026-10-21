@@ -101,7 +101,6 @@ import omegaup_Countdown from '../Countdown.vue';
 import { omegaup } from '../../omegaup';
 import { getExternalUrl } from '../../urlHelper';
 
-import 'bootstrap/dist/css/bootstrap.css';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';

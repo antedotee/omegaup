@@ -74,8 +74,7 @@
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
+// Import Bootstrap Icons
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import { BButton, BCard, BCardBody } from 'bootstrap-vue-next';

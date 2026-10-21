@@ -471,9 +471,6 @@ import * as ui from '../../ui';
 import T from '../../lang';
 import { getExternalUrl } from '../../urlHelper';
 
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
-
 // Import Only Required Plugins
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';

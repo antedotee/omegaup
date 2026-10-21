@@ -226,8 +226,6 @@ library.add(faCheckSquare, faExchangeAlt, faQuestionCircle, faTimes, faUser);
 
 import { getBlogUrl } from '../../urlHelper';
 
-// Import Bootstrap CSS file.
-import 'bootstrap/dist/css/bootstrap.css';
 interface Rank {
   country: string;
   classname?: string;

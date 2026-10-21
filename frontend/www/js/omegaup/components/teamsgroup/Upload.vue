@@ -140,9 +140,6 @@ import {
 import common_MultiTypeahead from '../common/MultiTypeahead.vue';
 import { getBlogUrl } from '../../urlHelper';
 
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
-
 import { BTable, BButton, BBadge, BCard, BForm } from 'bootstrap-vue-next';
 
 type TeamIdentity = types.Identity & {
