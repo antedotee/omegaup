@@ -65,11 +65,6 @@ import { types } from '../../api_types';
   },
 })
 class CoderOfTheMonthList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSelectedTab = this.selectedTab;
-  }
   @Prop() codersOfCurrentMonth!: types.CoderOfTheMonthList[];
   @Prop() codersOfPreviousMonth!: types.CoderOfTheMonthList[];
   @Prop() candidatesToCoderOfTheMonth!: types.CoderOfTheMonthList[];
@@ -80,7 +75,7 @@ class CoderOfTheMonthList extends Vue {
   @Prop() selectedTab!: string;
 
   T = T;
-  currentSelectedTab = undefined;
+  currentSelectedTab = this.selectedTab;
 
   get availableTabs(): { id: string; component: string; title: string }[] {
     const availableTabs = [

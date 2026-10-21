@@ -35,15 +35,10 @@ import T from '../../lang';
 
 @Component
 class FilterQuality extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentQuality = this.quality;
-  }
   @Prop({ default: 'onlyQualityProblems' }) quality!: string;
 
   T = T;
-  currentQuality = undefined;
+  currentQuality = this.quality;
 
   qualityValues: { [key: string]: { name: string; id: string } } = {
     allProblems: {

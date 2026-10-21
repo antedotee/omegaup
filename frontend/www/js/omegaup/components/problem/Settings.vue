@@ -112,11 +112,6 @@ import T from '../../lang';
 
 @Component
 class Settings extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentOverallWallTimeLimit = this.overallWallTimeLimit;
-  }
   @Prop() timeLimit!: number;
   @Prop() extraWallTime!: number;
   @Prop() memoryLimit!: number;
@@ -130,7 +125,7 @@ class Settings extends Vue {
 
   T = T;
 
-  currentOverallWallTimeLimit = undefined;
+  currentOverallWallTimeLimit = this.overallWallTimeLimit;
 
   @Watch('currentOverallWallTimeLimit')
   onOverallWallTimeLimitChanged(newVal: number) {

@@ -368,27 +368,6 @@ function getInitialSelectedTab(
   },
 })
 class ViewProfile extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.contests = Object.values(
-      this.data?.contests ?? ({} as types.UserProfileContests),
-    )
-      .map((contest) => {
-        const now = new Date();
-        if (contest.place === null || now <= contest.data.finish_time) {
-          return null;
-        }
-        return new ContestResult(contest);
-      })
-      .filter((contest) => Boolean(contest));
-    this.charts = this.data?.stats ?? [];
-    this.currentSelectedTab = getInitialSelectedTab(
-      this.profile,
-      this.selectedTab,
-    );
-    this.currentReadme = this.profile.readme ?? null;
-  }
   @Prop() data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop() profileBadges!: Set<string>;
@@ -406,15 +385,25 @@ class ViewProfile extends Vue {
     };
     tags: Array<{ name: string; count: number }>;
   } | null;
-  contests = undefined;
-  charts: types.UserProfileStats[] = [];
+  contests = Object.values(
+    this.data?.contests ?? ({} as types.UserProfileContests),
+  )
+    .map((contest) => {
+      const now = new Date();
+      if (contest.place === null || now <= contest.data.finish_time) {
+        return null;
+      }
+      return new ContestResult(contest);
+    })
+    .filter((contest) => Boolean(contest));
+  charts: types.UserProfileStats[] = this.data?.stats ?? [];
   ViewProfileTabs = ViewProfileTabs;
   T = T;
   ui = ui;
   columns = 3;
-  currentSelectedTab = undefined;
+  currentSelectedTab = getInitialSelectedTab(this.profile, this.selectedTab);
   normalizedRunCounts: Highcharts.PointOptionsObject[] = [];
-  currentReadme: string | null = '';
+  currentReadme: string | null = this.profile.readme ?? null;
   isEditingReadme = false;
   readmeEditContent: string | null = null;
   readmeReportSubmitted = false;

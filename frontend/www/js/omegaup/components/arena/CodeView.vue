@@ -85,18 +85,13 @@ export interface EditorOptions {
   },
 })
 class CodeView extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.mode = languageModeMap[this.language] || languageModeMap['cpp17-gcc'];
-  }
   @Prop({ default: 'cpp17-gcc' }) language!: string;
   @Prop({ default: false }) readonly!: boolean;
   @Prop() value!: string;
   @Ref('cm-wrapper') readonly cmWrapper!: codemirror;
 
   T = T;
-  mode = undefined;
+  mode = languageModeMap[this.language] || languageModeMap['cpp17-gcc'];
 
   refresh() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

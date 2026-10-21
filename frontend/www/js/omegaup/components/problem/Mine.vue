@@ -278,11 +278,6 @@ import { BModal } from 'bootstrap-vue-next';
   },
 })
 class ProblemMine extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentQuery = this.query ?? '';
-  }
   @Prop() problems!: types.ProblemListItem[];
   @Prop() pagerItems!: types.PageItem[];
   @Prop() privateProblemsAlert!: boolean;
@@ -292,7 +287,7 @@ class ProblemMine extends Vue {
 
   T = T;
   ui = ui;
-  currentQuery = undefined;
+  currentQuery = this.query ?? '';
   shouldShowAllProblems = false;
   selectedProblems: types.ProblemListItem[] = [];
   allProblemsVisibilityOption = -1;

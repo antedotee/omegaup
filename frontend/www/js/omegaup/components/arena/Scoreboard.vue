@@ -148,12 +148,6 @@ import { SocketStatus } from '../../arena/events_socket';
   },
 })
 class ArenaScoreboard extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.onlyShowExplicitlyInvited =
-      !this.showAllContestants && this.showInvitedUsersFilter;
-  }
   @Prop({ default: 10 }) numberOfPositions!: number;
   @Prop() problems!: omegaup.Problem[];
   @Prop() ranking!: types.ScoreboardRankingEntry[];
@@ -170,11 +164,8 @@ class ArenaScoreboard extends Vue {
   T = T;
   ui = ui;
   INF = '∞';
-  // Must have a concrete (non-undefined) initial value so vue-facing-decorator
-  // registers it as a reactive field; the real value is assigned in created()
-  // from the props. A field initialized to `undefined` is not tracked, which
-  // left the invited-users checkbox's v-model unbound.
-  onlyShowExplicitlyInvited = false;
+  onlyShowExplicitlyInvited =
+    !this.showAllContestants && this.showInvitedUsersFilter;
   nameDisplayOptions: ui.NameDisplayOptions =
     ui.NameDisplayOptions.NameAndUsername;
 

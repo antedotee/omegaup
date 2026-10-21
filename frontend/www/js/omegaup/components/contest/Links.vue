@@ -45,15 +45,10 @@ import T from '../../lang';
 
 @Component
 class Links extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.contest = this.data;
-  }
   @Prop() data!: types.Contest;
 
   T = T;
-  contest = undefined;
+  contest = this.data;
 
   @Emit('download-csv-scoreboard')
   onDownloadCsv(contestAlias: string): string {

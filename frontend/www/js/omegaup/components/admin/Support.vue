@@ -419,17 +419,6 @@ export enum MaintenanceType {
   },
 })
 class AdminSupport extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentContestAlias = this.contestAlias;
-    this.currentIsContestRecommended = this.isContestRecommended;
-    this.currentMaintenanceEnabled = this.maintenanceEnabled;
-    this.currentMaintenanceMessageEs = this.maintenanceMessageEs;
-    this.currentMaintenanceMessageEn = this.maintenanceMessageEn;
-    this.currentMaintenanceMessagePt = this.maintenanceMessagePt;
-    this.currentMaintenanceType = this.maintenanceType || 'info';
-  }
   @Prop() username!: string;
   @Prop() email!: string;
   @Prop() verified!: boolean;
@@ -453,13 +442,13 @@ class AdminSupport extends Vue {
 
   selectedTemplateId: string = '';
 
-  currentContestAlias = undefined;
-  currentIsContestRecommended = undefined;
-  currentMaintenanceEnabled = undefined;
-  currentMaintenanceMessageEs = undefined;
-  currentMaintenanceMessageEn = undefined;
-  currentMaintenanceMessagePt = undefined;
-  currentMaintenanceType = undefined;
+  currentContestAlias = this.contestAlias;
+  currentIsContestRecommended = this.isContestRecommended;
+  currentMaintenanceEnabled = this.maintenanceEnabled;
+  currentMaintenanceMessageEs = this.maintenanceMessageEs;
+  currentMaintenanceMessageEn = this.maintenanceMessageEn;
+  currentMaintenanceMessagePt = this.maintenanceMessagePt;
+  currentMaintenanceType = this.maintenanceType || 'info';
 
   T = T;
   ui = ui;

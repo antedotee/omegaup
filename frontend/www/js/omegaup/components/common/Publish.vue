@@ -94,11 +94,6 @@ export { AdmissionMode };
   },
 })
 class ContestEditPublish extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentAdmissionMode = this.admissionMode;
-  }
   @Prop() admissionMode!: AdmissionMode;
   @Prop() admissionModeDescription!: string;
   @Prop() alias!: string;
@@ -107,7 +102,7 @@ class ContestEditPublish extends Vue {
 
   T = T;
   AdmissionMode = AdmissionMode;
-  currentAdmissionMode = undefined;
+  currentAdmissionMode = this.admissionMode;
   currentDefaultShowAllContestantsInScoreboard =
     this.defaultShowAllContestantsInScoreboard;
 

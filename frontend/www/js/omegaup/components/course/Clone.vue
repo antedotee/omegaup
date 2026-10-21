@@ -59,19 +59,13 @@ library.add(fas);
   },
 })
 class CourseClone extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.alias = this.initialAlias;
-    this.name = this.initialName;
-  }
   @Prop() initialAlias!: string;
   @Prop() initialName!: string;
 
   T = T;
-  alias = undefined;
+  alias = this.initialAlias;
   startTime = new Date();
-  name = undefined;
+  name = this.initialName;
 }
 export default toNative(CourseClone);
 </script>

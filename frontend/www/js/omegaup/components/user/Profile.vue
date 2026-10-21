@@ -141,12 +141,6 @@ export { ProfileStatistics };
   },
 })
 class Profile extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSelectedTab = this.selectedTab;
-    this.currentViewProfileSelectedTab = this.viewProfileSelectedTab;
-  }
   @Prop({ default: null }) data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop({ default: 'view-profile' }) selectedTab!: string;
@@ -168,8 +162,8 @@ class Profile extends Vue {
 
   T = T;
   ui = ui;
-  currentSelectedTab = undefined;
-  currentViewProfileSelectedTab = undefined;
+  currentSelectedTab = this.selectedTab;
+  currentViewProfileSelectedTab = this.viewProfileSelectedTab;
 
   @Watch('viewProfileSelectedTab')
   onViewProfileSelectedTabChanged(newValue: string | null) {

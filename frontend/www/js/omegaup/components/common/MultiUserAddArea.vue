@@ -51,11 +51,6 @@ import T from '../../lang';
 
 @Component({})
 class MultiUserAddArea extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.usersList = this.users || [];
-  }
   @Prop() users!: string[];
 
   T = T;
@@ -63,7 +58,7 @@ class MultiUserAddArea extends Vue {
   bulkContestants: string | null = null;
 
   // if the users prop is not empty, we need to keep track of those users in the usersList
-  usersList: string[] = '';
+  usersList: string[] = this.users || [];
 
   onBulkContestantsChanged = debounce(this.onTextAreaChange, WAIT_TIME);
 

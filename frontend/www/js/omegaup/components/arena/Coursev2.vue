@@ -143,11 +143,6 @@ export { Tabs };
   },
 })
 class ArenaCourse extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSelectedTab = this.selectedTab;
-  }
   @Prop() allRuns!: types.Run[];
   @Prop() assignment!: types.ArenaCourseAssignment;
   @Prop() course!: types.ArenaCourseDetails;
@@ -162,7 +157,7 @@ class ArenaCourse extends Vue {
   T = T;
   ui = ui;
   Tabs = Tabs;
-  currentSelectedTab: string | null = '';
+  currentSelectedTab: string | null = this.selectedTab;
 
   private get currentAssignmentIndex(): number {
     return this.course.assignments.findIndex(

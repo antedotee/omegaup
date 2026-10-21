@@ -147,11 +147,6 @@ library.add(fas);
   },
 })
 class CourseAssignmentList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentContent = this.content;
-  }
   @Prop() content!: types.CourseAssignment[];
   @Prop() courseAlias!: string;
   @Prop() assignmentFormMode!: omegaup.AssignmentFormMode;
@@ -159,7 +154,7 @@ class CourseAssignmentList extends Vue {
   contentOrderChanged = false;
   T = T;
   AssignmentFormMode = omegaup.AssignmentFormMode;
-  currentContent: types.CourseAssignment[] = [];
+  currentContent: types.CourseAssignment[] = this.content;
 
   assignmentUrl(assignment: omegaup.Assignment): string {
     return `/course/${this.courseAlias}/assignment/${assignment.alias}/`;

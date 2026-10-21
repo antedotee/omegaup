@@ -94,18 +94,13 @@ library.add(fas);
   },
 })
 class TeachingAssistants extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentTeachingAssistants = this.teachingAssistants;
-  }
   @Prop() teachingAssistants!: omegaup.UserRole[];
   @Prop() searchResultUsers!: types.ListItem[];
 
   T = T;
   username: null | types.ListItem = null;
   selected = {};
-  currentTeachingAssistants = undefined;
+  currentTeachingAssistants = this.teachingAssistants;
 
   @Watch('teachingAssistants')
   onTeachingAssistantsChanged(newValue: omegaup.UserRole[]): void {

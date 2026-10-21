@@ -113,30 +113,24 @@ import common_Typeahead from '../common/Typeahead.vue';
   },
 })
 class IdentityEdit extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.selectedIdentity = Object.assign(
-      {
-        username: '',
-        classname: '',
-        name: '',
-        gender: '',
-        school: '',
-        country_id: 'MX',
-        state_id: '',
-      } as types.Identity,
-      this.identity,
-    );
-    this.school = this.searchResultSchools[0] ?? null;
-  }
   @Prop({ default: null }) identity!: types.Identity | null;
   @Prop() countries!: iso3166.Country[];
   @Prop() searchResultSchools!: types.SchoolListItem[];
 
   T = T;
-  selectedIdentity = undefined;
-  school: null | types.SchoolListItem = null;
+  selectedIdentity = Object.assign(
+    {
+      username: '',
+      classname: '',
+      name: '',
+      gender: '',
+      school: '',
+      country_id: 'MX',
+      state_id: '',
+    } as types.Identity,
+    this.identity,
+  );
+  school: null | types.SchoolListItem = this.searchResultSchools[0] ?? null;
 
   get groupName(): string {
     const teamUsername = this.selectedIdentity.username.split(':');

@@ -85,11 +85,6 @@ export { AvailableTabs };
   },
 })
 class Signin extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.activeTab = this.initialActiveTab;
-  }
   @Prop() validateRecaptcha!: boolean;
   @Prop() facebookUrl!: string;
   @Prop({ default: '' }) githubClientId!: string;
@@ -101,7 +96,7 @@ class Signin extends Vue {
 
   T = T;
   AvailableTabs = AvailableTabs;
-  activeTab: AvailableTabs = undefined;
+  activeTab: AvailableTabs = this.initialActiveTab;
 
   @Watch('initialActiveTab')
   onInitialActiveTabChanged(newValue: AvailableTabs): void {

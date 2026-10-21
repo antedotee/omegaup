@@ -304,21 +304,6 @@ import { BModal } from 'bootstrap-vue-next';
   },
 })
 class ProblemEdit extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.alias = this.data.alias;
-    this.showTab = this.initialTab;
-    this.currentStatement = this.statement;
-    this.currentSolution =
-      this.solution ||
-      ({
-        markdown: '',
-        language: 'es',
-        images: {},
-        sources: {},
-      } as types.ProblemStatement);
-  }
   @Prop() data!: types.ProblemEditPayload;
   @Prop() admins!: types.ProblemAdmin[];
   @Prop() initialTab!: string;
@@ -329,10 +314,17 @@ class ProblemEdit extends Vue {
   @Prop() searchResultGroups!: types.ListItem[];
 
   T = T;
-  alias = undefined;
-  showTab = undefined;
-  currentStatement: types.ProblemStatement = undefined;
-  currentSolution: types.ProblemStatement = undefined;
+  alias = this.data.alias;
+  showTab = this.initialTab;
+  currentStatement: types.ProblemStatement = this.statement;
+  currentSolution: types.ProblemStatement =
+    this.solution ||
+    ({
+      markdown: '',
+      language: 'es',
+      images: {},
+      sources: {},
+    } as types.ProblemStatement);
   showConfirmationModal = false;
 
   get activeTab(): string {

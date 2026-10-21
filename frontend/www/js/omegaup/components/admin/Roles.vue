@@ -48,18 +48,12 @@ import T from '../../lang';
 
 @Component
 class AdminRoles extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentRoles = this.roles;
-    this.currentGroups = this.groups;
-  }
   @Prop() roles!: types.UserRole[];
   @Prop() groups!: types.Group[];
 
   T = T;
-  currentRoles: types.UserRole[] = [];
-  currentGroups: types.Group[] = [];
+  currentRoles: types.UserRole[] = this.roles;
+  currentGroups: types.Group[] = this.groups;
 
   @Emit()
   changeRole(

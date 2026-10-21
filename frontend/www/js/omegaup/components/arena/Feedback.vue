@@ -77,20 +77,14 @@ export type { ArenaCourseFeedback };
   },
 })
 class Feedback extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.saved = this.feedback.status == FeedbackStatus.Saved;
-    this.currentFeedback = this.feedback;
-  }
   @Prop() feedback!: ArenaCourseFeedback;
   @Ref('feedback-form') feedbackForm!: HTMLTextAreaElement;
 
   FeedbackStatus = FeedbackStatus;
   T = T;
   time = time;
-  saved: boolean = false;
-  currentFeedback = undefined;
+  saved: boolean = this.feedback.status == FeedbackStatus.Saved;
+  currentFeedback = this.feedback;
 
   get currentFeedbackTimestamp(): string {
     return time.formatDateTimeLocal(this.feedback.timestamp ?? new Date());

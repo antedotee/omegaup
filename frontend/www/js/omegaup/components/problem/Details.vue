@@ -470,16 +470,6 @@ export { PopupDisplayed };
   },
 })
 class ProblemDetails extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.selectedTab = this.activeTab;
-    this.currentClarifications = this.clarifications;
-    this.currentPopupDisplayed = this.popupDisplayed;
-    this.hasUnreadClarifications =
-      this.clarifications?.length > 0 && this.activeTab !== 'clarifications';
-    this.currentRunDetailsData = this.runDetailsData;
-  }
   @Prop({
     default: () => {
       return [];
@@ -537,11 +527,12 @@ class ProblemDetails extends Vue {
   T = T;
   ui = ui;
   time = time;
-  selectedTab = undefined;
-  currentClarifications = undefined;
-  currentPopupDisplayed = undefined;
-  hasUnreadClarifications = undefined;
-  currentRunDetailsData = undefined;
+  selectedTab = this.activeTab;
+  currentClarifications = this.clarifications;
+  currentPopupDisplayed = this.popupDisplayed;
+  hasUnreadClarifications =
+    this.clarifications?.length > 0 && this.activeTab !== 'clarifications';
+  currentRunDetailsData = this.runDetailsData;
 
   get isReKarelProblem(): boolean {
     const languages = this.languages ?? this.problem.languages;

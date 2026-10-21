@@ -43,11 +43,6 @@ declare global {
 
 @Component
 class ProblemMarkdown extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.markdownConverter = new markdown.Converter({ preview: this.preview });
-  }
   @Prop() markdown!: string;
   @Ref() root!: HTMLElement;
   @Prop({ default: null }) imageMapping!: markdown.ImageMapping | null;
@@ -59,7 +54,9 @@ class ProblemMarkdown extends Vue {
 
   private vueInstances: Vue[] = [];
 
-  markdownConverter: markdown.Converter = undefined as any;
+  markdownConverter: markdown.Converter = new markdown.Converter({
+    preview: this.preview,
+  });
 
   get html(): string {
     if (this.problemSettings || this.imageMapping) {

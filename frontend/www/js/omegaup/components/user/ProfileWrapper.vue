@@ -36,17 +36,12 @@ import { types } from '../../api_types';
   },
 })
 class ProfileWrapper extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSelectedTab = this.selectedTab;
-  }
   @Prop({ default: null }) data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop({ default: null }) selectedTab!: null | string;
   @Prop() hasPassword!: boolean;
 
-  currentSelectedTab = undefined;
+  currentSelectedTab = this.selectedTab;
 
   @Watch('currentSelectedTab')
   onCurrentSelectedTabChanged(newValue: string) {

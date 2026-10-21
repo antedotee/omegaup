@@ -73,22 +73,15 @@ import { generateAlias } from '../../alias';
 
 @Component
 class GroupForm extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.alias = this.groupAlias;
-    this.description = this.groupDescription;
-    this.name = this.groupName;
-  }
   @Prop({ default: '' }) groupAlias!: string;
   @Prop({ default: '' }) groupDescription!: string;
   @Prop({ default: '' }) groupName!: string;
   @Prop({ default: false }) isUpdate!: boolean;
 
   T = T;
-  alias: string = '';
-  description: string = '';
-  name: string = '';
+  alias: string = this.groupAlias;
+  description: string = this.groupDescription;
+  name: string = this.groupName;
 
   onSubmit(): void {
     if (this.isUpdate) {

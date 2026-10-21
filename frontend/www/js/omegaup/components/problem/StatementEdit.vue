@@ -132,12 +132,6 @@ const markdownConverter = new markdown.Converter({
   },
 })
 class ProblemStatementEdit extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentLanguage = this.statement.language;
-    this.currentMarkdown = this.statement.markdown;
-  }
   @Ref() readonly markdownButtonBar!: HTMLDivElement;
   @Ref() readonly markdownInput!: HTMLTextAreaElement;
   @Prop() alias!: string;
@@ -151,8 +145,8 @@ class ProblemStatementEdit extends Vue {
 
   T = T;
   commitMessage = T.updateStatementsCommitMessage;
-  currentLanguage = undefined;
-  currentMarkdown = undefined;
+  currentLanguage = this.statement.language;
+  currentMarkdown = this.statement.markdown;
   errors: string[] = [];
   statements: types.Statements = {};
   markdownEditor: Markdown.Editor | null = null;

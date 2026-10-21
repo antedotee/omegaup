@@ -298,17 +298,6 @@ interface AddParams {
   },
 })
 class CourseAssignmentDetails extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.alias = this.assignment.alias || '';
-    this.assignmentType = this.assignment.assignment_type || 'homework';
-    this.description = this.assignment.description || '';
-    this.name = this.assignment.name || '';
-    this.startTime = this.assignment.start_time || new Date();
-    this.finishTime = this.assignment.finish_time || new Date();
-    this.unlimitedDuration = !this.assignment.finish_time;
-  }
   @Ref('scheduled-problem-list')
   readonly scheduledProblemList!: course_ScheduledProblemList;
   @Prop({
@@ -329,13 +318,13 @@ class CourseAssignmentDetails extends Vue {
 
   T = T;
   AssignmentFormMode = omegaup.AssignmentFormMode;
-  alias = undefined;
-  assignmentType = undefined;
-  description = undefined;
-  name = undefined;
-  startTime = undefined;
-  finishTime = undefined;
-  unlimitedDuration = undefined;
+  alias = this.assignment.alias || '';
+  assignmentType = this.assignment.assignment_type || 'homework';
+  description = this.assignment.description || '';
+  name = this.assignment.name || '';
+  startTime = this.assignment.start_time || new Date();
+  finishTime = this.assignment.finish_time || new Date();
+  unlimitedDuration = !this.assignment.finish_time;
 
   @Watch('assignment')
   onAssignmentChange() {

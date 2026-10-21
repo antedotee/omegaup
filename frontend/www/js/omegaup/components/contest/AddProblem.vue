@@ -212,13 +212,6 @@ export enum SearchTypes {
   },
 })
 class AddProblem extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.points = this.initialPoints;
-    this.order = this.initialProblems.length + 1;
-    this.problems = this.initialProblems;
-  }
   @Prop() contestAlias!: string;
   @Prop() initialPoints!: number;
   @Prop() initialProblems!: types.ProblemsetProblemWithVersions[];
@@ -227,9 +220,9 @@ class AddProblem extends Vue {
   T = T;
   alias: null | types.ListItem = null;
   title: null | string = null;
-  points = undefined;
-  order = undefined;
-  problems = undefined;
+  points = this.initialPoints;
+  order = this.initialProblems.length + 1;
+  problems = this.initialProblems;
   versionLog: types.ProblemVersion[] = [];
   useLatestVersion = true;
   publishedRevision: null | types.ProblemVersion = null;

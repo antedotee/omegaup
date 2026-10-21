@@ -35,15 +35,10 @@ import T from '../../lang';
 
 @Component
 class FilterDifficulty extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentDifficulty = this.selectedDifficulty;
-  }
   @Prop() selectedDifficulty!: string;
 
   T = T;
-  currentDifficulty = undefined;
+  currentDifficulty = this.selectedDifficulty;
 
   difficulties: { [key: string]: { name: string; id: string } } = {
     anyDifficulty: {

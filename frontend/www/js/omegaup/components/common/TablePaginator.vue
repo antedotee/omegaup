@@ -112,12 +112,6 @@ interface SortOption {
  */
 @Component
 class TablePaginator extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSortOption =
-      this.sortOptions.length > 0 ? this.sortOptions[0].value : '';
-  }
   @Prop() items!: LinkableResource[];
   @Prop() itemsPerPage!: number;
   @Prop() columnNames!: Array<{ name: string; style: string }>;
@@ -127,7 +121,8 @@ class TablePaginator extends Vue {
 
   private T = T;
   private currentPageNumber = 0;
-  private currentSortOption = undefined;
+  private currentSortOption =
+    this.sortOptions.length > 0 ? this.sortOptions[0].value : '';
 
   private nextPage(): void {
     this.currentPageNumber++;

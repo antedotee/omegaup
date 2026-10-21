@@ -382,23 +382,6 @@ const DANGER_THRESHOLD_PERCENTAGE = 0.9;
   },
 })
 class CourseDetails extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.alias = this.course.alias;
-    this.description = this.course.description;
-    this.finishTime = this.course.finish_time || new Date();
-    this.showScoreboard = this.course.show_scoreboard;
-    this.startTime = this.course.start_time;
-    this.name = this.course.name;
-    this.level = this.course.level ?? '';
-    this.objective = this.course.objective;
-    this.school = this.searchResultSchools[0] ?? null;
-    this.needsBasicInformation = this.course.needs_basic_information;
-    this.requestsUserInformation = this.course.requests_user_information;
-    this.unlimitedDuration = this.course.finish_time === null;
-    this.selectedLanguages = this.course.languages;
-  }
   @Prop({ default: false }) update!: boolean;
   @Prop({ default: false }) readOnly!: boolean;
   @Prop() course!: types.CourseDetails;
@@ -408,19 +391,19 @@ class CourseDetails extends Vue {
   @Prop({ default: true }) hasVisitedSection!: boolean;
 
   T = T;
-  alias = undefined;
-  description = undefined;
-  finishTime = undefined;
-  showScoreboard = undefined;
-  startTime = undefined;
-  name = undefined;
-  level = undefined;
-  objective = undefined;
-  school: null | types.SchoolListItem = null;
-  needsBasicInformation = undefined;
-  requestsUserInformation = undefined;
-  unlimitedDuration = undefined;
-  selectedLanguages = undefined;
+  alias = this.course.alias;
+  description = this.course.description;
+  finishTime = this.course.finish_time || new Date();
+  showScoreboard = this.course.show_scoreboard;
+  startTime = this.course.start_time;
+  name = this.course.name;
+  level = this.course.level ?? '';
+  objective = this.course.objective;
+  school: null | types.SchoolListItem = this.searchResultSchools[0] ?? null;
+  needsBasicInformation = this.course.needs_basic_information;
+  requestsUserInformation = this.course.requests_user_information;
+  unlimitedDuration = this.course.finish_time === null;
+  selectedLanguages = this.course.languages;
   levelOptions = levelOptions;
   MAX_LENGTH = MAX_LENGTH;
 

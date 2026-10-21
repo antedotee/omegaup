@@ -345,12 +345,6 @@ import contest_Certificates from './Certificates.vue';
   },
 })
 class Edit extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.virtual = ui.isVirtual(this.details);
-    this.alreadyArchived = this.details.archived;
-  }
   @Prop() admins!: types.ContestAdmin[];
   @Prop() details!: types.ContestAdminDetails;
   @Prop() initialTab!: string;
@@ -370,14 +364,14 @@ class Edit extends Vue {
 
   T = T;
   ui = ui;
-  virtual = undefined;
+  virtual = ui.isVirtual(this.details);
   showTab = this.selectedTab();
 
   @Watch('initialTab')
   onInitialTabChanged(newValue: string) {
     this.showTab = newValue !== '' ? newValue : this.selectedTab();
   }
-  alreadyArchived = undefined;
+  alreadyArchived = this.details.archived;
 
   selectedTab(): string {
     if (this.initialTab != '') {

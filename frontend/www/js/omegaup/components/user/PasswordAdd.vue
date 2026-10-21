@@ -64,15 +64,10 @@ import omegaup_PasswordInput from '../common/PasswordInput.vue';
   },
 })
 class UserPasswordAdd extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.newUsername = this.username;
-  }
   @Prop() username!: string;
 
   T = T;
-  newUsername = undefined;
+  newUsername = this.username;
   newPassword = '';
   newPassword2 = '';
 

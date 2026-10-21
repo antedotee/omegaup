@@ -144,11 +144,6 @@ export enum PopupDisplayed {
   },
 })
 class ArenaClarificationList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentPopupDisplayed = this.popupDisplayed;
-  }
   @Prop({ default: false }) isAdmin!: boolean;
   @Prop() clarifications!: types.Clarification[];
   @Prop({ default: () => [] }) problems!: types.NavbarProblemsetProblem[];
@@ -165,7 +160,7 @@ class ArenaClarificationList extends Vue {
   T = T;
   ui = ui;
   PopupDisplayed = PopupDisplayed;
-  currentPopupDisplayed = undefined;
+  currentPopupDisplayed = this.popupDisplayed;
   selectedAssignment: string | null = null;
   selectedProblem: string | null = null;
 

@@ -103,14 +103,6 @@ import T from '../../lang';
   ],
 })
 class TeamsGroupFormBase extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentAlias = this.alias;
-    this.currentDescription = this.description;
-    this.currentName = this.name;
-    this.currentNumberOfContestants = this.numberOfContestants;
-  }
   @Prop() alias!: null | string;
   @Prop() description!: null | string;
   @Prop() name!: null | string;
@@ -119,10 +111,10 @@ class TeamsGroupFormBase extends Vue {
   @Prop({ default: 1 }) minNumberOfContestants!: number;
 
   T = T;
-  currentAlias: null | string = '';
-  currentDescription: null | string = '';
-  currentName: null | string = '';
-  currentNumberOfContestants: number = 0;
+  currentAlias: null | string = this.alias;
+  currentDescription: null | string = this.description;
+  currentName: null | string = this.name;
+  currentNumberOfContestants: number = this.numberOfContestants;
 
   // Stacking @Watch and @Emit on one method does not emit under
   // vue-facing-decorator here (the watcher invokes the raw method, not the

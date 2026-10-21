@@ -176,11 +176,6 @@ const MOBILE_BREAKPOINT = 576;
   },
 })
 class CollectionList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.level = this.data.level;
-  }
   @Prop() data!: types.CollectionDetailsByLevelPayload;
   @Prop() problems!: omegaup.Problem[];
   @Prop() loggedIn!: boolean;
@@ -203,7 +198,7 @@ class CollectionList extends Vue {
 
   T = T;
   ToggleSwitchSize = ToggleSwitchSize;
-  level = undefined;
+  level = this.data.level;
   filtersVisible =
     typeof window === 'undefined'
       ? true

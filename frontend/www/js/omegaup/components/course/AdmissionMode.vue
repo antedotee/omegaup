@@ -123,12 +123,6 @@ VueGlobal.use(Clipboard);
   },
 })
 class CourseAdmissionMode extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentAdmissionMode = this.admissionMode;
-    this.currentShowInPublicCoursesList = this.showInPublicCoursesList;
-  }
   @Prop() admissionMode!: AdmissionMode;
   @Prop() courseAlias!: string;
   @Prop() shouldShowPublicOption!: boolean;
@@ -136,8 +130,8 @@ class CourseAdmissionMode extends Vue {
 
   T = T;
   AdmissionMode = AdmissionMode;
-  currentAdmissionMode = undefined;
-  currentShowInPublicCoursesList = undefined;
+  currentAdmissionMode = this.admissionMode;
+  currentShowInPublicCoursesList = this.showInPublicCoursesList;
   copiedToClipboard = false;
 
   onSubmit(): void {

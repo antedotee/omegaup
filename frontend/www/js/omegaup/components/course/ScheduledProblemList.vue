@@ -116,12 +116,6 @@ library.add(fas);
   },
 })
 class CourseScheduledProblemList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.assignment = this.selectedAssignment;
-    this.problems = this.assignmentProblems;
-  }
   @Prop() assignments!: types.CourseAssignment[];
   @Prop() assignmentProblems!: types.ProblemsetProblem[];
   @Prop() taggedProblems!: omegaup.Problem[];
@@ -129,8 +123,8 @@ class CourseScheduledProblemList extends Vue {
   @Prop() searchResultProblems!: types.ListItem[];
 
   T = T;
-  assignment: Partial<types.CourseAssignment> = undefined;
-  problems: types.AddedProblem[] = [];
+  assignment: Partial<types.CourseAssignment> = this.selectedAssignment;
+  problems: types.AddedProblem[] = this.assignmentProblems;
   taggedProblemAlias = '';
   problemAlias: null | types.ListItem = null;
   points = 100;

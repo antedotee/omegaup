@@ -127,11 +127,6 @@ library.add(fas);
   },
 })
 class AddContestant extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentUsers = this.users;
-  }
   @Prop() users!: types.ContestUser[];
   @Prop() contest!: types.ContestAdminDetails;
   @Prop() searchResultUsers!: types.ListItem[];
@@ -140,7 +135,7 @@ class AddContestant extends Vue {
   time = time;
   bulkContestants = '';
   typeaheadContestants: types.ListItem[] = [];
-  currentUsers = undefined;
+  currentUsers = this.users;
 
   onSubmit(): void {
     let users: string[] = [];

@@ -111,14 +111,6 @@ export { urlMapping };
   },
 })
 class UserSidebarMainInfo extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSelectedTab = this.getSelectedValidTab(
-      this.selectedTab,
-      this.currentUrlMapping,
-    );
-  }
   @Prop({ default: null }) data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop() selectedTab!: string;
@@ -126,7 +118,10 @@ class UserSidebarMainInfo extends Vue {
 
   T = T;
   urlMapping = urlMapping;
-  currentSelectedTab = undefined;
+  currentSelectedTab = this.getSelectedValidTab(
+    this.selectedTab,
+    this.currentUrlMapping,
+  );
 
   get solvedProblems(): Problem[] {
     if (!this.data?.solvedProblems) return [];

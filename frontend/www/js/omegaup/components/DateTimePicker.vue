@@ -23,11 +23,6 @@ import '../../../third_party/js/locales/bootstrap-datetimepicker.pt-BR.js';
 
 @Component
 class DateTimePicker extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.stringValue = time.formatDateTimeLocal(this.value);
-  }
   T = T;
   time = time;
 
@@ -43,7 +38,7 @@ class DateTimePicker extends Vue {
   @Prop({ default: false }) isInvalid!: boolean;
 
   private usedFallback: boolean = false;
-  private stringValue: string = '';
+  private stringValue: string = time.formatDateTimeLocal(this.value);
 
   public mounted() {
     if ((this.$el as HTMLInputElement).type === 'text') {

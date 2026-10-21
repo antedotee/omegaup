@@ -9,14 +9,9 @@ import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 
 @Component
 class Overlay extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.isOverlayShown = this.showOverlay;
-  }
   @Prop({ default: false }) showOverlay!: boolean;
 
-  isOverlayShown = undefined;
+  isOverlayShown = this.showOverlay;
 
   onOverlayClicked(evt: Event) {
     if (typeof $(evt.composedPath()[0]).attr('data-overlay') !== 'undefined') {

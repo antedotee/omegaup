@@ -116,11 +116,6 @@ import * as ui from '../../ui';
 
 @Component
 class ArenaClarification extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.isPublic = this.clarification.public;
-  }
   @Prop() clarification!: types.Clarification;
   @Prop({ default: false }) isAdmin!: boolean;
   @Prop({ default: false }) selected!: boolean;
@@ -128,7 +123,7 @@ class ArenaClarification extends Vue {
   T = T;
   time = time;
 
-  isPublic = undefined;
+  isPublic = this.clarification.public;
   message = '';
   selectedResponse = 'yes';
   showUpdateAnswer = false;

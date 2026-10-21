@@ -89,15 +89,6 @@ import { types } from '../../api_types';
   },
 })
 class LibinteractiveGen extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentLanguage = this.language;
-    this.currentOs = this.os;
-    this.currentName = this.name;
-    this.currentIdl = this.idl;
-    this.currentError = this.error;
-  }
   @Prop({ default: null }) error!: null | types.LibinteractiveError;
   @Prop() language!: string;
   @Prop() os!: string;
@@ -105,11 +96,11 @@ class LibinteractiveGen extends Vue {
   @Prop() idl!: string;
 
   T = T;
-  currentLanguage = undefined;
-  currentOs = undefined;
-  currentName = undefined;
-  currentIdl = undefined;
-  currentError = undefined;
+  currentLanguage = this.language;
+  currentOs = this.os;
+  currentName = this.name;
+  currentIdl = this.idl;
+  currentError = this.error;
 
   get errorDescription(): null | string {
     return this.currentError?.description ?? null;

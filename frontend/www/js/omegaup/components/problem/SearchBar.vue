@@ -92,13 +92,6 @@ library.add(faTimes);
   },
 })
 class ProblemSearchBar extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentKeyword = { key: this.keyword, value: this.keyword };
-    this.currentLanguage = this.language;
-    this.currentOnlyQualitySeal = this.onlyQualitySeal;
-  }
   @Prop() tags!: string[];
   @Prop() keyword!: string;
   @Prop() language!: string;
@@ -108,9 +101,9 @@ class ProblemSearchBar extends Vue {
 
   T = T;
 
-  currentKeyword: types.ListItem = undefined;
-  currentLanguage = undefined;
-  currentOnlyQualitySeal = undefined;
+  currentKeyword: types.ListItem = { key: this.keyword, value: this.keyword };
+  currentLanguage = this.language;
+  currentOnlyQualitySeal = this.onlyQualitySeal;
 
   getLanguageText(language: string): string {
     if (language === 'all') return T.wordsAll;

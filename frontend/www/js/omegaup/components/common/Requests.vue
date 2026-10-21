@@ -95,17 +95,12 @@ import 'bootstrap/dist/css/bootstrap.css';
   },
 })
 class Requests extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.requests = this.data;
-  }
   @Prop() data!: types.IdentityRequest[];
   @Prop() textAddParticipant!: string;
 
   T = T;
   time = time;
-  requests: types.IdentityRequest[] = [];
+  requests: types.IdentityRequest[] = this.data;
   showAllRequests = false;
   resolutionText: null | string = null;
   modalStates: { [key: string]: boolean } = {};

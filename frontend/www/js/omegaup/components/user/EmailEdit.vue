@@ -53,15 +53,10 @@ import user_MainInfo from './MainInfo.vue';
   },
 })
 class UserEmailEdit extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentEmail = this.email;
-  }
   @Prop() email!: string;
   @Prop() profile!: types.UserProfileInfo;
   T = T;
-  currentEmail: string = '';
+  currentEmail: string = this.email;
 }
 export default toNative(UserEmailEdit);
 </script>

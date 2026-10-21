@@ -91,12 +91,6 @@ import { ArenaCourseFeedback, FeedbackStatus } from './Feedback.vue';
   },
 })
 class FeedbackThread extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSaved = this.saved;
-    this.currentFeedbackThread = this.feedbackThread;
-  }
   @Prop() feedbackThread!: ArenaCourseFeedback;
   @Prop({ default: false }) saved!: boolean;
   @Ref('feedback-thread-form') feedbackThreadForm!: HTMLTextAreaElement;
@@ -104,8 +98,8 @@ class FeedbackThread extends Vue {
   FeedbackStatus = FeedbackStatus;
   T = T;
   time = time;
-  currentSaved = undefined;
-  currentFeedbackThread = undefined;
+  currentSaved = this.saved;
+  currentFeedbackThread = this.feedbackThread;
   isSelectedNewFeedback = false;
 
   get currentFeedbackThreadTimestamp(): string {

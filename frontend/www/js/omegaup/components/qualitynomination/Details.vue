@@ -142,11 +142,6 @@ interface QualityNominationContents {
   },
 })
 class QualityNominationDetails extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.rationale = this.initialRationale;
-  }
   @Prop() author!: omegaup.User;
   @Prop() contents!: QualityNominationContents;
   @Prop() initialRationale!: string;
@@ -158,7 +153,7 @@ class QualityNominationDetails extends Vue {
   @Prop() votes!: omegaup.NominationVote[];
 
   T = T;
-  rationale = undefined;
+  rationale = this.initialRationale;
   showConfirmation = false;
   status = 'banned';
 

@@ -149,18 +149,13 @@ library.add(fas);
   },
 })
 class CourseFilteredList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.showTab = this.activeTab;
-  }
   @Prop() courses!: types.CoursesByAccessMode;
   @Prop() activeTab!: string;
   @Prop({ default: true }) showPercentage!: boolean;
 
   T = T;
   time = time;
-  showTab = undefined;
+  showTab = this.activeTab;
 
   getTabName(timeType: string): string {
     switch (timeType) {

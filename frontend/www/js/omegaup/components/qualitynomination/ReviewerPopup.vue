@@ -107,11 +107,6 @@ interface ProblemTag {
   },
 })
 class ReviewerPopup extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.publicTagsList = this.selectedPublicTags ?? [];
-  }
   @Prop() allowUserAddTags!: boolean;
   @Prop() levelTags!: string[];
   @Prop() problemLevel!: string;
@@ -137,7 +132,7 @@ class ReviewerPopup extends Vue {
   T = T;
   currentView: AvailableViews = AvailableViews.Content;
   qualitySeal = true;
-  publicTagsList = undefined;
+  publicTagsList = this.selectedPublicTags ?? [];
 
   get sortedProblemTags(): ProblemTag[] {
     return this.possibleTags

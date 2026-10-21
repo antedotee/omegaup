@@ -34,11 +34,6 @@ import { types } from '../../api_types';
   },
 })
 class Typeahead extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.selectedOptions = this.options;
-  }
   @Prop({ default: () => [] }) existingOptions!: types.ListItem[];
   @Prop({ default: () => [] }) options!: types.ListItem[];
   @Prop({ default: 3 }) activationThreshold!: number;
@@ -52,7 +47,7 @@ class Typeahead extends Vue {
   @Prop({ default: false }) isInvalid!: boolean;
 
   T = T;
-  selectedOptions = undefined;
+  selectedOptions = this.options;
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   updateExistingOptions(query: string): void {

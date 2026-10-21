@@ -35,17 +35,12 @@ import omegaup_Markdown from '../Markdown.vue';
   },
 })
 class UserPrivacyPolicy extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentAgreed = this.agreed;
-  }
   @Prop() policyMarkdown!: string;
   @Prop({ default: false }) agreed!: boolean;
   @Prop() saved!: boolean;
 
   T = T;
-  currentAgreed = undefined;
+  currentAgreed = this.agreed;
 }
 export default toNative(UserPrivacyPolicy);
 </script>

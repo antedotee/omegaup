@@ -96,29 +96,19 @@ import DatePicker from '../DatePicker.vue';
   },
 })
 class UserBasicInformationEdit extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.username = this.profile.username;
-    this.name = this.profile.name;
-    this.gender = this.profile.gender;
-    this.countryId = this.profile.country_id ?? null;
-    this.stateId = this.profile.state_id ?? null;
-    this.birthDate = this.profile.birth_date
-      ? time.convertLocalDateToGMTDate(this.profile.birth_date)
-      : new Date('');
-  }
   @Prop() data!: types.UserProfileDetailsPayload;
   @Prop() countries!: dao.Countries[];
   @Prop() profile!: types.UserProfileInfo;
 
   T = T;
-  username = undefined;
-  name = undefined;
-  gender = undefined;
-  countryId = undefined;
-  stateId = undefined;
-  birthDate = undefined;
+  username = this.profile.username;
+  name = this.profile.name;
+  gender = this.profile.gender;
+  countryId = this.profile.country_id ?? null;
+  stateId = this.profile.state_id ?? null;
+  birthDate = this.profile.birth_date
+    ? time.convertLocalDateToGMTDate(this.profile.birth_date)
+    : new Date('');
 
   get isCountrySelected(): boolean {
     return Boolean(this.countryId);

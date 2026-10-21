@@ -202,19 +202,6 @@ import * as time from '../../time';
   },
 })
 class CourseViewStudent extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here. Under Vue
-    // 3 reactivity is already active in `created()`, so these initial
-    // assignments trigger the `selectedStudent`/`selectedAssignment` watchers,
-    // which did not happen under Vue 2 (where data was seeded before the
-    // watchers ran). Mark the component as initializing so those watchers skip
-    // their `update` emit for this prop-sync; user-driven changes still emit.
-    this.selectedAssignment = this.assignment?.alias ?? null;
-    this.selectedProblem = this.problem;
-    this.selectedStudent = this.student?.username ?? null;
-    this.updatedFeedback = this.feedback;
-  }
   @Prop() assignments!: omegaup.Assignment[];
   @Prop() course!: types.CourseDetails;
   @Prop() student!: types.StudentProgress;
@@ -227,12 +214,12 @@ class CourseViewStudent extends Vue {
   T = T;
   time = time;
   ui = ui;
-  selectedAssignment: string | null = '';
-  selectedProblem: Partial<types.CourseProblem> | null = null;
-  selectedStudent: string | null = '';
+  selectedAssignment: string | null = this.assignment?.alias ?? null;
+  selectedProblem: Partial<types.CourseProblem> | null = this.problem;
+  selectedStudent: string | null = this.student?.username ?? null;
   selectedRun: Partial<types.CourseRun> | null = null;
   showFeedbackForm = false;
-  updatedFeedback: null | string = '';
+  updatedFeedback: null | string = this.feedback;
 
   get problemsWithPoints(): types.CourseProblem[] {
     return this.problems.filter(
@@ -309,16 +296,10 @@ class CourseViewStudent extends Vue {
 
   @Watch('selectedStudent')
   onSelectedStudentChange(newVal?: string, oldVal?: string) {
-    // The empty-string seed only exists before `created()` syncs the props, so
-    // an `oldVal` of `''` means this fired for that initial prop-sync. Under Vue
-    // 2 the data was seeded before the watcher ran, so that sync never emitted;
-    // skip it here to match while still emitting on real user changes.
-    if (oldVal !== '') {
-      this.$emit('update', {
-        student: this.selectedStudent,
-        assignmentAlias: this.selectedAssignment,
-      });
-    }
+    this.$emit('update', {
+      student: this.selectedStudent,
+      assignmentAlias: this.selectedAssignment,
+    });
     if (!newVal || newVal === oldVal) {
       return;
     }
@@ -333,14 +314,10 @@ class CourseViewStudent extends Vue {
 
   @Watch('selectedAssignment')
   onSelectedAssignmentChange(newVal?: string, oldVal?: string) {
-    // See onSelectedStudentChange: an `oldVal` of `''` is the pre-`created()`
-    // seed, so skip the emit for that initial prop-sync to match Vue 2.
-    if (oldVal !== '') {
-      this.$emit('update', {
-        student: this.selectedStudent,
-        assignmentAlias: this.selectedAssignment,
-      });
-    }
+    this.$emit('update', {
+      student: this.selectedStudent,
+      assignmentAlias: this.selectedAssignment,
+    });
     if (!newVal || newVal === oldVal) {
       return;
     }

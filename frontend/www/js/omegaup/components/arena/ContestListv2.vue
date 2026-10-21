@@ -459,15 +459,6 @@ export type { UrlParams };
   },
 })
 class ArenaContestList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentTab = this.tab;
-    this.currentQuery = this.query;
-    this.currentOrder = this.sortOrder;
-    this.currentFilter = this.filter;
-    this.currentPage = this.page;
-  }
   @Prop({ default: null }) countContests!: { [key: string]: number } | null;
   @Prop() contests!: types.ContestList;
   @Prop() query!: string;
@@ -482,11 +473,11 @@ class ArenaContestList extends Vue {
   ContestTab = ContestTab;
   ContestOrder = ContestOrder;
   ContestFilter = ContestFilter;
-  currentTab: ContestTab = undefined;
-  currentQuery: string = '';
-  currentOrder: ContestOrder = undefined;
-  currentFilter: ContestFilter = undefined;
-  currentPage: number = 0;
+  currentTab: ContestTab = this.tab;
+  currentQuery: string = this.query;
+  currentOrder: ContestOrder = this.sortOrder;
+  currentFilter: ContestFilter = this.filter;
+  currentPage: number = this.page;
   refreshing: boolean = false;
   isScrollLoading: boolean = false;
   hasMore: boolean = true;

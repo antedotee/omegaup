@@ -61,14 +61,6 @@ import T from '../../../../lang';
 
 @Component
 class CaseInput extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.caseName = this.name;
-    this.caseGroup = this.group;
-    this.casePoints = this.points;
-    this.caseAutoPoints = this.autoPoints;
-  }
   @Prop({ default: '' }) name!: string;
   @Prop({ default: NIL }) group!: string;
   @Prop({ default: 0 }) points!: number;
@@ -86,10 +78,10 @@ class CaseInput extends Vue {
     return this.$store.getters['casesStore/getGroupIdsAndNames'];
   }
 
-  caseName = undefined;
-  caseGroup = undefined;
-  casePoints: number = 0;
-  caseAutoPoints: boolean = false;
+  caseName = this.name;
+  caseGroup = this.group;
+  casePoints: number = this.points;
+  caseAutoPoints: boolean = this.autoPoints;
 
   T = T;
 

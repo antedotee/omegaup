@@ -176,14 +176,6 @@ export { AvailableTabs };
   },
 })
 class GroupEdit extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.selectedTab = this.tab;
-    this.currentIdentities = this.identities;
-    this.currentIdentitiesCsv = this.identitiesCsv;
-    this.currentScoreboards = this.scoreboards;
-  }
   @Prop() groupAlias!: string;
   @Prop() groupDescription!: string;
   @Prop() groupName!: string;
@@ -201,10 +193,10 @@ class GroupEdit extends Vue {
   T = T;
   ui = ui;
   AvailableTabs = AvailableTabs;
-  selectedTab: AvailableTabs = undefined;
-  currentIdentities = undefined;
-  currentIdentitiesCsv = undefined;
-  currentScoreboards = undefined;
+  selectedTab: AvailableTabs = this.tab;
+  currentIdentities = this.identities;
+  currentIdentitiesCsv = this.identitiesCsv;
+  currentScoreboards = this.scoreboards;
 
   @Watch('tab')
   onInitialTabChanged(newValue: AvailableTabs): void {

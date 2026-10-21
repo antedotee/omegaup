@@ -40,17 +40,12 @@ import badge_Badge from '../badge/Badge.vue';
   },
 })
 class BadgeList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.isProfile = this.showAllBadgesLink;
-  }
   @Prop() allBadges!: Set<string>;
   @Prop() visitorBadges!: Set<string>;
   @Prop() showAllBadgesLink!: boolean;
 
   T = T;
-  isProfile = undefined;
+  isProfile = this.showAllBadgesLink;
 
   get badges(): types.Badge[] {
     return Array.from(this.allBadges)

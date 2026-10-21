@@ -119,11 +119,6 @@ import { types } from '../../api_types';
   },
 })
 class CollectionList extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.authors = this.data.authorsRanking;
-  }
   @Prop() data!: types.CollectionDetailsByAuthorPayload;
   @Prop() problems!: omegaup.Problem;
   @Prop() loggedIn!: boolean;
@@ -145,7 +140,7 @@ class CollectionList extends Vue {
   @Prop({ default: () => [] }) selectedAuthors!: string;
 
   T = T;
-  authors = undefined;
+  authors = this.data.authorsRanking;
 }
 export default toNative(CollectionList);
 </script>

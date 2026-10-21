@@ -402,13 +402,6 @@ export { EventBus };
   },
 })
 class Navbar extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.hasTeachingObjective = this.teachingUserTypes.some((teachingType) =>
-      this.userTypes.includes(teachingType),
-    );
-  }
   @Prop() omegaUpLockDown!: boolean;
   @Prop() inContest!: boolean;
   @Prop() isLoggedIn!: boolean;
@@ -442,7 +435,9 @@ class Navbar extends Vue {
   logoutModalVisible = false;
   scrollY: number = 0;
   teachingUserTypes = ['teacher', 'coach', 'independent-teacher'];
-  hasTeachingObjective = undefined;
+  hasTeachingObjective = this.teachingUserTypes.some((teachingType) =>
+    this.userTypes.includes(teachingType),
+  );
 
   get formattedLoginURL(): string {
     let path = window.location.pathname;

@@ -106,18 +106,6 @@ import { sourceTemplates } from '../../grader/GraderTemplates';
   },
 })
 class ArenaRunSubmitPopup extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.selectedLanguage = this.preferredLanguage;
-    // The `selectedLanguage` watcher already ran (immediately, with the field
-    // initializer value) and only reacts to this assignment on the next flush,
-    // after the code editor is created but before it is mounted, so the editor
-    // would receive its boilerplate too early. Load it before the first render.
-    if (this.selectedLanguage) {
-      this.loadBoilerplateForLanguage(this.selectedLanguage);
-    }
-  }
   @Ref() inputFile!: HTMLInputElement;
   @Prop() languages!: string[];
   @Prop({ required: true }) nextSubmissionTimestamp!: Date;
@@ -126,21 +114,15 @@ class ArenaRunSubmitPopup extends Vue {
 
   T = T;
   omegaup = omegaup;
-  selectedLanguage: null | string = '';
+  selectedLanguage: null | string = this.preferredLanguage;
   code = '';
   now: number = Date.now();
-  // Guards `selectedLanguage` persistence so it only happens after the initial
-  // created()/mounted() setup finishes. See onSelectedLanguageChanged().
-  initialized = false;
 
   mounted(): void {
     const savedLanguage = SafeStorage.getItem('arena:selectedLanguage');
     if (savedLanguage && savedLanguage in this.allowedLanguages) {
       this.selectedLanguage = savedLanguage;
     }
-    // Initialization is complete; subsequent `selectedLanguage` changes are
-    // user-driven and should be persisted.
-    this.initialized = true;
   }
 
   getLanguageExtension(language: string): string {
@@ -189,14 +171,7 @@ class ArenaRunSubmitPopup extends Vue {
   ): void {
     if (!newLanguage || newLanguage === oldLanguage) return;
     this.loadBoilerplateForLanguage(newLanguage);
-    // Only persist once the component has mounted. During initialization the
-    // field initializer, the `created()` assignment of `preferredLanguage`, and
-    // the `mounted()` restore from storage all mutate `selectedLanguage`; none
-    // of those represent a user-driven change and must not overwrite the saved
-    // value. (Under Vue 3 the `created()` assignment reaches this watcher with a
-    // defined `oldLanguage`, so an `oldLanguage !== undefined` guard is no longer
-    // enough to tell initialization apart from a real change.)
-    if (this.initialized) {
+    if (oldLanguage !== undefined) {
       SafeStorage.setItem('arena:selectedLanguage', newLanguage);
     }
   }

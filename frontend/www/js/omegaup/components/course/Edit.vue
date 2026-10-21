@@ -394,14 +394,6 @@ const emptyAssignment: types.CourseAssignment = {
   },
 })
 class CourseEdit extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.showTab = this.initialTab;
-    this.alreadyArchived = this.data.course.archived;
-    this.assignmentProblems = this.data.assignmentProblems;
-    this.assignments = this.data.course.assignments;
-  }
   @Ref('assignment-details') readonly assignmentDetails!: Vue;
   @Prop() data!: types.CourseEditPayload;
   @Prop() invalidParameterName!: string;
@@ -415,12 +407,12 @@ class CourseEdit extends Vue {
   @Prop() readOnly!: boolean;
 
   T = T;
-  showTab = undefined;
+  showTab = this.initialTab;
   admissionMode = AdmissionMode.Private;
-  alreadyArchived = undefined;
+  alreadyArchived = this.data.course.archived;
 
-  assignmentProblems = undefined;
-  assignments = undefined;
+  assignmentProblems = this.data.assignmentProblems;
+  assignments = this.data.course.assignments;
   assignmentFormMode: omegaup.AssignmentFormMode =
     omegaup.AssignmentFormMode.Default;
   assignment = emptyAssignment;

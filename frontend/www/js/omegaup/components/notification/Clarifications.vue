@@ -80,18 +80,13 @@ library.add(faBell, faAlignRight);
   },
 })
 class Clarifications extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.unreadClarifications = this.clarifications;
-  }
   @Prop({ default: () => [] }) clarifications!: types.Clarification[];
 
   @Prop() isAdmin!: boolean;
   T = T;
 
   flashInterval: number = 0;
-  unreadClarifications = undefined;
+  unreadClarifications = this.clarifications;
 
   beforeDestroy() {
     if (this.flashInterval) {

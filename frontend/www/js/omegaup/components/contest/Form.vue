@@ -1124,33 +1124,6 @@ const markdownConverter = new markdownModule.Converter({ preview: true });
   },
 })
 class Form extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.alias = this.initialAlias;
-    this.description = this.initialDescription;
-    this.feedback = this.initialFeedback;
-    this.finishTime = this.initialFinishTime;
-    this.languages = this.initialLanguages;
-    this.needsBasicInformation = this.initialNeedsBasicInformation;
-    this.penalty = this.initialPenalty;
-    this.penaltyType = this.initialPenaltyType;
-    this.pointsDecayFactor = this.initialPointsDecayFactor;
-    this.requestsUserInformation = this.initialRequestsUserInformation;
-    this.scoreboard = this.initialScoreboard;
-    this.showScoreboardAfter = this.initialShowScoreboardAfter;
-    this.currentScoreMode = this.scoreMode;
-    this.startTime = this.initialStartTime;
-    this.submissionsGap = this.initialSubmissionsGap
-      ? this.initialSubmissionsGap / 60
-      : 1;
-    this.title = this.initialTitle;
-    this.windowLength = this.initialWindowLength;
-    this.windowLengthEnabled = this.initialWindowLength !== null;
-    this.currentContestForTeams = this.contestForTeams;
-    this.currentTeamsGroupAlias = this.teamsGroupAlias;
-    this.recommended = this.initialRecommended;
-  }
   @Ref() readonly descriptionButtonBar!: HTMLDivElement;
   @Ref() readonly descriptionInput!: HTMLTextAreaElement;
   markdownEditor: Markdown.Editor | null = null;
@@ -1192,28 +1165,30 @@ class Form extends Vue {
   @Prop({ default: false }) canSetRecommended!: boolean;
   @Prop({ default: false }) initialRecommended!: boolean;
 
-  alias = undefined;
-  description = undefined;
-  feedback = undefined;
-  finishTime = undefined;
-  languages = undefined;
-  needsBasicInformation = undefined;
-  penalty = undefined;
-  penaltyType = undefined;
-  pointsDecayFactor = undefined;
-  requestsUserInformation = undefined;
-  scoreboard = undefined;
-  showScoreboardAfter = undefined;
-  currentScoreMode = undefined;
-  startTime = undefined;
-  submissionsGap = undefined;
-  title = undefined;
-  windowLength = undefined;
-  windowLengthEnabled = undefined;
-  currentContestForTeams = undefined;
-  currentTeamsGroupAlias = undefined;
+  alias = this.initialAlias;
+  description = this.initialDescription;
+  feedback = this.initialFeedback;
+  finishTime = this.initialFinishTime;
+  languages = this.initialLanguages;
+  needsBasicInformation = this.initialNeedsBasicInformation;
+  penalty = this.initialPenalty;
+  penaltyType = this.initialPenaltyType;
+  pointsDecayFactor = this.initialPointsDecayFactor;
+  requestsUserInformation = this.initialRequestsUserInformation;
+  scoreboard = this.initialScoreboard;
+  showScoreboardAfter = this.initialShowScoreboardAfter;
+  currentScoreMode = this.scoreMode;
+  startTime = this.initialStartTime;
+  submissionsGap = this.initialSubmissionsGap
+    ? this.initialSubmissionsGap / 60
+    : 1;
+  title = this.initialTitle;
+  windowLength = this.initialWindowLength;
+  windowLengthEnabled = this.initialWindowLength !== null;
+  currentContestForTeams = this.contestForTeams;
+  currentTeamsGroupAlias = this.teamsGroupAlias;
   titlePlaceHolder = '';
-  recommended = undefined;
+  recommended = this.initialRecommended;
   isSubmitting = false;
   localErrors: LocalErrors = {};
   hasFormChanged = false;

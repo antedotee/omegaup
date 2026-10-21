@@ -84,12 +84,6 @@ import omegaup_OverlayPopup from '../OverlayPopup.vue';
   },
 })
 class ArenaNewClarificationPopup extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentProblemAlias = this.problemAlias;
-    this.currentUsername = this.username;
-  }
   @Prop({ default: () => [] }) problems!: types.NavbarProblemsetProblem[];
   @Prop({ default: () => [] }) users!: types.ContestUser[];
   @Prop({ default: null }) problemAlias!: null | string;
@@ -97,8 +91,8 @@ class ArenaNewClarificationPopup extends Vue {
 
   T = T;
   message: null | string = null;
-  currentProblemAlias = undefined;
-  currentUsername = undefined;
+  currentProblemAlias = this.problemAlias;
+  currentUsername = this.username;
 
   get filteredUsers(): { username: string; name: string }[] {
     return this.users.map((user) => {

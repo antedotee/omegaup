@@ -504,13 +504,7 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue,
-  Component,
-  Prop,
-  Watch,
-  toNative,
-} from 'vue-facing-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import * as ui from '../../ui';
 import T from '../../lang';
@@ -610,12 +604,6 @@ export enum PopupDisplayed {
   },
 })
 class RunsForCourses extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentRunDetailsData = this.runDetailsData;
-    this.currentPopupDisplayed = this.popupDisplayed;
-  }
   @Prop({ default: false }) isContestFinished!: boolean;
   @Prop({ default: true }) isProblemsetOpened!: boolean;
   @Prop({ default: false }) showContest!: boolean;
@@ -661,8 +649,8 @@ class RunsForCourses extends Vue {
   filterExecution: string = '';
   filterOutput: string = '';
   filters: { name: string; value: string }[] = [];
-  currentRunDetailsData = undefined;
-  currentPopupDisplayed = undefined;
+  currentRunDetailsData = this.runDetailsData;
+  currentPopupDisplayed = this.popupDisplayed;
   currentPage: number = 1;
   currentDataPage: number = 1;
   newFieldsLaunchDate: Date = new Date('2023-10-22');

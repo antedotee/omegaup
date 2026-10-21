@@ -184,12 +184,6 @@ library.add(faTrash);
   },
 })
 class ProblemTags extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.allowTags = this.initialAllowTags;
-    this.problemLevelTag = this.problemLevel;
-  }
   @Prop({ default: null }) problemLevel!: string | null;
   @Prop() publicTags!: string[];
   @Prop() selectedPublicTags!: string[];
@@ -204,8 +198,8 @@ class ProblemTags extends Vue {
   @Prop() isLecture!: boolean;
 
   T = T;
-  allowTags = undefined;
-  problemLevelTag: string | null = '';
+  allowTags = this.initialAllowTags;
+  problemLevelTag: string | null = this.problemLevel;
   newPrivateTag = '';
   newPublicTag = '';
 

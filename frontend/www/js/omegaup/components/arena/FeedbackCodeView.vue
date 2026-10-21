@@ -42,11 +42,6 @@ for (const mode of modeList) {
   components: {},
 })
 class FeedbackCodeView extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.mode = languageModeMap[this.language] ?? languageModeMap['cpp17-gcc'];
-  }
   @Prop() language!: string;
   @Prop() value!: string;
   @Prop({ default: true }) readonly!: boolean;
@@ -59,7 +54,7 @@ class FeedbackCodeView extends Vue {
   @Prop() currentUserClassName!: string;
 
   T = T;
-  mode = undefined;
+  mode = languageModeMap[this.language] ?? languageModeMap['cpp17-gcc'];
   mapChangeTracker = 1;
 
   get feedbackList(): ArenaCourseFeedback[] {

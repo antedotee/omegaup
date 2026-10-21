@@ -170,11 +170,6 @@ import * as time from '../../time';
   options: { compatConfig: { COMPONENT_V_MODEL: false } },
 })
 class ProblemVersions extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.selectedRevision = this.modelValue;
-  }
   @Prop() log!: types.ProblemVersion[];
   @Prop({ default: null }) publishedRevision!: null | types.ProblemVersion;
   @Prop() showFooter!: boolean;
@@ -183,7 +178,7 @@ class ProblemVersions extends Vue {
   T = T;
   time = time;
   diffMode = 'files';
-  selectedRevision: null | types.ProblemVersion = null;
+  selectedRevision: null | types.ProblemVersion = this.modelValue;
   runsDiff: types.CommitRunsDiff = {};
   showOnlyChanges = false;
   updatePublished = 'owned-problemsets';

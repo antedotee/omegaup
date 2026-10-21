@@ -30,17 +30,12 @@ export { ToggleSwitchSize };
 
 @Component({ emits: ['update:value'] })
 class ToggleSwitch extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentCheckedValue = this.checkedValue;
-  }
   @Prop({ default: 'Check' }) textDescription!: string;
   @Prop({ default: true }) checkedValue!: boolean;
   @Prop({ default: ToggleSwitchSize.Large }) size!: ToggleSwitchSize;
   @Prop({ default: false }) disabled!: boolean;
 
-  currentCheckedValue = undefined;
+  currentCheckedValue = this.checkedValue;
 
   @Watch('currentCheckedValue')
   onUpdateInput(newValue: boolean): void {

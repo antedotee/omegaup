@@ -35,11 +35,6 @@ import T from '../lang';
 
 @Component({ emits: ['update:value'] })
 class RadioSwitch extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.radioValue = this.selectedValue ?? this.valueForFalse;
-  }
   @Prop() name!: string;
   @Prop({ default: false }) readonly!: boolean;
   @Prop() selectedValue!: any;
@@ -48,7 +43,7 @@ class RadioSwitch extends Vue {
   @Prop({ default: T.wordsYes }) textForTrue!: string;
   @Prop({ default: T.wordsNo }) textForFalse!: string;
 
-  radioValue = undefined;
+  radioValue = this.selectedValue ?? this.valueForFalse;
 
   @Watch('radioValue')
   onUpdateInput(): void {

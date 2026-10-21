@@ -144,15 +144,6 @@ import { SubmissionRequest } from '../../arena/submissions';
   },
 })
 class ArenaContestPractice extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentClarifications = this.clarifications;
-    this.activeProblem = this.problem;
-    this.currentNextSubmissionTimestamp = this.nextSubmissionTimestamp;
-    this.currentNextExecutionTimestamp = this.nextExecutionTimestamp;
-    this.currentRunDetailsData = this.runDetailsData;
-  }
   @Prop() contest!: types.ContestPublicDetails;
   @Prop() contestAdmin!: boolean;
   @Prop() problems!: types.NavbarProblemsetProblem[];
@@ -175,12 +166,12 @@ class ArenaContestPractice extends Vue {
 
   T = T;
   ui = ui;
-  currentClarifications = undefined;
+  currentClarifications = this.clarifications;
   ContestClarificationType = ContestClarificationType;
-  activeProblem: types.NavbarProblemsetProblem | null = null;
-  currentNextSubmissionTimestamp = undefined;
-  currentNextExecutionTimestamp = undefined;
-  currentRunDetailsData = undefined;
+  activeProblem: types.NavbarProblemsetProblem | null = this.problem;
+  currentNextSubmissionTimestamp = this.nextSubmissionTimestamp;
+  currentNextExecutionTimestamp = this.nextExecutionTimestamp;
+  currentRunDetailsData = this.runDetailsData;
 
   get activeProblemAlias(): null | string {
     return this.activeProblem?.alias ?? null;

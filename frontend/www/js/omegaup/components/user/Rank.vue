@@ -247,11 +247,6 @@ interface Rank {
   },
 })
 class UserRank extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentFilter = this.filter;
-  }
   @Prop() page!: number;
   @Prop() length!: number;
   @Prop({ default: false }) isIndex!: boolean;
@@ -269,7 +264,7 @@ class UserRank extends Vue {
   ui = ui;
   searchedUsername: null | types.ListItem = null;
   showPopover: boolean = false;
-  currentFilter = undefined;
+  currentFilter = this.filter;
   isSelectionMode: boolean = false;
   selectedUsers: string[] = [];
 

@@ -25,13 +25,6 @@ import '../../../third_party/js/bootstrap-datepicker.js';
   options: { compatConfig: { COMPONENT_V_MODEL: false } },
 })
 class DatePicker extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.stringValue = this.isValidDate(this.modelValue)
-      ? time.formatDateLocal(this.modelValue)
-      : '';
-  }
   T = T;
 
   @Prop({ default: '' }) name!: string;
@@ -46,7 +39,9 @@ class DatePicker extends Vue {
   @Prop({ default: null }) max!: Date | null;
 
   private usedFallback: boolean = false;
-  private stringValue: string = '';
+  private stringValue: string = this.isValidDate(this.modelValue)
+    ? time.formatDateLocal(this.modelValue)
+    : '';
 
   get minDateStr() {
     return this.min?.toISOString()?.split('T')?.[0];

@@ -30,16 +30,11 @@ import T from '../../lang';
 
 @Component
 class Settings extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.enabled = this.ephemeralGraderEnabled;
-  }
   T = T;
 
   @Prop({ default: true }) ephemeralGraderEnabled!: boolean;
 
-  enabled = undefined;
+  enabled = this.ephemeralGraderEnabled;
 
   @Watch('enabled')
   onEnabledChanged(newValue: boolean): void {

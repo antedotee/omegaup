@@ -513,12 +513,6 @@ export { DisqualificationType, PopupDisplayed };
   },
 })
 class Runs extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentRunDetailsData = this.runDetailsData;
-    this.currentPopupDisplayed = this.popupDisplayed;
-  }
   @Prop({ default: false }) isContestFinished!: boolean;
   @Prop({ default: true }) isProblemsetOpened!: boolean;
   @Prop({ default: false }) showContest!: boolean;
@@ -562,8 +556,8 @@ class Runs extends Vue {
   filterVerdict: string = '';
   filterContest: string = '';
   filters: { name: string; value: string }[] = [];
-  currentRunDetailsData = undefined;
-  currentPopupDisplayed = undefined;
+  currentRunDetailsData = this.runDetailsData;
+  currentPopupDisplayed = this.popupDisplayed;
 
   get currentPage(): number {
     return this.filterOffset + 1;

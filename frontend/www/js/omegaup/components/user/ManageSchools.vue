@@ -79,24 +79,16 @@ import OmegaupRadioSwitch from '../RadioSwitch.vue';
   },
 })
 class UserManageSchools extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.graduationDate = this.profile.graduation_date
-      ? time.convertLocalDateToGMTDate(this.profile.graduation_date)
-      : new Date('');
-    this.school = this.searchResultSchools[0] ?? null;
-    this.scholarDegree = this.profile.scholar_degree;
-    this.isCurrentlyEnrolled = !this.profile.graduation_date;
-  }
   @Prop() profile!: types.UserProfileInfo;
   @Prop() searchResultSchools!: types.SchoolListItem[];
 
   T = T;
-  graduationDate = undefined;
-  school: null | types.SchoolListItem = null;
-  scholarDegree = undefined;
-  isCurrentlyEnrolled = undefined;
+  graduationDate = this.profile.graduation_date
+    ? time.convertLocalDateToGMTDate(this.profile.graduation_date)
+    : new Date('');
+  school: null | types.SchoolListItem = this.searchResultSchools[0] ?? null;
+  scholarDegree = this.profile.scholar_degree;
+  isCurrentlyEnrolled = !this.profile.graduation_date;
 
   onUpdateUserSchools(): void {
     this.$emit('update-user-schools', {

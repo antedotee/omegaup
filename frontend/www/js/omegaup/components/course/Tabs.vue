@@ -167,11 +167,6 @@ export enum Level {
   },
 })
 class CourseTabs extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSelectedTab = this.selectedTab;
-  }
   @Prop() courses!: {
     enrolled: types.CourseCardEnrolled[];
     public: types.CourseCardPublic[];
@@ -185,7 +180,7 @@ class CourseTabs extends Vue {
   ui = ui;
   Tab = Tab;
   Level = Level;
-  currentSelectedTab = undefined;
+  currentSelectedTab = this.selectedTab;
   searchText = '';
   levelFilter = Level.All;
 

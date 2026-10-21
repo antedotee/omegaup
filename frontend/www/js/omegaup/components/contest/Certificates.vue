@@ -70,15 +70,10 @@ import T from '../../lang';
 
 @Component
 class Certificates extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.certificateCutoff = this.certificatesDetails.certificateCutoff;
-  }
   @Prop() certificatesDetails!: types.ContestCertificatesAdminDetails;
 
   T = T;
-  certificateCutoff = undefined;
+  certificateCutoff = this.certificatesDetails.certificateCutoff;
 }
 export default toNative(Certificates);
 </script>

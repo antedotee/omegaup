@@ -25,13 +25,6 @@ import T from '../../lang';
   emits: ['update-teams-group'],
 })
 class TeamsGroupForm extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentDescription = this.description;
-    this.currentName = this.name;
-    this.currentNumberOfContestants = this.numberOfContestants;
-  }
   @Prop({ default: null }) alias!: null | string;
   @Prop({ default: null }) description!: null | string;
   @Prop({ default: null }) name!: null | string;
@@ -39,9 +32,9 @@ class TeamsGroupForm extends Vue {
   @Prop({ default: 10 }) maxNumberOfContestants!: number;
 
   T = T;
-  currentDescription: null | string = '';
-  currentName: null | string = '';
-  currentNumberOfContestants: number = 0;
+  currentDescription: null | string = this.description;
+  currentName: null | string = this.name;
+  currentNumberOfContestants: number = this.numberOfContestants;
 }
 export default toNative(TeamsGroupForm);
 </script>

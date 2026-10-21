@@ -36,17 +36,12 @@ import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
   },
 })
 class FilterTags extends Vue {
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSelectedTags = this.selectedTags;
-  }
   @Prop() publicQualityTags!: types.TagWithProblemCount[];
   @Prop({ default: () => [] }) tags!: types.TagWithProblemCount[];
   @Prop({ default: () => [] }) selectedTags!: string[];
 
   T = T;
-  currentSelectedTags = undefined;
+  currentSelectedTags = this.selectedTags;
 
   get publicQualityTagNames(): string[] {
     return this.publicQualityTags.map((x) => x.name);

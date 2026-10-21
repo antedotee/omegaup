@@ -71,15 +71,9 @@ class CasesForm extends Vue {
   @Prop({ default: null }) readonly editGroup!: Group;
 
   T = T;
-  commitMessage: string = '';
-
-  created() {
-    // Props are not bound when class field initializers run under
-    // vue-facing-decorator, so this prop-derived field is assigned here.
-    this.commitMessage = this.isCaseEdit
-      ? T.problemEditUpdatingCase
-      : T.problemEditUpdatingGroup;
-  }
+  commitMessage: string = this.isCaseEdit
+    ? T.problemEditUpdatingCase
+    : T.problemEditUpdatingGroup;
 
   // The vuex-class namespaced getter decorators do not bind under
   // vue-facing-decorator, so read the store directly through native getters.
