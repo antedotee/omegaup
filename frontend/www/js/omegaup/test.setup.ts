@@ -13,6 +13,10 @@ import './vue-setup';
 // at content nested inside a `<b-*>` wrapper (e.g. inputs inside BCollapse)
 // working as they did under bootstrap-vue 2.
 config.global.renderStubDefaultSlot = true;
+// test-utils stubs <transition> by default, and a stubbed transition never
+// runs its enter hooks. bootstrap-vue-next shows lazy BModal/BOffcanvas content
+// from those hooks, so use real transitions as the browser does.
+config.global.stubs = { ...config.global.stubs, transition: false };
 
 // @vue/compat maps the Vue 2 `inserted` directive hook at runtime; the Vue 3
 // Directive type does not list it, so cast the definition.

@@ -92,6 +92,8 @@
       :cancel-title="T.problemCreatorValidatePointsBack"
       cancel-variant="danger"
       teleport-disabled
+      lazy
+      unmount-lazy
       @ok="validateAndFixPoints"
     >
       {{ T.problemCreatorValidatePointsWarning }}
@@ -345,6 +347,8 @@
             :cancel-title="T.groupModalBack"
             cancel-variant="danger"
             teleport-disabled
+            lazy
+            unmount-lazy
             @ok="updateGroupInfo(groupID)"
           >
             <div class="mt-3">

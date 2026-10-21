@@ -28,6 +28,8 @@
           :cancel-title="T.caseModalBack"
           cancel-variant="danger"
           teleport-disabled
+          lazy
+          unmount-lazy
           @ok="updateCaseInfo"
         >
           <omegaup-problem-creator-case-input
@@ -196,6 +198,8 @@
                       :cancel-title="T.arrayModalBack"
                       cancel-variant="danger"
                       teleport-disabled
+                      lazy
+                      unmount-lazy
                       @ok="
                         editLineValue([line.lineID, arrayModalEditArray]);
                         arrayModalEditArray = '';
@@ -276,6 +280,8 @@
                       :cancel-title="T.matrixModalBack"
                       cancel-variant="danger"
                       teleport-disabled
+                      lazy
+                      unmount-lazy
                       @ok="
                         editLineValue([line.lineID, matrixModalEditArray]);
                         matrixModalEditArray = '';

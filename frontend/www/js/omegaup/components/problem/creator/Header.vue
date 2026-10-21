@@ -29,6 +29,8 @@
         :cancel-title="T.caseModalBack"
         cancel-variant="danger"
         teleport-disabled
+        lazy
+        unmount-lazy
         @ok="retrieveStore"
       >
         <div class="mb-4">{{ T.problemCreatorUploadZipMessage }}</div>
@@ -72,6 +74,8 @@
         :cancel-title="T.problemCreatorCreateNewProblemBack"
         cancel-variant="success"
         teleport-disabled
+        lazy
+        unmount-lazy
         @ok="createNewProblem"
       >
         <div class="mb-4">{{ T.problemCreatorCreateNewProblemWarning }}</div>

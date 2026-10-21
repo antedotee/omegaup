@@ -9,6 +9,7 @@ import {
   generateGroup,
 } from '@/js/omegaup/problem/creator/modules/cases';
 import { Group, Layout, LayoutID } from '@/js/omegaup/problem/creator/types';
+import { waitForModalContent } from '../../../modalTestUtils';
 
 // Minimal view of the component instance for the internals the tests reach
 // into. The component is `toNative`'d so its class type is not exported.
@@ -199,6 +200,7 @@ describe('LayoutSidebar.vue', () => {
 
     const renameLayout = wrapper.find('[data-layout-dropdown-rename-layout]');
     await renameLayout.trigger('click');
+    await waitForModalContent();
 
     const renameLayoutModal = wrapper.find(
       '[data-layout-dropdown-rename-modal]',

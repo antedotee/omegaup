@@ -195,6 +195,8 @@
               <BModal
                 v-if="problemCanBeDeleted(problem)"
                 v-model="confirmationModal[problem.alias]"
+                lazy
+                unmount-lazy
                 :title="
                   ui.formatString(T.problemEditDeleteRequireConfirmation, {
                     problemAlias: problem.alias,

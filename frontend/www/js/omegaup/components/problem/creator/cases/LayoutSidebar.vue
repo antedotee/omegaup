@@ -15,6 +15,8 @@
         :cancel-title="T.problemCreatorRenameModalBack"
         cancel-variant="danger"
         teleport-disabled
+        lazy
+        unmount-lazy
         @ok="
           editLayoutName([
             layout.layoutID,

@@ -10,6 +10,7 @@ import {
   generateCase,
   generateGroup,
 } from '@/js/omegaup/problem/creator/modules/cases';
+import { waitForModalContent } from '../../modalTestUtils';
 
 // Minimal view of the component instance for the internals the tests reach
 // into. The component is `toNative`'d so its class type is not exported.
@@ -73,6 +74,7 @@ describe('Header.vue', () => {
       testText;
 
     await resetButton.trigger('click');
+    await waitForModalContent();
 
     const createNewProblemModal = wrapper.find('[data-create-new-problem]');
     await createNewProblemModal.find('button.btn-danger').trigger('click');
@@ -208,6 +210,7 @@ describe('Header.vue', () => {
     expect(loadFileButton.exists()).toBeTruthy();
 
     await loadFileButton.trigger('click');
+    await waitForModalContent();
 
     const fileInput = wrapper.find('input[data-upload-zip-file]');
     expect(fileInput.exists()).toBeTruthy();

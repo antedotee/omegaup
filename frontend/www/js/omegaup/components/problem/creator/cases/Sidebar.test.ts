@@ -11,6 +11,7 @@ import {
 
 import T from '../../../../lang';
 import { Group, GroupID } from '@/js/omegaup/problem/creator/types';
+import { waitForModalContent } from '../../../modalTestUtils';
 
 // Minimal view of the component instance for the internals the tests reach
 // into. The component is `toNative`'d so its class type is not exported.
@@ -199,6 +200,7 @@ describe('Sidebar.vue', () => {
       '[data-sidebar-edit-group-dropdown="edit group"]',
     );
     await editButton.trigger('click');
+    await waitForModalContent();
 
     const editModal = wrapper.find('[data-sidebar-edit-group-modal=""]');
 

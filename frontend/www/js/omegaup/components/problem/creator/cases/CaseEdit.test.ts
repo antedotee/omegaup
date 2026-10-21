@@ -19,6 +19,7 @@ import {
   LineID,
   CaseGroupID,
 } from '@/js/omegaup/problem/creator/types';
+import { waitForModalContent } from '../../../modalTestUtils';
 
 // Minimal view of the component instance for the internals the tests reach
 // into. The component is `toNative`'d so its class type is not exported;
@@ -575,6 +576,7 @@ describe('CaseEdit.vue', () => {
 
     const editIcon = wrapper.find(`button[data-line-edit-button]`);
     await editIcon.trigger('click');
+    await waitForModalContent();
 
     const modalBody = wrapper.find('div[data-array-modal]');
 
@@ -664,6 +666,7 @@ describe('CaseEdit.vue', () => {
 
     const editIcon = wrapper.find(`button[data-line-edit-button]`);
     await editIcon.trigger('click');
+    await waitForModalContent();
 
     const modalBody = wrapper.find('div[data-matrix-modal]');
 
@@ -769,6 +772,7 @@ describe('CaseEdit.vue', () => {
 
         const editIcon = wrapper.find(`button[data-line-edit-button]`);
         await editIcon.trigger('click');
+        await waitForModalContent();
 
         const modalBody = wrapper.find('div[data-matrix-modal]');
 
