@@ -3,6 +3,7 @@
 import Vue, {
   type Component,
   type ComponentPublicInstance,
+  type Plugin,
   configureCompat,
 } from 'vue';
 import * as BootstrapVueNext from 'bootstrap-vue-next';
@@ -40,14 +41,22 @@ for (const [name, exported] of Object.entries(BootstrapVueNext)) {
   Vue.component(name, exported as Component);
 }
 
-// `createBootstrap()` installs through `app.provide`, which the compat
-// `Vue.use` cannot reach: it hands plugins the global constructor, and each
-// `new Vue` root gets its own app whose provides are not inherited. Install it
-// on every root's app before its children are created instead.
+// `createBootstrap()` and Vuex 4 stores install through `app.provide` and
+// `app.config.globalProperties`, which the compat `Vue.use` cannot reach: it
+// hands plugins the global constructor, and each `new Vue` root gets its own
+// app. Install them on every root's app before its children are created. The
+// store comes from the root's Vue 2 style `store` option, which Vuex 4 no
+// longer reads itself.
 Vue.mixin({
   beforeCreate(this: ComponentPublicInstance) {
-    if (this.$.parent === null) {
-      this.$.appContext.app.use(createBootstrap());
+    if (this.$.parent !== null) {
+      return;
+    }
+    const app = this.$.appContext.app;
+    app.use(createBootstrap());
+    const store = (this.$options as { store?: Plugin }).store;
+    if (store) {
+      app.use(store);
     }
   },
 });
