@@ -36,7 +36,10 @@ describe('cases.ts', () => {
   it('Should save a group to the store', () => {
     const newGroup = generateGroup({ name: 'group1' });
     store.commit('casesStore/addGroup', newGroup);
-    expect(store.state.casesStore.groups[0]).toBe(newGroup);
+    // Vuex wraps committed state in a Vue 3 reactive proxy, so the stored value
+    // is no longer identical (`toBe`) to the plain object passed in; assert deep
+    // structural equality instead.
+    expect(store.state.casesStore.groups[0]).toStrictEqual(newGroup);
   });
 
   it('Should add a case to a group', () => {
@@ -48,7 +51,7 @@ describe('cases.ts', () => {
       autoPoints: true,
     };
     store.commit('casesStore/addCase', newCaseRequest);
-    expect(store.state.casesStore.groups[0]).toBe(newGroup);
+    expect(store.state.casesStore.groups[0]).toStrictEqual(newGroup);
     expect(store.state.casesStore.groups[0].cases[0]).toEqual(newCase);
   });
 

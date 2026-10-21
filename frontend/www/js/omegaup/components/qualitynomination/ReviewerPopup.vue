@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from 'vue-property-decorator';
+import { Vue, Prop, Component, toNative } from 'vue-facing-decorator';
 import omegaup_OverlayPopup from '../OverlayPopup.vue';
 import { AvailableViews } from './DemotionPopup.vue';
 import omegaup_RadioSwitch from '../RadioSwitch.vue';
@@ -106,7 +106,7 @@ interface ProblemTag {
     FontAwesomeIcon,
   },
 })
-export default class ReviewerPopup extends Vue {
+class ReviewerPopup extends Vue {
   @Prop() allowUserAddTags!: boolean;
   @Prop() levelTags!: string[];
   @Prop() problemLevel!: string;
@@ -136,14 +136,12 @@ export default class ReviewerPopup extends Vue {
 
   get sortedProblemTags(): ProblemTag[] {
     return this.possibleTags
-      .map(
-        (x: string): ProblemTag => {
-          return {
-            value: x,
-            text: T[x],
-          };
-        },
-      )
+      .map((x: string): ProblemTag => {
+        return {
+          value: x,
+          text: T[x],
+        };
+      })
       .sort((a: ProblemTag, b: ProblemTag): number => {
         return a.text.localeCompare(b.text, T.lang);
       });
@@ -184,6 +182,7 @@ export default class ReviewerPopup extends Vue {
     setTimeout(() => this.onHide(), 2000);
   }
 }
+export default toNative(ReviewerPopup);
 </script>
 
 <style lang="scss" scoped>

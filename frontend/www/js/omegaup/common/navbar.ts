@@ -3,10 +3,17 @@ import { OmegaUp } from '../omegaup';
 import * as api from '../api';
 import { types } from '../api_types';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import T from '../lang';
 import clarificationsStore from '../arena/clarificationsStore';
 import mainStore from '../mainStore';
+
+interface CommonNavbarInstance {
+  notifications: types.Notification[];
+  graderInfo: types.GraderStatus | null;
+  graderQueueLength: number;
+  errorMessage: string | null;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CommonPayload('header-payload');
@@ -35,7 +42,7 @@ OmegaUp.on('ready', () => {
       graderQueueLength: -1,
       errorMessage: null as string | null,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-common-navbar', {
         props: {
           omegaUpLockDown: payload.omegaUpLockDown,
@@ -77,7 +84,9 @@ OmegaUp.on('ready', () => {
             })
               .then(() => api.Notification.myList())
               .then((data) => {
-                commonNavbar.notifications = data.notifications;
+                (
+                  commonNavbar as unknown as CommonNavbarInstance
+                ).notifications = data.notifications;
                 if (redirectTo) {
                   ui.navigateTo(redirectTo);
                 }
@@ -127,7 +136,8 @@ OmegaUp.on('ready', () => {
     mainStore.commit('updateUsername', payload.currentUsername);
     api.Notification.myList()
       .then((data) => {
-        commonNavbar.notifications = data.notifications;
+        (commonNavbar as unknown as CommonNavbarInstance).notifications =
+          data.notifications;
       })
       .catch(ui.apiError);
   }
@@ -136,16 +146,20 @@ OmegaUp.on('ready', () => {
     const updateGraderStatus = () => {
       api.Grader.status()
         .then((stats) => {
-          commonNavbar.graderInfo = stats.grader;
+          (commonNavbar as unknown as CommonNavbarInstance).graderInfo =
+            stats.grader;
           if (stats.grader.queue) {
-            commonNavbar.graderQueueLength =
+            (
+              commonNavbar as unknown as CommonNavbarInstance
+            ).graderQueueLength =
               stats.grader.queue.run_queue_length +
               stats.grader.queue.running.length;
           }
-          commonNavbar.errorMessage = null;
+          (commonNavbar as unknown as CommonNavbarInstance).errorMessage = null;
         })
         .catch((stats) => {
-          commonNavbar.errorMessage = stats.error;
+          (commonNavbar as unknown as CommonNavbarInstance).errorMessage =
+            stats.error;
         });
     };
 

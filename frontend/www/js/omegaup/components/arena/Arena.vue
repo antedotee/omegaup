@@ -66,13 +66,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Emit,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import { Tab } from '../problem/Details.vue';
 
 @Component
-export default class Arena extends Vue {
+class Arena extends Vue {
   @Prop({ default: false }) shouldShowRuns!: boolean;
   @Prop({ default: true }) shouldShowRanking!: boolean;
   @Prop({ default: () => [] }) clarifications!: types.Clarification[];
@@ -130,6 +137,7 @@ export default class Arena extends Vue {
     return this.selectedTab;
   }
 }
+export default toNative(Arena);
 </script>
 
 <style lang="scss" scoped>

@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 
@@ -52,7 +52,7 @@ library.add(faEdit);
     FontAwesomeIcon,
   },
 })
-export default class GroupList extends Vue {
+class GroupList extends Vue {
   @Prop() groups!: types.Group[];
 
   T = T;
@@ -65,4 +65,5 @@ export default class GroupList extends Vue {
     return `/group/${group.alias}/edit/#edit`;
   }
 }
+export default toNative(GroupList);
 </script>

@@ -1,19 +1,23 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
 import SolutionTab from './SolutionTab.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import store from '@/js/omegaup/problem/creator/store';
 import T from '../../../../lang';
+import ProblemMarkdown from '../../ProblemMarkdown.vue';
 
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface SolutionTabVm {
+  currentSolutionMarkdown: string;
+  $store: typeof store;
+}
 
 describe('SolutionTab.vue', () => {
   it('Should contain markdown buttons and contents and update the store accordingly', async () => {
     const wrapper = shallowMount(SolutionTab, {
-      localVue,
-      store,
+      global: {
+        plugins: [store],
+      },
     });
 
     const markdownButtons = wrapper.find('div.wmd-button-bar');
@@ -23,25 +27,31 @@ describe('SolutionTab.vue', () => {
     expect(textArea.exists()).toBe(true);
     textArea.setValue('Hello omegaUp');
 
-    expect(wrapper.vm.currentSolutionMarkdown).toBe('Hello omegaUp');
+    expect(
+      (wrapper.vm as unknown as SolutionTabVm).currentSolutionMarkdown,
+    ).toBe('Hello omegaUp');
 
-    const markdownContent = wrapper.find('omegaup-markdown-stub');
+    const markdownContent = wrapper.findComponent(ProblemMarkdown);
     expect(markdownContent.exists()).toBe(true);
 
     await wrapper.trigger('click');
 
-    expect(markdownContent.props()['markdown']).toBe(
+    expect((markdownContent.props() as { markdown: string }).markdown).toBe(
       T.problemCreatorMarkdownPreviewInitialRender + 'Hello omegaUp',
     );
 
-    expect(wrapper.vm.$store.state.problemSolutionMarkdown).toBe('');
+    expect(
+      (wrapper.vm as unknown as SolutionTabVm).$store.state
+        .problemSolutionMarkdown,
+    ).toBe('');
 
     const markdownSaveButton = wrapper.find('button.btn-primary');
     expect(markdownSaveButton.exists()).toBe(true);
     await markdownSaveButton.trigger('click');
 
-    expect(wrapper.vm.$store.state.problemSolutionMarkdown).toBe(
-      'Hello omegaUp',
-    );
+    expect(
+      (wrapper.vm as unknown as SolutionTabVm).$store.state
+        .problemSolutionMarkdown,
+    ).toBe('Hello omegaUp');
   });
 });

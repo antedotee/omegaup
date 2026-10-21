@@ -2,8 +2,12 @@ import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import course_Intro from '../components/course/Intro.vue';
+
+interface CourseIntroInstance {
+  userRegistrationRequested: boolean;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.IntroDetailsPayload();
@@ -16,7 +20,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       userRegistrationRequested: payload.userRegistrationRequested,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-intro', {
         props: {
           course: payload.course,
@@ -64,7 +68,9 @@ OmegaUp.on('ready', () => {
               share_user_information: shareUserInformation,
             })
               .then(() => {
-                courseIntro.userRegistrationRequested = true;
+                (
+                  courseIntro as unknown as CourseIntroInstance
+                ).userRegistrationRequested = true;
               })
               .catch(ui.error);
           },

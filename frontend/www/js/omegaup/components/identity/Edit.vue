@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import type { types } from '../../api_types';
 import T from '../../lang';
 import * as iso3166 from '@/third_party/js/iso-3166-2.js/iso3166.min.js';
@@ -112,7 +112,7 @@ import common_Typeahead from '../common/Typeahead.vue';
     'omegaup-common-typeahead': common_Typeahead,
   },
 })
-export default class IdentityEdit extends Vue {
+class IdentityEdit extends Vue {
   @Prop({ default: null }) identity!: types.Identity | null;
   @Prop() countries!: iso3166.Country[];
   @Prop() searchResultSchools!: types.SchoolListItem[];
@@ -172,4 +172,5 @@ export default class IdentityEdit extends Vue {
     this.selectedIdentity = newValue;
   }
 }
+export default toNative(IdentityEdit);
 </script>

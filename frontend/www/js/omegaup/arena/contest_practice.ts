@@ -3,7 +3,7 @@ import * as time from '../time';
 import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import T from '../lang';
 import arena_ContestPractice from '../components/arena/ContestPractice.vue';
 import {
@@ -24,6 +24,7 @@ import clarificationStore from './clarificationsStore';
 import {
   getScoreModeEnum,
   navigateToProblem,
+  NavigationTarget,
   NavigationType,
 } from './navigation';
 import { myRunsStore } from './runsStore';
@@ -86,7 +87,7 @@ OmegaUp.on('ready', async () => {
       shouldShowFirstAssociatedIdentityRunWarning:
         payload.shouldShowFirstAssociatedIdentityRunWarning,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-contest-practice', {
         props: {
           contest: payload.contest,
@@ -105,8 +106,8 @@ OmegaUp.on('ready', async () => {
           nextSubmissionTimestamp: this.nextSubmissionTimestamp,
           nextExecutionTimestamp: this.nextExecutionTimestamp,
           runDetailsData: this.runDetailsData,
-          shouldShowFirstAssociatedIdentityRunWarning: this
-            .shouldShowFirstAssociatedIdentityRunWarning,
+          shouldShowFirstAssociatedIdentityRunWarning:
+            this.shouldShowFirstAssociatedIdentityRunWarning,
         },
         on: {
           'navigate-to-problem': ({
@@ -117,7 +118,7 @@ OmegaUp.on('ready', async () => {
             navigateToProblem({
               type: NavigationType.ForContest,
               problem,
-              target: contestPractice,
+              target: contestPractice as unknown as NavigationTarget,
               problems: this.problems,
               contestAlias: payload.contest.alias,
               contestMode: getScoreModeEnum(payload.contest.score_mode),
@@ -142,7 +143,7 @@ OmegaUp.on('ready', async () => {
           'execute-run': ({
             target,
           }: {
-            target: Vue & { currentNextExecutionTimestamp: Date };
+            target: { currentNextExecutionTimestamp: Date };
           }) => {
             api.Run.execute()
               .then(time.remoteTimeAdapter)
@@ -161,7 +162,7 @@ OmegaUp.on('ready', async () => {
             code: string;
             language: string;
             problem: types.NavbarProblemsetProblem;
-            target: Vue & { currentNextSubmissionTimestamp: Date };
+            target: { currentNextSubmissionTimestamp: Date };
           }) => {
             api.Run.create({
               problem_alias: problem.alias,

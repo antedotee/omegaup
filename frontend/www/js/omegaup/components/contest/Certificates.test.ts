@@ -13,7 +13,7 @@ describe('Certificates.vue', () => {
       isCertificateGenerator: true,
     };
     const wrapper = shallowMount(contest_Certificates, {
-      propsData: {
+      props: {
         certificatesDetails,
       },
     });
@@ -21,10 +21,10 @@ describe('Certificates.vue', () => {
     expect(wrapper.text()).toContain(T.contestCertificatesGenerate);
     expect(wrapper.text()).toContain(T.contestCertificatesCutoff);
     expect(wrapper.text()).toContain(T.contestCertificatesCutoffHelp);
-    expect(wrapper.find('input').attributes().disabled).toBe('disabled');
+    expect(wrapper.find('input').attributes().disabled).toBe('');
     expect(
       wrapper.find('button[data-button-generate]').attributes().disabled,
-    ).toBe('disabled');
+    ).toBe('');
   });
 
   it('Should generate certificates', async () => {
@@ -34,7 +34,7 @@ describe('Certificates.vue', () => {
       isCertificateGenerator: true,
     };
     const wrapper = mount(contest_Certificates, {
-      propsData: {
+      props: {
         certificatesDetails,
       },
     });

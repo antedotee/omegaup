@@ -2,7 +2,7 @@ import course_Statistics from '../components/course/Statistics.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', function () {
   const payload = types.payloadParsers.CourseStatisticsPayload();
@@ -12,7 +12,7 @@ OmegaUp.on('ready', function () {
     components: {
       'omegaup-course-statistics': course_Statistics,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-statistics', {
         props: {
           T: T,

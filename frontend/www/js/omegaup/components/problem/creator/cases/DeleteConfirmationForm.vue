@@ -1,5 +1,5 @@
 <template>
-  <b-collapse :visible="visible" class="w-100 mt-2">
+  <b-collapse :model-value="visible" class="w-100 mt-2">
     <form enctype="multipart/form-data" method="post" @submit="onSubmit">
       <div class="p-3 border rounded bg-light item-active-for-delete">
         <div class="form-group">
@@ -31,12 +31,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch, Inject } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  Vue,
+  Watch,
+  Inject,
+  toNative,
+} from 'vue-facing-decorator';
 import T from '../../../../lang';
 import * as ui from '@/js/omegaup/ui';
 @Component
-export default class DeleteConfirmationForm extends Vue {
-  @Inject('problemAlias') readonly alias!: string;
+class DeleteConfirmationForm extends Vue {
+  @Inject({ from: 'problemAlias' }) readonly alias!: string;
   @Prop({ required: true }) visible!: boolean;
   @Prop({ required: true }) itemName!: string;
   @Prop({ required: false }) itemId!: string;
@@ -67,6 +74,7 @@ export default class DeleteConfirmationForm extends Vue {
     this.commitMessage = '';
   }
 }
+export default toNative(DeleteConfirmationForm);
 </script>
 
 <style scoped lang="scss">

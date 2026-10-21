@@ -1,11 +1,12 @@
 import { shallowMount } from '@vue/test-utils';
 
-import omegaup_ToggleSwitch, { ToggleSwitchSize } from './ToggleSwitch.vue';
+import omegaup_ToggleSwitch from './ToggleSwitch.vue';
+import { ToggleSwitchSize } from './ToggleSwitch_types';
 
 describe('ToggleSwitch.vue', () => {
   it('Should render a simple toggle switch with default description and size', () => {
     const wrapper = shallowMount(omegaup_ToggleSwitch, {
-      propsData: {
+      props: {
         checkedValue: true,
       },
     });
@@ -14,7 +15,7 @@ describe('ToggleSwitch.vue', () => {
 
   it('Should render a simple toggle switch with custom description and size', () => {
     const wrapper = shallowMount(omegaup_ToggleSwitch, {
-      propsData: {
+      props: {
         checkedValue: true,
         textDescription: 'Are you happy?',
         size: ToggleSwitchSize.Small,

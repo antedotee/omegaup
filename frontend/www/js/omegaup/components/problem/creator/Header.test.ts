@@ -1,8 +1,8 @@
-import { shallowMount, createLocalVue, mount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
 import JSZip from 'jszip';
 
 import Header from './Header.vue';
-import BootstrapVue, { IconsPlugin, BButton, BFormInput } from 'bootstrap-vue';
+import { BButton, BFormInput } from 'bootstrap-vue-next';
 import store from '@/js/omegaup/problem/creator/store';
 import T from '../../../lang';
 import Vue from 'vue';
@@ -10,14 +10,25 @@ import {
   generateCase,
   generateGroup,
 } from '@/js/omegaup/problem/creator/modules/cases';
+import { waitForModalContent } from '../../modalTestUtils';
 
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface HeaderVm {
+  $store: typeof store;
+  nameInternal: string;
+  retrieveStore(): Promise<void>;
+  generateProblem(): void;
+  readFile(e: HTMLInputElement): File | null;
+}
 
 describe('Header.vue', () => {
   it('Should contain the header buttons and problem name input', async () => {
-    const wrapper = shallowMount(Header, { localVue, store });
+    const wrapper = shallowMount(Header, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const buttons = wrapper.findAllComponents(BButton);
     const expectedText = [
@@ -28,7 +39,7 @@ describe('Header.vue', () => {
 
     expect(expectedText.length).toBe(buttons.length);
     for (let i = 0; i < expectedText.length; i++) {
-      expect(buttons.at(i).text()).toBe(expectedText[i]);
+      expect(buttons[i].text()).toBe(expectedText[i]);
     }
 
     expect(wrapper.findComponent(BFormInput).exists()).toBe(true);
@@ -42,36 +53,49 @@ describe('Header.vue', () => {
       value: { reload: jest.fn() },
     });
 
-    const wrapper = mount(Header, { localVue, store });
+    const wrapper = mount(Header, {
+      global: {
+        plugins: [store],
+      },
+    });
 
-    const buttonsList = wrapper.findAll('button');
-    expect(buttonsList.length).toBe(3);
-
-    const resetButton = buttonsList.at(2);
+    const resetButton = wrapper.find('button[data-create-new-problem-button]');
     expect(resetButton.exists()).toBe(true);
 
     const testText = 'Hello';
     const emptyText = '';
-    wrapper.vm.$store.state.problemName = testText;
-    wrapper.vm.$store.state.problemMarkdown = testText;
-    wrapper.vm.$store.state.problemCodeContent = testText;
-    wrapper.vm.$store.state.problemCodeExtension = testText;
-    wrapper.vm.$store.state.problemSolutionMarkdown = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemName = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent =
+      testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension =
+      testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown =
+      testText;
 
     await resetButton.trigger('click');
+    await waitForModalContent();
 
     const createNewProblemModal = wrapper.find('[data-create-new-problem]');
     await createNewProblemModal.find('button.btn-danger').trigger('click');
 
     expect(window.location.reload).toHaveBeenCalledTimes(1);
 
-    expect(wrapper.vm.$store.state.problemName).toBe(
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemName).toBe(
       T.problemCreatorNewProblem,
     );
-    expect(wrapper.vm.$store.state.problemMarkdown).toBe(emptyText);
-    expect(wrapper.vm.$store.state.problemCodeContent).toBe(emptyText);
-    expect(wrapper.vm.$store.state.problemCodeExtension).toBe(emptyText);
-    expect(wrapper.vm.$store.state.problemSolutionMarkdown).toBe(emptyText);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown,
+    ).toBe(emptyText);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent,
+    ).toBe(emptyText);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension,
+    ).toBe(emptyText);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown,
+    ).toBe(emptyText);
 
     jest.restoreAllMocks();
     Object.defineProperty(window, 'location', {
@@ -81,9 +105,16 @@ describe('Header.vue', () => {
   });
 
   it('Should download the zip file', async () => {
-    const wrapper = mount(Header, { localVue, store });
+    const wrapper = mount(Header, {
+      global: {
+        plugins: [store],
+      },
+    });
 
-    const generateProblemSpy = jest.spyOn(wrapper.vm, 'generateProblem');
+    const generateProblemSpy = jest.spyOn(
+      wrapper.vm as unknown as HeaderVm,
+      'generateProblem',
+    );
 
     const downloadButton = wrapper.find('button[data-download-zip]');
     expect(downloadButton.exists()).toBe(true);
@@ -96,7 +127,11 @@ describe('Header.vue', () => {
   });
 
   it('Should have correct file/folder structure', async () => {
-    const wrapper = mount(Header, { localVue, store });
+    const wrapper = mount(Header, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const newUngroupedCasegroup = generateGroup({
       name: 'New Ungrouped Case Group',
@@ -142,7 +177,9 @@ describe('Header.vue', () => {
 
     const emitted = wrapper.emitted('download-zip-file');
     expect(emitted).toBeTruthy();
-    const { zipContent } = emitted?.slice(-1)[0][0];
+    const { zipContent } = emitted?.slice(-1)[0][0] as unknown as {
+      zipContent: JSZip;
+    };
     expect(Object.keys(zipContent.files)).toStrictEqual(fileFolderList);
 
     jest.restoreAllMocks();
@@ -150,8 +187,9 @@ describe('Header.vue', () => {
 
   it('Should process the zip after it is uploaded', async () => {
     const wrapper = mount(Header, {
-      localVue,
-      store,
+      global: {
+        plugins: [store],
+      },
     });
 
     const cdpDataText = `{"problemName":"Hello","problemMarkdown":"Hello Statement!","problemCodeContent":"print('Hello world')","problemCodeExtension":"py","problemSolutionMarkdown":"Hello Solution!","casesStore":{"groups":[{"groupID":"26fdf593-d0c5-49f0-80b0-09bf0673c974","name":"hellogroup","points":100,"autoPoints":false,"ungroupedCase":false,"cases":[{"caseID":"8dda8030-60b9-4daf-b484-c4254525be6e","groupID":"26fdf593-d0c5-49f0-80b0-09bf0673c974","lines":[{"lineID":"c54c349e-b56e-426e-b4e1-032c62b05e8e","caseID":"8dda8030-60b9-4daf-b484-c4254525be6e","label":"Line1","data":{"kind":"line","value":"Hello line"}},{"lineID":"9768961e-27fc-4cdc-a4ca-c2de43fc15b1","caseID":"8dda8030-60b9-4daf-b484-c4254525be6e","label":"Line2","data":{"kind":"multiline","value":"Hello multiline"}}],"points":100,"output":"","name":"hellocase"}]}],"selected":{"groupID":"26fdf593-d0c5-49f0-80b0-09bf0673c974","caseID":"8dda8030-60b9-4daf-b484-c4254525be6e"},"layouts":[{"layoutID":"2b741bd6-6f20-46bd-9a0f-d3fbfc4ad03f","name":"hellogroup_hellocase","caseLineInfos":[{"lineInfoID":"d8942896-0c67-42ce-8f4b-581eade8840f","label":"Line1","data":{"kind":"line","value":""}},{"lineInfoID":"416ce979-62c7-4e9c-b282-d4734a7b556e","label":"Line2","data":{"kind":"multiline","value":""}}]}],"hide":false}}`;
@@ -165,20 +203,21 @@ describe('Header.vue', () => {
     });
 
     const mockReadFileMethod = jest
-      .spyOn(wrapper.vm, 'readFile')
+      .spyOn(wrapper.vm as unknown as HeaderVm, 'readFile')
       .mockImplementation(() => testZipFile);
 
     const loadFileButton = wrapper.find('button[data-load-problem-button]');
     expect(loadFileButton.exists()).toBeTruthy();
 
     await loadFileButton.trigger('click');
+    await waitForModalContent();
 
     const fileInput = wrapper.find('input[data-upload-zip-file]');
     expect(fileInput.exists()).toBeTruthy();
 
     await fileInput.trigger('change');
 
-    wrapper.vm.retrieveStore();
+    (wrapper.vm as unknown as HeaderVm).retrieveStore();
     expect(mockReadFileMethod).toHaveBeenCalled();
 
     const emittedStoreData = {
@@ -264,24 +303,26 @@ describe('Header.vue', () => {
       [emittedStoreData],
     ]);
 
-    expect(wrapper.vm.nameInternal).toBe(emittedStoreData.problemName);
-    expect(wrapper.vm.$store.state.problemName).toBe(
+    expect((wrapper.vm as unknown as HeaderVm).nameInternal).toBe(
       emittedStoreData.problemName,
     );
-    expect(wrapper.vm.$store.state.problemCodeContent).toBe(
-      emittedStoreData.problemCodeContent,
+    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemName).toBe(
+      emittedStoreData.problemName,
     );
-    expect(wrapper.vm.$store.state.problemCodeExtension).toBe(
-      emittedStoreData.problemCodeExtension,
-    );
-    expect(wrapper.vm.$store.state.problemMarkdown).toBe(
-      emittedStoreData.problemMarkdown,
-    );
-    expect(wrapper.vm.$store.state.problemSolutionMarkdown).toBe(
-      emittedStoreData.problemSolutionMarkdown,
-    );
-    expect(wrapper.vm.$store.state.casesStore).toStrictEqual(
-      emittedStoreData.casesStore,
-    );
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent,
+    ).toBe(emittedStoreData.problemCodeContent);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension,
+    ).toBe(emittedStoreData.problemCodeExtension);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown,
+    ).toBe(emittedStoreData.problemMarkdown);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown,
+    ).toBe(emittedStoreData.problemSolutionMarkdown);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.casesStore,
+    ).toStrictEqual(emittedStoreData.casesStore);
   });
 });

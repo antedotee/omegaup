@@ -6,6 +6,12 @@ import type { types } from '../../api_types';
 
 import course_ProblemLists from './ProblemList.vue';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ProblemListVm {
+  selectedRevision: null | types.ProblemVersion;
+}
+
 describe('ProblemLists.vue', () => {
   const problem: types.ProblemsetProblem = {
     accepted: 1,
@@ -41,7 +47,7 @@ describe('ProblemLists.vue', () => {
 
   it('Should handle empty assignments and problems', () => {
     const wrapper = shallowMount(course_ProblemLists, {
-      propsData: {
+      props: {
         assignmentProblems: [] as types.ProblemsetProblem[],
         assignments: [] as omegaup.Assignment[],
         selectedAssignment: {} as omegaup.Assignment,
@@ -58,7 +64,7 @@ describe('ProblemLists.vue', () => {
 
   it('Should handle assignment extra problem', () => {
     const wrapper = shallowMount(course_ProblemLists, {
-      propsData: {
+      props: {
         assignmentProblems: [problem],
         selectedAssignment,
         taggedProblems: [problem] as omegaup.Problem[],
@@ -72,7 +78,7 @@ describe('ProblemLists.vue', () => {
 
   it('Should show the current version of a problem', async () => {
     const wrapper = shallowMount(course_ProblemLists, {
-      propsData: {
+      props: {
         assignmentProblems: [problem],
         selectedAssignment,
         taggedProblems: [problem] as omegaup.Problem[],
@@ -91,7 +97,7 @@ describe('ProblemLists.vue', () => {
 
   it('Should update the version of a problem', async () => {
     const wrapper = shallowMount(course_ProblemLists, {
-      propsData: {
+      props: {
         assignmentProblems: [problem],
         selectedAssignment,
         taggedProblems: [problem] as omegaup.Problem[],
@@ -150,7 +156,9 @@ describe('ProblemLists.vue', () => {
 
     await wrapper.setData({ versionLog, selectedRevision, publishedRevision });
 
-    expect(wrapper.vm.selectedRevision?.version).toEqual(versionLog[1].version);
+    expect(
+      (wrapper.vm as unknown as ProblemListVm).selectedRevision?.version,
+    ).toEqual(versionLog[1].version);
 
     expect(
       wrapper.find('input[data-use-latest-version-true]').element,
@@ -159,10 +167,10 @@ describe('ProblemLists.vue', () => {
       wrapper.find('input[data-use-latest-version-false]').element,
     ).toBeChecked();
 
-    const radio = wrapper.find('input[name="use-latest-version"]')
-      .element as HTMLOptionElement;
-    radio.selected = true;
-    await radio.click();
+    // @vue/test-utils 2 does not propagate a radio's bound model from a raw
+    // `element.click()`; drive the v-model through setValue, which selects the
+    // "use latest version" radio and fires `change`.
+    await wrapper.find('input[data-use-latest-version-true]').setValue(true);
 
     expect(
       wrapper.find('input[data-use-latest-version-true]').element,
@@ -171,6 +179,8 @@ describe('ProblemLists.vue', () => {
       wrapper.find('input[data-use-latest-version-false]').element,
     ).not.toBeChecked();
 
-    expect(wrapper.vm.selectedRevision?.version).toEqual(versionLog[0].version);
+    expect(
+      (wrapper.vm as unknown as ProblemListVm).selectedRevision?.version,
+    ).toEqual(versionLog[0].version);
   });
 });

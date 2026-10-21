@@ -1,20 +1,27 @@
 <template>
   <div class="mt-4" data-runs>
     <h5 class="mb-3">{{ T.wordsSubmissions }}</h5>
-    <b-table :fields="tableFields" :items="filteredRuns" striped responsive>
+    <b-table
+      v-model:expanded-items="expandedItems"
+      :fields="tableFields"
+      :items="filteredRuns"
+      primary-key="guid"
+      striped
+      responsive
+    >
       <template #cell(index)="row">
         <b-button
-          :disabled="!row.detailsShowing && showDetails"
+          :disabled="!row.expansionShowing && showDetails"
           variant="link"
           size="sm"
           @click="toggleDetails(row)"
         >
-          <b-icon-chevron-right v-if="!row.detailsShowing" />
-          <b-icon-chevron-down v-else />
+          <i v-if="!row.expansionShowing" class="bi bi-chevron-right" />
+          <i v-else class="bi bi-chevron-down" />
         </b-button>
       </template>
 
-      <template #row-details>
+      <template #row-expansion>
         {{ currentRunDetails }}
       </template>
 
@@ -30,7 +37,7 @@
           v-if="data.item.status === 'ready' && data.item.verdict !== 'AC'"
           v-b-tooltip.right="statusHelp(data.item)"
           size="sm"
-          ><b-icon-question-circle-fill></b-icon-question-circle-fill>
+          ><i class="bi bi-question-circle-fill"></i>
         </b-button>
       </template>
 
@@ -40,20 +47,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import * as time from '../../time';
 
-import {
-  BootstrapVue,
-  BIconChevronRight,
-  BIconChevronDown,
-  BIconQuestionCircleFill,
-} from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-Vue.use(BootstrapVue);
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export enum PopupDisplayed {
   None,
@@ -87,14 +87,8 @@ interface TableRunItem {
   };
 }
 
-@Component({
-  components: {
-    BIconChevronRight,
-    BIconChevronDown,
-    BIconQuestionCircleFill,
-  },
-})
-export default class Runs extends Vue {
+@Component
+class Runs extends Vue {
   @Prop() currentRunDetails!: types.RunDetails | null;
   @Prop({ default: null }) problemAlias!: string | null;
   @Prop() runs!: null | types.Run[];
@@ -102,13 +96,18 @@ export default class Runs extends Vue {
   T = T;
   time = time;
   showDetails = false;
+  expandedItems: TableRunItem[] = [];
 
-  toggleDetails(row: { toggleDetails: () => void; item: TableRunItem }): void {
+  toggleDetails(row: {
+    toggleExpansion: () => void;
+    expansionShowing: boolean;
+    item: TableRunItem;
+  }): void {
     this.showDetails = !this.showDetails;
     if (this.showDetails) {
       this.$emit('show-run-details', { guid: row.item.guid });
     }
-    row.toggleDetails();
+    row.toggleExpansion();
   }
 
   get filteredRuns(): TableRunItem[] {
@@ -303,4 +302,5 @@ export default class Runs extends Vue {
     return `${verdict}: ${verdictHelp}`;
   }
 }
+export default toNative(Runs);
 </script>

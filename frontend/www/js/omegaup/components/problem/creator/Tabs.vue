@@ -1,8 +1,8 @@
 <template>
-  <b-tabs v-model="activeTabIndex" small>
+  <b-tabs v-model:index="activeTabIndex" small>
     <b-tab>
       <template #title>
-        <BIconPencil class="mr-1" />
+        <i class="bi bi-pencil mr-1" />
         <span name="writing" data-problem-creator-tab="statement">
           {{ T.problemCreatorStatement }}</span
         >
@@ -20,7 +20,7 @@
 
     <b-tab>
       <template #title>
-        <BIconFileCode class="mr-1" />
+        <i class="bi bi-file-code mr-1" />
         <span name="code" data-problem-creator-tab="code">
           {{ T.problemCreatorCode }}</span
         >
@@ -39,7 +39,7 @@
 
     <b-tab>
       <template #title>
-        <BIconCheckCircle class="mr-1" />
+        <i class="bi bi-check-circle mr-1" />
         <span name="testcases" data-problem-creator-tab="cases">
           {{ T.problemCreatorTestCases }}</span
         >
@@ -58,7 +58,7 @@
 
     <b-tab>
       <template #title>
-        <BIconFileEarmarkCheck class="mr-1" />
+        <i class="bi bi-file-earmark-check mr-1" />
         <span name="solution" data-problem-creator-tab="solution">
           {{ T.problemCreatorSolution }}</span
         >
@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Ref } from 'vue-property-decorator';
+import { Component, Vue, Prop, Ref, toNative } from 'vue-facing-decorator';
 import problemCreator_CasesTab from './cases/CasesTab.vue';
 import problemCreator_StatementTab from './statement/StatementTab.vue';
 import problemCreator_CodeTab from './code/CodeTab.vue';
@@ -99,7 +99,7 @@ export enum TabIndex {
     'omegaup-problem-creator-solution-tab': problemCreator_SolutionTab,
   },
 })
-export default class Tabs extends Vue {
+class Tabs extends Vue {
   T = T;
   activeTabIndex = TabIndex.Statement;
 
@@ -123,4 +123,5 @@ export default class Tabs extends Vue {
     this.solutionTabRef?.persistDraft();
   }
 }
+export default toNative(Tabs);
 </script>

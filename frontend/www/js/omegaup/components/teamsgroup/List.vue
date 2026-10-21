@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <b-modal
+    <BModal
       v-model="showArchiveModal"
       :title="archiveModalTitle"
       :ok-title="T.wordsYes"
@@ -89,12 +89,13 @@
       @ok="confirmArchive"
     >
       <p>{{ archiveModalBody }}</p>
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BModal } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 import T from '../../lang';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -107,10 +108,11 @@ import {
 library.add(faEdit, faArchive, faBoxOpen);
 @Component({
   components: {
+    BModal,
     FontAwesomeIcon,
   },
 })
-export default class TeamsGroupList extends Vue {
+class TeamsGroupList extends Vue {
   @Prop() teamsGroups!: types.TeamsGroup[];
   T = T;
   showArchiveModal = false;
@@ -159,6 +161,7 @@ export default class TeamsGroupList extends Vue {
     this.selectedTeamsGroup = null;
   }
 }
+export default toNative(TeamsGroupList);
 </script>
 
 <style lang="scss" scoped>

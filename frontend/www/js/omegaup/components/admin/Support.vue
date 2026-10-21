@@ -372,7 +372,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Emit,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import Clipboard from 'v-clipboard';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -389,7 +397,7 @@ import {
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
 export interface UpdateEmailRequest {
   email: string;
@@ -410,7 +418,7 @@ export enum MaintenanceType {
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
   },
 })
-export default class AdminSupport extends Vue {
+class AdminSupport extends Vue {
   @Prop() username!: string;
   @Prop() email!: string;
   @Prop() verified!: boolean;
@@ -617,6 +625,7 @@ export default class AdminSupport extends Vue {
     this.currentMaintenanceType = 'info';
   }
 }
+export default toNative(AdminSupport);
 </script>
 
 <style lang="scss" scoped>

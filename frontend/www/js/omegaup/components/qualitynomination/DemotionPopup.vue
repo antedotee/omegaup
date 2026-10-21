@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import omegaup_OverlayPopup from '../OverlayPopup.vue';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -91,11 +91,12 @@ export enum AvailableViews {
 }
 
 @Component({
+  emits: ['submit'],
   components: {
     'omegaup-overlay-popup': omegaup_OverlayPopup,
   },
 })
-export default class QualityNominationDemotionPopup extends Vue {
+class QualityNominationDemotionPopup extends Vue {
   AvailableViews = AvailableViews;
   T = T;
   ui = ui;
@@ -114,4 +115,5 @@ export default class QualityNominationDemotionPopup extends Vue {
     setTimeout(() => this.onHide(), 2000);
   }
 }
+export default toNative(QualityNominationDemotionPopup);
 </script>

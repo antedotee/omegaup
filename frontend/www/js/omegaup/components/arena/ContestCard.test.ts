@@ -4,7 +4,19 @@ import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
 import T from '../../lang';
 import arena_ContestCard from './ContestCard.vue';
-import { ContestTab } from './ContestListv2.vue';
+import { ContestTab } from './ContestListv2_types';
+
+// `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
+// the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
+// RENDER_FUNCTION disabled, as required for native SFC templates) cannot patch —
+// it throws `InvalidCharacterError: "0" ...`. Stub the icon so the components
+// under test can mount. The arena suites assert on behavior, not icon glyphs.
+const global = {
+  stubs: {
+    FontAwesomeIcon: true,
+    'font-awesome-icon': true,
+  },
+};
 
 describe('ContestCard.vue', () => {
   const daySeconds = 24 * 60 * 60 * 1000;
@@ -75,10 +87,11 @@ describe('ContestCard.vue', () => {
 
   it('Should show the current contest card', async () => {
     const wrapper = mount(arena_ContestCard, {
-      propsData: {
+      props: {
         contest: currentContest,
         contestTab: currentTab,
       },
+      global,
     });
 
     const contestEnrollStatus = wrapper.findComponent({
@@ -95,10 +108,11 @@ describe('ContestCard.vue', () => {
 
   it('Should show the future contest card', async () => {
     const wrapper = mount(arena_ContestCard, {
-      propsData: {
+      props: {
         contest: futureContest,
         contestTab: futureTab,
       },
+      global,
     });
 
     const contestEnrollStatus = wrapper.findComponent({
@@ -122,10 +136,11 @@ describe('ContestCard.vue', () => {
 
   it('Should show the past contest card', async () => {
     const wrapper = mount(arena_ContestCard, {
-      propsData: {
+      props: {
         contest: pastContest,
         contestTab: pastTab,
       },
+      global,
     });
 
     const contestButtonScoreboard = wrapper.findComponent({

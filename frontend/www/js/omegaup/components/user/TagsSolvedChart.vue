@@ -13,7 +13,7 @@
 <script lang="ts">
 import { Chart } from 'highcharts-vue';
 import * as Highcharts from 'highcharts/highstock';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 interface TagStats {
@@ -26,7 +26,7 @@ interface TagStats {
     highcharts: Chart,
   },
 })
-export default class TagsSolvedChart extends Vue {
+class TagsSolvedChart extends Vue {
   @Prop({ required: true }) tags!: TagStats[];
 
   T = T;
@@ -71,7 +71,7 @@ export default class TagsSolvedChart extends Vue {
       },
       tooltip: {
         formatter: function (): string {
-          const point = (this as unknown) as Highcharts.Point;
+          const point = this as unknown as Highcharts.Point;
           return `<b>${point.y}</b> ${T.profileProblemsCount}`;
         },
       },
@@ -115,6 +115,7 @@ export default class TagsSolvedChart extends Vue {
     };
   }
 }
+export default toNative(TagsSolvedChart);
 </script>
 
 <style lang="scss" scoped>

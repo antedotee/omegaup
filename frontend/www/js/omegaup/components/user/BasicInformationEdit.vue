@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { dao, types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -91,11 +91,12 @@ import * as iso3166 from '@/third_party/js/iso-3166-2.js/iso3166.min.js';
 import DatePicker from '../DatePicker.vue';
 
 @Component({
+  emits: ['update-user-basic-information'],
   components: {
     'omegaup-datepicker': DatePicker,
   },
 })
-export default class UserBasicInformationEdit extends Vue {
+class UserBasicInformationEdit extends Vue {
   @Prop() data!: types.UserProfileDetailsPayload;
   @Prop() countries!: dao.Countries[];
   @Prop() profile!: types.UserProfileInfo;
@@ -199,4 +200,5 @@ export default class UserBasicInformationEdit extends Vue {
     this.stateId = Object.keys(this.countryStates)[0].split('-')[1];
   }
 }
+export default toNative(UserBasicInformationEdit);
 </script>

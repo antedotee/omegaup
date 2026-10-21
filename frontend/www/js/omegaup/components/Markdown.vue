@@ -8,7 +8,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import * as markdown from '../markdown';
 import * as ui from '../ui';
 import T from '../lang';
@@ -31,7 +38,7 @@ declare global {
 }
 
 @Component
-export default class Markdown extends Vue {
+class Markdown extends Vue {
   @Prop() markdown!: string;
   @Ref() root!: HTMLElement;
   @Prop({ default: false }) fullWidth!: boolean;
@@ -101,6 +108,7 @@ export default class Markdown extends Vue {
     });
   }
 }
+export default toNative(Markdown);
 </script>
 
 <style lang="scss">

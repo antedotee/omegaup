@@ -1,13 +1,10 @@
-import Vue from 'vue';
-import problem_Details, {
-  PopupDisplayed,
-} from '../components/problem/Details.vue';
+import Vue, { type CreateElement } from 'vue';
+import problem_Details from '../components/problem/Details.vue';
+import { PopupDisplayed } from '../components/problem/Details_types';
 import {
   getOptionsFromLocation,
   getProblemAndRunDetails,
 } from '../arena/location';
-import qualitynomination_Demotion from '../components/qualitynomination/DemotionPopup.vue';
-import qualitynomination_Promotion from '../components/qualitynomination/PromotionPopup.vue';
 import { myRunsStore, runsStore, RunFilters } from '../arena/runsStore';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
@@ -31,6 +28,29 @@ import {
   trackRun,
   updateRunFallback,
 } from '../arena/submissions';
+
+interface ProblemDetailsInstance {
+  popupDisplayed: PopupDisplayed;
+  guid: null | string;
+  nominationStatus: types.NominationStatus;
+  nextSubmissionTimestamp: null | Date;
+  nextExecutionTimestamp: null | Date;
+  createdGuid: string;
+}
+
+// The demotion/promotion popups emit their own component instance via
+// `this.$emit('submit'|'dismiss', this)`. These structural shapes describe the
+// reactive fields the handlers read, since the compat instance type does not
+// surface component data.
+interface DemotionPopupSource {
+  rationale: string;
+  selectedReason: string;
+  original: string;
+}
+interface PromotionPopupSource {
+  solved: boolean;
+  tried: boolean;
+}
 
 OmegaUp.on('ready', async () => {
   const payload = types.payloadParsers.ProblemDetailsPayload();
@@ -93,7 +113,7 @@ OmegaUp.on('ready', async () => {
       isBookmarked: payload.isBookmarked,
       isLoadingBookmark: false,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-problem-details', {
         props: {
           activeTab: this.activeTab,
@@ -188,9 +208,12 @@ OmegaUp.on('ready', async () => {
             })
               .then(time.remoteTimeAdapter)
               .then((response) => {
-                problemDetailsView.nextSubmissionTimestamp =
-                  response.nextSubmissionTimestamp;
-                problemDetailsView.createdGuid = response.guid;
+                (
+                  problemDetailsView as unknown as ProblemDetailsInstance
+                ).nextSubmissionTimestamp = response.nextSubmissionTimestamp;
+                (
+                  problemDetailsView as unknown as ProblemDetailsInstance
+                ).createdGuid = response.guid;
 
                 submitRun({
                   guid: response.guid,
@@ -231,7 +254,7 @@ OmegaUp.on('ready', async () => {
               contents: JSON.stringify(contents),
             }).catch(ui.apiError);
           },
-          'submit-demotion': (source: qualitynomination_Demotion) => {
+          'submit-demotion': (source: DemotionPopupSource) => {
             api.QualityNomination.create({
               problem_alias: payload.problem.alias,
               nomination: 'demotion',
@@ -280,7 +303,7 @@ OmegaUp.on('ready', async () => {
               .catch(ui.apiError);
           },
           'dismiss-promotion': (
-            source: qualitynomination_Promotion,
+            source: PromotionPopupSource,
             isDismissed: boolean,
           ) => {
             const contents: { before_ac?: boolean } = {};
@@ -475,9 +498,12 @@ OmegaUp.on('ready', async () => {
           api.Run.create(e.data.params)
             .then(time.remoteTimeAdapter)
             .then((response) => {
-              problemDetailsView.nextSubmissionTimestamp =
-                response.nextSubmissionTimestamp;
-              problemDetailsView.createdGuid = response.guid;
+              (
+                problemDetailsView as unknown as ProblemDetailsInstance
+              ).nextSubmissionTimestamp = response.nextSubmissionTimestamp;
+              (
+                problemDetailsView as unknown as ProblemDetailsInstance
+              ).createdGuid = response.guid;
               submitRun({
                 guid: response.guid,
                 submitDelay: response.submit_delay,
@@ -499,8 +525,9 @@ OmegaUp.on('ready', async () => {
           api.Run.execute()
             .then(time.remoteTimeAdapter)
             .then((response) => {
-              problemDetailsView.nextExecutionTimestamp =
-                response.nextExecutionTimestamp;
+              (
+                problemDetailsView as unknown as ProblemDetailsInstance
+              ).nextExecutionTimestamp = response.nextExecutionTimestamp;
             })
             .catch((run) => {
               submitRunFailed({
@@ -545,11 +572,12 @@ OmegaUp.on('ready', async () => {
     })
       .then(time.remoteTimeAdapter)
       .then((response) => {
-        if (!problemDetailsView.nominationStatus) return;
+        const view = problemDetailsView as unknown as ProblemDetailsInstance;
+        if (!view.nominationStatus) return;
         onRefreshRuns({ runs: response.runs, totalRuns: response.totalRuns });
         setNominationStatus({
           runs: response.runs,
-          nominationStatus: problemDetailsView.nominationStatus,
+          nominationStatus: view.nominationStatus,
         });
       })
       .catch(ui.apiError);
@@ -560,10 +588,11 @@ OmegaUp.on('ready', async () => {
     for (const run of runs) {
       trackRun({ run });
     }
-    if (problemDetailsView.nominationStatus) {
+    const view = problemDetailsView as unknown as ProblemDetailsInstance;
+    if (view.nominationStatus) {
       setNominationStatus({
         runs: myRunsStore.state.runs,
-        nominationStatus: problemDetailsView.nominationStatus,
+        nominationStatus: view.nominationStatus,
       });
     }
   }
@@ -577,13 +606,14 @@ OmegaUp.on('ready', async () => {
       });
     }, 5 * 60 * 1000);
   }
+  const detailsView = problemDetailsView as unknown as ProblemDetailsInstance;
   if (locationHash.includes('new-run')) {
-    problemDetailsView.popupDisplayed = PopupDisplayed.RunSubmit;
+    detailsView.popupDisplayed = PopupDisplayed.RunSubmit;
   } else if (locationHash[1] && locationHash[1].includes('show-run:')) {
     const showRunRegex = /.*\/show-run:([a-fA-F0-9]+)/;
     const showRunMatch = window.location.hash.match(showRunRegex);
-    problemDetailsView.guid = showRunMatch ? showRunMatch[1] : null;
-    problemDetailsView.popupDisplayed = PopupDisplayed.RunDetails;
+    detailsView.guid = showRunMatch ? showRunMatch[1] : null;
+    detailsView.popupDisplayed = PopupDisplayed.RunDetails;
   } else if (
     (payload.nominationStatus?.solved || payload.nominationStatus?.tried) &&
     !(
@@ -598,6 +628,6 @@ OmegaUp.on('ready', async () => {
     ) &&
     payload.nominationStatus?.canNominateProblem
   ) {
-    problemDetailsView.popupDisplayed = PopupDisplayed.Promotion;
+    detailsView.popupDisplayed = PopupDisplayed.Promotion;
   }
 });

@@ -8,6 +8,12 @@ import { Multiselect } from 'vue-multiselect';
 
 import { types } from '../../api_types';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ContestFormVm {
+  currentScoreMode: string;
+}
+
 describe('Form.vue', () => {
   beforeAll(() => {
     const div = document.createElement('div');
@@ -18,7 +24,7 @@ describe('Form.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -26,7 +32,7 @@ describe('Form.vue', () => {
     const startTime = new Date();
     const finishTime = new Date(startTime.getTime() + 60 * 60 * 1000);
     const wrapper = shallowMount(contest_Form, {
-      propsData: {
+      props: {
         update: false,
         allLanguages: [{ py2: 'Python 2' }, { py3: 'Python 3' }],
         initialLanguages: [],
@@ -57,7 +63,7 @@ describe('Form.vue', () => {
     const finishTime = new Date(startTime.getTime() + 60 * 60 * 1000);
     const wrapper = shallowMount(contest_Form, {
       attachTo: '#root',
-      propsData: {
+      props: {
         update: true,
         allLanguages: [{ py2: 'Python 2' }, { py3: 'Python 3' }],
         initialLanguages: ['py2'],
@@ -75,7 +81,7 @@ describe('Form.vue', () => {
     );
     await wrapper.find('form button[type="submit"]').trigger('click');
     expect(wrapper.emitted('update-contest')).toBeDefined();
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   const problems: types.ProblemsetProblemWithVersions[] = [
@@ -104,7 +110,7 @@ describe('Form.vue', () => {
     const startTime = new Date();
     const finishTime = new Date(startTime.getTime() + 60 * 60 * 1000);
     const wrapper = shallowMount(contest_Form, {
-      propsData: {
+      props: {
         update: true,
         allLanguages: [
           { py2: 'Python 2' },
@@ -123,13 +129,13 @@ describe('Form.vue', () => {
     });
     await wrapper.findComponent(Multiselect).vm.$emit('remove', 'cat');
     expect(wrapper.emitted('language-remove-blocked')).toBeDefined();
-    wrapper.destroy();
+    wrapper.unmount();
   });
   it('Should update score mode when', async () => {
     const startTime = new Date();
     const finishTime = new Date(startTime.getTime() + 60 * 60 * 1000);
     const wrapper = shallowMount(contest_Form, {
-      propsData: {
+      props: {
         update: true,
         allLanguages: [
           { py2: 'Python 2' },
@@ -147,14 +153,24 @@ describe('Form.vue', () => {
       },
     });
 
-    expect(wrapper.vm.currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'partial',
+    );
     await wrapper.find('[data-contest-icpc]').trigger('click');
-    expect(wrapper.vm.currentScoreMode).toBe('all_or_nothing');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'all_or_nothing',
+    );
     await wrapper.find('[data-contest-preioi]').trigger('click');
-    expect(wrapper.vm.currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'partial',
+    );
     await wrapper.find('[data-contest-omi]').trigger('click');
-    expect(wrapper.vm.currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'partial',
+    );
     await wrapper.find('[data-contest-conacup]').trigger('click');
-    expect(wrapper.vm.currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'partial',
+    );
   });
 });

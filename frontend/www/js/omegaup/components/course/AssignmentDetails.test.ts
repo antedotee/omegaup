@@ -15,7 +15,7 @@ describe('AssignmentDetails.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -30,7 +30,9 @@ describe('AssignmentDetails.vue', () => {
   };
 
   it('Should handle empty assignments and progress as admin', () => {
-    const wrapper = shallowMount(course_AssignmentDetails, { propsData });
+    const wrapper = shallowMount(course_AssignmentDetails, {
+      props: propsData,
+    });
 
     expect(wrapper.find('form button[type=submit].submit').text()).toBe(
       T.courseAssignmentNewFormSchedule,
@@ -40,7 +42,7 @@ describe('AssignmentDetails.vue', () => {
   it('Should handle submit action for a new assignment', async () => {
     const wrapper = shallowMount(course_AssignmentDetails, {
       attachTo: '#root',
-      propsData,
+      props: propsData,
     });
 
     await wrapper.setData({
@@ -65,13 +67,13 @@ describe('AssignmentDetails.vue', () => {
       ],
     ]);
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   it('Should handle submit action for an existing assignment', async () => {
     const wrapper = shallowMount(course_AssignmentDetails, {
       attachTo: '#root',
-      propsData: {
+      props: {
         ...propsData,
         ...{
           assignmentFormMode: omegaup.AssignmentFormMode.Edit,
@@ -104,13 +106,13 @@ describe('AssignmentDetails.vue', () => {
       ],
     ]);
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   it('Should handle submit action for an existing assignment with runs', async () => {
     const wrapper = shallowMount(course_AssignmentDetails, {
       attachTo: '#root',
-      propsData: {
+      props: {
         ...propsData,
         ...{
           assignmentFormMode: omegaup.AssignmentFormMode.Edit,
@@ -143,6 +145,6 @@ describe('AssignmentDetails.vue', () => {
       ],
     ]);
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 });

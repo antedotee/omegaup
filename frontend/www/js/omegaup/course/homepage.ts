@@ -1,6 +1,6 @@
 import course_Homepage from '../components/course/Homepage.vue';
 import { OmegaUp } from '../omegaup';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', () => {
   new Vue({
@@ -8,7 +8,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-course-homepage': course_Homepage,
     },
-    render: (createElement) => {
+    render: (createElement: CreateElement) => {
       return createElement('omegaup-course-homepage');
     },
   });

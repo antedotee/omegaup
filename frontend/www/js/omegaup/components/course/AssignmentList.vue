@@ -20,7 +20,7 @@
           <tr v-for="assignment in content" :key="assignment.alias">
             <td>
               <button
-                v-tooltip="T.courseAssignmentReorder"
+                v-b-tooltip="T.courseAssignmentReorder"
                 class="btn btn-link"
               >
                 <font-awesome-icon icon="arrows-alt" />
@@ -45,7 +45,7 @@
             </td>
             <td class="text-center">
               <button
-                v-tooltip="T.courseAssignmentEdit"
+                v-b-tooltip="T.courseAssignmentEdit"
                 data-course-edit-content-button
                 class="btn btn-link"
                 @click="$emit('emit-edit', assignment)"
@@ -53,7 +53,7 @@
                 <font-awesome-icon icon="edit" />
               </button>
               <button
-                v-tooltip="T.courseAddProblemsAdd"
+                v-b-tooltip="T.courseAddProblemsAdd"
                 class="btn btn-link"
                 @click="$emit('emit-add-problems', assignment)"
               >
@@ -61,7 +61,7 @@
               </button>
               <button
                 v-if="assignment.has_runs"
-                v-tooltip="T.assignmentRemoveAlreadyHasRuns"
+                v-b-tooltip="T.assignmentRemoveAlreadyHasRuns"
                 class="btn btn-link"
                 data-toggle="tooltip"
                 data-placement="bottom"
@@ -70,7 +70,7 @@
               </button>
               <button
                 v-else
-                v-tooltip="T.courseAssignmentDelete"
+                v-b-tooltip="T.courseAssignmentDelete"
                 class="btn btn-link"
                 @click="$emit('emit-delete', assignment)"
               >
@@ -117,12 +117,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
-import 'v-tooltip/dist/v-tooltip.css';
-import { VTooltip } from 'v-tooltip';
+import { vBTooltip } from 'bootstrap-vue-next';
 
 import {
   FontAwesomeIcon,
@@ -140,10 +139,14 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
   directives: {
-    tooltip: VTooltip,
+    // Swapped from the Vue 2-only `v-tooltip` package (its directive renders a
+    // `new Vue({ render(h) {} })` tooltip app that fails under @vue/compat's
+    // RENDER_FUNCTION:false) to bootstrap-vue-next's tooltip directive, which is
+    // registered globally and Vue 3 native. Deliberate visual change (PR4).
+    'b-tooltip': vBTooltip,
   },
 })
-export default class CourseAssignmentList extends Vue {
+class CourseAssignmentList extends Vue {
   @Prop() content!: types.CourseAssignment[];
   @Prop() courseAlias!: string;
   @Prop() assignmentFormMode!: omegaup.AssignmentFormMode;
@@ -182,6 +185,7 @@ export default class CourseAssignmentList extends Vue {
     this.currentContent = newValue;
   }
 }
+export default toNative(CourseAssignmentList);
 </script>
 
 <style lang="scss" scoped>

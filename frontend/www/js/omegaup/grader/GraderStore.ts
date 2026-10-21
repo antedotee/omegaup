@@ -102,7 +102,7 @@ const languageExtensionMapping: Record<string, string> = {};
 Object.keys(Util.supportedLanguages).forEach((key) => {
   languageExtensionMapping[key] = Util.supportedLanguages[key].extension;
 });
-Vue.use(Vuex);
+Vue.use(Vuex as unknown as Parameters<typeof Vue.use>[0]);
 const storeOptions: StoreOptions<GraderStore> = {
   state: {
     alias: '',
@@ -354,9 +354,7 @@ const storeOptions: StoreOptions<GraderStore> = {
       | undefined {
       return state.request.input.validator.custom_validator;
     },
-    inputCases(
-      state: GraderStore,
-    ): {
+    inputCases(state: GraderStore): {
       [key: string]: { in: string; out: string; weight?: number };
     } {
       return state.request.input.cases;

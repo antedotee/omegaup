@@ -12,7 +12,7 @@ describe('ViewUnavailable.vue', () => {
 
   it('Should show a custom title and description', () => {
     const wrapper = shallowMount(common_ViewUnavailable, {
-      propsData: {
+      props: {
         title: 'Section turned off',
         description: 'The EphemeralGrader IDE is currently disabled.',
       },

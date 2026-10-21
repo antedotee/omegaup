@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 
@@ -25,7 +25,7 @@ import clarification_List from '../arena/ClarificationList.vue';
     'omegaup-clarification-list': clarification_List,
   },
 })
-export default class CourseClarifications extends Vue {
+class CourseClarifications extends Vue {
   @Prop() isAdmin!: boolean;
   @Prop() clarifications!: types.Clarification[];
   @Prop() pagerItems!: types.PageItem[];
@@ -34,4 +34,5 @@ export default class CourseClarifications extends Vue {
 
   T = T;
 }
+export default toNative(CourseClarifications);
 </script>

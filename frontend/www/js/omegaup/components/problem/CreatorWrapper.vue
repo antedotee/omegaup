@@ -11,17 +11,23 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
 import problem_Creator from './creator/Creator.vue';
 import creatorStore from '../../problem/creator/store';
 
 @Component({
+  emits: [
+    'download-input-file',
+    'download-zip-file',
+    'show-update-success-message',
+    'upload-zip-file',
+  ],
   components: {
     'omegaup-problem-creator': problem_Creator,
   },
   store: creatorStore,
 })
-export default class CreatorWrapper extends Vue {
+class CreatorWrapper extends Vue {
   @Prop({ default: false }) hideHeaderActions!: boolean;
   @Prop({ default: false }) hideSaveButtons!: boolean;
   @Ref('creator') creatorRef!: problem_Creator;
@@ -54,4 +60,5 @@ export default class CreatorWrapper extends Vue {
     this.$emit('download-input-file', fileObject);
   }
 }
+export default toNative(CreatorWrapper);
 </script>

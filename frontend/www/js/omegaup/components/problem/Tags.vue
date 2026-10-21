@@ -166,7 +166,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
 import omegaup_ToggleSwitch from '../ToggleSwitch.vue';
@@ -177,13 +177,14 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 library.add(faTrash);
 
 @Component({
+  emits: ['select-problem-level'],
   components: {
     FontAwesomeIcon,
     VueTypeaheadBootstrap,
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
   },
 })
-export default class ProblemTags extends Vue {
+class ProblemTags extends Vue {
   @Prop({ default: null }) problemLevel!: string | null;
   @Prop() publicTags!: string[];
   @Prop() selectedPublicTags!: string[];
@@ -264,6 +265,7 @@ export default class ProblemTags extends Vue {
     );
   }
 }
+export default toNative(ProblemTags);
 </script>
 
 <style>

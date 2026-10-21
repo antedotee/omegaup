@@ -7,9 +7,9 @@ import {
   ContestTab,
   ContestOrder,
   ContestFilter,
-} from '../components/arena/ContestList.vue';
+} from '../components/arena/ContestList_types';
 
-Vue.use(Vuex);
+Vue.use(Vuex as unknown as Parameters<typeof Vue.use>[0]);
 
 export interface UrlParams {
   page: number;

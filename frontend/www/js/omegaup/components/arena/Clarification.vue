@@ -108,14 +108,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import * as ui from '../../ui';
 
 @Component
-export default class ArenaClarification extends Vue {
+class ArenaClarification extends Vue {
   @Prop() clarification!: types.Clarification;
   @Prop({ default: false }) isAdmin!: boolean;
   @Prop({ default: false }) selected!: boolean;
@@ -190,6 +190,7 @@ export default class ArenaClarification extends Vue {
     this.$emit('clarification-response', response);
   }
 }
+export default toNative(ArenaClarification);
 </script>
 
 <style lang="scss" scoped>

@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -63,10 +63,11 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class CourseCardEnrolled extends Vue {
+class CourseCardEnrolled extends Vue {
   @Prop() course!: types.CourseCardEnrolled;
 
   T = T;
   ui = ui;
 }
+export default toNative(CourseCardEnrolled);
 </script>

@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -127,11 +127,12 @@ library.add(
 );
 
 @Component({
+  emits: ['toggle-bookmark'],
   components: {
     FontAwesomeIcon,
   },
 })
-export default class ProblemSettingsSummary extends Vue {
+class ProblemSettingsSummary extends Vue {
   @Prop() problem!: types.ArenaProblemDetails;
   @Prop({ default: null }) problemsetTitle!: null | string;
   @Prop({ default: false }) showVisibilityIndicators!: boolean;
@@ -219,6 +220,7 @@ export default class ProblemSettingsSummary extends Vue {
     return this.problem.visibility <= -2;
   }
 }
+export default toNative(ProblemSettingsSummary);
 </script>
 
 <style lang="scss" scoped>

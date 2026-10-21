@@ -1,4 +1,9 @@
 jest.mock('../../../../third_party/js/diff_match_patch.js');
+// vue-infinite-scroll is a Vue 2 directive that registers listeners via the
+// removed `vm.$on` API; mounting the Runs table (which this component embeds)
+// invokes it and throws under Vue 3. Stub it to a no-op directive, matching
+// Runs.test.ts.
+jest.mock('vue-infinite-scroll', () => ({}));
 
 import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
@@ -19,7 +24,7 @@ describe('Contest.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -125,7 +130,7 @@ describe('Contest.vue', () => {
 
   it('Should handle a finished contest', async () => {
     const wrapper = mount(arena_Contest, {
-      propsData: {
+      props: {
         contest: Object.assign({}, contest, { finish_time: currentDate }),
         problems,
         problemInfo,
@@ -139,7 +144,7 @@ describe('Contest.vue', () => {
 
   it('Should handle details for a problem in a contest', async () => {
     const wrapper = mount(arena_Contest, {
-      propsData: {
+      props: {
         contest,
         problems,
         problemInfo,
@@ -153,7 +158,7 @@ describe('Contest.vue', () => {
     expect(wrapper.find('a[data-problem=otherProblemOmegaUp]').text()).toBe(
       'B. hello other problem omegaUp',
     );
-    expect(wrapper.text()).toContain(problemInfo.points);
+    expect(wrapper.text()).toContain(`${problemInfo.points}`);
     expect(wrapper.text()).toContain(time.formatDateLocal(currentDate));
 
     await wrapper.find('a[data-problem=problemOmegaUp]').trigger('click');
@@ -163,7 +168,7 @@ describe('Contest.vue', () => {
   it('Should handle a submission', async () => {
     const wrapper = mount(arena_Contest, {
       attachTo: '#root',
-      propsData: {
+      props: {
         contest,
         problems,
         problemInfo,
@@ -178,9 +183,7 @@ describe('Contest.vue', () => {
       .trigger('click');
     expect(wrapper.find('form[data-run-submit')).toBeTruthy();
 
-    await wrapper
-      .find('select[name="language"] option[value="py3"]')
-      .setSelected();
+    await wrapper.find('select[name="language"]').setValue('py3');
 
     const runSubmitWrapper = wrapper.findComponent(arena_RunSubmit);
 
@@ -191,7 +194,7 @@ describe('Contest.vue', () => {
     await wrapper.find('form button[type="submit"]').trigger('click');
     expect(wrapper.emitted('submit-run')).toBeDefined();
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 
   const run: types.Run = {
@@ -218,7 +221,7 @@ describe('Contest.vue', () => {
   };
   it('Should handle details for a run in a contest', async () => {
     const wrapper = mount(arena_Contest, {
-      propsData: {
+      props: {
         contest,
         problems,
         problem: problems[0],
@@ -234,8 +237,7 @@ describe('Contest.vue', () => {
       [
         {
           guid: '78099022574726af861839e1b4210188',
-          hash:
-            '#problems/problemOmegaUp/show-run:78099022574726af861839e1b4210188',
+          hash: '#problems/problemOmegaUp/show-run:78099022574726af861839e1b4210188',
           isAdmin: false,
         },
       ],
@@ -244,7 +246,7 @@ describe('Contest.vue', () => {
 
   it('Should handle details for a run in a contest as admin', async () => {
     const wrapper = mount(arena_Contest, {
-      propsData: {
+      props: {
         activeTab: 'runs',
         contestAdmin: true,
         contest,
@@ -273,7 +275,7 @@ describe('Contest.vue', () => {
 
   it('Should display the edit button when current user is admin', () => {
     const wrapper = mount(arena_Contest, {
-      propsData: {
+      props: {
         activeTab: 'runs',
         contestAdmin: true,
         contest,
@@ -287,7 +289,7 @@ describe('Contest.vue', () => {
 
   it('Should hide the edit button when current user is not an admin', () => {
     const wrapper = mount(arena_Contest, {
-      propsData: {
+      props: {
         activeTab: 'runs',
         contestAdmin: false,
         contest,

@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import course_Clone from './Clone.vue';
@@ -73,7 +73,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class CourseCloneWithToken extends Vue {
+class CourseCloneWithToken extends Vue {
   @Prop() course!: types.CourseDetails;
   @Prop() username!: string;
   @Prop() classname!: string;
@@ -86,6 +86,7 @@ export default class CourseCloneWithToken extends Vue {
     return `${this.course.alias}_${this.currentUsername}`;
   }
 }
+export default toNative(CourseCloneWithToken);
 </script>
 
 <style lang="scss" scoped>

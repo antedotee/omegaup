@@ -35,7 +35,7 @@ describe('TablePaginator.vue', () => {
 
   it('Should handle an empty table', () => {
     const wrapper = shallowMount(common_TablePaginator, {
-      propsData: {
+      props: {
         items: [],
         itemsPerPage: 5,
         columnNames,
@@ -50,7 +50,7 @@ describe('TablePaginator.vue', () => {
   it('Should handle a table with rows', async () => {
     const title = 'Coder of the month';
     const wrapper = shallowMount(common_TablePaginator, {
-      propsData: {
+      props: {
         items,
         itemsPerPage: 5,
         columnNames,
@@ -62,16 +62,16 @@ describe('TablePaginator.vue', () => {
     // Only one page is shown
     expect(
       wrapper.find('button[data-button-previous]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
     expect(
       wrapper.find('button[data-button-next]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
   });
 
   it('Should handle a table with rows and several pages', async () => {
     const title = 'Coder of the month';
     const wrapper = shallowMount(common_TablePaginator, {
-      propsData: {
+      props: {
         items,
         itemsPerPage: 1,
         columnNames,
@@ -85,7 +85,7 @@ describe('TablePaginator.vue', () => {
     // should be enabled
     expect(
       wrapper.find('button[data-button-previous]').attributes('disabled'),
-    ).toBe('disabled');
+    ).toBe('');
     expect(
       wrapper.find('button[data-button-next]').attributes('disabled'),
     ).toBeUndefined();

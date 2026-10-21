@@ -155,9 +155,8 @@
                       class="badge custom-badge m-1 p-1 p-lg-2"
                       :class="[
                         {
-                          'custom-badge-quality': tag.name.includes(
-                            'problemLevel',
-                          ),
+                          'custom-badge-quality':
+                            tag.name.includes('problemLevel'),
                         },
                         `custom-badge-${
                           tag.source.includes('quality') ? 'owner' : tag.source
@@ -193,9 +192,11 @@
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </button>
               </td>
-              <b-modal
+              <BModal
                 v-if="problemCanBeDeleted(problem)"
                 v-model="confirmationModal[problem.alias]"
+                lazy
+                unmount-lazy
                 :title="
                   ui.formatString(T.problemEditDeleteRequireConfirmation, {
                     problemAlias: problem.alias,
@@ -212,13 +213,15 @@
                 "
               >
                 <p>{{ T.problemEditDeleteConfirmationMessage }}</p>
-              </b-modal>
+              </BModal>
             </tr>
           </tbody>
         </table>
       </div>
-      <b-modal
+      <BModal
         v-model="showConfirmationModalDeleteAll"
+        lazy
+        unmount-lazy
         :title="T.problemEditDeleteSelectedProblemsRequireConfirmation"
         :ok-title="T.problemEditDeleteOk"
         ok-variant="danger"
@@ -233,7 +236,7 @@
         "
       >
         <p>{{ T.problemEditDeleteSelectedProblemsConfirmationMessage }}</p>
-      </b-modal>
+      </BModal>
       <div class="card-footer">
         <omegaup-common-paginator
           :pager-items="pagerItems"
@@ -245,7 +248,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import common_Paginator from '../common/Paginator.vue';
@@ -269,16 +272,17 @@ library.add(
   faExclamationTriangle,
   faBan,
 );
-import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
+import { BModal } from 'bootstrap-vue-next';
 
 @Component({
+  emits: ['change-visibility'],
   components: {
+    BModal,
     FontAwesomeIcon,
     'omegaup-common-paginator': common_Paginator,
   },
 })
-export default class ProblemMine extends Vue {
+class ProblemMine extends Vue {
   @Prop() problems!: types.ProblemListItem[];
   @Prop() pagerItems!: types.PageItem[];
   @Prop() privateProblemsAlert!: boolean;
@@ -316,11 +320,8 @@ export default class ProblemMine extends Vue {
   }
 
   toggleConfirmationModal(problemAlias: string): void {
-    this.$set(
-      this.confirmationModal,
-      problemAlias,
-      !this.confirmationModal[problemAlias],
-    );
+    this.confirmationModal[problemAlias] =
+      !this.confirmationModal[problemAlias];
   }
 
   onChangeVisibility(): void {
@@ -346,4 +347,5 @@ export default class ProblemMine extends Vue {
     this.allProblemsVisibilityOption = -1;
   }
 }
+export default toNative(ProblemMine);
 </script>

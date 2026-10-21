@@ -94,7 +94,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -108,7 +109,7 @@ import user_Rank from '../user/Rank.vue';
 import homepage_Sponsors from './Sponsors.vue';
 import homepage_Cookie from './CookieConsent.vue';
 import VueCookies from 'vue-cookies';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 @Component({
   components: {
@@ -123,7 +124,7 @@ Vue.use(VueCookies, { expires: -1 });
     'omegaup-cookie-accept-decline': homepage_Cookie,
   },
 })
-export default class Homepage extends Vue {
+class Homepage extends Vue {
   @Prop() coderOfTheMonth!: types.UserProfile;
   @Prop() coderOfTheMonthFemale!: types.UserProfile;
   @Prop() schoolOfTheMonth!: omegaup.SchoolOfTheMonth;
@@ -148,4 +149,5 @@ export default class Homepage extends Vue {
     // TODO: make an API to send the response to the server
   }
 }
+export default toNative(Homepage);
 </script>

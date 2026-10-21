@@ -1,6 +1,6 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import contest_NewForm from '../components/contest/Form.vue';
 import * as ui from '../ui';
 import * as api from '../api';
@@ -19,7 +19,7 @@ OmegaUp.on('ready', () => {
       searchResultTeamsGroups: [] as types.ListItem[],
       canSetRecommended: payload.canSetRecommended,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-contest-new', {
         props: {
           allLanguages: payload.languages,

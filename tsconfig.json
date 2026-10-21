@@ -27,6 +27,12 @@
     "paths": {
       "@/*": [
         "frontend/www/*"
+      ],
+      "vue": [
+        "frontend/www/js/omegaup/vue-compat.d.ts"
+      ],
+      "@vue/runtime-dom": [
+        "node_modules/@vue/runtime-dom/dist/runtime-dom.d.ts"
       ]
     }
   },

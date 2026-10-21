@@ -36,7 +36,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import Clipboard from 'v-clipboard';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -49,7 +50,7 @@ import {
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
 @Component({
   components: {
@@ -58,7 +59,7 @@ Vue.use(Clipboard);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class CourseGenerateLinkClone extends Vue {
+class CourseGenerateLinkClone extends Vue {
   @Prop() alias!: string;
   @Prop() token!: string;
 
@@ -78,4 +79,5 @@ export default class CourseGenerateLinkClone extends Vue {
     ui.success(T.passwordResetLinkCopiedToClipboard);
   }
 }
+export default toNative(CourseGenerateLinkClone);
 </script>

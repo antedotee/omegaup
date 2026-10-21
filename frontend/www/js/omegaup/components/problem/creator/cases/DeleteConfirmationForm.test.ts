@@ -1,25 +1,20 @@
-import { createLocalVue, shallowMount, mount } from '@vue/test-utils';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
+import { shallowMount, mount } from '@vue/test-utils';
 import Vue from 'vue';
 import DeleteConfirmationForm from './DeleteConfirmationForm.vue';
 import T from '../../../../lang';
 import * as ui from '@/js/omegaup/ui';
 
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('DeleteConfirmationForm.vue', () => {
   it('Should set commitMessage when visible changes', async () => {
     const wrapper = shallowMount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: false,
         itemName: 'My Item',
         itemId: '42',
         onCancel: () => {},
       },
-      provide: { problemAlias: 'alias' },
+
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     expect((wrapper.vm as any).commitMessage).toBe('');
@@ -40,14 +35,14 @@ describe('DeleteConfirmationForm.vue', () => {
 
   it('Should display correct button labels', async () => {
     const wrapper = mount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: true,
         itemName: 'Item',
         itemId: '1',
         onCancel: jest.fn(),
       },
-      provide: { problemAlias: 'alias' },
+
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     const submitBtn = wrapper.find('button.btn-danger');
@@ -58,15 +53,18 @@ describe('DeleteConfirmationForm.vue', () => {
   });
 
   it('Should include proper hidden fields (request, alias, contents)', async () => {
-    const wrapper = shallowMount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+    // mount (not shallowMount) so the BCollapse default slot renders its
+    // content. Under @vue/test-utils 2 a stubbed child does not render its
+    // slot by default, unlike Vue 2 test-utils.
+    const wrapper = mount(DeleteConfirmationForm, {
+      props: {
         visible: true,
         itemName: 'Deleted Item',
         itemId: '1234',
         onCancel: () => {},
       },
-      provide: { problemAlias: 'the-alias' },
+
+      global: { provide: { problemAlias: 'the-alias' } },
     });
 
     await Vue.nextTick();
@@ -96,14 +94,14 @@ describe('DeleteConfirmationForm.vue', () => {
   it('Should prevent submit and show error when commitMessage empty', async () => {
     const errorSpy = jest.spyOn(ui, 'error').mockImplementation(() => {});
     const wrapper = mount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: true,
         itemName: 'to delete',
         itemId: '999',
         onCancel: () => {},
       },
-      provide: { problemAlias: 'alias' },
+
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     wrapper.setData({ commitMessage: '      ' });
@@ -121,14 +119,14 @@ describe('DeleteConfirmationForm.vue', () => {
     const onCancel = jest.fn();
 
     const wrapper = mount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: false,
         itemName: 'to delete',
         itemId: '1',
         onCancel,
       },
-      provide: { problemAlias: 'alias' },
+
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     wrapper.setProps({ visible: true });
@@ -147,21 +145,22 @@ describe('DeleteConfirmationForm.vue', () => {
 
   it('Should disable submit button when commitMessage is empty', async () => {
     const wrapper = mount(DeleteConfirmationForm, {
-      localVue,
-      propsData: {
+      props: {
         visible: true,
         itemName: 'Item',
         itemId: '1',
         onCancel: jest.fn(),
       },
-      provide: { problemAlias: 'alias' },
+
+      global: { provide: { problemAlias: 'alias' } },
     });
 
     wrapper.setData({ commitMessage: '' });
     await Vue.nextTick();
 
     const submitBtn = wrapper.find('button.btn-danger');
-    expect(submitBtn.attributes('disabled')).toBe('disabled');
+    // Vue 3 renders boolean attributes as an empty string, not the name.
+    expect(submitBtn.attributes('disabled')).toBe('');
 
     wrapper.setData({ commitMessage: 'Delete message' });
     await Vue.nextTick();

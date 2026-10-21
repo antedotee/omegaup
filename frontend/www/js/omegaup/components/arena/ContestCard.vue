@@ -122,20 +122,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from 'vue-property-decorator';
+import { Vue, Prop, Component, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import * as ui from '../../ui';
 import T from '../../lang';
 
-// Import Bootstrap an BootstrapVue CSS files (order is important)
+// Import Bootstrap CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
-import { ButtonPlugin, DropdownPlugin, LayoutPlugin } from 'bootstrap-vue';
-Vue.use(ButtonPlugin);
-Vue.use(DropdownPlugin);
-Vue.use(LayoutPlugin);
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -147,7 +141,7 @@ library.add(fas);
     FontAwesomeIcon,
   },
 })
-export default class ContestCard extends Vue {
+class ContestCard extends Vue {
   @Prop() contest!: types.ContestListItem;
 
   T = T;
@@ -176,6 +170,7 @@ export default class ContestCard extends Vue {
     return `/arena/${encodeURIComponent(alias)}/practice/`;
   }
 }
+export default toNative(ContestCard);
 </script>
 
 <style lang="scss" scoped>

@@ -119,7 +119,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import * as ui from '../../ui';
@@ -136,6 +136,7 @@ export enum PopupDisplayed {
 }
 
 @Component({
+  emits: ['new-clarification'],
   components: {
     'omegaup-clarification': arena_Clarification,
     'omegaup-arena-new-clarification-popup': arena_NewClarification,
@@ -143,7 +144,7 @@ export enum PopupDisplayed {
     'omegaup-common-paginator': common_Paginator,
   },
 })
-export default class ArenaClarificationList extends Vue {
+class ArenaClarificationList extends Vue {
   @Prop({ default: false }) isAdmin!: boolean;
   @Prop() clarifications!: types.Clarification[];
   @Prop({ default: () => [] }) problems!: types.NavbarProblemsetProblem[];
@@ -228,6 +229,7 @@ export default class ArenaClarificationList extends Vue {
     }
   }
 }
+export default toNative(ArenaClarificationList);
 </script>
 
 <style lang="scss" scoped>

@@ -92,7 +92,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { omegaup } from '../../../../omegaup';
 import * as ui from '../../../../ui';
 import T from '../../../../lang';
@@ -108,7 +116,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 library.add(fas);
 
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 @Component({
   components: {
@@ -116,7 +124,7 @@ Vue.use(VueCookies, { expires: -1 });
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class CodeTab extends Vue {
+class CodeTab extends Vue {
   @Prop({ default: T.problemCreatorEmpty }) codeProp!: string;
   @Prop({ default: T.problemCreatorEmpty }) extensionProp!: string;
   @Prop() activeTabIndex!: TabIndex;
@@ -303,6 +311,7 @@ export default class CodeTab extends Vue {
     }
   }
 }
+export default toNative(CodeTab);
 </script>
 
 <style lang="scss" scoped>

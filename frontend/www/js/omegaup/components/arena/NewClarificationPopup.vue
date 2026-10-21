@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import omegaup_OverlayPopup from '../OverlayPopup.vue';
@@ -83,7 +83,7 @@ import omegaup_OverlayPopup from '../OverlayPopup.vue';
     'omegaup-overlay-popup': omegaup_OverlayPopup,
   },
 })
-export default class ArenaNewClarificationPopup extends Vue {
+class ArenaNewClarificationPopup extends Vue {
   @Prop({ default: () => [] }) problems!: types.NavbarProblemsetProblem[];
   @Prop({ default: () => [] }) users!: types.ContestUser[];
   @Prop({ default: null }) problemAlias!: null | string;
@@ -138,4 +138,5 @@ export default class ArenaNewClarificationPopup extends Vue {
     this.$emit('dismiss');
   }
 }
+export default toNative(ArenaNewClarificationPopup);
 </script>

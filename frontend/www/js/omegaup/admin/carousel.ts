@@ -4,12 +4,14 @@ import * as api from '../api';
 import * as ui from '../ui';
 import * as time from '../time';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+interface AdminCarouselInstance {
+  carouselItems: types.CarouselItem[];
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CarouselManagementPayload();
@@ -22,10 +24,11 @@ OmegaUp.on('ready', () => {
     data: () => ({
       carouselItems: payload.carouselItems,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-admin-carousel', {
         props: {
-          carouselItems: this.carouselItems,
+          carouselItems: (this as unknown as AdminCarouselInstance)
+            .carouselItems,
         },
         on: {
           'create-item': (item: types.CarouselItem): void => {
@@ -42,11 +45,18 @@ OmegaUp.on('ready', () => {
             })
               .then(() => {
                 ui.success(T.carouselItemCreated);
-                adminCarousel.carouselItems = [...adminCarousel.carouselItems];
+                (
+                  adminCarousel as unknown as AdminCarouselInstance
+                ).carouselItems = [
+                  ...(adminCarousel as unknown as AdminCarouselInstance)
+                    .carouselItems,
+                ];
                 return api.CarouselItems.list({});
               })
               .then((response) => {
-                adminCarousel.carouselItems = response.carouselItems;
+                (
+                  adminCarousel as unknown as AdminCarouselInstance
+                ).carouselItems = response.carouselItems;
               })
               .catch(ui.apiError);
           },
@@ -68,7 +78,9 @@ OmegaUp.on('ready', () => {
                 return api.CarouselItems.list({});
               })
               .then((response) => {
-                adminCarousel.carouselItems = response.carouselItems;
+                (
+                  adminCarousel as unknown as AdminCarouselInstance
+                ).carouselItems = response.carouselItems;
               })
               .catch(ui.apiError);
           },
@@ -79,7 +91,9 @@ OmegaUp.on('ready', () => {
                 return api.CarouselItems.list({});
               })
               .then((response) => {
-                adminCarousel.carouselItems = response.carouselItems;
+                (
+                  adminCarousel as unknown as AdminCarouselInstance
+                ).carouselItems = response.carouselItems;
               })
               .catch(ui.apiError);
           },

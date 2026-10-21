@@ -308,7 +308,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -328,6 +328,7 @@ import common_Publish from '../common/Publish.vue';
 import contest_Certificates from './Certificates.vue';
 
 @Component({
+  emits: ['archive-contest'],
   components: {
     'omegaup-contest-add-problem': contest_AddProblem,
     'omegaup-common-admins': common_Admins,
@@ -344,7 +345,7 @@ import contest_Certificates from './Certificates.vue';
     'omegaup-contest-certificates': contest_Certificates,
   },
 })
-export default class Edit extends Vue {
+class Edit extends Vue {
   @Prop() admins!: types.ContestAdmin[];
   @Prop() details!: types.ContestAdminDetails;
   @Prop() initialTab!: string;
@@ -439,4 +440,5 @@ export default class Edit extends Vue {
     this.alreadyArchived = archive;
   }
 }
+export default toNative(Edit);
 </script>

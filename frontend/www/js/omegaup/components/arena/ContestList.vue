@@ -463,65 +463,37 @@ const debounce = (fn: (...args: any[]) => void, waitTime: number) => {
   };
 };
 
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import * as ui from '../../ui';
 import T from '../../lang';
 import { getExternalUrl } from '../../urlHelper';
 
-// Import Bootstrap an BootstrapVue CSS files (order is important)
+// Import Bootstrap CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 // Import Only Required Plugins
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  TabsPlugin,
-  CardPlugin,
-  DropdownPlugin,
-  LayoutPlugin,
-} from 'bootstrap-vue';
 import ContestCard from './ContestCardv2.vue';
 import ContestSkeleton from './ContestSkeleton.vue';
-import infiniteScroll from 'vue-infinite-scroll';
-Vue.use(TabsPlugin);
-Vue.use(CardPlugin);
-Vue.use(DropdownPlugin);
-Vue.use(LayoutPlugin);
+import infiniteScroll from '../../directives/infiniteScroll';
 library.add(fas);
 
-export enum ContestTab {
-  Current = 'current',
-  Future = 'future',
-  Past = 'past',
-}
-
-export enum ContestOrder {
-  None = 'none',
-  Title = 'title',
-  Ends = 'ends',
-  Duration = 'duration',
-  Organizer = 'organizer',
-  Contestants = 'contestants',
-  SignedUp = 'signedup',
-}
-
-export enum ContestFilter {
-  SignedUp = 'signedup',
-  OnlyRecommended = 'recommended',
-  All = 'all',
-}
-
-export interface UrlParams {
-  page: number;
-  tab_name: ContestTab;
-  query: string;
-  sort_order: ContestOrder;
-  filter: ContestFilter;
-}
+import {
+  ContestTab,
+  ContestOrder,
+  ContestFilter,
+  UrlParams,
+} from './ContestList_types';
+// These are declared in ./ContestList_types and re-exported here so existing
+// SFC importers keep working while plain `.ts` entry points import them from
+// the `.ts` module.
+export { ContestTab, ContestOrder, ContestFilter };
+export type { UrlParams };
 
 @Component({
   components: {
@@ -638,7 +610,7 @@ class ArenaContestList extends Vue {
         sort_order: this.currentOrder,
         filter: this.currentFilter,
       };
-      Vue.set(this.contests, this.viewAllCategory, []);
+      VueGlobal.set(this.contests, this.viewAllCategory, []);
       this.currentPage = 1;
       this.hasMore = true;
       this.fetchPage(params, urlObj);
@@ -685,27 +657,27 @@ class ArenaContestList extends Vue {
   }
 
   scrollLeft(tab: ContestTab) {
-    const container = (this.$refs[`scrollContainer_${tab}`] as
-      | HTMLElement[]
-      | undefined)?.[0];
+    const container = (
+      this.$refs[`scrollContainer_${tab}`] as HTMLElement[] | undefined
+    )?.[0];
     if (container) {
       container.scrollBy({ left: -600, behavior: 'smooth' });
     }
   }
 
   scrollRight(tab: ContestTab) {
-    const container = (this.$refs[`scrollContainer_${tab}`] as
-      | HTMLElement[]
-      | undefined)?.[0];
+    const container = (
+      this.$refs[`scrollContainer_${tab}`] as HTMLElement[] | undefined
+    )?.[0];
     if (container) {
       container.scrollBy({ left: 600, behavior: 'smooth' });
     }
   }
 
   onScroll(tab: ContestTab) {
-    const container = (this.$refs[`scrollContainer_${tab}`] as
-      | HTMLElement[]
-      | undefined)?.[0];
+    const container = (
+      this.$refs[`scrollContainer_${tab}`] as HTMLElement[] | undefined
+    )?.[0];
     if (container) {
       this.$set(this.scrollPositions, tab, container.scrollLeft);
       this.$set(
@@ -891,7 +863,7 @@ class ArenaContestList extends Vue {
   }
 }
 
-export default ArenaContestList;
+export default toNative(ArenaContestList);
 </script>
 
 <style lang="scss" scoped>

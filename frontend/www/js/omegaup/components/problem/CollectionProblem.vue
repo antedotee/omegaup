@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import 'v-tooltip/dist/v-tooltip.css';
 import { VTooltip } from 'v-tooltip';
@@ -28,10 +28,11 @@ import { VTooltip } from 'v-tooltip';
     tooltip: VTooltip,
   },
 })
-export default class CollectionProblem extends Vue {
+class CollectionProblem extends Vue {
   @Prop() title!: string;
   T = T;
 }
+export default toNative(CollectionProblem);
 </script>
 
 <style>

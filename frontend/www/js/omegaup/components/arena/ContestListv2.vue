@@ -417,65 +417,36 @@
 
 <script lang="ts">
 import debounce from 'lodash/debounce';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import * as time from '../../time';
 import T from '../../lang';
 import { getExternalUrl } from '../../urlHelper';
 
-// Import Bootstrap an BootstrapVue CSS files (order is important)
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+// Import Bootstrap CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css';
 
 // Import Only Required Plugins
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import {
-  CardPlugin,
-  DropdownPlugin,
-  LayoutPlugin,
-  TabsPlugin,
-} from 'bootstrap-vue';
-import infiniteScroll from 'vue-infinite-scroll';
+import infiniteScroll from '../../directives/infiniteScroll';
 import ContestCard from './ContestCard.vue';
 import ContestSkeleton from './ContestSkeleton.vue';
-Vue.use(TabsPlugin);
-Vue.use(CardPlugin);
-Vue.use(DropdownPlugin);
-Vue.use(LayoutPlugin);
 library.add(fas);
 
-export enum ContestTab {
-  Current = 'current',
-  Future = 'future',
-  Past = 'past',
-}
-
-export enum ContestOrder {
-  None = 'none',
-  Title = 'title',
-  Ends = 'ends',
-  Duration = 'duration',
-  Organizer = 'organizer',
-  Contestants = 'contestants',
-  SignedUp = 'signedup',
-}
-
-export enum ContestFilter {
-  SignedUp = 'signedup',
-  OnlyRecommended = 'recommended',
-  All = 'all',
-}
-
-export interface UrlParams {
-  page: number;
-  tab_name: ContestTab;
-  query: string;
-  sort_order: ContestOrder;
-  filter: ContestFilter;
-  replaceState?: boolean; // When true, use replaceState instead of pushState (for browser navigation)
-}
+import {
+  ContestTab,
+  ContestOrder,
+  ContestFilter,
+  UrlParams,
+} from './ContestListv2_types';
+// These are declared in ./ContestListv2_types and re-exported here so existing
+// SFC importers keep working while plain `.ts` entry points import them from
+// the `.ts` module.
+export { ContestTab, ContestOrder, ContestFilter };
+export type { UrlParams };
 
 @Component({
   components: {
@@ -538,7 +509,7 @@ class ArenaContestList extends Vue {
       filter: this.currentFilter,
     };
     // Reset the contest list for this tab to avoid stale data
-    Vue.set(this.contests, this.currentTab, []);
+    VueGlobal.set(this.contests, this.currentTab, []);
     this.currentPage = 1;
     this.hasMore = true;
     this.fetchPage(params, urlObj);
@@ -558,7 +529,7 @@ class ArenaContestList extends Vue {
       replaceState: this.isFromBrowserNavigation || this.isInitialLoad,
     };
     // Reset the contest list for this tab to avoid stale data
-    Vue.set(this.contests, this.currentTab, []);
+    VueGlobal.set(this.contests, this.currentTab, []);
     this.currentPage = 1;
     this.hasMore = true;
     // Reset the navigation and initial load flags after using them
@@ -775,7 +746,7 @@ class ArenaContestList extends Vue {
   }
 }
 
-export default ArenaContestList;
+export default toNative(ArenaContestList);
 </script>
 
 <style lang="scss" scoped>

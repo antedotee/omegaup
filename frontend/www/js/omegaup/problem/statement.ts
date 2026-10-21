@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 import { types } from '../api_types';
 import problem_StatementEdit from '../components/problem/StatementEdit.vue';
@@ -51,7 +51,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-problem-statementedit': problem_StatementEdit,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-problem-statementedit', {
         props: {
           alias: 'problema',

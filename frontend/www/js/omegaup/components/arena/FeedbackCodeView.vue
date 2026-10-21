@@ -23,15 +23,16 @@
 <script lang="ts">
 // TODO: Only display the gutters in the component if the logged-in user is an
 // admin or teaching assistant.
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 import CodeMirror from 'codemirror';
 import { EditorOptions, languageModeMap, modeList } from './CodeView.vue';
 import Feedback, { ArenaCourseFeedback, FeedbackStatus } from './Feedback.vue';
 import FeedbackThread from './FeedbackThread.vue';
 
-const FeedbackClass = Vue.extend(Feedback);
-const FeedbackThreadClass = Vue.extend(FeedbackThread);
+const FeedbackClass = VueGlobal.extend(Feedback);
+const FeedbackThreadClass = VueGlobal.extend(FeedbackThread);
 
 for (const mode of modeList) {
   require(`codemirror/mode/${mode}/${mode}.js`);
@@ -40,7 +41,7 @@ for (const mode of modeList) {
 @Component({
   components: {},
 })
-export default class FeedbackCodeView extends Vue {
+class FeedbackCodeView extends Vue {
   @Prop() language!: string;
   @Prop() value!: string;
   @Prop({ default: true }) readonly!: boolean;
@@ -194,7 +195,7 @@ export default class FeedbackCodeView extends Vue {
         );
 
         feedbackForm.$on('submit', (feedback: ArenaCourseFeedback) => {
-          Vue.nextTick(() => {
+          VueGlobal.nextTick(() => {
             // Now that the DOM has changed, we need to tell CodeMirror to
             // recalculate the height of the line widget so that it knows which
             // y coordinate corresponds to which line.
@@ -259,6 +260,7 @@ export default class FeedbackCodeView extends Vue {
     );
   }
 }
+export default toNative(FeedbackCodeView);
 </script>
 
 <style lang="scss">

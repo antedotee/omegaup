@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import * as time from '../../time';
@@ -98,7 +98,7 @@ import { types } from '../../api_types';
 import { getExternalUrl } from '../../urlHelper';
 
 @Component
-export default class FilteredList extends Vue {
+class FilteredList extends Vue {
   @Prop() contests!: types.ContestAdminDetails[];
   @Prop() showTimes!: boolean;
   @Prop() showPractice!: boolean;
@@ -160,6 +160,7 @@ export default class FilteredList extends Vue {
     return `${getExternalUrl('TimeAndDateBaseURL')}?iso=${time}`;
   }
 }
+export default toNative(FilteredList);
 </script>
 
 <style lang="scss" scoped>

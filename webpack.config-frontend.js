@@ -3,7 +3,7 @@ const path = require('path');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const defaultBadgeIcon = fs.readFileSync('./frontend/badges/default_icon.svg');
 
@@ -166,7 +166,14 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         extensions: {
-          vue: true,
+          vue: {
+            enabled: true,
+            compiler: '@vue/compiler-sfc',
+          },
+        },
+        diagnosticOptions: {
+          semantic: true,
+          syntactic: false,
         },
       },
       formatter: 'codeframe',
@@ -221,7 +228,7 @@ module.exports = {
   },
 
   module: {
-    noParse: /^(vue|vue-router|vuex|vuex-router-sync)$/,
+    noParse: /^(vue-router|vuex-router-sync)$/,
     rules: [
       {
         test: /\.vue$/,
@@ -229,8 +236,10 @@ module.exports = {
         options: {
           compilerOptions: {
             whitespace: 'condense',
+            compatConfig: {
+              MODE: 2,
+            },
           },
-          optimizeSSR: false,
         },
       },
       {
@@ -257,14 +266,20 @@ module.exports = {
         loader: 'file-loader',
         options: { name: '[name].[ext]?[hash]' },
       },
+      {
+        // Font files pulled in by bootstrap-icons' CSS.
+        test: /\.(woff2?|eot|ttf|otf)$/,
+        loader: 'file-loader',
+        options: { name: '[name].[ext]?[hash]' },
+      },
       // inline scss styles on vue components
       {
         test: /\.css$/,
-        use: ['vue-style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.ttf$/,
@@ -279,7 +294,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
-      vue$: 'vue/dist/vue.common.js',
+      vue$: '@vue/compat/dist/vue.esm-bundler.js',
       'vue-async-computed': 'vue-async-computed/dist/vue-async-computed.js',
       jszip: 'jszip/dist/jszip.js',
       pako: 'pako/dist/pako.min.js',

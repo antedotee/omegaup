@@ -191,7 +191,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -222,7 +222,7 @@ interface Origin {
     'omegaup-common-paginator': common_Paginator,
   },
 })
-export default class ActivityFeed extends Vue {
+class ActivityFeed extends Vue {
   @Prop() page!: number;
   @Prop() length!: number;
   @Prop() type!: string;
@@ -332,4 +332,5 @@ export default class ActivityFeed extends Vue {
     return origins;
   }
 }
+export default toNative(ActivityFeed);
 </script>

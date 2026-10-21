@@ -1,6 +1,6 @@
 import admin_Crons from '../components/admin/Crons.vue';
 import { OmegaUp } from '../omegaup';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
 
 OmegaUp.on('ready', () => {
@@ -11,7 +11,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-admin-crons': admin_Crons,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-admin-crons', {
         props: {
           jobs: payload.jobs,

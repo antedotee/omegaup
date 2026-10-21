@@ -81,25 +81,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
 import omegaup_Username from '../user/Username.vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
-import { FormInputPlugin, ModalPlugin } from 'bootstrap-vue';
-Vue.use(FormInputPlugin);
-Vue.use(ModalPlugin);
 
 @Component({
+  emits: ['deny-request'],
   components: {
     'omegaup-username': omegaup_Username,
   },
 })
-export default class Requests extends Vue {
+class Requests extends Vue {
   @Prop() data!: types.IdentityRequest[];
   @Prop() textAddParticipant!: string;
 
@@ -122,7 +118,7 @@ export default class Requests extends Vue {
   }
 
   toggleFeedbackModal(username: string): void {
-    this.$set(this.modalStates, username, !this.modalStates[username]);
+    this.modalStates[username] = !this.modalStates[username];
   }
 
   get filteredRequests(): types.IdentityRequest[] {
@@ -132,4 +128,5 @@ export default class Requests extends Vue {
     return this.requests.filter((request) => !request.accepted);
   }
 }
+export default toNative(Requests);
 </script>

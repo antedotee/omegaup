@@ -13,8 +13,9 @@ import {
 import * as api from '../api';
 import * as time from '../time';
 
-import Vue from 'vue';
-import arena_Course, { Tabs } from '../components/arena/Coursev2.vue';
+import Vue, { type CreateElement } from 'vue';
+import arena_Course from '../components/arena/Coursev2.vue';
+import { Tabs } from '../components/arena/Coursev2_types';
 
 OmegaUp.on('ready', async () => {
   const payload = types.payloadParsers.ArenaCoursePayload();
@@ -33,7 +34,7 @@ OmegaUp.on('ready', async () => {
         currentRunDetails: null as types.RunDetails | null,
       };
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-course', {
         props: {
           allRuns: runsStore.state.runs,

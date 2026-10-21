@@ -1,17 +1,10 @@
-import { createLocalVue, mount, Wrapper } from '@vue/test-utils';
+import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 
 import AddPanel from './AddPanel.vue';
-import BootstrapVue, { IconsPlugin } from 'bootstrap-vue';
 import T from '../../../../lang';
-import Vue from 'vue';
 import vuexStore from '../../../../problem/creator/store';
 import { StoreState } from '../../../../problem/creator/types';
 import { Store } from 'vuex';
-
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
-
 describe('AddPanel.vue', () => {
   beforeEach(() => {
     vuexStore.commit('casesStore/resetStore');
@@ -20,12 +13,13 @@ describe('AddPanel.vue', () => {
   const testGroup = 'testgroup';
 
   it('Should add a case to the store', async () => {
-    const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
+    const wrapper: VueWrapper = mount(AddPanel, {
+      global: {
+        plugins: [vuexStore],
+      },
     });
 
-    await Vue.nextTick();
+    await flushPromises();
 
     const nameInput = wrapper.find('input[name="case-name"]');
 
@@ -39,7 +33,8 @@ describe('AddPanel.vue', () => {
     // We need to use any since vue components methods are not stored in vm's type
     await (wrapper.vm as any).addItemToStore();
 
-    const store = wrapper.vm.$store as Store<StoreState>;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> })
+      .$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(1);
@@ -49,12 +44,14 @@ describe('AddPanel.vue', () => {
   });
 
   it('Should add a group to the store and add a case to the group', async () => {
-    const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
+    const wrapper: VueWrapper = mount(AddPanel, {
+      global: {
+        plugins: [vuexStore],
+      },
     });
 
     await wrapper.setData({ tab: 'group' });
+    await flushPromises();
 
     await wrapper.find('input[name="group-name"]').setValue(testGroup);
 
@@ -65,7 +62,8 @@ describe('AddPanel.vue', () => {
 
     await (wrapper.vm as any).addItemToStore();
 
-    const store = wrapper.vm.$store as Store<StoreState>;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> })
+      .$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(1);
@@ -77,6 +75,7 @@ describe('AddPanel.vue', () => {
     const groupId = groups[0].groupID;
 
     await wrapper.setData({ tab: 'case' });
+    await flushPromises();
 
     await wrapper.find('input[name="case-name"]').setValue('groupedtestcase');
     await wrapper.find('input[name="case-points"]').setValue(10);
@@ -91,12 +90,14 @@ describe('AddPanel.vue', () => {
   });
 
   it('Should add an ungrouped case to the store', async () => {
-    const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
+    const wrapper: VueWrapper = mount(AddPanel, {
+      global: {
+        plugins: [vuexStore],
+      },
     });
 
     await wrapper.setData({ tab: 'case' });
+    await flushPromises();
 
     await wrapper.find('input[name="case-name"]').setValue('testcase');
     await wrapper.find('input[name="case-points"]').setValue(50);
@@ -112,7 +113,8 @@ describe('AddPanel.vue', () => {
 
     await wrapper.find('form').trigger('submit.prevent');
 
-    const store = wrapper.vm.$store as Store<StoreState>;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> })
+      .$store;
     const [ungroupedCase] = store.state.casesStore.groups;
 
     expect(ungroupedCase.name).toBe('testcase');
@@ -122,33 +124,42 @@ describe('AddPanel.vue', () => {
   });
 
   it('Should add multiple ungrouped cases to the store', async () => {
-    const wrapper: Wrapper<AddPanel> = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
+    const wrapper: VueWrapper = mount(AddPanel, {
+      global: {
+        plugins: [vuexStore],
+      },
     });
 
     await wrapper.setData({ tab: 'multiplecases' });
+    await flushPromises();
 
     await wrapper.find('input[name="multiple-cases-prefix"]').setValue('test');
     await wrapper.find('input[name="multiple-cases-suffix"]').setValue('case');
     await wrapper.find('input[name="multiple-cases-count"]').setValue(10);
 
     expect(
-      (wrapper.find('input[name="multiple-cases-prefix"]')
-        .element as HTMLInputElement).value,
+      (
+        wrapper.find('input[name="multiple-cases-prefix"]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('test');
     expect(
-      (wrapper.find('input[name="multiple-cases-suffix"]')
-        .element as HTMLInputElement).value,
+      (
+        wrapper.find('input[name="multiple-cases-suffix"]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('case');
     expect(
-      (wrapper.find('input[name="multiple-cases-count"]')
-        .element as HTMLInputElement).value,
+      (
+        wrapper.find('input[name="multiple-cases-count"]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('10');
 
     await wrapper.find('form').trigger('submit.prevent');
 
-    const store = wrapper.vm.$store as Store<StoreState>;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> })
+      .$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(10);
@@ -161,9 +172,10 @@ describe('AddPanel.vue', () => {
 
   it('Should contain 3 tabs', async () => {
     const wrapper = mount(AddPanel, {
-      localVue,
-      store: vuexStore,
-      stubs: { transition: false },
+      global: {
+        plugins: [vuexStore],
+        stubs: { transition: false },
+      },
     });
 
     const expectedText = [
@@ -172,11 +184,11 @@ describe('AddPanel.vue', () => {
       T.problemCreatorMultipleCases,
     ];
 
-    await Vue.nextTick();
+    await flushPromises();
 
     const tabs = wrapper.findAll('.nav-link');
     expect(tabs.length).toBe(expectedText.length);
-    tabs.wrappers.forEach((tab, index) => {
+    tabs.forEach((tab, index) => {
       expect(tab.text()).toBe(expectedText[index]);
     });
   });

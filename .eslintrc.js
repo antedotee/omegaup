@@ -13,9 +13,10 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:jest-dom/recommended',
-    // Vue 2 ruleset. Do NOT mix with vue3-* until we migrate.
-    'plugin:vue/recommended',
-    // TODO: when migrating to Vue 3, replace the line above with vue3-recommended
+    // Vue 3 ruleset: the frontend now runs on the Vue 3 migration build
+    // (@vue/compat), so templates use Vue 3 syntax (v-model:arg, key on
+    // <template v-for>, etc.).
+    'plugin:vue/vue3-recommended',
     'prettier',
     'prettier/@typescript-eslint',
     'prettier/vue',

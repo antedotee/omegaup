@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import problem_SettingsSummary from '../problem/SettingsSummary.vue';
@@ -40,12 +40,13 @@ library.add(faPrint);
     'omegaup-problem-settings-summary': problem_SettingsSummary,
   },
 })
-export default class ProblemPrint extends Vue {
+class ProblemPrint extends Vue {
   @Prop() problems!: types.ProblemDetails[];
   @Prop() contestTitle!: string;
 
   T = T;
 }
+export default toNative(ProblemPrint);
 </script>
 
 <style lang="scss" scoped>

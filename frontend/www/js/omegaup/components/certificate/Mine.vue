@@ -75,7 +75,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import Clipboard from 'v-clipboard';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -88,7 +89,7 @@ import {
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
 @Component({
   components: {
@@ -97,7 +98,7 @@ Vue.use(Clipboard);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class Mine extends Vue {
+class Mine extends Vue {
   @Prop() certificates!: types.CertificateListItem[];
   @Prop() selectedCertificate?: string;
   @Prop() location!: string;
@@ -136,6 +137,7 @@ export default class Mine extends Vue {
     this.$emit('show-download-message');
   }
 }
+export default toNative(Mine);
 </script>
 
 <style lang="scss" scoped>

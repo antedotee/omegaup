@@ -2,7 +2,7 @@
   <div class="password-input-wrapper">
     <input
       v-bind="$attrs"
-      :value="value"
+      :value="modelValue"
       :type="showPassword ? 'text' : 'password'"
       :name="name"
       :class="['form-control', inputClass]"
@@ -10,7 +10,7 @@
       :autocomplete="autocomplete"
       :size="size"
       :required="required"
-      @input="$emit('input', $event.target.value)"
+      @input="$emit('update:modelValue', $event.target.value)"
     />
     <button
       type="button"
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -37,12 +37,14 @@ library.add(faEye, faEyeSlash);
 
 @Component({
   inheritAttrs: false,
+  emits: ['update:modelValue'],
+  options: { compatConfig: { COMPONENT_V_MODEL: false } },
   components: {
     FontAwesomeIcon,
   },
 })
-export default class PasswordInput extends Vue {
-  @Prop({ required: true }) value!: string;
+class PasswordInput extends Vue {
+  @Prop({ required: true }) modelValue!: string;
   @Prop({ default: '' }) name!: string;
   @Prop({ default: '' }) inputClass!: string;
   @Prop({ default: null }) tabindex!: number | null;
@@ -57,6 +59,7 @@ export default class PasswordInput extends Vue {
     this.showPassword = !this.showPassword;
   }
 }
+export default toNative(PasswordInput);
 </script>
 
 <style lang="scss" scoped>

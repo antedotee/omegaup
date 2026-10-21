@@ -3,7 +3,7 @@ import { OmegaUp } from '../omegaup';
 import { messages, types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import T from '../lang';
 
 OmegaUp.on('ready', () => {
@@ -23,7 +23,7 @@ OmegaUp.on('ready', () => {
       invalidParameterName: null as null | string,
       searchResultSchools: searchResultSchools,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-form', {
         props: {
           course: {

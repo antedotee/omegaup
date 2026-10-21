@@ -111,7 +111,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal, { markRaw } from 'vue';
 import store from '../grader/GraderStore';
 import * as Util from '../grader/util';
 import * as monaco from 'monaco-editor';
@@ -122,7 +123,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faClipboard, faCheck } from '@fortawesome/free-solid-svg-icons';
 library.add(faClipboard, faCheck);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
 // ─── Sourced from constants.ts ────────────────────────────────────────────────
 import { EDITOR, TIMING } from '../grader/constants';
@@ -162,7 +163,7 @@ const FALLBACKS = {
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class MonacoEditor extends Vue {
+class MonacoEditor extends Vue {
   @Prop({ required: true }) storeMapping!: { [key: string]: string };
   @Prop({ default: false }) readOnly!: boolean;
 
@@ -271,21 +272,24 @@ export default class MonacoEditor extends Vue {
       ? langObj.modelMapping
       : FALLBACKS.MODEL_MAPPING;
 
-    this._editor = monaco.editor.create(container, {
-      autoIndent: 'brackets',
-      formatOnPaste: true,
-      formatOnType: true,
-      language: modelMapping,
-      readOnly: this.readOnly,
-      theme: this.theme,
-      value: this.contents,
-      fontSize: this.selectedFontSize,
-      minimap: { enabled: true },
-      automaticLayout: true,
-    } as monaco.editor.IStandaloneEditorConstructionOptions);
+    this._editor = markRaw(
+      monaco.editor.create(container, {
+        autoIndent: 'brackets',
+        formatOnPaste: true,
+        formatOnType: true,
+        language: modelMapping,
+        readOnly: this.readOnly,
+        theme: this.theme,
+        value: this.contents,
+        fontSize: this.selectedFontSize,
+        minimap: { enabled: true },
+        automaticLayout: true,
+      } as monaco.editor.IStandaloneEditorConstructionOptions),
+    );
 
-    this._model = this._editor.getModel();
-    if (!this._model) return;
+    const model = this._editor.getModel();
+    if (!model) return;
+    this._model = markRaw(model);
 
     this._model.onDidChangeContent(() => {
       if (this.debounceTimer) clearTimeout(this.debounceTimer);
@@ -398,6 +402,7 @@ export default class MonacoEditor extends Vue {
     }
   }
 }
+export default toNative(MonacoEditor);
 </script>
 
 <style lang="scss" scoped>

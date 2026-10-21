@@ -11,13 +11,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  // The @storybook/vue types resolve Story args to a Vue meta shape and do not
+  // infer the component's own props, so the args object is cast.
   args: {
     storeMapping: {
       originalContents: 'original',
       modifiedContents: 'modified',
     },
     readOnly: false,
-  },
+  } as unknown as Story['args'],
   render: (args, { argTypes }) => ({
     components: { DiffEditorV2 },
     props: Object.keys(argTypes),
@@ -32,7 +34,7 @@ export const ReadOnly: Story = {
       modifiedContents: 'modified',
     },
     readOnly: true,
-  },
+  } as unknown as Story['args'],
   render: (args, { argTypes }) => ({
     components: { DiffEditorV2 },
     props: Object.keys(argTypes),

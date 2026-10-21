@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import problem_SettingsSummary from './SettingsSummary.vue';
@@ -36,11 +36,12 @@ library.add(faPrint);
     'omegaup-problem-settings-summary': problem_SettingsSummary,
   },
 })
-export default class ProblemPrint extends Vue {
+class ProblemPrint extends Vue {
   @Prop() problem!: types.ProblemInfo;
 
   T = T;
 }
+export default toNative(ProblemPrint);
 </script>
 
 <style lang="scss" scoped>

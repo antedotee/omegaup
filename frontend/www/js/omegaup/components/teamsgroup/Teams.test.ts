@@ -3,8 +3,17 @@ import { mount, shallowMount } from '@vue/test-utils';
 import { dao, types } from '../../api_types';
 import T from '../../lang';
 
-import teamsgroup_Teams, { AvailableForms } from './Teams.vue';
+import teamsgroup_Teams from './Teams.vue';
+import { AvailableForms } from './Teams_types';
 import identity_Edit from '../identity/Edit.vue';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface TeamsVm {
+  identity: null | types.Identity;
+  formToShow: AvailableForms;
+  username: null | string;
+}
 
 describe('Teams.vue', () => {
   beforeEach(() => {
@@ -16,7 +25,7 @@ describe('Teams.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
@@ -39,7 +48,7 @@ describe('Teams.vue', () => {
 
   it('Should handle an empty list of members and identities', () => {
     const wrapper = shallowMount(teamsgroup_Teams, {
-      propsData: {
+      props: {
         teams: [] as types.Identity[],
         countries: [{ country_id: 'mx', name: 'Mexico' }] as dao.Countries[],
       },
@@ -52,36 +61,43 @@ describe('Teams.vue', () => {
 
   it('Should handle a list of teams as identities', () => {
     const wrapper = mount(teamsgroup_Teams, {
-      propsData,
+      props: propsData,
     });
 
-    expect(wrapper.find('table[data-table-identities]').text()).toContain(
-      'omegaUp:user user',
-    );
+    const identitiesTable = wrapper.find('table[data-table-identities]');
+    // Vue 3 condenses the inter-element whitespace that Vue 2 preserved, so the
+    // concatenated table text no longer has a space between the username and
+    // the team name cell. Assert each cell renders its own value instead.
+    expect(identitiesTable.text()).toContain('omegaUp:user');
+    expect(identitiesTable.find('[data-group-team-name]').text()).toBe('user');
   });
 
   it('Should handle edit identity form', async () => {
     const wrapper = mount(teamsgroup_Teams, {
       attachTo: '#root',
-      propsData,
+      props: propsData,
     });
 
     await wrapper
       .find('button[data-edit-identity="omegaUp:user"]')
       .trigger('click');
 
-    expect(wrapper.vm.identity).toEqual({
+    expect((wrapper.vm as unknown as TeamsVm).identity).toEqual({
       username: 'omegaUp:user',
       name: 'user',
     });
-    expect(wrapper.vm.formToShow).toBe(AvailableForms.Edit);
-    expect(wrapper.vm.username).toBe('omegaUp:user');
+    expect((wrapper.vm as unknown as TeamsVm).formToShow).toBe(
+      AvailableForms.Edit,
+    );
+    expect((wrapper.vm as unknown as TeamsVm).username).toBe('omegaUp:user');
 
     await wrapper.find('button[type="reset"]').trigger('click');
 
-    expect(wrapper.vm.identity).toBe(null);
-    expect(wrapper.vm.formToShow).toBe(AvailableForms.None);
-    expect(wrapper.vm.username).toBe(null);
+    expect((wrapper.vm as unknown as TeamsVm).identity).toBe(null);
+    expect((wrapper.vm as unknown as TeamsVm).formToShow).toBe(
+      AvailableForms.None,
+    );
+    expect((wrapper.vm as unknown as TeamsVm).username).toBe(null);
 
     await wrapper
       .find('button[data-edit-identity="omegaUp:user"]')

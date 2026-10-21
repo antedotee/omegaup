@@ -135,7 +135,7 @@
               </b-button>
               <!-- id-lint on -->
               <b-popover
-                :show.sync="showPopover"
+                v-model="showPopover"
                 target="popover-solved-problems"
                 placement="right"
               >
@@ -202,7 +202,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -226,13 +226,8 @@ library.add(faCheckSquare, faExchangeAlt, faQuestionCircle, faTimes, faUser);
 
 import { getBlogUrl } from '../../urlHelper';
 
-// Import Bootstrap and BootstrapVue CSS files (order is important: base before overrides)
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+// Import Bootstrap CSS file.
 import 'bootstrap/dist/css/bootstrap.css';
-// Import Only Required Plugins
-import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
-Vue.use(ButtonPlugin);
-Vue.use(PopoverPlugin);
 interface Rank {
   country: string;
   classname?: string;
@@ -251,7 +246,7 @@ interface Rank {
     'omegaup-common-paginator': common_Paginator,
   },
 })
-export default class UserRank extends Vue {
+class UserRank extends Vue {
   @Prop() page!: number;
   @Prop() length!: number;
   @Prop({ default: false }) isIndex!: boolean;
@@ -364,6 +359,7 @@ export default class UserRank extends Vue {
     else return `/rank?page=${this.page - 1}`;
   }
 }
+export default toNative(UserRank);
 </script>
 
 <style lang="scss">

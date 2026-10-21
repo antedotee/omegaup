@@ -11,7 +11,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import T from '../../lang';
 import { codemirror } from 'vue-codemirror-lite';
 
@@ -73,11 +80,12 @@ export interface EditorOptions {
 }
 
 @Component({
+  emits: ['change', 'input'],
   components: {
     'codemirror-editor': codemirror,
   },
 })
-export default class CodeView extends Vue {
+class CodeView extends Vue {
   @Prop({ default: 'cpp17-gcc' }) language!: string;
   @Prop({ default: false }) readonly!: boolean;
   @Prop() value!: string;
@@ -131,6 +139,7 @@ export default class CodeView extends Vue {
     this.$emit('change-language', codeAndLanguage.language);
   }
 }
+export default toNative(CodeView);
 </script>
 
 <style lang="scss">

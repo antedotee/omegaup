@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import user_SidebarMainInfo from './SidebarMainInfo.vue';
 import { types } from '../../api_types';
 
@@ -35,7 +35,7 @@ import { types } from '../../api_types';
     'omegaup-user-maininfo': user_SidebarMainInfo,
   },
 })
-export default class ProfileWrapper extends Vue {
+class ProfileWrapper extends Vue {
   @Prop({ default: null }) data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop({ default: null }) selectedTab!: null | string;
@@ -48,4 +48,5 @@ export default class ProfileWrapper extends Vue {
     this.$emit('update:selectedTab', newValue);
   }
 }
+export default toNative(ProfileWrapper);
 </script>

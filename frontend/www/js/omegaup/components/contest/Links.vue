@@ -39,12 +39,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 
 @Component
-export default class Links extends Vue {
+class Links extends Vue {
   @Prop() data!: types.Contest;
 
   T = T;
@@ -55,4 +55,5 @@ export default class Links extends Vue {
     return contestAlias;
   }
 }
+export default toNative(Links);
 </script>

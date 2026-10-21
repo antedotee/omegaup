@@ -161,22 +161,24 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
 
-@Component
-export default class ProblemVersions extends Vue {
+@Component({
+  options: { compatConfig: { COMPONENT_V_MODEL: false } },
+})
+class ProblemVersions extends Vue {
   @Prop() log!: types.ProblemVersion[];
   @Prop({ default: null }) publishedRevision!: null | types.ProblemVersion;
   @Prop() showFooter!: boolean;
-  @Prop({ default: null }) value!: null | types.ProblemVersion;
+  @Prop({ default: null }) modelValue!: null | types.ProblemVersion;
 
   T = T;
   time = time;
   diffMode = 'files';
-  selectedRevision: null | types.ProblemVersion = this.value;
+  selectedRevision: null | types.ProblemVersion = this.modelValue;
   runsDiff: types.CommitRunsDiff = {};
   showOnlyChanges = false;
   updatePublished = 'owned-problemsets';
@@ -245,14 +247,14 @@ export default class ProblemVersions extends Vue {
     return result;
   }
 
-  @Watch('value')
+  @Watch('modelValue')
   onValueChange(newValue: types.ProblemVersion) {
     this.selectedRevision = newValue;
   }
 
   @Watch('selectedRevision')
   onSelectedRevisionChange(newValue: types.ProblemVersion) {
-    this.$emit('input', this.selectedRevision);
+    this.$emit('update:modelValue', this.selectedRevision);
     if (
       !newValue ||
       Object.prototype.hasOwnProperty.call(this.runsDiff, newValue.version)
@@ -266,6 +268,7 @@ export default class ProblemVersions extends Vue {
     }
   }
 }
+export default toNative(ProblemVersions);
 </script>
 
 <style lang="scss" scoped>

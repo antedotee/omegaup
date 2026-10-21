@@ -565,7 +565,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Ref } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Watch,
+  Ref,
+  toNative,
+} from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import problem_Settings from './Settings.vue';
 import problem_Tags from './Tags.vue';
 import problem_CreatorWrapper from './CreatorWrapper.vue';
@@ -577,12 +585,13 @@ import { types } from '../../api_types';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
+import { CreationMethods } from './Form_types';
 
-export enum CreationMethods {
-  Creator = 'creator',
-  Zip = 'zip',
-}
+// CreationMethods is declared in ./Form_types and re-exported here so existing
+// SFC importers keep working while plain `.ts` entry points import it from the
+// `.ts` module.
+export { CreationMethods };
 
 @Component({
   components: {
@@ -591,7 +600,7 @@ export enum CreationMethods {
     'omegaup-problem-creator': problem_CreatorWrapper,
   },
 })
-export default class ProblemForm extends Vue {
+class ProblemForm extends Vue {
   @Prop() data!: types.ProblemFormPayload;
   @Prop({ default: () => [] }) errors!: string[];
   @Prop({ default: false }) isUpdate!: boolean;
@@ -995,6 +1004,7 @@ export default class ProblemForm extends Vue {
     this.$emit('alias-changed', newValue);
   }
 }
+export default toNative(ProblemForm);
 </script>
 
 <style>

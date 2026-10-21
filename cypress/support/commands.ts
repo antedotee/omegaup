@@ -42,7 +42,7 @@ Cypress.Commands.add('loginAdmin', () => {
 Cypress.Commands.add('logout', () => {
   cy.get('a[data-nav-user]').click();
   cy.get('a[data-logout-button]').click({ force: true });
-  cy.get('footer.logout-confirmation-modal>button.btn-primary').click();
+  cy.get('.logout-confirmation-modal > button.btn-primary').click();
   cy.waitUntil(() => cy.url().should('eq', 'http://127.0.0.1:8001/'));
 });
 
@@ -283,6 +283,9 @@ Cypress.Commands.add(
 
       // Mocking date just a few seconds after to allow create new run
       cy.clock(new Date(), ['Date']).then((clock) => clock.tick(9000));
+      // The new-submission button stays disabled until its countdown notices
+      // the mocked clock moved forward; clicking it earlier is a no-op.
+      cy.get('[data-new-run] button:disabled').should('not.exist');
       cy.get('[data-new-run]').click();
 
       // Wait for the language selector to be visible before trying to interact with it

@@ -5,6 +5,12 @@ import { types } from '../../api_types';
 
 import contest_Edit from './Edit.vue';
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ContestEditVm {
+  showTab: string;
+}
+
 describe('Edit.vue', () => {
   const details: types.ContestAdminDetails = {
     admin: true,
@@ -70,22 +76,24 @@ describe('Edit.vue', () => {
   };
   it('Should handle a normal contest', () => {
     const wrapper = shallowMount(contest_Edit, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.text()).toContain(T.contestDetailsGoToContest);
 
-    expect(wrapper.vm.showTab).toBe('clone');
+    expect((wrapper.vm as unknown as ContestEditVm).showTab).toBe('clone');
   });
 
   it('Should handle a virtual contest', () => {
     propsData.details.rerun_id = 2;
     propsData.initialTab = '';
     const wrapper = shallowMount(contest_Edit, {
-      propsData,
+      props: propsData,
     });
 
-    expect(wrapper.vm.showTab).toBe('contestants');
+    expect((wrapper.vm as unknown as ContestEditVm).showTab).toBe(
+      'contestants',
+    );
   });
 
   it('Should handle a virtual contest from an original private contest', () => {
@@ -93,9 +101,9 @@ describe('Edit.vue', () => {
     propsData.initialTab = '';
     propsData.originalContestAdmissionMode = 'private';
     const wrapper = shallowMount(contest_Edit, {
-      propsData,
+      props: propsData,
     });
 
-    expect(wrapper.vm.showTab).toBe('links');
+    expect((wrapper.vm as unknown as ContestEditVm).showTab).toBe('links');
   });
 });

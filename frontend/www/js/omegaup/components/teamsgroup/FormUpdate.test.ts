@@ -14,14 +14,14 @@ describe('FormUpdate.vue', () => {
   afterAll(() => {
     const rootDiv = document.getElementById('root');
     if (rootDiv) {
-      document.removeChild(rootDiv);
+      document.body.removeChild(rootDiv);
     }
   });
 
   it('Should handle form update', async () => {
     const wrapper = mount(teamsgroup_FormUpdate, {
       attachTo: '#root',
-      propsData: {
+      props: {
         alias: 'Hello',
         name: 'Hello omegaUp',
         description: 'Hello omegaUp Description',
@@ -38,10 +38,10 @@ describe('FormUpdate.vue', () => {
       currentNumberOfContestants: 8,
     });
 
-    await formBase.find('button[type="submit"]').trigger('click');
+    await formBase.find('form[data-teams-group]').trigger('submit');
 
     // In edit mode, alias can not change its value
-    expect(wrapper.vm.$props.alias).toBe('Hello');
+    expect((wrapper.vm.$props as { alias: string }).alias).toBe('Hello');
     expect(wrapper.emitted('validate-unused-alias')).toBeFalsy();
     expect(wrapper.emitted('update-teams-group')).toEqual([
       [
@@ -53,6 +53,6 @@ describe('FormUpdate.vue', () => {
       ],
     ]);
 
-    wrapper.destroy();
+    wrapper.unmount();
   });
 });

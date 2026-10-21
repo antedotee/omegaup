@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -81,8 +81,9 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
 
-import { BBreadcrumb, BBreadcrumbItem } from 'bootstrap-vue';
+import { BBreadcrumb, BBreadcrumbItem } from 'bootstrap-vue-next';
 @Component({
+  emits: ['navigate-to-problem'],
   components: {
     'font-awesome-icon': FontAwesomeIcon,
     'font-awesome-layers': FontAwesomeLayers,
@@ -91,7 +92,7 @@ import { BBreadcrumb, BBreadcrumbItem } from 'bootstrap-vue';
     'b-breadcrumb-item': BBreadcrumbItem,
   },
 })
-export default class ArenaNavbarProblems extends Vue {
+class ArenaNavbarProblems extends Vue {
   @Prop() problems!: types.NavbarProblemsetProblem[];
   @Prop() activeProblem!: string | null;
   @Prop() courseAlias!: string | null;
@@ -121,6 +122,7 @@ export default class ArenaNavbarProblems extends Vue {
     this.$emit('navigate-to-problem', problem);
   }
 }
+export default toNative(ArenaNavbarProblems);
 </script>
 
 <style lang="scss" scoped>

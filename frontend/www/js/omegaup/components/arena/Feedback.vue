@@ -58,29 +58,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as time from '../../time';
 import user_Username from '../user/Username.vue';
 import omegaup_Markdown from '../Markdown.vue';
+import { FeedbackStatus, ArenaCourseFeedback } from './Feedback_types';
 
-export enum FeedbackStatus {
-  New = 'New',
-  InProgress = 'InProgress',
-  Saved = 'Saved',
-  Updated = 'Updated',
-  Deleted = 'Deleted',
-}
-
-export interface ArenaCourseFeedback {
-  author?: string;
-  authorClassname?: string;
-  lineNumber: number;
-  text: null | string;
-  status: FeedbackStatus;
-  timestamp?: Date;
-  submissionFeedbackId?: number;
-}
+// Declared in ./Feedback_types and re-exported here so existing SFC importers
+// keep working while plain `.ts` modules import them from the `.ts` file.
+export { FeedbackStatus };
+export type { ArenaCourseFeedback };
 
 @Component({
   components: {
@@ -88,7 +76,7 @@ export interface ArenaCourseFeedback {
     'omegaup-user-username': user_Username,
   },
 })
-export default class Feedback extends Vue {
+class Feedback extends Vue {
   @Prop() feedback!: ArenaCourseFeedback;
   @Ref('feedback-form') feedbackForm!: HTMLTextAreaElement;
 
@@ -123,4 +111,5 @@ export default class Feedback extends Vue {
     this.$emit('delete', this.currentFeedback);
   }
 }
+export default toNative(Feedback);
 </script>

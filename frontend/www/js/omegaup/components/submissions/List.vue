@@ -135,7 +135,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -143,7 +143,7 @@ import * as time from '../../time';
 import UserName from '../user/Username.vue';
 import common_Typeahead from '../common/Typeahead.vue';
 import common_Paginator from '../common/Paginator.vue';
-import infiniteScroll from 'vue-infinite-scroll';
+import infiniteScroll from '../../directives/infiniteScroll';
 
 @Component({
   components: {
@@ -155,7 +155,7 @@ import infiniteScroll from 'vue-infinite-scroll';
     infiniteScroll,
   },
 })
-export default class SubmissionsList extends Vue {
+class SubmissionsList extends Vue {
   @Prop() page!: number;
   @Prop() includeUser!: boolean;
   @Prop() submissions!: types.Submission[];
@@ -178,6 +178,7 @@ export default class SubmissionsList extends Vue {
     return this.loading || this.endOfResults;
   }
 }
+export default toNative(SubmissionsList);
 </script>
 
 <style lang="scss">

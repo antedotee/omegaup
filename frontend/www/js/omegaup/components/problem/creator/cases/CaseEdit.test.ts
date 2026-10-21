@@ -1,7 +1,7 @@
-import { createLocalVue, shallowMount, mount } from '@vue/test-utils';
+import { enableAutoUnmount, shallowMount, mount } from '@vue/test-utils';
+import { BButton } from 'bootstrap-vue-next';
 
 import CaseEdit from './CaseEdit.vue';
-import BootstrapVue, { IconsPlugin, BButton } from 'bootstrap-vue';
 import store from '@/js/omegaup/problem/creator/store';
 import Vue from 'vue';
 import { NIL as UUID_NIL } from 'uuid';
@@ -11,12 +11,51 @@ import {
 } from '@/js/omegaup/problem/creator/modules/cases';
 
 import T from '../../../../lang';
-import { MatrixDistinctType } from '@/js/omegaup/problem/creator/types';
+import {
+  MatrixDistinctType,
+  Group,
+  Case,
+  CaseLine,
+  LineID,
+  CaseGroupID,
+} from '@/js/omegaup/problem/creator/types';
+import { waitForModalContent } from '../../../modalTestUtils';
 
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported;
+// this precise shape keeps `.find` callbacks and generators typed without
+// resorting to `any`.
+interface CaseEditVm {
+  groups: Group[];
+  getLinesFromSelectedCase: CaseLine[];
+  getSelectedCase: Case;
+  getSelectedGroup: Group;
+  matrixModalEditArray: string;
+  caseInputRef: { caseGroup: string };
+  addNewLine(): void;
+  deleteLine(lineID: LineID): void;
+  editLineValue(arg: [LineID, string]): void;
+  updateCaseInfo(): void;
+  downloadInputFile(ext: '.txt' | '.in'): void;
+  getStringifiedLinesFromCaseGroupID(caseGroupID: CaseGroupID): string;
+  getArrayContent(
+    size: number,
+    low: number,
+    high: number,
+    distinct: boolean,
+  ): string;
+  getMatrixContent(
+    rows: number,
+    cols: number,
+    low: number,
+    high: number,
+    distinct: MatrixDistinctType,
+  ): string;
+}
 
+// Every test mounts against the shared creator store; unmount each wrapper so
+// earlier ones do not keep re-rendering on later store commits.
+enableAutoUnmount(afterEach);
 describe('CaseEdit.vue', () => {
   const newUngroupedCasegroup = generateGroup({
     name: 'New Ungrouped Case Group',
@@ -43,7 +82,11 @@ describe('CaseEdit.vue', () => {
   });
 
   it('Should show an ungrouped case', async () => {
-    const wrapper = shallowMount(CaseEdit, { localVue, store: store });
+    const wrapper = shallowMount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newUngroupedCasegroup.groupID;
     const caseID = newUngroupedCase.caseID;
@@ -70,16 +113,20 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.text()).toContain(newUngroupedCasegroup.name);
 
     expect(
-      wrapper.find('biconpencilfill-stub').element.parentElement?.textContent,
+      wrapper.find('i.bi-pencil-fill').element.parentElement?.textContent,
     ).toContain(T.problemCreatorEditCase);
     expect(
-      wrapper.find('bicontrashfill-stub').element.parentElement?.textContent,
+      wrapper.find('i.bi-trash-fill').element.parentElement?.textContent,
     ).toContain(T.problemCreatorDeleteCase);
-    expect(wrapper.find('b-dropdown-stub').exists()).toBe(true);
+    expect(wrapper.find('[data-menu-dropdown]').exists()).toBe(true);
   });
 
   it('Should show a grouped case', async () => {
-    const wrapper = shallowMount(CaseEdit, { localVue, store: store });
+    const wrapper = shallowMount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newGroup.groupID;
     const caseID = newCase.caseID;
@@ -93,16 +140,20 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.text()).toContain(newGroup.name);
 
     expect(
-      wrapper.find('biconpencilfill-stub').element.parentElement?.textContent,
+      wrapper.find('i.bi-pencil-fill').element.parentElement?.textContent,
     ).toContain(T.problemCreatorEditCase);
     expect(
-      wrapper.find('bicontrashfill-stub').element.parentElement?.textContent,
+      wrapper.find('i.bi-trash-fill').element.parentElement?.textContent,
     ).toContain(T.problemCreatorDeleteCase);
-    expect(wrapper.find('b-dropdown-stub').exists()).toBe(true);
+    expect(wrapper.find('[data-menu-dropdown]').exists()).toBe(true);
   });
 
   it('Should delete a case', async () => {
-    const wrapper = mount(CaseEdit, { localVue, store });
+    const wrapper = mount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newGroup.groupID;
     const caseID = newCase.caseID;
@@ -117,10 +168,12 @@ describe('CaseEdit.vue', () => {
 
     await caseDeleteButton.trigger('click');
     expect(
-      wrapper.vm.groups.find((_group) => _group.groupID === newGroup.groupID),
+      (wrapper.vm as unknown as CaseEditVm).groups.find(
+        (_group) => _group.groupID === newGroup.groupID,
+      ),
     ).toBeTruthy();
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as CaseEditVm).groups
         .find((_group) => _group.groupID === newGroup.groupID)
         ?.cases.find((_case) => _case.caseID === newCase.caseID),
     ).toBeFalsy();
@@ -129,7 +182,11 @@ describe('CaseEdit.vue', () => {
   });
 
   it('Should add, modify and delete a line', async () => {
-    const wrapper = mount(CaseEdit, { localVue, store: store });
+    const wrapper = mount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newGroup.groupID;
     const caseID = newCase.caseID;
@@ -142,19 +199,29 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.text()).toContain(newCase.name);
     expect(wrapper.text()).toContain(newGroup.name);
 
-    wrapper.vm.addNewLine();
+    (wrapper.vm as unknown as CaseEditVm).addNewLine();
     await Vue.nextTick();
 
     expect(wrapper.find('table').exists()).toBeTruthy();
-    const formInputs = wrapper.findAll('input');
+    // Scope to the line table; the (eagerly rendered) edit-case modal also
+    // contains inputs that would otherwise shift these positional lookups.
+    const formInputs = wrapper.find('table').findAll('input');
 
-    formInputs.at(0).setValue('testLabel');
-    formInputs.at(1).setValue('testValue');
+    formInputs[0].setValue('testLabel');
+    formInputs[1].setValue('testValue');
     await wrapper.trigger('click');
 
-    expect(wrapper.vm.getLinesFromSelectedCase[0].label).toBe('testLabel');
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.value).toBe('testValue');
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('line');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].label,
+    ).toBe('testLabel');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .value,
+    ).toBe('testValue');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('line');
 
     // There are 4 dropdown items for each line:
     // - Line
@@ -163,29 +230,44 @@ describe('CaseEdit.vue', () => {
     // - Matrix
     const dropdownItemCount = 4;
 
-    const dropdowns = wrapper.findAll('a.dropdown-item');
+    const dropdowns = wrapper.findAll('button.dropdown-item');
     expect(dropdowns.length).toBe(dropdownItemCount);
 
-    await dropdowns.at(1).trigger('click');
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('multiline');
+    await dropdowns[1].trigger('click');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('multiline');
 
-    await dropdowns.at(2).trigger('click');
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('array');
+    await dropdowns[2].trigger('click');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('array');
 
-    await dropdowns.at(3).trigger('click');
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('matrix');
+    await dropdowns[3].trigger('click');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('matrix');
 
-    wrapper.vm.deleteLine(wrapper.vm.getLinesFromSelectedCase[0].lineID);
+    (wrapper.vm as unknown as CaseEditVm).deleteLine(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].lineID,
+    );
     await Vue.nextTick();
 
-    const formInputsUpdated = wrapper.findAll('input');
+    const formInputsUpdated = wrapper.find('table').findAll('input');
 
     // The input element should be replaced by textarea element
     expect(formInputsUpdated.length).toBe(0);
   });
 
   it('Should write and erase outputs', async () => {
-    const wrapper = mount(CaseEdit, { localVue, store: store });
+    const wrapper = mount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newGroup.groupID;
     const caseID = newCase.caseID;
@@ -202,7 +284,7 @@ describe('CaseEdit.vue', () => {
     await outputTextarea.setValue(testOutput);
 
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as CaseEditVm).groups
         .find((_group) => _group.groupID === newGroup.groupID)
         ?.cases.find((_case) => _case.caseID === newCase.caseID)?.output,
     ).toBe(testOutput);
@@ -214,7 +296,7 @@ describe('CaseEdit.vue', () => {
 
     await eraseOutputButton.trigger('click');
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as CaseEditVm).groups
         .find((_group) => _group.groupID === newGroup.groupID)
         ?.cases.find((_case) => _case.caseID === newCase.caseID)?.output,
     ).toBe('');
@@ -231,7 +313,11 @@ describe('CaseEdit.vue', () => {
     store.commit('casesStore/addCase', newUngroupedCase);
     store.commit('casesStore/addGroup', newGroup);
 
-    const wrapper = mount(CaseEdit, { localVue, store: store });
+    const wrapper = mount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newUngroupedCasegroup.groupID;
     const caseID = newUngroupedCase.caseID;
@@ -255,19 +341,28 @@ describe('CaseEdit.vue', () => {
 
     await saveButton.trigger('click');
 
-    expect(wrapper.vm.getSelectedCase.name).toBe(modifiedName);
-    expect(wrapper.vm.getSelectedGroup.name).toBe(modifiedName);
+    expect((wrapper.vm as unknown as CaseEditVm).getSelectedCase.name).toBe(
+      modifiedName,
+    );
+    expect((wrapper.vm as unknown as CaseEditVm).getSelectedGroup.name).toBe(
+      modifiedName,
+    );
 
     await editButton.trigger('click');
 
-    wrapper.vm.caseInputRef.caseGroup = newGroup.groupID;
-    wrapper.vm.updateCaseInfo();
+    (wrapper.vm as unknown as CaseEditVm).caseInputRef.caseGroup =
+      newGroup.groupID;
+    (wrapper.vm as unknown as CaseEditVm).updateCaseInfo();
 
     // There's only one group added to the store.
-    expect(wrapper.vm.groups.length).toBe(1);
+    expect((wrapper.vm as unknown as CaseEditVm).groups.length).toBe(1);
 
-    expect(wrapper.vm.groups[0].cases[0].name).toBe(modifiedName);
-    expect(wrapper.vm.groups[0].cases[0].groupID).toBe(newGroup.groupID);
+    expect((wrapper.vm as unknown as CaseEditVm).groups[0].cases[0].name).toBe(
+      modifiedName,
+    );
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).groups[0].cases[0].groupID,
+    ).toBe(newGroup.groupID);
   });
 
   const arrayInputMapping: {
@@ -306,9 +401,13 @@ describe('CaseEdit.vue', () => {
 
   describe.each(arrayInputMapping)(`An array with:`, (arrayInput) => {
     it(`size ${arrayInput.arrSize}, minimum ${arrayInput.arrLow}, maximum ${arrayInput.arrHigh}, distinct ${arrayInput.distinct}, should have uniqueConstraint ${arrayInput.emptyConstraint} and emptyConstraint ${arrayInput.emptyConstraint}`, async () => {
-      const wrapper = mount(CaseEdit, { localVue, store });
+      const wrapper = mount(CaseEdit, {
+        global: {
+          plugins: [store],
+        },
+      });
 
-      const array = wrapper.vm
+      const array = (wrapper.vm as unknown as CaseEditVm)
         .getArrayContent(
           arrayInput.arrSize,
           arrayInput.arrLow,
@@ -399,8 +498,12 @@ describe('CaseEdit.vue', () => {
 
   describe.each(matrixInputMapping)(`A matrix with:`, (matrixInput) => {
     it(`${matrixInput.matrixRows} rows, ${matrixInput.matrixCols} columns, minimum ${matrixInput.matrixLow}, maximum ${matrixInput.matrixHigh}, distinct type ${matrixInput.distinct}, should have emptyConstraint ${matrixInput.emptyConstraint}, rowUniqueConstraint ${matrixInput.rowUniqueConstraint}, colUniqueConstraint ${matrixInput.colUniqueConstraint}`, async () => {
-      const wrapper = mount(CaseEdit, { localVue, store });
-      const matrix = wrapper.vm
+      const wrapper = mount(CaseEdit, {
+        global: {
+          plugins: [store],
+        },
+      });
+      const matrix = (wrapper.vm as unknown as CaseEditVm)
         .getMatrixContent(
           matrixInput.matrixRows,
           matrixInput.matrixCols,
@@ -443,7 +546,11 @@ describe('CaseEdit.vue', () => {
   });
 
   it('Should generate and render arrays', async () => {
-    const wrapper = mount(CaseEdit, { localVue, store });
+    const wrapper = mount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newGroup.groupID;
     const caseID = newCase.caseID;
@@ -456,19 +563,23 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.text()).toContain(newCase.name);
     expect(wrapper.text()).toContain(newGroup.name);
 
-    wrapper.vm.addNewLine();
+    (wrapper.vm as unknown as CaseEditVm).addNewLine();
     await Vue.nextTick();
 
-    const dropdowns = wrapper.findAll('a.dropdown-item');
+    const dropdowns = wrapper.findAll('button.dropdown-item');
 
-    await dropdowns.at(2).trigger('click');
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('array');
+    await dropdowns[2].trigger('click');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('array');
 
-    const editSVG = wrapper.find('svg.bi-pencil-square');
+    const editSVG = wrapper.find('i.bi-pencil-square');
     expect(editSVG.exists()).toBeTruthy();
 
     const editIcon = wrapper.find(`button[data-line-edit-button]`);
     await editIcon.trigger('click');
+    await waitForModalContent();
 
     const modalBody = wrapper.find('div[data-array-modal]');
 
@@ -477,7 +588,10 @@ describe('CaseEdit.vue', () => {
     const modalButton = modalBody.find('button[data-array-modal-generate]');
     expect(modalButton.exists()).toBeTruthy();
 
-    const mockGenerate = jest.spyOn(wrapper.vm, 'getArrayContent');
+    const mockGenerate = jest.spyOn(
+      wrapper.vm as unknown as CaseEditVm,
+      'getArrayContent',
+    );
 
     await modalButton.trigger('click');
     expect(mockGenerate).toHaveBeenCalledWith(10, 0, 100, false);
@@ -485,25 +599,29 @@ describe('CaseEdit.vue', () => {
     await modalBody.find('input[data-array-modal-size]').setValue(5);
     await modalBody.find('input[data-array-modal-min]').setValue(10);
     await modalBody.find('input[data-array-modal-max]').setValue(20);
-    await modalBody.find('input[data-array-modal-checkbox]').setChecked(true);
+    await modalBody.find('input[data-array-modal-checkbox]').setValue(true);
 
     await modalButton.trigger('click');
     expect(mockGenerate).toHaveBeenCalledWith(5, 10, 20, true);
     mockGenerate.mockRestore();
 
-    await modalInputs.at(0).setValue(5);
-    await modalInputs.at(1).setValue(10);
-    await modalInputs.at(2).setValue(10);
-    await modalInputs.at(3).setChecked(false);
+    await modalInputs[0].setValue(5);
+    await modalInputs[1].setValue(10);
+    await modalInputs[2].setValue(10);
+    await modalInputs[3].setValue(false);
 
     await modalButton.trigger('click');
 
     expect(
-      (modalBody.find('input[data-array-modal-generated-array]')
-        .element as HTMLInputElement).value,
+      (
+        modalBody.find('input[data-array-modal-generated-array]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('10 10 10 10 10');
 
-    const modalFooter = wrapper.find('footer.modal-footer');
+    // Scope to the array modal's own footer; other modals are now rendered in
+    // place too, so an unscoped lookup could match the wrong modal.
+    const modalFooter = modalBody.find('div.modal-footer');
 
     // There should be two footer buttons: Save and Cancel.
     const footerButtonsCount = 2;
@@ -513,13 +631,18 @@ describe('CaseEdit.vue', () => {
 
     await modalFooter.find('button.btn-success').trigger('click');
 
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.value).toBe(
-      '10 10 10 10 10',
-    );
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .value,
+    ).toBe('10 10 10 10 10');
   });
 
   it('Should generate and render matrices', async () => {
-    const wrapper = mount(CaseEdit, { localVue, store });
+    const wrapper = mount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newGroup.groupID;
     const caseID = newCase.caseID;
@@ -532,17 +655,21 @@ describe('CaseEdit.vue', () => {
     expect(wrapper.text()).toContain(newCase.name);
     expect(wrapper.text()).toContain(newGroup.name);
 
-    const dropdowns = wrapper.findAll('a.dropdown-item');
+    const dropdowns = wrapper.findAll('button.dropdown-item');
     expect(dropdowns.length).toBe(4);
 
-    await dropdowns.at(3).trigger('click');
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('matrix');
+    await dropdowns[3].trigger('click');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('matrix');
 
-    const editSVG = wrapper.find('svg.bi-pencil-square');
+    const editSVG = wrapper.find('i.bi-pencil-square');
     expect(editSVG.exists()).toBeTruthy();
 
     const editIcon = wrapper.find(`button[data-line-edit-button]`);
     await editIcon.trigger('click');
+    await waitForModalContent();
 
     const modalBody = wrapper.find('div[data-matrix-modal]');
 
@@ -552,7 +679,10 @@ describe('CaseEdit.vue', () => {
     const modalButton = modalBody.find('button[data-matrix-modal-generate]');
     expect(modalButton.exists).toBeTruthy();
 
-    const mockGenerateMatrix = jest.spyOn(wrapper.vm, 'getMatrixContent');
+    const mockGenerateMatrix = jest.spyOn(
+      wrapper.vm as unknown as CaseEditVm,
+      'getMatrixContent',
+    );
 
     await modalButton.trigger('click');
     expect(mockGenerateMatrix).toHaveBeenCalledWith(3, 3, 0, 100, 'none');
@@ -565,23 +695,26 @@ describe('CaseEdit.vue', () => {
 
     await modalButton.trigger('click');
     expect(
-      (modalBody.find('textarea[data-matrix-modal-generated-matrix]')
-        .element as HTMLInputElement).value,
+      (
+        modalBody.find('textarea[data-matrix-modal-generated-matrix]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('20 20 20\n20 20 20\n20 20 20');
 
-    const modalFooter = wrapper.find('footer.modal-footer');
+    const modalFooter = modalBody.find('div.modal-footer');
 
     const footerButtons = modalFooter.findAll('button');
     expect(footerButtons.length).toBe(2);
 
-    wrapper.vm.editLineValue([
-      wrapper.vm.getLinesFromSelectedCase[0].lineID,
-      wrapper.vm.matrixModalEditArray,
+    (wrapper.vm as unknown as CaseEditVm).editLineValue([
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].lineID,
+      (wrapper.vm as unknown as CaseEditVm).matrixModalEditArray,
     ]);
 
-    expect(wrapper.vm.getLinesFromSelectedCase[0].data.value).toBe(
-      '20 20 20\n20 20 20\n20 20 20',
-    );
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .value,
+    ).toBe('20 20 20\n20 20 20\n20 20 20');
   });
 
   const matrixDistinctTypeMapping: {
@@ -610,7 +743,11 @@ describe('CaseEdit.vue', () => {
     `When dropdown:`,
     ({ matrixDistinctType, matrixDistinctEnum }) => {
       it(`${matrixDistinctType} is selected, function should be called with ${matrixDistinctEnum}`, async () => {
-        const wrapper = mount(CaseEdit, { localVue, store });
+        const wrapper = mount(CaseEdit, {
+          global: {
+            plugins: [store],
+          },
+        });
 
         const groupID = newGroup.groupID;
         const caseID = newCase.caseID;
@@ -619,14 +756,26 @@ describe('CaseEdit.vue', () => {
           caseID,
         });
         await Vue.nextTick();
-        const dropdowns = wrapper.findAll('a.dropdown-item');
+
+        // Start from a single, clean line. The group/case fixtures are shared by
+        // reference across the suite, so clear any lines leaked by earlier tests
+        // before adding the one this test exercises.
+        store.dispatch('casesStore/deleteLinesForSelectedCase');
+        (wrapper.vm as unknown as CaseEditVm).addNewLine();
+        await Vue.nextTick();
+
+        const dropdowns = wrapper.findAll('button.dropdown-item');
         expect(dropdowns.length).toBe(4);
 
-        await dropdowns.at(3).trigger('click');
-        expect(wrapper.vm.getLinesFromSelectedCase[0].data.kind).toBe('matrix');
+        await dropdowns[3].trigger('click');
+        expect(
+          (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+            .kind,
+        ).toBe('matrix');
 
         const editIcon = wrapper.find(`button[data-line-edit-button]`);
         await editIcon.trigger('click');
+        await waitForModalContent();
 
         const modalBody = wrapper.find('div[data-matrix-modal]');
 
@@ -635,10 +784,13 @@ describe('CaseEdit.vue', () => {
         );
         expect(modalButton.exists).toBeTruthy();
 
-        const mockGenerateMatrix = jest.spyOn(wrapper.vm, 'getMatrixContent');
+        const mockGenerateMatrix = jest.spyOn(
+          wrapper.vm as unknown as CaseEditVm,
+          'getMatrixContent',
+        );
 
         await modalBody
-          .find(`a[data-matrix-modal-dropdown="${matrixDistinctType}"]`)
+          .find(`button[data-matrix-modal-dropdown="${matrixDistinctType}"]`)
           .trigger('click');
         await modalButton.trigger('click');
         expect(mockGenerateMatrix).toHaveBeenCalledWith(
@@ -654,7 +806,11 @@ describe('CaseEdit.vue', () => {
   );
 
   it('deletes line, downloads .in and downloads .txt, when corresponding buttons are clicked', async () => {
-    const wrapper = mount(CaseEdit, { localVue, store });
+    const wrapper = mount(CaseEdit, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const groupID = newGroup.groupID;
     const caseID = newCase.caseID;
@@ -688,25 +844,31 @@ describe('CaseEdit.vue', () => {
     expect(downloadInButton.text()).toBe(T.problemCreatorCaseDownloadIn);
     expect(downloadTxtButton.text()).toBe(T.problemCreatorCaseDownloadTxt);
 
-    wrapper.vm.addNewLine();
+    (wrapper.vm as unknown as CaseEditVm).addNewLine();
     await Vue.nextTick();
 
     // Only one line is added.
-    expect(wrapper.vm.getLinesFromSelectedCase.length).toBe(1);
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length,
+    ).toBe(1);
 
     await deleteButton.trigger('click');
 
-    expect(wrapper.vm.getLinesFromSelectedCase.length).toBe(0);
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length,
+    ).toBe(0);
 
-    wrapper.vm.addNewLine();
-    wrapper.vm.addNewLine();
+    (wrapper.vm as unknown as CaseEditVm).addNewLine();
+    (wrapper.vm as unknown as CaseEditVm).addNewLine();
     await Vue.nextTick();
 
     // Two lines are added, so!
-    expect(wrapper.vm.getLinesFromSelectedCase.length).toBe(2);
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length,
+    ).toBe(2);
 
     const dropdownsMultiline = wrapper.findAll(
-      `a[data-array-modal-dropdown-kind]`,
+      `button[data-array-modal-dropdown-kind]`,
     );
 
     // There are two dropdown items for multiline, one for each line.
@@ -717,25 +879,30 @@ describe('CaseEdit.vue', () => {
     });
     expect(filteredDropdowns.length).toBe(2);
 
-    await filteredDropdowns.at(1).trigger('click');
+    await filteredDropdowns[1].trigger('click');
 
-    const formInputs = wrapper.findAll('input');
-    const formTextArea = wrapper.find('textarea');
+    // Scope to the line table; the eagerly rendered edit-case modal also
+    // contains inputs that would otherwise shift these positional lookups.
+    const formInputs = wrapper.find('table').findAll('input');
+    const formTextArea = wrapper.find('table').findAll('textarea')[0];
 
-    await formInputs.at(0).setValue('testLabel');
-    await formInputs.at(1).setValue('ome g a');
+    await formInputs[0].setValue('testLabel');
+    await formInputs[1].setValue('ome g a');
 
-    await formInputs.at(2).setValue('testLabel');
+    await formInputs[2].setValue('testLabel');
     await formTextArea.setValue('u\np');
 
     expect(
-      wrapper.vm.getStringifiedLinesFromCaseGroupID({
+      (wrapper.vm as unknown as CaseEditVm).getStringifiedLinesFromCaseGroupID({
         groupID: groupID,
         caseID: caseID,
       }),
     ).toBe('ome g a\nu\np');
 
-    const mockDownload = jest.spyOn(wrapper.vm, 'downloadInputFile');
+    const mockDownload = jest.spyOn(
+      wrapper.vm as unknown as CaseEditVm,
+      'downloadInputFile',
+    );
 
     await downloadInButton.trigger('click');
     expect(mockDownload).toHaveBeenCalledWith('.in');

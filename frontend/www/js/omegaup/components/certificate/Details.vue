@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 
@@ -29,10 +29,11 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class CertificateDetails extends Vue {
+class CertificateDetails extends Vue {
   @Prop() uuid!: string;
 
   T = T;
   ui = ui;
 }
+export default toNative(CertificateDetails);
 </script>

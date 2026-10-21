@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -44,7 +44,7 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class GraderStatus extends Vue {
+class GraderStatus extends Vue {
   @Prop() status!: string;
   @Prop() error!: string;
   @Prop() graderInfo!: types.GraderStatus | null;
@@ -56,6 +56,7 @@ export default class GraderStatus extends Vue {
     return this.status === 'ok' ? 'Grader OK' : 'Grader DOWN';
   }
 }
+export default toNative(GraderStatus);
 </script>
 
 <style lang="scss" scoped>

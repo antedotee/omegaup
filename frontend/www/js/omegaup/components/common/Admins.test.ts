@@ -7,7 +7,7 @@ import common_Admins from './Admins.vue';
 describe('Admins.vue', () => {
   it('Should handle empty admins list', () => {
     const wrapper = shallowMount(common_Admins, {
-      propsData: {
+      props: {
         admins: [],
       },
     });
@@ -18,7 +18,7 @@ describe('Admins.vue', () => {
 
   it('Should handle admins list with data', async () => {
     const wrapper = shallowMount(common_Admins, {
-      propsData: {
+      props: {
         admins: [
           { role: 'owner', user_id: 1, username: 'admin-username' },
           { role: 'site-admin', user_id: 2, username: 'site-admin-username' },
@@ -27,7 +27,9 @@ describe('Admins.vue', () => {
       },
     });
     expect(wrapper.find('table tbody').text()).toContain('owner');
-    await wrapper.find('input[name="toggle-site-admins"]').trigger('click');
+    // @vue/test-utils 2 no longer toggles a checkbox's bound model from a raw
+    // `click`; drive the v-model through setValue, which fires `change`.
+    await wrapper.find('input[name="toggle-site-admins"]').setValue(true);
     expect(wrapper.find('table tbody').text()).toContain('site-admin');
   });
 });

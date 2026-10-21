@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -93,7 +93,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class TeachingAssistants extends Vue {
+class TeachingAssistants extends Vue {
   @Prop() teachingAssistants!: omegaup.UserRole[];
   @Prop() searchResultUsers!: types.ListItem[];
 
@@ -116,4 +116,5 @@ export default class TeachingAssistants extends Vue {
     this.$emit('remove-teaching-assistant', teachingAssistant.username);
   }
 }
+export default toNative(TeachingAssistants);
 </script>

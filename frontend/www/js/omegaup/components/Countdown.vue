@@ -5,14 +5,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../omegaup';
 import * as time from '../time';
 import * as ui from '../ui';
 import T from '../lang';
 
 @Component
-export default class Countdown extends Vue {
+class Countdown extends Vue {
   @Prop() targetTime!: Date;
   @Prop({
     default: omegaup.CountdownFormat.EventCountdown,
@@ -65,7 +65,7 @@ export default class Countdown extends Vue {
     this.$emit('finish');
   }
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = 0;
@@ -79,4 +79,5 @@ export default class Countdown extends Vue {
     );
   }
 }
+export default toNative(Countdown);
 </script>

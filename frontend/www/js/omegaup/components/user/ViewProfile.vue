@@ -311,7 +311,7 @@
 
 <script lang="ts">
 import * as Highcharts from 'highcharts/highstock';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import {
@@ -335,14 +335,11 @@ import tags_SolvedChart from './TagsSolvedChart.vue';
 import user_Heatmap from './UserHeatmap.vue';
 import user_Username from './Username.vue';
 
-export enum ViewProfileTabs {
-  Badges = 'badges',
-  Problems = 'problems',
-  Contests = 'contests',
-  CreatedContent = 'created-content',
-  Data = 'data',
-  Charts = 'charts',
-}
+import { ViewProfileTabs } from './ViewProfile_types';
+// ViewProfileTabs is declared in ./ViewProfile_types and re-exported here so
+// existing SFC importers keep working while plain `.ts` entry points import it
+// from the `.ts` module.
+export { ViewProfileTabs };
 
 function getInitialSelectedTab(
   profile: types.UserProfileInfo,
@@ -370,7 +367,7 @@ function getInitialSelectedTab(
     'omegaup-countryflag': country_Flag,
   },
 })
-export default class ViewProfile extends Vue {
+class ViewProfile extends Vue {
   @Prop() data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop() profileBadges!: Set<string>;
@@ -516,6 +513,7 @@ export default class ViewProfile extends Vue {
     this.$emit('update:selectedTab', newValue);
   }
 }
+export default toNative(ViewProfile);
 </script>
 
 <style lang="scss">

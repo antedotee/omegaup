@@ -3,9 +3,9 @@
     <div class="form-group">
       <label>{{ T.profileSchool }}</label>
       <omegaup-common-typeahead
+        v-model:value="school"
         :existing-options="searchResultSchools"
         :options="searchResultSchools"
-        :value.sync="school"
         data-school-name
         @update-existing-options="
           (query) => $emit('update-search-result-schools', query)
@@ -37,7 +37,7 @@
     <div class="form-group">
       <label>{{ T.userEditManageSchoolsUserCurrentlyEnrolled }}</label>
       <omegaup-radio-switch
-        :value.sync="isCurrentlyEnrolled"
+        v-model:value="isCurrentlyEnrolled"
         :selected-value="isCurrentlyEnrolled"
       ></omegaup-radio-switch>
     </div>
@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -72,13 +72,14 @@ import DatePicker from '../DatePicker.vue';
 import OmegaupRadioSwitch from '../RadioSwitch.vue';
 
 @Component({
+  emits: ['update-user-schools'],
   components: {
     'omegaup-datepicker': DatePicker,
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-radio-switch': OmegaupRadioSwitch,
   },
 })
-export default class UserManageSchools extends Vue {
+class UserManageSchools extends Vue {
   @Prop() profile!: types.UserProfileInfo;
   @Prop() searchResultSchools!: types.SchoolListItem[];
 
@@ -107,4 +108,5 @@ export default class UserManageSchools extends Vue {
     });
   }
 }
+export default toNative(UserManageSchools);
 </script>

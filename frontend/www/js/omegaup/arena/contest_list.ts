@@ -1,12 +1,13 @@
 import { OmegaUp } from '../omegaup';
 import * as time from '../time';
 import { types } from '../api_types';
-import Vue from 'vue';
-import arena_ContestList, {
+import Vue, { type CreateElement } from 'vue';
+import arena_ContestList from '../components/arena/ContestList.vue';
+import {
   ContestTab,
   ContestOrder,
   ContestFilter,
-} from '../components/arena/ContestList.vue';
+} from '../components/arena/ContestList_types';
 import contestStore, { UrlParams } from './contestStore';
 
 OmegaUp.on('ready', () => {
@@ -101,7 +102,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       query: payload.query,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-contestlist', {
         props: {
           contests: contestStore.state.contests,

@@ -3,8 +3,12 @@ import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import coderofthemonth_List from '../components/coderofthemonth/List.vue';
+
+interface CoderOfTheMonthInstance {
+  coderIsSelected: boolean;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CoderOfTheMonthPayload();
@@ -22,7 +26,7 @@ OmegaUp.on('ready', () => {
       coderIsSelected:
         payload.isMentor && payload.options && payload.options.coderIsSelected,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-coder-of-the-month-list', {
         props: {
           codersOfCurrentMonth: payload.codersOfCurrentMonth,
@@ -46,7 +50,9 @@ OmegaUp.on('ready', () => {
                     ? T.coderOfTheMonthSelectedSuccessfully
                     : T.coderOfTheMonthFemaleSelectedSuccessfully,
                 );
-                coderOfTheMonthList.coderIsSelected = true;
+                (
+                  coderOfTheMonthList as unknown as CoderOfTheMonthInstance
+                ).coderIsSelected = true;
               })
               .catch(ui.apiError);
           },

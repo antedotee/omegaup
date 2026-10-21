@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import * as time from '../../time';
@@ -48,12 +48,13 @@ import omegaup_Username from '../user/Username.vue';
     'omegaup-username': omegaup_Username,
   },
 })
-export default class Solvers extends Vue {
+class Solvers extends Vue {
   @Prop() solvers!: types.BestSolvers[];
 
   T = T;
   time = time;
 }
+export default toNative(Solvers);
 </script>
 
 <style lang="scss" scoped>

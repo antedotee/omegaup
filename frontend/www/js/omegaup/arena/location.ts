@@ -1,5 +1,5 @@
 import { types } from '../api_types';
-import { PopupDisplayed } from '../components/problem/Details.vue';
+import { PopupDisplayed } from '../components/problem/Details_types';
 import clarificationsStore from './clarificationsStore';
 import * as api from '../api';
 import * as time from '../time';
@@ -91,9 +91,8 @@ export async function getProblemAndRunDetails({
   problemDetails: null | types.ProblemDetails;
 }> {
   const { guid, problemAlias } = getOptionsFromLocation(location);
-  let problemPromise: Promise<null | types.ProblemDetails> = Promise.resolve(
-    null,
-  );
+  let problemPromise: Promise<null | types.ProblemDetails> =
+    Promise.resolve(null);
   let runPromise: Promise<null | types.RunDetails> = Promise.resolve(null);
 
   if (problemAlias) {

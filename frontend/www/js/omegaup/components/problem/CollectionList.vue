@@ -145,7 +145,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import problem_FilterTags from './FilterTags.vue';
 import problem_BaseList from './BaseList.vue';
@@ -175,7 +175,7 @@ const MOBILE_BREAKPOINT = 576;
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
   },
 })
-export default class CollectionList extends Vue {
+class CollectionList extends Vue {
   @Prop() data!: types.CollectionDetailsByLevelPayload;
   @Prop() problems!: omegaup.Problem[];
   @Prop() loggedIn!: boolean;
@@ -281,6 +281,7 @@ export default class CollectionList extends Vue {
     }
   }
 }
+export default toNative(CollectionList);
 </script>
 
 <style scoped>

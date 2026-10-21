@@ -35,26 +35,20 @@ const profile: types.UserProfileInfo = {
 describe('PreferencesEdit.vue', () => {
   it('Should display user email', () => {
     const wrapper = shallowMount(user_Preferences_Edit, {
-      propsData: { profile },
+      props: { profile },
     });
     expect(wrapper.find('[data-email]').text()).toContain('admin@omegaup.com');
   });
 
   it('Should emit user update preferences', async () => {
     const wrapper = shallowMount(user_Preferences_Edit, {
-      propsData: { profile },
+      props: { profile },
     });
 
-    await wrapper
-      .find('select[data-locale]')
-      .find('option[value="en"]')
-      .setSelected();
-    await wrapper
-      .find('select[data-preferred-language]')
-      .find('option[value="rb"]')
-      .setSelected();
-    await wrapper.find('input[data-is-private]').setChecked();
-    await wrapper.find('input[data-hide-problem-tags]').setChecked();
+    await wrapper.find('select[data-locale]').setValue('en');
+    await wrapper.find('select[data-preferred-language]').setValue('rb');
+    await wrapper.find('input[data-is-private]').setValue(true);
+    await wrapper.find('input[data-hide-problem-tags]').setValue(true);
 
     await wrapper.find('button[type="submit"]').trigger('submit');
     expect(wrapper.emitted('update-user-preferences')).toBeDefined();
@@ -79,12 +73,11 @@ describe('PreferencesEdit.vue', () => {
 
   it('Should disable ScholarCompetitive objective select when "none" option is selected', async () => {
     const wrapper = shallowMount(user_Preferences_Edit, {
-      propsData: { profile },
+      props: { profile },
     });
     await wrapper
       .find('select[data-learning-teaching-objective]')
-      .find('option[value="none"]')
-      .setSelected();
+      .setValue('none');
     expect(
       wrapper.find('select[data-scholar-competitive-objective]').element,
     ).toBeDisabled();
@@ -118,12 +111,11 @@ describe('PreferencesEdit.vue', () => {
       objectiveScholarCompetitiveQuestion,
     }) => {
       const wrapper = shallowMount(user_Preferences_Edit, {
-        propsData: { profile },
+        props: { profile },
       });
       await wrapper
         .find('select[data-learning-teaching-objective]')
-        .find(`option[value="${objectiveLearningTeaching}"]`)
-        .setSelected();
+        .setValue(objectiveLearningTeaching);
       expect(wrapper.text()).toContain(objectiveScholarCompetitiveQuestion);
     },
   );
@@ -238,16 +230,14 @@ describe('PreferencesEdit.vue', () => {
       valueTeaching,
     }) => {
       const wrapper = shallowMount(user_Preferences_Edit, {
-        propsData: { profile },
+        props: { profile },
       });
       await wrapper
         .find('select[data-learning-teaching-objective]')
-        .find(`option[value="${objectiveLearningTeaching}"]`)
-        .setSelected();
+        .setValue(objectiveLearningTeaching);
       await wrapper
         .find('select[data-scholar-competitive-objective]')
-        .find(`option[value="${objectiveScholarCompetitive}"]`)
-        .setSelected();
+        .setValue(objectiveScholarCompetitive);
       await wrapper.find('button[type="submit"]').trigger('submit');
       expect(wrapper.emitted('update-user-preferences')).toBeDefined();
       expect(wrapper.emitted('update-user-preferences')).toEqual([
@@ -272,12 +262,11 @@ describe('PreferencesEdit.vue', () => {
 
   it('Should emit correct objectives values when "none" option is selected', async () => {
     const wrapper = shallowMount(user_Preferences_Edit, {
-      propsData: { profile },
+      props: { profile },
     });
     await wrapper
       .find('select[data-learning-teaching-objective]')
-      .find('option[value="none"]')
-      .setSelected();
+      .setValue('none');
     await wrapper.find('button[type="submit"]').trigger('submit');
     expect(wrapper.emitted('update-user-preferences')).toBeDefined();
     expect(wrapper.emitted('update-user-preferences')).toEqual([

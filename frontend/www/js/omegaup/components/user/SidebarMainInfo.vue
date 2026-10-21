@@ -91,29 +91,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import country_Flag from '../CountryFlag.vue';
 import user_Username from './Username.vue';
 import { types } from '../../api_types';
 import { Problem } from '../../linkable_resource';
 
-export const urlMapping: { key: string; title: string; visible: boolean }[] = [
-  { key: 'view-profile', title: T.userEditViewProfile, visible: true },
-  {
-    key: 'edit-basic-information',
-    title: T.profileBasicInformation,
-    visible: true,
-  },
-  { key: 'edit-preferences', title: T.userEditPreferences, visible: true },
-  { key: 'manage-schools', title: T.userEditManageSchools, visible: true },
-  { key: 'manage-identities', title: T.profileManageIdentities, visible: true },
-  { key: 'manage-api-tokens', title: T.profileManageApiTokens, visible: true },
-  { key: 'change-password', title: T.userEditChangePassword, visible: false },
-  { key: 'add-password', title: T.userEditAddPassword, visible: false },
-  { key: 'change-email', title: T.userEditChangeEmail, visible: false },
-  { key: 'delete-account', title: T.userEditDeleteAccount, visible: true },
-];
+import { urlMapping } from './SidebarMainInfo_types';
+// Declared in ./SidebarMainInfo_types and re-exported here so existing SFC
+// importers keep working while plain `.ts` modules import it from the `.ts`
+// file.
+export { urlMapping };
 
 @Component({
   components: {
@@ -121,7 +110,7 @@ export const urlMapping: { key: string; title: string; visible: boolean }[] = [
     'omegaup-user-username': user_Username,
   },
 })
-export default class UserSidebarMainInfo extends Vue {
+class UserSidebarMainInfo extends Vue {
   @Prop({ default: null }) data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop() selectedTab!: string;
@@ -204,4 +193,5 @@ export default class UserSidebarMainInfo extends Vue {
     }
   }
 }
+export default toNative(UserSidebarMainInfo);
 </script>

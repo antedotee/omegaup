@@ -14,8 +14,9 @@
         ok-variant="success"
         :cancel-title="T.problemCreatorRenameModalBack"
         cancel-variant="danger"
-        static
+        teleport-disabled
         lazy
+        unmount-lazy
         @ok="
           editLayoutName([
             layout.layoutID,
@@ -24,8 +25,9 @@
         "
       >
         <b-form-input
-          v-model="editLayoutModalName[layout.layoutID]"
+          :model-value="editLayoutModalName[layout.layoutID]"
           data-layout-sidebar-rename-layout
+          @update:model-value="editLayoutModalName[layout.layoutID] = $event"
         />
       </b-modal>
       <b-card no-body class="w-84 mb-2">
@@ -42,17 +44,12 @@
             <b-dropdown-item
               data-layout-dropdown-rename-layout
               @click="
-                showRenameModal[layout.layoutID] = !showRenameModal[
-                  layout.layoutID
-                ]
+                showRenameModal[layout.layoutID] =
+                  !showRenameModal[layout.layoutID]
               "
             >
               <div class="d-flex">
-                <BIconPencil
-                  variant="success"
-                  class="pt-1 mr-3"
-                  font-scale="1.2"
-                />
+                <i class="bi bi-pencil text-success pt-1 mr-3" />
                 {{ T.problemCreatorRenameLayout }}
               </div>
             </b-dropdown-item>
@@ -61,11 +58,7 @@
               @click="enforceLayoutToTheSelectedCase(layout.layoutID)"
             >
               <div class="d-flex">
-                <BIconArrowLeftRight
-                  variant="success"
-                  class="pt-1 mr-3"
-                  font-scale="1.2"
-                />
+                <i class="bi bi-arrow-left-right text-success pt-1 mr-3" />
                 {{ T.problemCreatorLayoutLoadToSelected }}
               </div>
             </b-dropdown-item>
@@ -74,11 +67,7 @@
               @click="enforceLayoutToAllCases(layout.layoutID)"
             >
               <div class="d-flex">
-                <BIconArrowRepeat
-                  variant="success"
-                  class="pt-1 mr-3"
-                  font-scale="1.2"
-                />
+                <i class="bi bi-arrow-repeat text-success pt-1 mr-3" />
                 {{ T.problemCreatorLayoutLoadToAll }}
               </div>
             </b-dropdown-item>
@@ -87,11 +76,7 @@
               @click="copyLayout(layout.layoutID)"
             >
               <div class="d-flex">
-                <BIconBoxArrowInDown
-                  variant="success"
-                  class="pt-1 mr-3"
-                  font-scale="1.2"
-                />
+                <i class="bi bi-box-arrow-in-down text-success pt-1 mr-3" />
                 {{ T.problemCreatorLayoutCopy }}
               </div>
             </b-dropdown-item>
@@ -100,11 +85,7 @@
               @click="removeLayout(layout.layoutID)"
             >
               <div class="d-flex">
-                <BIconTrash
-                  variant="danger"
-                  class="pt-1 mr-3"
-                  font-scale="1.2"
-                />
+                <i class="bi bi-trash text-danger pt-1 mr-3" />
                 {{ T.problemCreatorLayoutDelete }}
               </div>
             </b-dropdown-item>
@@ -123,9 +104,10 @@
                       >
                         <b-col cols="4" class="mt-2 mb-2 pl-2 pr-1">
                           <b-form-input
-                            v-model="lineInfo.label"
+                            :model-value="lineInfo.label"
                             size="sm"
                             :placeholder="T.problemCreatorLabelPlaceHolder"
+                            @update:model-value="lineInfo.label = $event"
                           />
                         </b-col>
                         <b-col cols="6" class="pl-0 pr-0 text-center">
@@ -161,10 +143,7 @@
                             :title="T.problemCreatorLineEdit"
                             variant="light"
                           >
-                            <BIconPencilSquare
-                              variant="info"
-                              font-scale="1.20"
-                            />
+                            <i class="bi bi-pencil-square text-info" />
                           </b-button>
                         </b-col>
                         <b-col cols="2">
@@ -180,10 +159,7 @@
                               ])
                             "
                           >
-                            <BIconTrashFill
-                              variant="danger"
-                              font-scale="1.20"
-                            />
+                            <i class="bi bi-trash-fill text-danger" />
                           </b-button>
                         </b-col>
                       </b-row>
@@ -202,11 +178,7 @@
             >
               <div class="container">
                 <div class="row">
-                  <BIconPlusSquare
-                    variant="info"
-                    font-scale="1.25"
-                    class="mr-2 pt-1"
-                  />
+                  <i class="bi bi-plus-square text-info mr-2 pt-1" />
                   {{ T.problemCreatorLayoutAddLineInfo }}
                 </div>
               </div>
@@ -219,8 +191,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import { namespace } from 'vuex-class';
+import { Component, Vue, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
 import {
   Layout,
@@ -231,36 +202,57 @@ import {
   CaseLineInfo,
 } from '@/js/omegaup/problem/creator/types';
 
-const casesStore = namespace('casesStore');
-
 @Component
-export default class Sidebar extends Vue {
+class Sidebar extends Vue {
   T = T;
 
-  @casesStore.State('groups') groups!: Group[];
-  @casesStore.Getter('getAllLayouts') getAllLayouts!: Layout[];
-  @casesStore.Mutation('enforceLayoutToTheSelectedCase')
-  enforceLayoutToTheSelectedCase!: (layoutID: LayoutID) => void;
-  @casesStore.Mutation('addNewLineInfoToLayout')
-  addNewLineInfoToLayout!: (layoutID: LayoutID) => void;
-  @casesStore.Mutation('editLineInfoKind') editLineInfoKind!: ([
-    layoutID,
-    lineInfoID,
-    kind,
-  ]: [LayoutID, LineInfoID, CaseLineKind]) => void;
-  @casesStore.Mutation('enforceLayoutToAllCases')
-  enforceLayoutToAllCases!: (layoutID: LayoutID) => void;
-  @casesStore.Mutation('copyLayout')
-  copyLayout!: (layoutID: LayoutID) => void;
-  @casesStore.Mutation('removeLayout')
-  removeLayout!: (layoutID: LayoutID) => void;
-  @casesStore.Mutation('removeLineInfoFromLayout')
-  removeLineInfoFromLayout!: ([layoutID, lineInfoID]: [
+  // The vuex-class namespaced decorators do not bind under
+  // vue-facing-decorator, so the store module is accessed directly through
+  // native getters and method wrappers.
+  get groups(): Group[] {
+    return this.$store.state.casesStore.groups;
+  }
+  get getAllLayouts(): Layout[] {
+    return this.$store.getters['casesStore/getAllLayouts'];
+  }
+  enforceLayoutToTheSelectedCase(layoutID: LayoutID): void {
+    this.$store.commit('casesStore/enforceLayoutToTheSelectedCase', layoutID);
+  }
+  addNewLineInfoToLayout(layoutID: LayoutID): void {
+    this.$store.commit('casesStore/addNewLineInfoToLayout', layoutID);
+  }
+  editLineInfoKind([layoutID, lineInfoID, kind]: [
     LayoutID,
     LineInfoID,
-  ]) => void;
-  @casesStore.Mutation('editLayoutName')
-  editLayoutName!: ([layoutID, newValue]: [LayoutID, string]) => void;
+    CaseLineKind,
+  ]): void {
+    this.$store.commit('casesStore/editLineInfoKind', [
+      layoutID,
+      lineInfoID,
+      kind,
+    ]);
+  }
+  enforceLayoutToAllCases(layoutID: LayoutID): void {
+    this.$store.commit('casesStore/enforceLayoutToAllCases', layoutID);
+  }
+  copyLayout(layoutID: LayoutID): void {
+    this.$store.commit('casesStore/copyLayout', layoutID);
+  }
+  removeLayout(layoutID: LayoutID): void {
+    this.$store.commit('casesStore/removeLayout', layoutID);
+  }
+  removeLineInfoFromLayout([layoutID, lineInfoID]: [
+    LayoutID,
+    LineInfoID,
+  ]): void {
+    this.$store.commit('casesStore/removeLineInfoFromLayout', [
+      layoutID,
+      lineInfoID,
+    ]);
+  }
+  editLayoutName([layoutID, newValue]: [LayoutID, string]): void {
+    this.$store.commit('casesStore/editLayoutName', [layoutID, newValue]);
+  }
 
   showLayout: { [key: LayoutID]: boolean } = {};
   showRenameModal: { [key: LayoutID]: boolean } = {};
@@ -308,6 +300,7 @@ export default class Sidebar extends Vue {
     return this.lineKindOptions.find((line) => line.kind === kind)?.type;
   }
 }
+export default toNative(Sidebar);
 </script>
 
 <style lang="scss" scoped>

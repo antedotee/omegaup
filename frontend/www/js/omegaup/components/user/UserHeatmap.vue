@@ -44,7 +44,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import * as Highcharts from 'highcharts/highstock';
 import HighchartsHeatmap from 'highcharts/modules/heatmap';
 import T from '../../lang';
@@ -64,7 +71,7 @@ export const COLORS = {
 };
 
 @Component({})
-export default class UserHeatmap extends Vue {
+class UserHeatmap extends Vue {
   @Prop() username!: string;
   @Prop({ default: () => [] }) availableYears!: number[];
   @Prop({ default: false }) isLoading!: boolean;
@@ -280,6 +287,7 @@ export default class UserHeatmap extends Vue {
     }
   }
 }
+export default toNative(UserHeatmap);
 </script>
 
 <style lang="scss" scoped>

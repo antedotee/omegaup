@@ -5,10 +5,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 
 @Component
-export default class Overlay extends Vue {
+class Overlay extends Vue {
   @Prop({ default: false }) showOverlay!: boolean;
 
   isOverlayShown = this.showOverlay;
@@ -25,6 +25,7 @@ export default class Overlay extends Vue {
     this.isOverlayShown = newValue;
   }
 }
+export default toNative(Overlay);
 </script>
 
 <style lang="scss" scoped>

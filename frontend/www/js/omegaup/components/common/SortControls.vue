@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -38,7 +38,7 @@ library.add(
     FontAwesomeIcon,
   },
 })
-export default class SortControls extends Vue {
+class SortControls extends Vue {
   @Prop() column!: string;
   @Prop() sortOrder!: omegaup.SortOrder;
   @Prop({ default: omegaup.ColumnType.Number }) columnType!: omegaup.ColumnType;
@@ -67,4 +67,5 @@ export default class SortControls extends Vue {
       : omegaup.SortOrder.Ascending;
   }
 }
+export default toNative(SortControls);
 </script>

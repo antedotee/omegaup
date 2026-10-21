@@ -181,7 +181,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -209,11 +209,12 @@ library.add(
 );
 
 @Component({
+  emits: ['change-admission-mode'],
   components: {
     FontAwesomeIcon,
   },
 })
-export default class List extends Vue {
+class List extends Vue {
   @Prop() contests!: types.ContestListItem[];
   @Prop() privateContestsAlert!: boolean;
 
@@ -266,4 +267,5 @@ export default class List extends Vue {
     return contestAlias;
   }
 }
+export default toNative(List);
 </script>

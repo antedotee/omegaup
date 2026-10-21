@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import latinize from 'latinize';
 import { types } from '../../api_types';
@@ -89,7 +89,7 @@ library.add(faEdit);
     FontAwesomeIcon,
   },
 })
-export default class GroupScoreboards extends Vue {
+class GroupScoreboards extends Vue {
   @Prop() scoreboards!: types.GroupScoreboard[];
   @Prop() groupAlias!: string;
 
@@ -126,4 +126,5 @@ export default class GroupScoreboards extends Vue {
     this.description = null;
   }
 }
+export default toNative(GroupScoreboards);
 </script>

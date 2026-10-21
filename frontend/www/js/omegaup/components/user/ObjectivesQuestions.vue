@@ -1,6 +1,6 @@
 <template>
-  <b-modal v-model="showModal" hide-footer>
-    <template #modal-title>
+  <b-modal v-model="showModal" no-footer>
+    <template #title>
       <h5 class="modal-title font-weight-bold">
         {{ T.userObjectivesModalTitle }}
       </h5>
@@ -114,13 +114,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
-
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
 
 import {
   FontAwesomeIcon,
@@ -143,13 +139,14 @@ export enum ObjectivesAnswers {
 }
 
 @Component({
+  emits: ['submit'],
   components: {
     'font-awesome-icon': FontAwesomeIcon,
     'font-awesome-layers': FontAwesomeLayers,
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class UserObjectivesQuestions extends Vue {
+class UserObjectivesQuestions extends Vue {
   T = T;
   ui = ui;
   objective = ObjectivesAnswers.Learning;
@@ -248,6 +245,7 @@ export default class UserObjectivesQuestions extends Vue {
     });
   }
 }
+export default toNative(UserObjectivesQuestions);
 </script>
 
 <style lang="scss" scoped>

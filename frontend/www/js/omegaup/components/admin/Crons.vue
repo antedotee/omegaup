@@ -49,9 +49,8 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="run in runs">
+          <template v-for="run in runs" :key="run.run_id">
             <tr
-              :key="run.run_id"
               class="cron-run-row"
               :class="{ 'table-active': expandedRunId === run.run_id }"
               @click="toggle(run.run_id)"
@@ -71,11 +70,7 @@
               <td>{{ formatDuration(run.duration_seconds) }}</td>
               <td>{{ formatRows(run.rows_affected) }}</td>
             </tr>
-            <tr
-              v-if="expandedRunId === run.run_id"
-              :key="`detail-${run.run_id}`"
-              class="cron-run-detail"
-            >
+            <tr v-if="expandedRunId === run.run_id" class="cron-run-detail">
               <td></td>
               <td colspan="5">
                 <div v-if="run.error_text" class="text-danger mb-2">
@@ -109,7 +104,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as time from '../../time';
 import * as ui from '../../ui';
@@ -151,13 +146,8 @@ export function describeSchedule(schedule?: string | null): string | null {
   if (fields.length !== CRON_FIELD_COUNT) {
     return null;
   }
-  const [
-    minuteField,
-    hourField,
-    dayOfMonthField,
-    monthField,
-    dayOfWeekField,
-  ] = fields;
+  const [minuteField, hourField, dayOfMonthField, monthField, dayOfWeekField] =
+    fields;
   if (monthField !== '*') {
     return null;
   }
@@ -209,7 +199,7 @@ export function describeSchedule(schedule?: string | null): string | null {
 }
 
 @Component
-export default class Crons extends Vue {
+class Crons extends Vue {
   T = T;
   @Prop({ default: () => [] }) jobs!: types.CronJob[];
   @Prop({ default: () => [] }) runs!: types.CronRun[];
@@ -264,6 +254,7 @@ export default class Crons extends Vue {
     return typeof rows === 'number' ? String(rows) : '—';
   }
 }
+export default toNative(Crons);
 </script>
 
 <style lang="scss" scoped>

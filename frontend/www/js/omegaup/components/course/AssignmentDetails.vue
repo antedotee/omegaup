@@ -239,7 +239,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit, Ref } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Watch,
+  Emit,
+  Ref,
+  toNative,
+} from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -289,7 +297,7 @@ interface AddParams {
     'omegaup-course-scheduled-problem-list': course_ScheduledProblemList,
   },
 })
-export default class CourseAssignmentDetails extends Vue {
+class CourseAssignmentDetails extends Vue {
   @Ref('scheduled-problem-list')
   readonly scheduledProblemList!: course_ScheduledProblemList;
   @Prop({
@@ -422,6 +430,7 @@ export default class CourseAssignmentDetails extends Vue {
     this.assignment.assignment_type = (event.target as HTMLSelectElement).value;
   }
 }
+export default toNative(CourseAssignmentDetails);
 </script>
 
 <style lang="scss" scoped>

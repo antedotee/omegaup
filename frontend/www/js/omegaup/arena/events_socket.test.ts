@@ -12,7 +12,6 @@ import { SocketOptions, SocketStatus, EventsSocket } from './events_socket';
 import WS from 'jest-websocket-mock';
 import { runsStoreConfig } from './runsStore';
 import { clarificationStoreConfig } from './clarificationsStore';
-import { createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import fetchMock from 'jest-fetch-mock';
 import {
@@ -22,8 +21,13 @@ import {
   onVirtualRankingChanged,
 } from './ranking';
 import rankingStore from './rankingStore';
-import { mocked } from 'ts-jest/utils';
 import { ScoreMode } from './navigation';
+
+// `ts-jest/utils` was removed; Jest 27+ ships `jest.mocked`. This wrapper keeps
+// the call sites loosely typed, as the old `mocked()` helper did.
+function mocked<T>(item: T): jest.MockedFunction<any> {
+  return jest.mocked(item) as unknown as jest.MockedFunction<any>;
+}
 
 const navbarProblems: types.NavbarProblemsetProblem[] = [
   {
@@ -307,9 +311,9 @@ describe('EventsSocket', () => {
   });
 
   it('should commit the polled scoreboard to the ranking store', async () => {
-    mocked(onRankingChanged, true).mockReset();
-    mocked(onRankingEvents, false).mockReset();
-    mocked(createChart, false).mockReset();
+    mocked(onRankingChanged).mockReset();
+    mocked(onRankingEvents).mockReset();
+    mocked(createChart).mockReset();
 
     const ranking: types.ScoreboardRankingEntry[] = [
       {
@@ -334,14 +338,14 @@ describe('EventsSocket', () => {
     ];
     const lastTimeUpdated = new Date(1674625378734);
 
-    mocked(onRankingChanged, true).mockReturnValue({
+    mocked(onRankingChanged).mockReturnValue({
       users: miniRankingUsers,
       ranking,
       currentRanking: { omegaUp: 0 },
       maxPoints: 200,
       lastTimeUpdated,
     });
-    mocked(onRankingEvents, false).mockReturnValue({
+    mocked(onRankingEvents).mockReturnValue({
       series: [
         {
           type: 'line',
@@ -374,8 +378,8 @@ describe('EventsSocket', () => {
   });
 
   it('should route virtual contests through onVirtualRankingChanged while polling', async () => {
-    mocked(onRankingChanged, true).mockReset();
-    mocked(onVirtualRankingChanged, false).mockReset();
+    mocked(onRankingChanged).mockReset();
+    mocked(onVirtualRankingChanged).mockReset();
 
     const client = new EventsSocket({
       ...options,
@@ -457,8 +461,6 @@ describe('EventsSocket', () => {
     jest.runOnlyPendingTimers();
     await server?.connected;
 
-    const localVue = createLocalVue();
-    localVue.use(Vuex);
     const store = new Vuex.Store(runsStoreConfig);
 
     server?.send({
@@ -494,8 +496,6 @@ describe('EventsSocket', () => {
     jest.runOnlyPendingTimers();
     await server?.connected;
 
-    const localVue = createLocalVue();
-    localVue.use(Vuex);
     const clarificationStore = new Vuex.Store(clarificationStoreConfig);
 
     server?.send({
@@ -530,8 +530,8 @@ describe('EventsSocket', () => {
     jest.runOnlyPendingTimers();
     await server?.connected;
 
-    const onRankingChangedMock = mocked(onRankingChanged, true);
-    const onRankingEventsMock = mocked(onRankingEvents, false);
+    const onRankingChangedMock = mocked(onRankingChanged);
+    const onRankingEventsMock = mocked(onRankingEvents);
     onRankingChangedMock.mockReturnValueOnce({
       users: [],
       ranking: [],

@@ -1,10 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import T from '../../lang';
 
-import arena_Feedback, {
-  FeedbackStatus,
-  ArenaCourseFeedback,
-} from './Feedback.vue';
+import arena_Feedback from './Feedback.vue';
+import { FeedbackStatus, ArenaCourseFeedback } from './Feedback_types';
 
 const feedback: ArenaCourseFeedback = {
   lineNumber: 2,
@@ -15,7 +13,7 @@ const feedback: ArenaCourseFeedback = {
 describe('Feedback.vue', () => {
   it('Should handle feedback component when form is sumbitted', async () => {
     const wrapper = shallowMount(arena_Feedback, {
-      propsData: {
+      props: {
         feedback,
       },
     });
@@ -24,7 +22,7 @@ describe('Feedback.vue', () => {
 
     const button = wrapper.find('button[data-button-submit]');
     expect(button.attributes().disabled).toBeDefined();
-    expect(button.attributes().disabled).toBe('disabled');
+    expect(button.attributes().disabled).toBe('');
 
     await wrapper.setData({
       currentFeedback: {
@@ -51,7 +49,7 @@ describe('Feedback.vue', () => {
 
   it('Should handle feedback component when form is cancelled', async () => {
     const wrapper = shallowMount(arena_Feedback, {
-      propsData: {
+      props: {
         feedback,
       },
     });

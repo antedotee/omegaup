@@ -64,15 +64,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 
 @Component
-export default class Certificates extends Vue {
+class Certificates extends Vue {
   @Prop() certificatesDetails!: types.ContestCertificatesAdminDetails;
 
   T = T;
   certificateCutoff = this.certificatesDetails.certificateCutoff;
 }
+export default toNative(Certificates);
 </script>

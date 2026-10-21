@@ -184,7 +184,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 
@@ -201,7 +201,7 @@ import * as time from '../../time';
     'omegaup-user-username': user_Username,
   },
 })
-export default class CourseViewStudent extends Vue {
+class CourseViewStudent extends Vue {
   @Prop() assignments!: omegaup.Assignment[];
   @Prop() course!: types.CourseDetails;
   @Prop() student!: types.StudentProgress;
@@ -364,6 +364,7 @@ export default class CourseViewStudent extends Vue {
     this.updatedFeedback = newVal.feedback.feedback;
   }
 }
+export default toNative(CourseViewStudent);
 </script>
 
 <style lang="scss" scoped>

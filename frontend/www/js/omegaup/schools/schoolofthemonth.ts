@@ -3,8 +3,12 @@ import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import schoolOfTheMonth_List from '../components/schoolofthemonth/List.vue';
+
+interface SchoolListInstance {
+  schoolIsSelected: boolean | undefined;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.SchoolOfTheMonthPayload();
@@ -17,7 +21,7 @@ OmegaUp.on('ready', () => {
       schoolIsSelected:
         payload.isMentor && payload.options && payload.options.schoolIsSelected,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('school-of-the-month-list', {
         props: {
           schoolsOfPreviousMonth: payload.schoolsOfPreviousMonth,
@@ -28,7 +32,8 @@ OmegaUp.on('ready', () => {
             payload.isMentor &&
             payload.options &&
             payload.options.canChooseSchool,
-          schoolIsSelected: this.schoolIsSelected,
+          schoolIsSelected: (this as unknown as SchoolListInstance)
+            .schoolIsSelected,
         },
         on: {
           'select-school': function (schoolId: number) {
@@ -37,7 +42,9 @@ OmegaUp.on('ready', () => {
             })
               .then(() => {
                 ui.success(T.schoolOfTheMonthSelectedSuccessfully);
-                schoolOfTheMonthList.schoolIsSelected = true;
+                (
+                  schoolOfTheMonthList as unknown as SchoolListInstance
+                ).schoolIsSelected = true;
               })
               .catch(ui.apiError);
           },

@@ -79,7 +79,7 @@ const baseScoreboardProps = {
 describe('Scoreboard.vue', () => {
   it('Should handle scoreboard in a contest', async () => {
     const wrapper = shallowMount(arena_Scoreboard, {
-      propsData: Object.assign(
+      props: Object.assign(
         {
           showInvitedUsersFilter: true,
         },
@@ -95,9 +95,12 @@ describe('Scoreboard.vue', () => {
       wrapper.find('.omegaup-scoreboard table tbody').text(),
     ).not.toContain('test_user_0');
 
+    // Uncheck the "only invited" filter. Under @vue/test-utils 2, triggering a
+    // raw `click` on a checkbox no longer fires the `change` event that a native
+    // `v-model` listens for, so use `setValue(false)` to simulate unchecking it.
     await wrapper
       .find('input[type="checkbox"].toggle-contestants')
-      .trigger('click');
+      .setValue(false);
 
     expect(wrapper.find('.omegaup-scoreboard table tbody').text()).toContain(
       'test_user_0',
@@ -110,7 +113,7 @@ describe('Scoreboard.vue', () => {
 
   it('Should handle scoreboard in a course', () => {
     const wrapper = shallowMount(arena_Scoreboard, {
-      propsData: Object.assign(
+      props: Object.assign(
         {
           showInvitedUsersFilter: false,
         },
@@ -133,7 +136,7 @@ describe('Scoreboard.vue', () => {
 
   it('Should handle scoreboard with limited finishTime', () => {
     const wrapper = mount(arena_Scoreboard, {
-      propsData: baseScoreboardProps,
+      props: baseScoreboardProps,
     });
 
     expect(wrapper.find('.clock').text()).toBe('00:00:00');
@@ -141,7 +144,7 @@ describe('Scoreboard.vue', () => {
 
   it('Should handle scoreboard with unlimited finishTime', () => {
     const wrapper = mount(arena_Scoreboard, {
-      propsData: { ...baseScoreboardProps, ...{ finishTime: null } },
+      props: { ...baseScoreboardProps, ...{ finishTime: null } },
     });
 
     expect(wrapper.find('.clock').text()).toBe('∞');
@@ -149,7 +152,7 @@ describe('Scoreboard.vue', () => {
 
   it('Should handle scoreboard when socket status changes', async () => {
     const wrapper = mount(arena_Scoreboard, {
-      propsData: baseScoreboardProps,
+      props: baseScoreboardProps,
     });
 
     expect(wrapper.find('.omegaup-scoreboard>div>h2>span').text()).toBe(

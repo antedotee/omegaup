@@ -1,7 +1,13 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
-import course_Tabs, { Tab } from '../components/course/Tabs.vue';
+import Vue, { type CreateElement } from 'vue';
+import course_Tabs from '../components/course/Tabs.vue';
+
+enum Tab {
+  Enrolled = 'enrolled',
+  Public = 'public',
+  Finished = 'finished',
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CourseTabsPayload();
@@ -10,7 +16,7 @@ OmegaUp.on('ready', () => {
   let selectedTab = Tab.Public;
   for (const tab of Object.values(Tab)) {
     if (locationHashTab === tab) {
-      selectedTab = locationHashTab;
+      selectedTab = tab;
       break;
     }
   }
@@ -19,7 +25,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-course-tabs': course_Tabs,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-tabs', {
         props: {
           courses: payload.courses,

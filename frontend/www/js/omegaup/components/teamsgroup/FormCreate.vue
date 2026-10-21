@@ -1,9 +1,9 @@
 <template>
   <omegaup-teams-group-form
-    :alias.sync="alias"
-    :description.sync="description"
-    :name.sync="name"
-    :number-of-contestants.sync="numberOfContestants"
+    v-model:alias="alias"
+    v-model:description="description"
+    v-model:name="name"
+    v-model:number-of-contestants="numberOfContestants"
     :max-number-of-contestants="maxNumberOfContestants"
     @submit="(request) => $emit('create-teams-group', { ...request, alias })"
   >
@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import teamsgroup_FormBase from './FormBase.vue';
-import { Vue, Component, Watch, Emit, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { generateAlias } from '../../alias';
 
@@ -27,8 +27,9 @@ import { generateAlias } from '../../alias';
   components: {
     'omegaup-teams-group-form': teamsgroup_FormBase,
   },
+  emits: ['create-teams-group', 'validate-unused-alias'],
 })
-export default class TeamsGroupFormCreate extends Vue {
+class TeamsGroupFormCreate extends Vue {
   @Prop({ default: 10 }) maxNumberOfContestants!: number;
 
   T = T;
@@ -37,10 +38,13 @@ export default class TeamsGroupFormCreate extends Vue {
   name: null | string = null;
   numberOfContestants: number = 3;
 
+  // The @Watch+@Emit stack does not emit under vue-facing-decorator here, so
+  // emit explicitly. @Emit emitted (returnValue, ...watcherArgs); the watcher
+  // receives (newValue, oldValue), so preserve the (newValue, newValue,
+  // oldValue) payload the consumer expects.
   @Watch('alias')
-  @Emit('validate-unused-alias')
-  onAliasChanged(newValue: string): string {
-    return newValue;
+  onAliasChanged(newValue: string, oldValue: string): void {
+    this.$emit('validate-unused-alias', newValue, newValue, oldValue);
   }
 
   @Watch('name')
@@ -48,4 +52,5 @@ export default class TeamsGroupFormCreate extends Vue {
     this.alias = generateAlias(newValue);
   }
 }
+export default toNative(TeamsGroupFormCreate);
 </script>

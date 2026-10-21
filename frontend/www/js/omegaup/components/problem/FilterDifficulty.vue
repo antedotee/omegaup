@@ -23,11 +23,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Emit, Watch, Prop } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Emit,
+  Watch,
+  Prop,
+  toNative,
+} from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class FilterDifficulty extends Vue {
+class FilterDifficulty extends Vue {
   @Prop() selectedDifficulty!: string;
 
   T = T;
@@ -58,6 +65,7 @@ export default class FilterDifficulty extends Vue {
     return val;
   }
 }
+export default toNative(FilterDifficulty);
 </script>
 
 <style scoped>

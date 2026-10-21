@@ -104,7 +104,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch, toNative } from 'vue-facing-decorator';
 import { dao, types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -116,17 +116,15 @@ import user_ManageSchools from './ManageSchools.vue';
 import user_PasswordAdd from './PasswordAdd.vue';
 import user_PasswordEdit from './PasswordEdit.vue';
 import user_PreferencesEdit from './PreferencesEdit.vue';
-import { DifficultyStats } from './ProblemSolvingProgress.vue';
 import user_ProfileWrapper from './ProfileWrapper.vue';
 import { urlMapping } from './SidebarMainInfo.vue';
 import user_ViewProfile from './ViewProfile.vue';
+import { ProfileStatistics } from './Profile_types';
 
-export interface ProfileStatistics {
-  solved: number;
-  attempting: number;
-  difficulty: DifficultyStats;
-  tags: Array<{ name: string; count: number }>;
-}
+// ProfileStatistics is declared in ./Profile_types and re-exported here so
+// existing SFC importers keep working while plain `.ts` entry points import it
+// from the `.ts` module.
+export { ProfileStatistics };
 
 @Component({
   components: {
@@ -142,7 +140,7 @@ export interface ProfileStatistics {
     'omegaup-user-delete-account': userDeleteAccount,
   },
 })
-export default class Profile extends Vue {
+class Profile extends Vue {
   @Prop({ default: null }) data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;
   @Prop({ default: 'view-profile' }) selectedTab!: string;
@@ -187,6 +185,7 @@ export default class Profile extends Vue {
     this.currentSelectedTab = newValue;
   }
 }
+export default toNative(Profile);
 </script>
 
 <style scoped>

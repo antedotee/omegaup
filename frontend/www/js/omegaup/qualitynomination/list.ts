@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import qualitynomination_List from '../components/qualitynomination/List.vue';
 import { OmegaUp } from '../omegaup';
 import * as api from '../api';
@@ -14,6 +14,12 @@ OmegaUp.on('ready', function () {
   );
   const searchResultEmpty: types.ListItem[] = [];
 
+  interface NominationsListInstance {
+    nominations: types.NominationListItem[];
+    pagerItems: types.PageItem[];
+    pages: number;
+  }
+
   const nominationsList = new Vue({
     el: '#main-container',
     components: {
@@ -26,7 +32,7 @@ OmegaUp.on('ready', function () {
       searchResultUsers: searchResultEmpty,
       searchResultProblems: searchResultEmpty,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-qualitynomination-list', {
         props: {
           pages: this.pages,
@@ -104,17 +110,19 @@ OmegaUp.on('ready', function () {
 
       api.QualityNomination.list(request)
         .then((data) => {
-          nominationsList.nominations = data.nominations;
-          nominationsList.pagerItems = data.pager_items;
-          nominationsList.pages = pageNumber;
+          const inst = nominationsList as unknown as NominationsListInstance;
+          inst.nominations = data.nominations;
+          inst.pagerItems = data.pager_items;
+          inst.pages = pageNumber;
         })
         .catch(ui.apiError);
     } else {
       api.QualityNomination.myList(request)
         .then((data) => {
-          nominationsList.nominations = data.nominations;
-          nominationsList.pagerItems = data.pager_items;
-          nominationsList.pages = pageNumber;
+          const inst = nominationsList as unknown as NominationsListInstance;
+          inst.nominations = data.nominations;
+          inst.pagerItems = data.pager_items;
+          inst.pages = pageNumber;
         })
         .catch(ui.apiError);
     }

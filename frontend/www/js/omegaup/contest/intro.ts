@@ -1,6 +1,6 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import contest_Intro from '../components/contest/Intro.vue';
 import * as ui from '../ui';
 import * as api from '../api';
@@ -22,7 +22,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-contest-intro': contest_Intro,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-contest-intro', {
         props: {
           requestsUserInformation: payload.requestsUserInformation,

@@ -67,12 +67,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { generateAlias } from '../../alias';
 
 @Component
-export default class GroupForm extends Vue {
+class GroupForm extends Vue {
   @Prop({ default: '' }) groupAlias!: string;
   @Prop({ default: '' }) groupDescription!: string;
   @Prop({ default: '' }) groupName!: string;
@@ -107,4 +107,5 @@ export default class GroupForm extends Vue {
     this.alias = generateAlias(newValue);
   }
 }
+export default toNative(GroupForm);
 </script>

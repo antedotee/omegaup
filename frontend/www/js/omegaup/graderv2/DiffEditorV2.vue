@@ -17,13 +17,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { markRaw } from 'vue';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import store from '../grader/GraderStore';
 import * as monaco from 'monaco-editor';
 import T from '../lang';
 
 @Component
-export default class DiffEditorV2 extends Vue {
+class DiffEditorV2 extends Vue {
   @Prop({ required: true }) storeMapping!: {
     originalContents: string;
     modifiedContents: string;
@@ -69,29 +70,29 @@ export default class DiffEditorV2 extends Vue {
   }
 
   mounted(): void {
-    this._originalModel = monaco.editor.createModel(
-      this.originalContents,
-      this.language,
+    this._originalModel = markRaw(
+      monaco.editor.createModel(this.originalContents, this.language),
     );
-    this._modifiedModel = monaco.editor.createModel(
-      this.modifiedContents,
-      this.language,
+    this._modifiedModel = markRaw(
+      monaco.editor.createModel(this.modifiedContents, this.language),
     );
 
-    this._editor = monaco.editor.createDiffEditor(
-      this.$refs.editorContainer as HTMLElement,
-      {
-        theme: this.theme,
-        originalEditable: !this.readOnly,
-        readOnly: this.readOnly,
-        renderSideBySide: true,
-        fontSize: 13,
-        lineHeight: 20,
-        fontFamily: "'JetBrains Mono', 'monospace'",
-        scrollBeyondLastLine: false,
-        minimap: { enabled: false },
-        automaticLayout: true,
-      },
+    this._editor = markRaw(
+      monaco.editor.createDiffEditor(
+        this.$refs.editorContainer as HTMLElement,
+        {
+          theme: this.theme,
+          originalEditable: !this.readOnly,
+          readOnly: this.readOnly,
+          renderSideBySide: true,
+          fontSize: 13,
+          lineHeight: 20,
+          fontFamily: "'JetBrains Mono', 'monospace'",
+          scrollBeyondLastLine: false,
+          minimap: { enabled: false },
+          automaticLayout: true,
+        },
+      ),
     );
 
     this._editor.setModel({
@@ -114,6 +115,7 @@ export default class DiffEditorV2 extends Vue {
     this._editor?.layout();
   }
 }
+export default toNative(DiffEditorV2);
 </script>
 
 <style lang="scss" scoped>

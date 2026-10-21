@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import * as ui from '../../ui';
 import T from '../../lang';
 import omegaup_PasswordInput from '../common/PasswordInput.vue';
@@ -72,7 +72,7 @@ import omegaup_PasswordInput from '../common/PasswordInput.vue';
     'omegaup-password-input': omegaup_PasswordInput,
   },
 })
-export default class IdentityChangePassword extends Vue {
+class IdentityChangePassword extends Vue {
   @Prop() username!: string;
 
   T = T;
@@ -80,4 +80,5 @@ export default class IdentityChangePassword extends Vue {
   newPassword = '';
   newPasswordRepeat = '';
 }
+export default toNative(IdentityChangePassword);
 </script>

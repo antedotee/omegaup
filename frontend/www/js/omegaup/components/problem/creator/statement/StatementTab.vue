@@ -42,7 +42,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import * as Markdown from '@/third_party/js/pagedown/Markdown.Editor.js';
 import * as markdown from '../../../../markdown';
 import T from '../../../../lang';
@@ -58,7 +65,7 @@ const markdownConverter = new markdown.Converter({
     'omegaup-markdown': ProblemMarkdown,
   },
 })
-export default class StatementTab extends Vue {
+class StatementTab extends Vue {
   @Ref() readonly markdownButtonBar!: HTMLDivElement;
   @Ref() readonly markdownInput!: HTMLTextAreaElement;
 
@@ -162,6 +169,7 @@ export default class StatementTab extends Vue {
     }
   }
 }
+export default toNative(StatementTab);
 </script>
 
 <style lang="scss" scoped>

@@ -5,7 +5,7 @@ import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
 
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import arena_Course from '../components/arena/Course.vue';
 import { getOptionsFromLocation, getProblemAndRunDetails } from './location';
 import {
@@ -17,8 +17,13 @@ import {
   trackRun,
   updateRunFallback,
 } from './submissions';
-import { PopupDisplayed } from '../components/problem/Details.vue';
-import { navigateToProblem, NavigationType, ScoreMode } from './navigation';
+import { PopupDisplayed } from '../components/problem/Details_types';
+import {
+  navigateToProblem,
+  NavigationTarget,
+  NavigationType,
+  ScoreMode,
+} from './navigation';
 import {
   CourseClarificationType,
   refreshCourseClarifications,
@@ -31,7 +36,22 @@ import { myRunsStore, RunFilters, runsStore } from './runsStore';
 import {
   ArenaCourseFeedback,
   FeedbackStatus,
-} from '../components/arena/Feedback.vue';
+} from '../components/arena/Feedback_types';
+
+// Describes the reactive data fields read off the captured `new Vue` instance.
+interface ArenaCourseInstance {
+  problems: types.NavbarProblemsetProblem[];
+  runDetailsData: null | types.RunDetails;
+  feedbackMap: Map<number, ArenaCourseFeedback>;
+  feedbackThreadMap: Map<number, ArenaCourseFeedback>;
+}
+
+// Describes the fields read off the inner Course.vue component via `$refs`.
+interface ArenaCourseComponent {
+  currentPopupDisplayed: PopupDisplayed;
+  activeProblem: types.NavbarProblemsetProblem | null;
+  feedbackMap: Map<number, ArenaCourseFeedback>;
+}
 
 OmegaUp.on('ready', async () => {
   time.setSugarLocale();
@@ -118,7 +138,7 @@ OmegaUp.on('ready', async () => {
       feedbackMap,
       feedbackThreadMap,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-arena-course', {
         props: {
           clarifications: clarificationStore.state.clarifications,
@@ -142,8 +162,8 @@ OmegaUp.on('ready', async () => {
           nextSubmissionTimestamp: this.nextSubmissionTimestamp,
           nextExecutionTimestamp: this.nextExecutionTimestamp,
           socketStatus: socketStore.state.socketStatus,
-          shouldShowFirstAssociatedIdentityRunWarning: this
-            .shouldShowFirstAssociatedIdentityRunWarning,
+          shouldShowFirstAssociatedIdentityRunWarning:
+            this.shouldShowFirstAssociatedIdentityRunWarning,
           feedbackMap: this.feedbackMap,
           feedbackThreadMap: this.feedbackThreadMap,
           currentUsername: commonPayload.currentUsername,
@@ -167,7 +187,7 @@ OmegaUp.on('ready', async () => {
             navigateToProblem({
               type: NavigationType.ForSingleProblemOrCourse,
               problem,
-              target: arenaCourse,
+              target: arenaCourse as unknown as NavigationTarget,
               problems: this.problems,
               problemsetId: payload.currentAssignment.problemset_id,
             });
@@ -234,7 +254,7 @@ OmegaUp.on('ready', async () => {
           'execute-run': ({
             target,
           }: {
-            target: Vue & { currentNextExecutionTimestamp: Date };
+            target: { currentNextExecutionTimestamp: Date };
           }) => {
             api.Run.execute()
               .then(time.remoteTimeAdapter)
@@ -581,9 +601,7 @@ OmegaUp.on('ready', async () => {
       .catch(ui.apiError);
   }
 
-  function getFeedbackMap(
-    runDetailsFeedback: types.SubmissionFeedback[],
-  ): {
+  function getFeedbackMap(runDetailsFeedback: types.SubmissionFeedback[]): {
     feedbackMap: Map<number, ArenaCourseFeedback>;
     feedbackThreadMap: Map<number, ArenaCourseFeedback>;
   } {
@@ -655,7 +673,7 @@ OmegaUp.on('ready', async () => {
     scoreboardToken: null,
     clarificationsOffset: 1,
     clarificationsRowcount: 30,
-    navbarProblems: arenaCourse.problems,
+    navbarProblems: (arenaCourse as unknown as ArenaCourseInstance).problems,
     currentUsername: commonPayload.currentUsername,
     intervalInMilliseconds: 5 * 60 * 1000,
     scoreMode: ScoreMode.Partial,
@@ -669,16 +687,18 @@ OmegaUp.on('ready', async () => {
     });
   }, 5 * 60 * 1000);
 
-  const component = arenaCourse.$refs.component as arena_Course;
+  const component = arenaCourse.$refs
+    .component as unknown as ArenaCourseComponent;
 
   window.addEventListener('hashchange', async () => {
+    const instance = arenaCourse as unknown as ArenaCourseInstance;
     const { problem, guid } = getOptionsFromLocation(window.location.hash);
     if (guid != null && problem != null) {
       navigateToProblem({
         type: NavigationType.ForSingleProblemOrCourse,
         problem,
-        target: arenaCourse,
-        problems: arenaCourse.problems,
+        target: arenaCourse as unknown as NavigationTarget,
+        problems: instance.problems,
         problemsetId: payload.currentAssignment.problemset_id,
         guid,
       });
@@ -687,7 +707,7 @@ OmegaUp.on('ready', async () => {
       const hash = `#problems/${problem.alias}/show-run:${guid}`;
       api.Run.details({ run_alias: guid })
         .then((runDetails) => {
-          arenaCourse.runDetailsData = showSubmission({
+          const submissionDetails = showSubmission({
             request: {
               guid,
               isAdmin: courseAdmin,
@@ -695,13 +715,14 @@ OmegaUp.on('ready', async () => {
             },
             runDetails,
           });
+          instance.runDetailsData = submissionDetails;
 
           ({ feedbackMap, feedbackThreadMap } = getFeedbackMap(
-            arenaCourse.runDetailsData.feedback,
+            submissionDetails.feedback,
           ));
 
-          arenaCourse.feedbackMap = feedbackMap;
-          arenaCourse.feedbackThreadMap = feedbackThreadMap;
+          instance.feedbackMap = feedbackMap;
+          instance.feedbackThreadMap = feedbackThreadMap;
 
           if (hash) {
             window.location.hash = hash;

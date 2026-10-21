@@ -72,12 +72,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
-// https://binarcode.github.io/vue-form-wizard/
-import { FormWizard, TabContent } from 'vue-form-wizard';
-import 'vue-form-wizard/dist/vue-form-wizard.min.css';
+// https://github.com/parsajiravand/vue3-form-wizard
+import { FormWizard, TabContent } from 'vue3-form-wizard';
+import 'vue3-form-wizard/dist/vue3-form-wizard.css';
 // https://www.npmjs.com/package/vue-js-toggle-button
 import { ToggleButton } from 'vue-js-toggle-button';
 // https://github.com/voerro/vue-tagsinput
@@ -106,7 +106,7 @@ interface TagObject {
     VueSlider,
   },
 })
-export default class ProblemFinderWizard extends Vue {
+class ProblemFinderWizard extends Vue {
   @Prop() possibleTags!: { name: string }[];
   @Prop({ default: false }) show!: boolean;
 
@@ -195,6 +195,7 @@ export default class ProblemFinderWizard extends Vue {
     this.$emit('close');
   }
 }
+export default toNative(ProblemFinderWizard);
 </script>
 
 <style lang="scss" scoped>

@@ -1,11 +1,22 @@
 import common_Stats from '../components/common/Stats.vue';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { OmegaUp } from '../omegaup';
 import T from '../lang';
 import * as api from '../api';
 import { types } from '../api_types';
 import * as ui from '../ui';
 import * as Highcharts from 'highcharts';
+
+interface ChartOptionsWithSeries {
+  series: { data: unknown }[];
+  xAxis: { categories: { [key: number]: number } };
+}
+
+interface StatsChartInstance {
+  stats: types.StatsPayload;
+  verdictChartOptions: ChartOptionsWithSeries;
+  distributionChartOptions: ChartOptionsWithSeries;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.StatsPayload();
@@ -145,11 +156,12 @@ OmegaUp.on('ready', () => {
           events: {
             load: (ev: Event): void => {
               // set up the updating of the chart each second
-              const series = ((ev.target as unknown) as Highcharts.Chart)
+              const series = (ev.target as unknown as Highcharts.Chart)
                 .series[0];
               setInterval(() => {
                 const x = new Date().getTime(), // current time
-                  y = statsChart.stats.pending_runs.length;
+                  y = (statsChart as unknown as StatsChartInstance).stats
+                    .pending_runs.length;
                 series.addPoint([x, y], true, true);
               }, updatePendingRunsChartTimeout);
             },
@@ -186,7 +198,7 @@ OmegaUp.on('ready', () => {
         },
       },
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-common-stats', {
         props: {
           stats: this.stats,
@@ -196,16 +208,14 @@ OmegaUp.on('ready', () => {
         },
         on: {
           'update-series': (series: types.StatsPayload): void => {
-            statsChart.verdictChartOptions.series[0].data = normalizeRunCounts(
-              series,
-            );
-            statsChart.distributionChartOptions.series[0].data = getDistribution(
-              series,
-            );
-            statsChart.distributionChartOptions.xAxis.categories = getCategories(
-              series,
-            );
-            statsChart.stats.pending_runs = series.pending_runs;
+            const inst = statsChart as unknown as StatsChartInstance;
+            inst.verdictChartOptions.series[0].data =
+              normalizeRunCounts(series);
+            inst.distributionChartOptions.series[0].data =
+              getDistribution(series);
+            inst.distributionChartOptions.xAxis.categories =
+              getCategories(series);
+            inst.stats.pending_runs = series.pending_runs;
           },
         },
       });

@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -61,7 +61,7 @@ import common_Typeahead from '../common/Typeahead.vue';
     'omegaup-common-typeahead': common_Typeahead,
   },
 })
-export default class Groups extends Vue {
+class Groups extends Vue {
   @Prop() groups!: types.ContestGroup[];
   @Prop() searchResultGroups!: types.ListItem[];
 
@@ -75,4 +75,5 @@ export default class Groups extends Vue {
     this.selected = null;
   }
 }
+export default toNative(Groups);
 </script>

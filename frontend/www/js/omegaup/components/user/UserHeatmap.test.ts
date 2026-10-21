@@ -45,7 +45,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should mount and render the container', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     expect(wrapper.find('.user-heatmap-container').exists()).toBe(true);
@@ -54,7 +54,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should render stats elements', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     expect(wrapper.find('.heatmap-stats').exists()).toBe(true);
@@ -64,18 +64,18 @@ describe('UserHeatmap.vue', () => {
 
   it('should render year selector with all available years', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     const options = wrapper.findAll('option');
     expect(options.length).toBe(2);
-    expect(options.at(0).attributes('value')).toBe('2024');
-    expect(options.at(1).attributes('value')).toBe('2023');
+    expect(options[0].attributes('value')).toBe('2024');
+    expect(options[1].attributes('value')).toBe('2023');
   });
 
   it('should initialize selectedYear to the first available year', async () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     // Wait for the watcher to fire
@@ -87,7 +87,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should format date correctly with zero-padding', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     const vm = wrapper.vm as any;
@@ -107,7 +107,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should compute setActivityStats correctly with known data', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     const vm = wrapper.vm as any;
@@ -133,7 +133,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should compute streak correctly when days are not consecutive', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     const vm = wrapper.vm as any;
@@ -160,7 +160,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should return all zeros for empty data in setActivityStats', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: {
+      props: {
         ...defaultProps,
         data: [],
       },
@@ -182,7 +182,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should emit year-changed event when year is changed', async () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     const vm = wrapper.vm as any;
@@ -195,19 +195,16 @@ describe('UserHeatmap.vue', () => {
 
   it('should set hasRendered to true after renderHeatmap', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     const vm = wrapper.vm as any;
 
-    // Reset state so renderHeatmap proceeds
+    // Reset state so renderHeatmap proceeds. The `@Ref` getter is backed by the
+    // read-only `$refs`, so it can't be redefined on the Vue 3 instance proxy;
+    // the real `<div ref="heatmapContainer">` rendered by shallowMount already
+    // provides the container renderHeatmap needs.
     vm.hasRendered = false;
-
-    // Provide a mock container element (simulates the @Ref)
-    Object.defineProperty(vm, 'heatmapContainer', {
-      get: () => document.createElement('div'),
-      configurable: true,
-    });
 
     vm.renderHeatmap();
 
@@ -216,7 +213,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should skip renderHeatmap when hasRendered is true', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     const vm = wrapper.vm as any;
@@ -232,7 +229,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should render gracefully with empty data array', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: {
+      props: {
         ...defaultProps,
         data: [],
       },
@@ -249,7 +246,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should reset hasRendered when data watcher fires', async () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: defaultProps,
+      props: defaultProps,
     });
 
     const vm = wrapper.vm as any;
@@ -277,7 +274,7 @@ describe('UserHeatmap.vue', () => {
 
   it('should handle single day of data correctly', () => {
     const wrapper = shallowMount(UserHeatmap, {
-      propsData: {
+      props: {
         ...defaultProps,
         data: [{ date: '2024-07-15', runs: 10 }],
       },

@@ -7,7 +7,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Emit, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Emit,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import * as markdown from '../../markdown';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
@@ -34,7 +42,7 @@ declare global {
 }
 
 @Component
-export default class ProblemMarkdown extends Vue {
+class ProblemMarkdown extends Vue {
   @Prop() markdown!: string;
   @Ref() root!: HTMLElement;
   @Prop({ default: null }) imageMapping!: markdown.ImageMapping | null;
@@ -46,7 +54,9 @@ export default class ProblemMarkdown extends Vue {
 
   private vueInstances: Vue[] = [];
 
-  markdownConverter = new markdown.Converter({ preview: this.preview });
+  markdownConverter: markdown.Converter = new markdown.Converter({
+    preview: this.preview,
+  });
 
   get html(): string {
     if (this.problemSettings || this.imageMapping) {
@@ -209,6 +219,7 @@ export default class ProblemMarkdown extends Vue {
     this.vueInstances = [];
   }
 }
+export default toNative(ProblemMarkdown);
 </script>
 
 <style lang="scss">

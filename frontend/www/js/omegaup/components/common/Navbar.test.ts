@@ -1,4 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils';
+import { BModal } from 'bootstrap-vue-next';
 
 import T from '../../lang';
 
@@ -32,7 +33,7 @@ describe('Navbar.vue', () => {
 
   it('Should handle empty navbar (in contest only)', () => {
     const wrapper = mount(common_Navbar, {
-      propsData,
+      props: propsData,
     });
     expect(wrapper.find('.nav-contests').exists()).toBe(false);
     expect(wrapper.find('.nav-courses').exists()).toBe(false);
@@ -42,7 +43,7 @@ describe('Navbar.vue', () => {
 
   it('Should handle common navbar to logged user', () => {
     const wrapper = mount(common_Navbar, {
-      propsData: {
+      props: {
         ...propsData,
         ...{ inContest: false, userTypes: ['student', 'teacher'] },
       },
@@ -57,7 +58,7 @@ describe('Navbar.vue', () => {
 
   it('Should handle common navbar to not-logged user', () => {
     const wrapper = mount(common_Navbar, {
-      propsData: { ...propsData, ...{ inContest: false, isLoggedIn: false } },
+      props: { ...propsData, ...{ inContest: false, isLoggedIn: false } },
     });
 
     expect(wrapper.find('.nav-problems').exists()).toBe(true);
@@ -70,7 +71,7 @@ describe('Navbar.vue', () => {
 
   it('Should show objectives modal only when a main user identity is logged', async () => {
     const wrapper = shallowMount(common_Navbar, {
-      propsData: { ...propsData, ...{ fromLogin: true } },
+      props: { ...propsData, ...{ fromLogin: true } },
     });
 
     expect(wrapper.findComponent(UserObjectivesQuestions).exists()).toBe(false);
@@ -88,7 +89,7 @@ describe('Navbar.vue', () => {
     finishTime.setHours(finishTime.getHours() + 2);
 
     const wrapper = mount(common_Navbar, {
-      propsData: {
+      props: {
         ...propsData,
         ...{
           fromLogin: true,
@@ -131,9 +132,46 @@ describe('Navbar.vue', () => {
     expect(nextRegisteredContest.text()).toContain('01:00:00');
   });
 
+  it('Should log out after confirming in the logout modal', async () => {
+    const original = window.location;
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '' },
+    });
+    const wrapper = mount(common_Navbar, {
+      props: { ...propsData, ...{ inContest: false } },
+      attachTo: document.body,
+      global: { stubs: { transition: false } },
+    });
+    expect(wrapper.find('.logout-confirmation-modal').exists()).toBe(false);
+
+    await wrapper.find('a[data-logout-button]').trigger('click');
+    // BModal finishes showing over a few animation frames and then emits
+    // `shown`.
+    const modal = wrapper.findComponent(BModal);
+    while (!modal.emitted('shown')) {
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+
+    const confirmButton = wrapper.find(
+      '.logout-confirmation-modal > button.btn-primary',
+    );
+    expect(confirmButton.exists()).toBe(true);
+    expect(confirmButton.isVisible()).toBe(true);
+
+    await confirmButton.trigger('click');
+    expect(window.location.href).toBe('/logout/');
+
+    wrapper.unmount();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: original,
+    });
+  });
+
   it('Should not show the information of a next registered contest when the user is not registered to a current or upcoming contest', () => {
     const wrapper = shallowMount(common_Navbar, {
-      propsData: { ...propsData, ...{ fromLogin: true } },
+      props: { ...propsData, ...{ fromLogin: true } },
     });
 
     expect(

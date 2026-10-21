@@ -1,10 +1,15 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import problem_Mine from '../components/problem/Mine.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import T from '../lang';
 import * as api from '../api';
 import * as ui from '../ui';
+
+interface ProblemsMineInstance {
+  problems: types.ProblemListItem[];
+  pagerItems: types.PageItem[];
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.ProblemsMineInfoPayload();
@@ -18,7 +23,7 @@ OmegaUp.on('ready', () => {
       problems: [] as types.ProblemListItem[],
       pagerItems: [] as types.PageItem[],
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-problem-mine', {
         props: {
           problems: this.problems,
@@ -122,8 +127,9 @@ OmegaUp.on('ready', () => {
         })
     )
       .then((result) => {
-        problemsMine.pagerItems = result.pagerItems;
-        problemsMine.problems = result.problems;
+        const instance = problemsMine as unknown as ProblemsMineInstance;
+        instance.pagerItems = result.pagerItems;
+        instance.problems = result.problems;
       })
       .catch(ui.apiError);
   }

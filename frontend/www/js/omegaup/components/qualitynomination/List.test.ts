@@ -29,10 +29,16 @@ const nominations: types.NominationListItem[] = [1, 2, 3].map((x) => ({
   votes: [],
 }));
 
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface QualityNominationListVm {
+  orderedNominations: types.NominationListItem[];
+}
+
 describe('List.vue', () => {
   it('Should handle list of nominations', async () => {
     const wrapper = shallowMount(qualitynomination_List, {
-      propsData: {
+      props: {
         nominations: [
           {
             author: {
@@ -80,7 +86,7 @@ describe('List.vue', () => {
 
   it('Should handle my list of nominations', async () => {
     const wrapper = shallowMount(qualitynomination_List, {
-      propsData: {
+      props: {
         nominations: [
           {
             author: {
@@ -127,7 +133,7 @@ describe('List.vue', () => {
   describe('Sort controls', () => {
     it('Should sort by problem title by default', async () => {
       const wrapper = shallowMount(qualitynomination_List, {
-        propsData: {
+        props: {
           nominations,
           pagerItems: [
             {
@@ -143,12 +149,15 @@ describe('List.vue', () => {
         },
       });
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 1');
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 1');
     });
 
     it('Should sort by problem title in descending order', async () => {
       const wrapper = mount(qualitynomination_List, {
-        propsData: {
+        props: {
           nominations,
           pagerItems: [
             {
@@ -164,7 +173,10 @@ describe('List.vue', () => {
         },
       });
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 1');
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 1');
 
       const sortControlByTitle = wrapper.findComponent({
         ref: 'sortControlByTitle',
@@ -176,12 +188,15 @@ describe('List.vue', () => {
 
       button.trigger('click');
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 3');
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 3');
     });
 
     it('Should sort by time', async () => {
       const wrapper = mount(qualitynomination_List, {
-        propsData: {
+        props: {
           nominations,
           pagerItems: [
             {
@@ -197,10 +212,15 @@ describe('List.vue', () => {
         },
       });
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 1');
-      expect(wrapper.vm.orderedNominations[0].time.getTime()).toBe(
-        new Date('2021-02-01 00:00:00').getTime(),
-      );
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 1');
+      expect(
+        (
+          wrapper.vm as unknown as QualityNominationListVm
+        ).orderedNominations[0].time.getTime(),
+      ).toBe(new Date('2021-02-01 00:00:00').getTime());
 
       const sortControlByTime = wrapper.findComponent({
         ref: 'sortControlByTime',
@@ -212,16 +232,21 @@ describe('List.vue', () => {
 
       button.trigger('click');
 
-      expect(wrapper.vm.orderedNominations[0].problem.title).toBe('Problem 3');
-      expect(wrapper.vm.orderedNominations[0].time.getTime()).toBe(
-        new Date('2021-02-03 00:00:00').getTime(),
-      );
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 3');
+      expect(
+        (
+          wrapper.vm as unknown as QualityNominationListVm
+        ).orderedNominations[0].time.getTime(),
+      ).toBe(new Date('2021-02-03 00:00:00').getTime());
     });
   });
 
   it('Should display EmptyState when list of nominations is empty', () => {
     const wrapper = shallowMount(qualitynomination_List, {
-      propsData: {
+      props: {
         nominations: [],
         pagerItems: [],
         pages: 0,

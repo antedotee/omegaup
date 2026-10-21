@@ -1,7 +1,7 @@
 import Homepage from '../components/homepage/Homepage.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.IndexPayload();
@@ -21,7 +21,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-homepage': Homepage,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-homepage', {
         props: {
           coderOfTheMonth: payload.coderOfTheMonthData

@@ -3,10 +3,15 @@ import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
-import login_Signin, { AvailableTabs } from '../components/login/Signin.vue';
-import { EventBus } from '../components/common/Navbar.vue';
+import Vue, { type CreateElement } from 'vue';
+import login_Signin from '../components/login/Signin.vue';
+import { AvailableTabs } from '../components/login/Signin_types';
+import { EventBus } from '../components/common/eventBus';
 import VueRecaptcha from 'vue-recaptcha';
+
+interface UserSigninInstance {
+  initialActiveTab: AvailableTabs;
+}
 
 OmegaUp.on('ready', () => {
   function loginAndRedirect(
@@ -86,7 +91,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       initialActiveTab,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-login-signin', {
         props: {
           validateRecaptcha: payload.validateRecaptcha,
@@ -191,7 +196,7 @@ OmegaUp.on('ready', () => {
   });
 
   const onActiveTab = (tab: AvailableTabs): void => {
-    userSignin.initialActiveTab = tab;
+    (userSignin as unknown as UserSigninInstance).initialActiveTab = tab;
     window.location.hash = `#${tab}`;
   };
   EventBus.$on('update:activeTab', onActiveTab);

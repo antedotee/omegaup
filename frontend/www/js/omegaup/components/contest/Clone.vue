@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import DateTime from '../DateTimePicker.vue';
 
@@ -78,11 +78,12 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class Clone extends Vue {
+class Clone extends Vue {
   T = T;
   title = '';
   alias = '';
   description = '';
   startTime = new Date();
 }
+export default toNative(Clone);
 </script>

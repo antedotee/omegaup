@@ -1,9 +1,9 @@
 <template>
   <omegaup-teams-group-form
+    v-model:description="currentDescription"
+    v-model:name="currentName"
+    v-model:number-of-contestants="currentNumberOfContestants"
     :alias="alias"
-    :description.sync="currentDescription"
-    :name.sync="currentName"
-    :number-of-contestants.sync="currentNumberOfContestants"
     :max-number-of-contestants="maxNumberOfContestants"
     @submit="(request) => $emit('update-teams-group', request)"
   >
@@ -15,15 +15,16 @@
 
 <script lang="ts">
 import teamsgroup_FormBase from './FormBase.vue';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component({
   components: {
     'omegaup-teams-group-form': teamsgroup_FormBase,
   },
+  emits: ['update-teams-group'],
 })
-export default class TeamsGroupForm extends Vue {
+class TeamsGroupForm extends Vue {
   @Prop({ default: null }) alias!: null | string;
   @Prop({ default: null }) description!: null | string;
   @Prop({ default: null }) name!: null | string;
@@ -35,4 +36,5 @@ export default class TeamsGroupForm extends Vue {
   currentName: null | string = this.name;
   currentNumberOfContestants: number = this.numberOfContestants;
 }
+export default toNative(TeamsGroupForm);
 </script>

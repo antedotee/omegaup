@@ -1,6 +1,6 @@
 import admin_Settings from '../components/admin/Settings.vue';
 import { OmegaUp } from '../omegaup';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import T from '../lang';
 import { types } from '../api_types';
 import * as api from '../api';
@@ -13,7 +13,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-admin-settings': admin_Settings,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-admin-settings', {
         props: {
           ephemeralGraderEnabled: payload.ephemeralGraderEnabled,

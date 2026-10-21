@@ -41,14 +41,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 
 import T from '../../lang';
 
 @Component
-export default class Intro extends Vue {
+class Intro extends Vue {
   T = T;
 }
+export default toNative(Intro);
 </script>
 
 <style lang="scss" scoped>

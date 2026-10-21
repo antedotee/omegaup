@@ -26,8 +26,8 @@
       <table class="table table-striped mb-0">
         <thead>
           <tr>
-            <template v-for="column in columnNames">
-              <th :key="column.name" :class="column.style">
+            <template v-for="column in columnNames" :key="column.name">
+              <th :class="column.style">
                 {{ column.name }}
               </th>
             </template>
@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { LinkableResource } from '../../linkable_resource';
 
@@ -111,7 +111,7 @@ interface SortOption {
  * calculated taking into account the number of items per page, total items.
  */
 @Component
-export default class TablePaginator extends Vue {
+class TablePaginator extends Vue {
   @Prop() items!: LinkableResource[];
   @Prop() itemsPerPage!: number;
   @Prop() columnNames!: Array<{ name: string; style: string }>;
@@ -159,6 +159,7 @@ export default class TablePaginator extends Vue {
     this.$emit('sort-option-change', newSelector);
   }
 }
+export default toNative(TablePaginator);
 </script>
 
 <style scoped>

@@ -179,7 +179,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import {
   NavbarAccess,
@@ -256,7 +256,7 @@ library.add(
     'omegaup-navbar-item': NavbarItem,
   },
 })
-export default class NavbarItems extends Vue {
+class NavbarItems extends Vue {
   @Prop() omegaUpLockDown!: boolean;
   @Prop() inContest!: boolean;
   @Prop() isLoggedIn!: boolean;
@@ -297,6 +297,7 @@ export default class NavbarItems extends Vue {
     return visibleEntries(helpMenuEntries, this.access);
   }
 }
+export default toNative(NavbarItems);
 </script>
 
 <style lang="scss" scoped>

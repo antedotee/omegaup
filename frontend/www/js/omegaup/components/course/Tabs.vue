@@ -129,7 +129,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -137,7 +138,7 @@ import latinize from 'latinize';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 import omegaup_Markdown from '../Markdown.vue';
 import course_CardPublic from './CardPublic.vue';
@@ -165,7 +166,7 @@ export enum Level {
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class CourseTabs extends Vue {
+class CourseTabs extends Vue {
   @Prop() courses!: {
     enrolled: types.CourseCardEnrolled[];
     public: types.CourseCardPublic[];
@@ -272,6 +273,7 @@ export default class CourseTabs extends Vue {
     }
   }
 }
+export default toNative(CourseTabs);
 </script>
 
 <style lang="scss">

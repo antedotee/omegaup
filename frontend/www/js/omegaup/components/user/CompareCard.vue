@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as UI from '../../ui';
@@ -105,7 +105,7 @@ import user_Username from './Username.vue';
     'omegaup-user-username': user_Username,
   },
 })
-export default class CompareCard extends Vue {
+class CompareCard extends Vue {
   @Prop() profile!: types.UserProfileInfo;
   @Prop({ default: null }) solvedProblemsCount!: number | null;
   @Prop({ default: null }) contestsCount!: number | null;
@@ -133,6 +133,7 @@ export default class CompareCard extends Vue {
     return `#${rank}`;
   }
 }
+export default toNative(CompareCard);
 </script>
 
 <style lang="scss" scoped>

@@ -7,12 +7,13 @@
       class="mb-4"
     >
       <b-form-input
-        v-model="groupName"
+        :model-value="groupName"
         data-problem-creator-group-input="name"
         :formatter="formatter"
         required
         autocomplete="off"
         name="group-name"
+        @update:model-value="groupName = $event"
       />
     </b-form-group>
     <b-form-group
@@ -21,12 +22,13 @@
       label-for="case-points"
     >
       <b-form-input
-        v-model="groupPoints"
+        :model-value="groupPoints"
         name="group-points"
         :formatter="pointsFormatter"
         type="number"
         number
         min="0"
+        @update:model-value="groupPoints = $event"
       />
     </b-form-group>
     <b-form-group
@@ -44,11 +46,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
 
 @Component
-export default class GroupInput extends Vue {
+class GroupInput extends Vue {
   @Prop({ default: '' }) name!: string;
   @Prop({ default: 100 }) points!: number;
   @Prop({ default: true }) autoPoints!: boolean;
@@ -74,4 +76,5 @@ export default class GroupInput extends Vue {
     }
   }
 }
+export default toNative(GroupInput);
 </script>

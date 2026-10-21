@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -126,7 +126,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class AddContestant extends Vue {
+class AddContestant extends Vue {
   @Prop() users!: types.ContestUser[];
   @Prop() contest!: types.ContestAdminDetails;
   @Prop() searchResultUsers!: types.ListItem[];
@@ -171,4 +171,5 @@ export default class AddContestant extends Vue {
     this.bulkContestants = '';
   }
 }
+export default toNative(AddContestant);
 </script>

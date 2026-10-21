@@ -1,9 +1,16 @@
 import { shallowMount } from '@vue/test-utils';
 import T from '../../lang';
-import course_ViewProgress, { escapeXml, toOds } from './ViewProgress.vue';
-import { Percentage } from '../../csv';
+import course_ViewProgress from './ViewProgress.vue';
+import { escapeXml, toOds } from './ViewProgress_types';
+import { Percentage, TableCell } from '../../csv';
 import type { types } from '../../api_types';
 import { formatString } from '../../ui';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ViewProgressVm {
+  progressTable: TableCell[][] | null;
+}
 
 describe('ViewProgress.vue', () => {
   if (typeof window.URL.createObjectURL === 'undefined') {
@@ -111,7 +118,7 @@ describe('ViewProgress.vue', () => {
 
   it('Should handle scores', async () => {
     const wrapper = shallowMount(course_ViewProgress, {
-      propsData: baseViewProgressProps,
+      props: baseViewProgressProps,
     });
     expect(wrapper.text()).toContain(
       T.courseStudentsProgressExportToSpreadsheet,
@@ -125,9 +132,12 @@ describe('ViewProgress.vue', () => {
 
   it('Should handle ods content', () => {
     const wrapper = shallowMount(course_ViewProgress, {
-      propsData: baseViewProgressProps,
+      props: baseViewProgressProps,
     });
-    const odsContent = toOds(courseName, wrapper.vm.progressTable);
+    const odsContent = toOds(
+      courseName,
+      (wrapper.vm as unknown as ViewProgressVm).progressTable,
+    );
     expect(odsContent).toBe(`<table:table table:name="${courseName}">
 <table:table-column table:number-columns-repeated="4"/>
 <table:table-row>

@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -24,7 +24,7 @@ import { Chart } from 'highcharts-vue';
     highcharts: Chart,
   },
 })
-export default class Stats extends Vue {
+class Stats extends Vue {
   @Prop() stats!: omegaup.Stats;
   @Prop() verdictChartOptions!: Chart;
   @Prop() distributionChartOptions!: Chart;
@@ -41,4 +41,5 @@ export default class Stats extends Vue {
     this.$emit('update-series', newValue);
   }
 }
+export default toNative(Stats);
 </script>

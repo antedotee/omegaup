@@ -47,7 +47,7 @@
               >{{ T.contestAddproblemChooseVersion }}
             </label>
             <omegaup-radio-switch
-              :value.sync="useLatestVersion"
+              v-model:value="useLatestVersion"
               :selected-value="useLatestVersion"
               :name="'use-latest-version'"
               :text-for-true="T.contestAddproblemLatestVersion"
@@ -166,15 +166,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 
 import problem_Versions from '../problem/Versions.vue';
 import common_Typeahead from '../common/Typeahead.vue';
 import omegaup_RadioSwitch from '../RadioSwitch.vue';
-import 'v-tooltip/dist/v-tooltip.css';
-import { VTooltip } from 'v-tooltip';
+import { vBTooltip } from 'bootstrap-vue-next';
 
 import {
   FontAwesomeIcon,
@@ -200,6 +199,7 @@ export enum SearchTypes {
 }
 
 @Component({
+  emits: ['add-problem', 'get-versions', 'runs-diff'],
   components: {
     'omegaup-problem-versions': problem_Versions,
     'omegaup-common-typeahead': common_Typeahead,
@@ -209,10 +209,10 @@ export enum SearchTypes {
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
   directives: {
-    tooltip: VTooltip,
+    tooltip: vBTooltip,
   },
 })
-export default class AddProblem extends Vue {
+class AddProblem extends Vue {
   @Prop() contestAlias!: string;
   @Prop() initialPoints!: number;
   @Prop() initialProblems!: types.ProblemsetProblemWithVersions[];
@@ -351,4 +351,5 @@ export default class AddProblem extends Vue {
     });
   }
 }
+export default toNative(AddProblem);
 </script>

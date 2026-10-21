@@ -320,7 +320,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Ref } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Watch,
+  Ref,
+  toNative,
+} from 'vue-facing-decorator';
 import course_Form from './Form.vue';
 import course_AssignmentList from './AssignmentList.vue';
 import common_Archive from '../common/Archive.vue';
@@ -371,6 +378,7 @@ const emptyAssignment: types.CourseAssignment = {
 };
 
 @Component({
+  emits: ['archive-course', 'cancel'],
   components: {
     'omegaup-course-form': course_Form,
     'omegaup-common-archive': common_Archive,
@@ -386,7 +394,7 @@ const emptyAssignment: types.CourseAssignment = {
     'omegaup-course-generate-link-clone': course_GenerateLinkClone,
   },
 })
-export default class CourseEdit extends Vue {
+class CourseEdit extends Vue {
   @Ref('assignment-details') readonly assignmentDetails!: Vue;
   @Prop() data!: types.CourseEditPayload;
   @Prop() invalidParameterName!: string;
@@ -472,4 +480,5 @@ export default class CourseEdit extends Vue {
     this.showTab = newValue;
   }
 }
+export default toNative(CourseEdit);
 </script>

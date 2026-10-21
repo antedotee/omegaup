@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { types } from '../api_types';
 
-Vue.use(Vuex);
+Vue.use(Vuex as unknown as Parameters<typeof Vue.use>[0]);
 
 export interface ProblemState {
   // The mapping of problem alias to indexes on the problems array

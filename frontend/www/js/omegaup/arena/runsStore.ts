@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { types } from '../api_types';
 
-Vue.use(Vuex);
+Vue.use(Vuex as unknown as Parameters<typeof Vue.use>[0]);
 
 export interface RunFilters {
   offset?: number;
@@ -70,7 +70,7 @@ export const runsStoreConfig = {
       }
     },
     applyFilter(state: RunsState, filter: RunFilters) {
-      state.filters = Object.assign(state.filters, filter);
+      state.filters = { ...state.filters, ...filter };
     },
     removeFilter(
       state: RunsState,

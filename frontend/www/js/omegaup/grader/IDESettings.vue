@@ -131,7 +131,7 @@
 
 <script lang="ts">
 // TODO: use mapGetters, mapMutations and mapActions to get auto complete
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import RadioSwitch from '../components/RadioSwitch.vue';
 import store from './GraderStore';
 import * as Util from './util';
@@ -142,7 +142,7 @@ import T from '../lang';
     'omegaup-radio-switch': RadioSwitch,
   },
 })
-export default class IDESettings extends Vue {
+class IDESettings extends Vue {
   @Prop({ required: true }) storeMapping!: { [key: string]: any };
 
   T = T;
@@ -292,6 +292,7 @@ export default class IDESettings extends Vue {
     store.dispatch('moduleName', value);
   }
 }
+export default toNative(IDESettings);
 </script>
 
 <style lang="scss">

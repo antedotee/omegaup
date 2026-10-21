@@ -46,11 +46,11 @@ const debounce = (fn: (event: Event) => void, waitTime: number) => {
 };
 
 const WAIT_TIME = 1000;
-import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component({})
-export default class MultiUserAddArea extends Vue {
+class MultiUserAddArea extends Vue {
   @Prop() users!: string[];
 
   T = T;
@@ -109,6 +109,7 @@ export default class MultiUserAddArea extends Vue {
     this.$emit('update-users', this.usersList);
   }
 }
+export default toNative(MultiUserAddArea);
 </script>
 
 <style scoped>

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import badge_Details from '../components/badge/Details.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
@@ -10,7 +10,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-badge-details': badge_Details,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-badge-details', {
         props: {
           badge: payload.badge,

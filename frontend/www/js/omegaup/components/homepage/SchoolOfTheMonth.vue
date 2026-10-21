@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import CountryFlag from '../CountryFlag.vue';
 import T from '../../lang';
@@ -53,7 +53,7 @@ library.add(faInfoCircle);
     'omegaup-countryflag': CountryFlag,
   },
 })
-export default class SchoolOfTheMonth extends Vue {
+class SchoolOfTheMonth extends Vue {
   @Prop() schoolOfTheMonth!: omegaup.SchoolOfTheMonth;
 
   T = T;
@@ -62,6 +62,7 @@ export default class SchoolOfTheMonth extends Vue {
     return getBlogUrl('NewSchoolofTheMonthFeatureURL');
   }
 }
+export default toNative(SchoolOfTheMonth);
 </script>
 
 <style lang="scss" scoped>

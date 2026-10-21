@@ -116,7 +116,7 @@
     </div>
 
     <!-- Create/Edit Modal -->
-    <b-modal
+    <BModal
       ref="carouselItemModal"
       size="xl"
       :title="isEditing ? T.carouselEditItem : T.carouselCreateNew"
@@ -222,8 +222,8 @@
           </div>
         </div>
       </form>
-    </b-modal>
-    <b-modal
+    </BModal>
+    <BModal
       v-model="showArchiveModal"
       :title="T.carouselDeleteConfirm"
       :ok-title="T.carouselArchive"
@@ -234,12 +234,13 @@
       @hidden="resetArchiveModal"
     >
       {{ T.carouselDeleteMessage }}
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator';
+import { Vue, Component, Prop, Ref, toNative } from 'vue-facing-decorator';
+import { BModal } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -261,10 +262,11 @@ interface ModalRef {
 
 @Component({
   components: {
+    BModal,
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class Carousel extends Vue {
+class Carousel extends Vue {
   @Prop() carouselItems!: types.CarouselItem[];
   @Ref('carouselItemModal') readonly carouselItemModal!: ModalRef;
   @Ref('carouselForm') readonly carouselForm!: HTMLFormElement;
@@ -505,6 +507,7 @@ export default class Carousel extends Vue {
     };
   }
 }
+export default toNative(Carousel);
 </script>
 
 <style scoped>

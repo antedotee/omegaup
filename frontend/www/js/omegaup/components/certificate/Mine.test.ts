@@ -7,11 +7,9 @@ import * as ui from '../../ui';
 import certificate_Mine from './Mine.vue';
 
 interface Mine {
-  options: {
-    methods: {
-      getVerificationLink: (verificationCode: string) => string;
-      getDownloadLink: (verificationCode: string) => string;
-    };
+  methods: {
+    getVerificationLink: (verificationCode: string) => string;
+    getDownloadLink: (verificationCode: string) => string;
   };
 }
 
@@ -48,7 +46,7 @@ describe('Mine.vue', () => {
 
   it('Should handle an empty table', () => {
     const wrapper = shallowMount(certificate_Mine, {
-      propsData: {
+      props: {
         certificates: [] as types.CertificateListItem[],
       },
     });
@@ -60,7 +58,7 @@ describe('Mine.vue', () => {
 
   it('Should handle a table with data', () => {
     const wrapper = mount(certificate_Mine, {
-      propsData,
+      props: propsData,
     });
 
     expect(wrapper.text()).toContain(T.certificateListMineTitle);
@@ -84,13 +82,16 @@ describe('Mine.vue', () => {
   });
 
   it('Should copy the verification code', () => {
+    // vue-facing-decorator's `toNative()` exports a Vue 3 options object whose
+    // methods live directly under `.methods` (there is no Vue 2 `.options`
+    // wrapper).
     const defineSpy = jest.spyOn(
-      ((certificate_Mine as unknown) as Mine).options.methods,
+      (certificate_Mine as unknown as Mine).methods,
       'getVerificationLink',
     );
 
     shallowMount(certificate_Mine, {
-      propsData,
+      props: propsData,
     });
 
     expect(defineSpy).toHaveBeenCalledTimes(
@@ -105,15 +106,19 @@ describe('Mine.vue', () => {
 
   it('Should download a file', async () => {
     const clickSpy = jest.spyOn(
-      ((certificate_Mine as unknown) as Mine).options.methods,
+      (certificate_Mine as unknown as Mine).methods,
       'getDownloadLink',
     );
 
     const wrapper = mount(certificate_Mine, {
-      propsData,
+      props: propsData,
     });
 
-    await wrapper.findAll('a[download-file]').trigger('click');
+    // @vue/test-utils 2 returns a plain array from findAll (no WrapperArray
+    // `.trigger`), so click each element individually.
+    for (const link of wrapper.findAll('a[download-file]')) {
+      await link.trigger('click');
+    }
 
     await wrapper.vm.$nextTick();
 

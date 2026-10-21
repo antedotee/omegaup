@@ -8,7 +8,7 @@ import arena_NavbarProblems from './NavbarProblems.vue';
 describe('NavbarProblems.vue', () => {
   it('Should handle breadcrumbs in course', () => {
     const wrapper = shallowMount(arena_NavbarProblems, {
-      propsData: {
+      props: {
         activeProblem: null,
         courseAlias: 'curso-prueba',
         courseName: 'Curso de prueba',
@@ -33,24 +33,20 @@ describe('NavbarProblems.vue', () => {
         inAssignment: true,
         problems: [],
       },
-      stubs: {
-        'b-breadcrumb': {
-          template: '<div v-bind="$attrs"><slot /></div>',
-        },
-        'b-breadcrumb-item': {
-          template: '<span><slot /></span>',
-        },
-      },
     });
 
+    // BootstrapVueNext renders breadcrumb separators as CSS `::before` content
+    // (not DOM text), so `wrapper.text()` no longer has characters between the
+    // crumbs the way bootstrap-vue 2 did. Assert the crumbs still render in order
+    // without requiring literal separator text between them.
     expect(wrapper.text()).toMatch(
-      new RegExp(`${T.navCourses}.+?Curso de prueba.+?Tarea de prueba`, 'ms'),
+      new RegExp(`${T.navCourses}.*?Curso de prueba.*?Tarea de prueba`, 'ms'),
     );
   });
 
   it('Should handle empty breadcrumbs in contest', async () => {
     const wrapper = shallowMount(arena_NavbarProblems, {
-      propsData: {
+      props: {
         activeProblem: null,
         contestAlias: 'concurso-prueba',
         courseName: 'Concurso de prueba',
@@ -58,12 +54,14 @@ describe('NavbarProblems.vue', () => {
         inAssignment: false,
         problems: [],
       },
-      stubs: {
-        'b-breadcrumb': {
-          template: '<div v-bind="$attrs"><slot /></div>',
-        },
-        'b-breadcrumb-item': {
-          template: '<span><slot /></span>',
+      global: {
+        stubs: {
+          'b-breadcrumb': {
+            template: '<div v-bind="$attrs"><slot /></div>',
+          },
+          'b-breadcrumb-item': {
+            template: '<span><slot /></span>',
+          },
         },
       },
     });

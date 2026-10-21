@@ -2,7 +2,7 @@ import { mount, shallowMount } from '@vue/test-utils';
 import T from '../../lang';
 
 import arena_FeedbackThread from './FeedbackThread.vue';
-import { FeedbackStatus, ArenaCourseFeedback } from './Feedback.vue';
+import { FeedbackStatus, ArenaCourseFeedback } from './Feedback_types';
 
 const feedbackThread: ArenaCourseFeedback = {
   lineNumber: 2,
@@ -16,7 +16,7 @@ const feedbackThread: ArenaCourseFeedback = {
 describe('FeedbackThread.vue', () => {
   it('Should handle feedback thread component when form is sumbitted', async () => {
     const wrapper = mount(arena_FeedbackThread, {
-      propsData: {
+      props: {
         feedbackThread,
       },
     });
@@ -31,7 +31,7 @@ describe('FeedbackThread.vue', () => {
     expect(wrapper.html()).not.toContain('input');
 
     const addFeedbackButton = wrapper.find('button[data-button-submit]');
-    expect(addFeedbackButton.attributes().disabled).toBe('disabled');
+    expect(addFeedbackButton.attributes().disabled).toBe('');
 
     await wrapper.setData({
       currentFeedbackThread: {
@@ -63,7 +63,7 @@ describe('FeedbackThread.vue', () => {
 
   it('Should handle feedback component when form is cancelled', async () => {
     const wrapper = shallowMount(arena_FeedbackThread, {
-      propsData: {
+      props: {
         feedbackThread,
       },
     });

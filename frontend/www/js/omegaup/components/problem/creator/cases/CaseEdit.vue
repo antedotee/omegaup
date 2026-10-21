@@ -15,11 +15,7 @@
         >
           <div class="container">
             <div class="row">
-              <BIconPencilFill
-                variant="info"
-                font-scale="1.10"
-                class="mr-1 pt-1"
-              />
+              <i class="bi bi-pencil-fill text-info mr-1 pt-1" />
               {{ T.problemCreatorEditCase }}
             </div>
           </div>
@@ -31,8 +27,9 @@
           ok-variant="success"
           :cancel-title="T.caseModalBack"
           cancel-variant="danger"
-          static
+          teleport-disabled
           lazy
+          unmount-lazy
           @ok="updateCaseInfo"
         >
           <omegaup-problem-creator-case-input
@@ -57,11 +54,7 @@
         >
           <div class="container">
             <div class="row">
-              <BIconTrashFill
-                variant="danger"
-                font-scale="1.20"
-                class="mr-1 pt-1"
-              />
+              <i class="bi bi-trash-fill text-danger mr-1 pt-1" />
               {{ T.problemCreatorDeleteCase }}
             </div>
           </div>
@@ -75,7 +68,7 @@
           no-caret
         >
           <template #button-content>
-            <BIconThreeDotsVertical />
+            <i class="bi bi-three-dots-vertical" />
           </template>
           <b-button
             data-menu-delete-lines
@@ -84,7 +77,7 @@
             @click="deleteLines()"
           >
             <div class="d-flex">
-              <BIconTrash variant="danger" class="pt-1 mr-3" font-scale="1.2" />
+              <i class="bi bi-trash text-danger pt-1 mr-3" />
               {{ T.problemCreatorLinesDelete }}
             </div>
           </b-button>
@@ -96,11 +89,7 @@
             @click="downloadInputFile('.in')"
           >
             <div class="d-flex">
-              <BIconBoxArrowDown
-                variant="info"
-                class="pt-1 mr-3"
-                font-scale="1.2"
-              />
+              <i class="bi bi-box-arrow-down text-info pt-1 mr-3" />
               {{ T.problemCreatorCaseDownloadIn }}
             </div>
           </b-button>
@@ -111,11 +100,7 @@
             @click="downloadInputFile('.txt')"
           >
             <div class="d-flex">
-              <BIconTextLeft
-                variant="info"
-                class="pt-1 mr-3"
-                font-scale="1.2"
-              />
+              <i class="bi bi-text-left text-info pt-1 mr-3" />
               {{ T.problemCreatorCaseDownloadTxt }}
             </div>
           </b-button>
@@ -126,10 +111,11 @@
     <div>
       <table class="table">
         <draggable
-          v-model="lines"
+          :value="lines"
           tag="tbody"
           :animation="200"
           handle=".drag-handle"
+          @input="lines = $event"
         >
           <tr v-for="line in lines" :key="line.lineID">
             <td>
@@ -142,7 +128,7 @@
                       :title="T.problemCreatorLinesReorder"
                       variant="light"
                     >
-                      <font-awesome-icon icon="sort" />
+                      <i class="bi bi-arrow-down-up" />
                     </b-button>
                   </b-col>
                   <b-col cols="2" class="pl-0 pr-2">
@@ -200,7 +186,7 @@
                       variant="light"
                       @click="editModalState(line.data.kind)"
                     >
-                      <BIconPencilSquare variant="info" font-scale="1.20" />
+                      <i class="bi bi-pencil-square text-info" />
                     </b-button>
                     <b-modal
                       v-if="line.data.kind === 'array'"
@@ -211,8 +197,9 @@
                       ok-variant="success"
                       :cancel-title="T.arrayModalBack"
                       cancel-variant="danger"
-                      static
+                      teleport-disabled
                       lazy
+                      unmount-lazy
                       @ok="
                         editLineValue([line.lineID, arrayModalEditArray]);
                         arrayModalEditArray = '';
@@ -292,8 +279,9 @@
                       ok-variant="success"
                       :cancel-title="T.matrixModalBack"
                       cancel-variant="danger"
-                      static
+                      teleport-disabled
                       lazy
+                      unmount-lazy
                       @ok="
                         editLineValue([line.lineID, matrixModalEditArray]);
                         matrixModalEditArray = '';
@@ -403,7 +391,7 @@
                       variant="light"
                       @click="deleteLine(line.lineID)"
                     >
-                      <BIconTrashFill variant="danger" font-scale="1.20" />
+                      <i class="bi bi-trash-fill text-danger" />
                     </b-button>
                   </b-col>
                 </b-row>
@@ -436,7 +424,7 @@
                       variant="light"
                       @click="getSelectedCase.output = ''"
                     >
-                      <font-awesome-icon icon="eraser" />
+                      <i class="bi bi-eraser" />
                     </b-button>
                   </b-col>
                 </b-row>
@@ -455,11 +443,7 @@
       >
         <div class="container">
           <div class="row">
-            <BIconPlusSquare
-              variant="info"
-              font-scale="1.25"
-              class="mr-2 pt-1"
-            />
+            <i class="bi bi-plus-square text-info mr-2 pt-1" />
             {{ T.problemCreatorAddLine }}
           </div>
         </div>
@@ -469,10 +453,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Ref } from 'vue-property-decorator';
+import { Component, Vue, Ref, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
 import problemCreator_Cases_CaseInput from './CaseInput.vue';
-import { namespace } from 'vuex-class';
 import {
   Case,
   Group,
@@ -484,33 +467,30 @@ import {
   CaseRequest,
   GroupID,
 } from '@/js/omegaup/problem/creator/types';
-import {
-  FontAwesomeIcon,
-  FontAwesomeLayers,
-  FontAwesomeLayersText,
-} from '@fortawesome/vue-fontawesome';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-import { BNavItemDropdown, FormInputPlugin, ModalPlugin } from 'bootstrap-vue';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import draggable from 'vuedraggable';
-library.add(fas);
-Vue.use(FormInputPlugin);
-Vue.use(ModalPlugin);
 
-const casesStore = namespace('casesStore');
+// vuedraggable 2.x is a Vue 2 component whose render function reads
+// `$slots.default` as an array of vnodes. The global test/runtime compat turns
+// the Vue-2 render shim off (RENDER_FUNCTION: false) because it corrupts BVN
+// v-for output, but that same shim is what vuedraggable needs. Scope the shim
+// back on for this single component so its render keeps working.
+(draggable as { compatConfig?: Record<string, unknown> }).compatConfig = {
+  MODE: 2,
+  RENDER_FUNCTION: true,
+  // Keep Vue 3 v-model semantics for the bootstrap-vue-next form controls
+  // rendered inside the draggable rows; MODE 2 would otherwise re-enable the
+  // legacy value/input convention and break their two-way binding.
+  COMPONENT_V_MODEL: false,
+};
 
 @Component({
   components: {
     'omegaup-problem-creator-case-input': problemCreator_Cases_CaseInput,
-    'font-awesome-icon': FontAwesomeIcon,
-    'font-awesome-layers': FontAwesomeLayers,
-    'font-awesome-layers-text': FontAwesomeLayersText,
     draggable: draggable,
   },
 })
-export default class CaseEdit extends Vue {
+class CaseEdit extends Vue {
   T = T;
   editCaseModal = false;
 
@@ -522,40 +502,59 @@ export default class CaseEdit extends Vue {
   arrayModalEditArray: string = '';
   matrixModalEditArray: string = '';
 
-  @casesStore.State('groups') groups!: Group[];
-  @casesStore.Getter('getSelectedCase') getSelectedCase!: Case;
-  @casesStore.Getter('getLinesFromSelectedCase')
-  getLinesFromSelectedCase!: CaseLine[];
-  @casesStore.Getter('getSelectedGroup') getSelectedGroup!: Group;
+  // The vuex-class namespaced decorators do not bind under
+  // vue-facing-decorator, so the store module is accessed directly through
+  // native getters and method wrappers.
+  get groups(): Group[] {
+    return this.$store.state.casesStore.groups;
+  }
+  get getSelectedCase(): Case {
+    return this.$store.getters['casesStore/getSelectedCase'];
+  }
+  get getLinesFromSelectedCase(): CaseLine[] {
+    return this.$store.getters['casesStore/getLinesFromSelectedCase'];
+  }
+  get getSelectedGroup(): Group {
+    return this.$store.getters['casesStore/getSelectedGroup'];
+  }
 
-  @casesStore.Action('editLineKind') editLineKind!: ([lineID, kind]: [
-    LineID,
-    CaseLineKind,
-  ]) => void;
-  @casesStore.Action('editLineValue') editLineValue!: ([lineID, value]: [
-    LineID,
-    string,
-  ]) => void;
-  @casesStore.Mutation('deleteCase') deleteCase!: ({
-    groupID,
-    caseID,
-  }: CaseGroupID) => void;
-  @casesStore.Mutation('updateCase') updateCase!: ([
-    oldGroupID,
-    updateCaseRequest,
-  ]: [GroupID, CaseRequest]) => void;
-  @casesStore.Getter('getStringifiedLinesFromCaseGroupID')
-  getStringifiedLinesFromCaseGroupID!: (caseGroupID: CaseGroupID) => string;
+  editLineKind([lineID, kind]: [LineID, CaseLineKind]): void {
+    this.$store.dispatch('casesStore/editLineKind', [lineID, kind]);
+  }
+  editLineValue([lineID, value]: [LineID, string]): void {
+    this.$store.dispatch('casesStore/editLineValue', [lineID, value]);
+  }
+  deleteCase({ groupID, caseID }: CaseGroupID): void {
+    this.$store.commit('casesStore/deleteCase', { groupID, caseID });
+  }
+  updateCase([oldGroupID, updateCaseRequest]: [GroupID, CaseRequest]): void {
+    this.$store.commit('casesStore/updateCase', [
+      oldGroupID,
+      updateCaseRequest,
+    ]);
+  }
+  getStringifiedLinesFromCaseGroupID(caseGroupID: CaseGroupID): string {
+    return this.$store.getters['casesStore/getStringifiedLinesFromCaseGroupID'](
+      caseGroupID,
+    );
+  }
 
-  @casesStore.Action('addNewLine') addNewLine!: () => void;
-  @casesStore.Action('setLines') setLines!: (lines: CaseLine[]) => void;
-  @casesStore.Action('deleteLine') deleteLine!: (line: LineID) => void;
-  @casesStore.Action('deleteLinesForSelectedCase')
-  deleteLinesForSelectedCase!: () => void;
+  addNewLine(): void {
+    this.$store.dispatch('casesStore/addNewLine');
+  }
+  setLines(lines: CaseLine[]): void {
+    this.$store.dispatch('casesStore/setLines', lines);
+  }
+  deleteLine(line: LineID): void {
+    this.$store.dispatch('casesStore/deleteLine', line);
+  }
+  deleteLinesForSelectedCase(): void {
+    this.$store.dispatch('casesStore/deleteLinesForSelectedCase');
+  }
 
   deleteLines() {
     this.deleteLinesForSelectedCase();
-    (this.$refs.dropdown as BNavItemDropdown).hide(true);
+    (this.$refs.dropdown as { hide: (ok?: boolean) => void }).hide(true);
   }
 
   LineDisplayOption = Object.freeze({
@@ -834,6 +833,7 @@ export default class CaseEdit extends Vue {
     });
   }
 }
+export default toNative(CaseEdit);
 </script>
 
 <style lang="scss" scoped>

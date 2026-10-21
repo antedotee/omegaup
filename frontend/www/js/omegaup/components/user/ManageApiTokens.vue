@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -144,7 +144,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class ManageApiTokens extends Vue {
+class ManageApiTokens extends Vue {
   @Prop({ default: () => [] }) apiTokens!: types.ApiToken[];
 
   T = T;
@@ -161,6 +161,7 @@ export default class ManageApiTokens extends Vue {
     return time.formatDateTime(value);
   }
 }
+export default toNative(ManageApiTokens);
 </script>
 
 <style lang="scss" scoped>

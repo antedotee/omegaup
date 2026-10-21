@@ -173,9 +173,17 @@
 <script lang="ts">
 import * as monaco from 'monaco-editor';
 (window as any).monaco = monaco;
-import { Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  Vue,
+  toNative,
+} from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { omegaup } from '../omegaup';
-import Vue, { CreateElement } from 'vue';
+import type { CreateElement } from 'vue';
 import Clipboard from 'v-clipboard';
 import omegaup_Countdown from '../components/Countdown.vue';
 import type { Component as VueComponent } from 'vue'; // this is the component type for Vue components
@@ -215,7 +223,7 @@ import {
   faCopy,
 } from '@fortawesome/free-solid-svg-icons';
 library.add(faUpload, faFileArchive, faDownload, faSun, faMoon, faUndo, faCopy);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
 import T from '../lang';
 import * as ui from '../ui';
@@ -237,7 +245,7 @@ interface ComponentState {
     'omegaup-countdown': omegaup_Countdown,
   },
 })
-export default class Ephemeral extends Vue {
+class Ephemeral extends Vue {
   @Prop({ required: true }) acceptedLanguages!: string[];
   @Prop({ required: true }) isEmbedded!: boolean;
   @Prop({ required: true }) canRun!: boolean;
@@ -405,9 +413,8 @@ export default class Ephemeral extends Vue {
         store.commit('updatingSettings', false);
         this.$nextTick(() => {
           if (!this.isEmbedded || !this.goldenLayout?.isInitialised) return;
-          let mainColumn = this.goldenLayout.root.getItemsById(
-            'main-column',
-          )[0];
+          let mainColumn =
+            this.goldenLayout.root.getItemsById('main-column')[0];
           mainColumn.parent.setActiveContentItem(mainColumn);
         });
       })
@@ -847,7 +854,16 @@ export default class Ephemeral extends Vue {
             props[k] = componentState[k];
           }
 
-          const vue = new Vue({
+          const vue = new VueGlobal({
+            // This instance is created dynamically for a golden-layout panel
+            // and still relies on the Vue 2 render signature (a `createElement`
+            // argument) and `$children`. The global test/app compat level turns
+            // RENDER_FUNCTION off, so opt this specific instance back into the
+            // Vue 2 behaviors it needs.
+            compatConfig: {
+              RENDER_FUNCTION: true,
+              INSTANCE_CHILDREN: true,
+            },
             el: container.getElement()[0],
             components: {
               [componentName]: component,
@@ -914,6 +930,7 @@ export default class Ephemeral extends Vue {
     }
   }
 }
+export default toNative(Ephemeral);
 </script>
 
 <style lang="scss" scoped>

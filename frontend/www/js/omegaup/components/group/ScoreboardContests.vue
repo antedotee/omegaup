@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
@@ -106,12 +106,13 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 library.add(faTrash);
 
 @Component({
+  emits: ['add-contest'],
   components: {
     FontAwesomeIcon,
     'omegaup-radio-switch': omegaup_RadioSwitch,
   },
 })
-export default class GroupScoreboardContests extends Vue {
+class GroupScoreboardContests extends Vue {
   @Prop() scoreboard!: string;
   @Prop() availableContests!: types.ContestListItem[];
   @Prop() contests!: types.ScoreboardContest[];
@@ -138,4 +139,5 @@ export default class GroupScoreboardContests extends Vue {
     this.weight = 1.0;
   }
 }
+export default toNative(GroupScoreboardContests);
 </script>

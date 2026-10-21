@@ -5,13 +5,26 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 
 import Vue from 'vue';
+import { config } from '@vue/test-utils';
 import Sortable from 'sortablejs';
+import './vue-setup';
+// Vue 2 `@vue/test-utils` rendered a stubbed child's default slot; v2 does not
+// by default. Restoring that behavior keeps `shallowMount` assertions that look
+// at content nested inside a `<b-*>` wrapper (e.g. inputs inside BCollapse)
+// working as they did under bootstrap-vue 2.
+config.global.renderStubDefaultSlot = true;
+// test-utils stubs <transition> by default, and a stubbed transition never
+// runs its enter hooks. bootstrap-vue-next shows lazy BModal/BOffcanvas content
+// from those hooks, so use real transitions as the browser does.
+config.global.stubs = { ...config.global.stubs, transition: false };
 
+// @vue/compat maps the Vue 2 `inserted` directive hook at runtime; the Vue 3
+// Directive type does not list it, so cast the definition.
 Vue.directive('Sortable', {
-  inserted: (el: HTMLElement, binding) => {
+  inserted: (el: HTMLElement, binding: { value?: Sortable.Options }) => {
     new Sortable(el, binding.value || {});
   },
-});
+} as unknown as Parameters<typeof Vue.directive>[1]);
 
 // Intercept all API calls. Only let `API.Session.currentSession()` work and
 // fail everything else.
@@ -65,12 +78,12 @@ global.URL.createObjectURL = jest.fn();
 
 // This is needed for CodeMirror to work.
 global.document.createRange = () => {
-  return ({
+  return {
     setEnd: () => {},
     setStart: () => {},
     getBoundingClientRect: () => {},
     getClientRects: () => [],
-  } as any) as Range;
+  } as any as Range;
 };
 
 // Any write to console.error() will cause a test failure.

@@ -1,5 +1,5 @@
 import common_Docs from '../components/common/Docs.vue';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 
@@ -10,7 +10,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-common-docs': common_Docs,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-common-docs', {
         props: {
           docs,

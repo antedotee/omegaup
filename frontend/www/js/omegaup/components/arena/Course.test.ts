@@ -226,7 +226,7 @@ describe('Course.vue', () => {
   };
   it('Should handle course in arena', async () => {
     const wrapper = mount(arena_Course, {
-      propsData: {
+      props: {
         activeTab: 'problems',
         clarifications: [],
         course,
@@ -240,7 +240,9 @@ describe('Course.vue', () => {
         users: [],
         scoreboard,
       },
-      stubs: breadcrumbStubs,
+      global: {
+        stubs: breadcrumbStubs,
+      },
     });
 
     expect(wrapper.find('h2').text()).toContain(currentAssignment.name);
@@ -249,7 +251,7 @@ describe('Course.vue', () => {
 
   it('Should emit reset-hash function in arena course', async () => {
     const wrapper = mount(arena_Course, {
-      propsData: {
+      props: {
         activeTab: 'problems',
         clarifications: [],
         course,
@@ -262,7 +264,9 @@ describe('Course.vue', () => {
         users: [] as types.ContestUser[],
         scoreboard,
       },
-      stubs: breadcrumbStubs,
+      global: {
+        stubs: breadcrumbStubs,
+      },
     });
 
     await wrapper.setProps({ problem: null });
@@ -273,7 +277,7 @@ describe('Course.vue', () => {
 
   it('Should handle run details button as student', async () => {
     const wrapper = mount(arena_Course, {
-      propsData: {
+      props: {
         activeTab: 'problems',
         clarifications: [],
         course,
@@ -287,7 +291,9 @@ describe('Course.vue', () => {
         users: [] as types.ContestUser[],
         scoreboard,
       },
-      stubs: breadcrumbStubs,
+      global: {
+        stubs: breadcrumbStubs,
+      },
     });
 
     await wrapper
@@ -306,7 +312,7 @@ describe('Course.vue', () => {
 
   it('Should handle run details button as admin', async () => {
     const wrapper = mount(arena_Course, {
-      propsData: {
+      props: {
         activeTab: 'runs',
         clarifications: [],
         course: { ...course, ...{ is_admin: true } },
@@ -321,7 +327,9 @@ describe('Course.vue', () => {
         scoreboard,
         showAllRuns: true,
       },
-      stubs: breadcrumbStubs,
+      global: {
+        stubs: breadcrumbStubs,
+      },
     });
 
     await wrapper.find('a[href="#runs"]').trigger('click');

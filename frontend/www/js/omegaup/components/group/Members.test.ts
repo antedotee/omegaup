@@ -8,7 +8,7 @@ import group_Members from './Members.vue';
 describe('Members.vue', () => {
   it('Should handle an empty list of members and identities', () => {
     const wrapper = shallowMount(group_Members, {
-      propsData: {
+      props: {
         groupAlias: 'omegaUp',
         identities: [] as types.Identity[],
         identitiesCsv: [] as types.Identity[],
@@ -21,7 +21,7 @@ describe('Members.vue', () => {
 
   it('Should handle a list of members and identities', () => {
     const wrapper = mount(group_Members, {
-      propsData: {
+      props: {
         groupAlias: 'omegaUp',
         identities: [
           {
@@ -42,8 +42,12 @@ describe('Members.vue', () => {
     expect(wrapper.find('table[data-table-members] tbody').text()).toContain(
       'hello',
     );
+    // Username and name live in two separate `<td>` cells. Vue 3's default
+    // whitespace:'condense' drops the whitespace-only text node between them, so
+    // `.text()` concatenates the cell contents with no separating space. The
+    // rendered DOM (two cells) is unchanged.
     expect(wrapper.find('table[data-table-identities] tbody').text()).toContain(
-      'omegaUp:user user',
+      'omegaUp:useruser',
     );
   });
 });

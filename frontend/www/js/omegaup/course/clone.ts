@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import course_Clone from '../components/course/CloneWithToken.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
@@ -14,7 +14,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-course-clone': course_Clone,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-clone', {
         props: {
           username: payload.creator.username,

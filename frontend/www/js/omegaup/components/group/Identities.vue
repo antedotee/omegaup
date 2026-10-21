@@ -98,14 +98,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import omegaup_Markdown from '../Markdown.vue';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -118,7 +119,7 @@ library.add(faDownload);
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class Identities extends Vue {
+class Identities extends Vue {
   @Prop() groupAlias!: string;
   @Prop() userErrorRow!: string | null;
   @Prop() hasVisitedSection!: boolean;
@@ -224,4 +225,5 @@ export default class Identities extends Vue {
     });
   }
 }
+export default toNative(Identities);
 </script>

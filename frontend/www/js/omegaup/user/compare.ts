@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import { types } from '../api_types';
 import user_CompareUsers from '../components/user/CompareUsers.vue';
@@ -58,7 +58,7 @@ OmegaUp.on('ready', () => {
           .catch(ui.apiError);
       }
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-user-compare', {
         props: {
           user1: this.user1,

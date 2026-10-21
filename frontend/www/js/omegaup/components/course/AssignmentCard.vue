@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import * as ui from '../../ui';
 import * as time from '../../time';
@@ -101,7 +101,7 @@ library.add(faChalkboardTeacher, faClock, faFileAlt, faListAlt);
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class AssignmentCard extends Vue {
+class AssignmentCard extends Vue {
   @Prop() courseAlias!: string;
   @Prop() assignment!: types.CourseAssignment;
   @Prop() studentProgress!: number;
@@ -123,6 +123,7 @@ export default class AssignmentCard extends Vue {
     return time.formatDateTime(date);
   }
 }
+export default toNative(AssignmentCard);
 </script>
 
 <style lang="scss" scoped>

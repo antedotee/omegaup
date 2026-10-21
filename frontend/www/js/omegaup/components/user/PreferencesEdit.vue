@@ -106,9 +106,8 @@
         <!-- id-lint on -->
       </div>
       <b-popover
-        :show.sync="show"
+        v-model="show"
         target="popover-private-profile"
-        variant="danger"
         placement="bottom"
       >
         <template #title>{{ T.profilePrivateRankMessageTitle }}</template>
@@ -140,28 +139,23 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { ObjectivesAnswers } from './ObjectivesQuestions.vue';
 import { types } from '../../api_types';
 import T from '../../lang';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { getExternalUrl } from '../../urlHelper';
 
-// Import Bootstrap and BootstrapVue CSS files (order is important)
+// Import Bootstrap CSS file.
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
-// Import Only Required Plugins
-import { ButtonPlugin, PopoverPlugin } from 'bootstrap-vue';
-Vue.use(ButtonPlugin);
-Vue.use(PopoverPlugin);
 
 @Component({
+  emits: ['update-user-preferences'],
   components: {
     FontAwesomeIcon,
   },
 })
-export default class UserPreferencesEdit extends Vue {
+class UserPreferencesEdit extends Vue {
   @Prop() profile!: types.UserProfileInfo;
 
   show: boolean = false;
@@ -286,6 +280,7 @@ export default class UserPreferencesEdit extends Vue {
     this.show = this.isPrivate;
   }
 }
+export default toNative(UserPreferencesEdit);
 </script>
 
 <style lang="scss" scoped>

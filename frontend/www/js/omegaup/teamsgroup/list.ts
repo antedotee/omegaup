@@ -1,7 +1,7 @@
 import teamsgroup_List from '../components/teamsgroup/List.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
@@ -16,7 +16,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       teamsGroups: payload.teamsGroups,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-teams-group-list', {
         props: { teamsGroups: this.teamsGroups },
         on: {

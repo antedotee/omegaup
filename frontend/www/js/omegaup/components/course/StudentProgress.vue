@@ -36,7 +36,9 @@
           <a
             v-for="problem in assignment.problems"
             :key="problem.alias"
-            v-tooltip="getProgressTooltipDescription(assignment.alias, problem)"
+            v-b-tooltip="
+              getProgressTooltipDescription(assignment.alias, problem)
+            "
             :class="getProblemColor(assignment.alias, problem)"
             data-toggle="tooltip"
             data-placement="bottom"
@@ -54,23 +56,26 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import * as ui from '../../ui';
 import T from '../../lang';
-import 'v-tooltip/dist/v-tooltip.css';
-import { VTooltip } from 'v-tooltip';
+import { vBTooltip } from 'bootstrap-vue-next';
 import user_Username from '../user/Username.vue';
 
 @Component({
   directives: {
-    tooltip: VTooltip,
+    // Swapped the Vue 2-only `v-tooltip` package for bootstrap-vue-next's Vue 3
+    // native tooltip directive; the former renders through a `new Vue({ render(h)
+    // {} })` app that breaks under @vue/compat RENDER_FUNCTION:false. Deliberate
+    // visual change (PR4).
+    'b-tooltip': vBTooltip,
   },
   components: {
     'omegaup-user-username': user_Username,
   },
 })
-export default class StudentProgress extends Vue {
+class StudentProgress extends Vue {
   @Prop() courseAlias!: string;
   @Prop() studentProgress!: types.StudentProgressInCourse;
   @Prop() assignmentsProblems!: types.AssignmentsProblemsPoints[];
@@ -184,6 +189,7 @@ export default class StudentProgress extends Vue {
     return `/course/${this.courseAlias}/student/${this.studentProgress.username}/assignment/${selectedAssignment}/#${selectedProblem}`;
   }
 }
+export default toNative(StudentProgress);
 </script>
 
 <style lang="scss" scoped>

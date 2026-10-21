@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
+import { Component, Prop, Ref, Vue, toNative } from 'vue-facing-decorator';
 import creator_Header from './Header.vue';
 import creator_Tabs from './Tabs.vue';
 import T from '../../../lang';
@@ -49,7 +49,7 @@ import 'intro.js/introjs.css';
     'creator-tabs': creator_Tabs,
   },
 })
-export default class Creator extends Vue {
+class Creator extends Vue {
   @Prop({ default: false }) hideHeaderActions!: boolean;
   @Prop({ default: false }) hideSaveButtons!: boolean;
   @Ref('creatorHeader') creatorHeaderRef!: creator_Header;
@@ -151,4 +151,5 @@ export default class Creator extends Vue {
     this.currentSolutionMarkdownProp = storeData.problemSolutionMarkdown;
   }
 }
+export default toNative(Creator);
 </script>

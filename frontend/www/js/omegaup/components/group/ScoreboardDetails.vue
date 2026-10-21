@@ -53,12 +53,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 
 @Component
-export default class GroupScoreboardDetails extends Vue {
+class GroupScoreboardDetails extends Vue {
   @Prop() ranking!: types.ScoreboardRanking[];
   @Prop() scoreboard!: types.ScoreboardDetails;
   @Prop() contests!: types.ScoreboardContest[];
@@ -67,4 +67,5 @@ export default class GroupScoreboardDetails extends Vue {
 
   T = T;
 }
+export default toNative(GroupScoreboardDetails);
 </script>

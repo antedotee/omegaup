@@ -65,16 +65,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import VueRecaptcha from 'vue-recaptcha';
 import omegaup_Login from './Login.vue';
 import omegaup_Signup from './Signup.vue';
 
-export enum AvailableTabs {
-  Login = 'login',
-  Signup = 'signup',
-}
+import { AvailableTabs } from './Signin_types';
+// AvailableTabs is declared in ./Signin_types and re-exported here so existing
+// SFC importers keep working while plain `.ts` entry points import it from the
+// `.ts` module.
+export { AvailableTabs };
 
 @Component({
   components: {
@@ -83,7 +84,7 @@ export enum AvailableTabs {
     'vue-recaptcha': VueRecaptcha,
   },
 })
-export default class Signin extends Vue {
+class Signin extends Vue {
   @Prop() validateRecaptcha!: boolean;
   @Prop() facebookUrl!: string;
   @Prop({ default: '' }) githubClientId!: string;
@@ -107,6 +108,7 @@ export default class Signin extends Vue {
     window.location.hash = `#${tab}`;
   }
 }
+export default toNative(Signin);
 </script>
 
 <style scoped lang="scss">

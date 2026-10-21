@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import DatePicker from '../DatePicker.vue';
 
@@ -58,7 +58,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class CourseClone extends Vue {
+class CourseClone extends Vue {
   @Prop() initialAlias!: string;
   @Prop() initialName!: string;
 
@@ -67,6 +67,7 @@ export default class CourseClone extends Vue {
   startTime = new Date();
   name = this.initialName;
 }
+export default toNative(CourseClone);
 </script>
 
 <style scoped>

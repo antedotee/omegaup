@@ -1,7 +1,7 @@
-import { createLocalVue, shallowMount, mount } from '@vue/test-utils';
+import { shallowMount, mount } from '@vue/test-utils';
+import { BButton } from 'bootstrap-vue-next';
 
 import Sidebar from './Sidebar.vue';
-import BootstrapVue, { IconsPlugin, BButton } from 'bootstrap-vue';
 import store from '@/js/omegaup/problem/creator/store';
 import Vue from 'vue';
 import {
@@ -10,10 +10,15 @@ import {
 } from '@/js/omegaup/problem/creator/modules/cases';
 
 import T from '../../../../lang';
+import { Group, GroupID } from '@/js/omegaup/problem/creator/types';
+import { waitForModalContent } from '../../../modalTestUtils';
 
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
-localVue.use(IconsPlugin);
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface SidebarVm {
+  groups: Group[];
+  downloadGroupInput(groupID: GroupID, ext: '.in' | '.txt'): void;
+}
 
 describe('Sidebar.vue', () => {
   // Total 6 buttons are rendered initially on this page.
@@ -30,12 +35,16 @@ describe('Sidebar.vue', () => {
   });
 
   it('Should contain buttons and Groups text', async () => {
-    const wrapper = shallowMount(Sidebar, { localVue, store });
+    const wrapper = shallowMount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const buttons = wrapper.findAllComponents(BButton);
     expect(buttons.length).toBe(initialButtonsCount);
     let shouldContainAddText = false;
-    buttons.wrappers.forEach((button) => {
+    buttons.forEach((button) => {
       if (button.text() === T.problemCreatorAdd) shouldContainAddText = true;
     });
     expect(shouldContainAddText).toBe(true);
@@ -43,7 +52,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('should show ungrouped testcases', async () => {
-    const wrapper = shallowMount(Sidebar, { localVue, store });
+    const wrapper = shallowMount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     expect(wrapper.text()).toContain(T.problemCreatorUngrouped);
 
@@ -56,7 +69,7 @@ describe('Sidebar.vue', () => {
       ungroupedCase: true,
     });
     store.commit('casesStore/addGroup', newGroup1);
-    expect(store.state.casesStore.groups[0]).toBe(newGroup1);
+    expect(store.state.casesStore.groups[0]).toStrictEqual(newGroup1);
 
     await Vue.nextTick();
 
@@ -80,7 +93,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('should show groups and cases inside them', async () => {
-    const wrapper = shallowMount(Sidebar, { localVue, store });
+    const wrapper = shallowMount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const newGroup1 = generateGroup({
       name: 'group1',
@@ -166,7 +183,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('Should modify a group', async () => {
-    const wrapper = mount(Sidebar, { localVue, store: store });
+    const wrapper = mount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const newGroup = generateGroup({
       name: 'group',
@@ -179,6 +200,7 @@ describe('Sidebar.vue', () => {
       '[data-sidebar-edit-group-dropdown="edit group"]',
     );
     await editButton.trigger('click');
+    await waitForModalContent();
 
     const editModal = wrapper.find('[data-sidebar-edit-group-modal=""]');
 
@@ -197,22 +219,28 @@ describe('Sidebar.vue', () => {
     const editAutoPointsInput = editModal.find(
       '[data-sidebar-edit-group-modal="edit autoPoints"]',
     );
-    await editAutoPointsInput.setChecked(false);
+    await editAutoPointsInput.setValue(false);
 
     await editModal.find('button.btn-success').trigger('click');
 
     expect(
-      wrapper.vm.groups.find((_group) => _group.groupID === newGroup.groupID)
-        ?.name,
+      (wrapper.vm as unknown as SidebarVm).groups.find(
+        (_group) => _group.groupID === newGroup.groupID,
+      )?.name,
     ).toBe(modifiedName);
     expect(
-      wrapper.vm.groups.find((_group) => _group.groupID === newGroup.groupID)
-        ?.points,
+      (wrapper.vm as unknown as SidebarVm).groups.find(
+        (_group) => _group.groupID === newGroup.groupID,
+      )?.points,
     ).toBe(modifiedPoints);
   });
 
   it('Should download a group', async () => {
-    const wrapper = mount(Sidebar, { localVue, store: store });
+    const wrapper = mount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const newGroup = generateGroup({
       name: 'group',
@@ -227,7 +255,10 @@ describe('Sidebar.vue', () => {
       '[data-sidebar-edit-group-dropdown="download .txt"]',
     );
 
-    const mockDownload = jest.spyOn(wrapper.vm, 'downloadGroupInput');
+    const mockDownload = jest.spyOn(
+      wrapper.vm as unknown as SidebarVm,
+      'downloadGroupInput',
+    );
 
     await downloadInButton.trigger('click');
     expect(mockDownload).toHaveBeenCalledWith(newGroup.groupID, '.in');
@@ -239,7 +270,11 @@ describe('Sidebar.vue', () => {
   });
 
   it('Should validate and fix points', async () => {
-    const wrapper = mount(Sidebar, { localVue, store });
+    const wrapper = mount(Sidebar, {
+      global: {
+        plugins: [store],
+      },
+    });
 
     const fixedPointsGroup1 = generateGroup({
       name: 'fixedPointsGroup',
@@ -385,92 +420,92 @@ describe('Sidebar.vue', () => {
     await validatePointsModal.find('button.btn-success').trigger('click');
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === fixedPointsGroup1.groupID,
       )?.points,
     ).toBe(100);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === fixedPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newCase1.caseID)?.points,
     ).toBe(40);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === fixedPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newCase2.caseID)?.points,
     ).toBe(60);
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === fixedPointsGroup2.groupID,
       )?.points,
     ).toBe(100);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === fixedPointsGroup2.groupID)
         ?.cases.find((_case) => _case.caseID === newCase3.caseID)?.points,
     ).toBe(40);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === fixedPointsGroup2.groupID)
         ?.cases.find((_case) => _case.caseID === newCase4.caseID)?.points,
     ).toBe(60);
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === autoPointsGroup1.groupID,
       )?.points,
     ).toBe(500);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newCase5.caseID)?.points,
     ).toBe(200);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newCase6.caseID)?.points,
     ).toBe(300);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup1.groupID)
         ?.cases.find((_case) => _case.caseID === newAutoPointsCase1.caseID)
         ?.points,
     ).toBe(0);
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === autoPointsGroup2.groupID,
       )?.points,
     ).toBe(50);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup2.groupID)
         ?.cases.find((_case) => _case.caseID === newCase7.caseID)?.points,
     ).toBe(20);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup2.groupID)
         ?.cases.find((_case) => _case.caseID === newCase8.caseID)?.points,
     ).toBe(30);
 
     expect(
-      wrapper.vm.groups.find(
+      (wrapper.vm as unknown as SidebarVm).groups.find(
         (_group) => _group.groupID === autoPointsGroup3.groupID,
       )?.points,
     ).toBe(100);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup3.groupID)
         ?.cases.find((_case) => _case.caseID === newCase9.caseID)?.points,
     ).toBe(20);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup3.groupID)
         ?.cases.find((_case) => _case.caseID === newCase10.caseID)?.points,
     ).toBe(30);
     expect(
-      wrapper.vm.groups
+      (wrapper.vm as unknown as SidebarVm).groups
         .find((_group) => _group.groupID === autoPointsGroup3.groupID)
         ?.cases.find((_case) => _case.caseID === newAutoPointsCase2.caseID)
         ?.points,

@@ -135,7 +135,7 @@
         <omegaup-problem-versions
           :log="data.log"
           :published-revision="data.publishedRevision"
-          :value="data.publishedRevision"
+          :model-value="data.publishedRevision"
           :show-footer="true"
           @emit-select-version="
             (selectedRevision, updatePublished) =>
@@ -264,7 +264,7 @@
         </div>
       </div>
     </div>
-    <b-modal
+    <BModal
       v-model="showConfirmationModal"
       :title="T.problemEditDeleteRequireConfirmation"
       :ok-title="T.problemEditDeleteOk"
@@ -273,12 +273,12 @@
       @ok="$emit('remove', alias)"
     >
       <p>{{ T.problemEditDeleteConfirmationMessage }}</p>
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import problem_Form from './Form.vue';
 import problem_Tags from './Tags.vue';
 import problem_Versions from './Versions.vue';
@@ -289,12 +289,11 @@ import T from '../../lang';
 import { types } from '../../api_types';
 import omegaup_Markdown from '../Markdown.vue';
 
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
+import { BModal } from 'bootstrap-vue-next';
 
 @Component({
   components: {
+    BModal,
     'omegaup-markdown': omegaup_Markdown,
     'omegaup-problem-form': problem_Form,
     'omegaup-problem-tags': problem_Tags,
@@ -304,7 +303,7 @@ Vue.use(ModalPlugin);
     'omegaup-common-groupadmins': common_GroupAdmins,
   },
 })
-export default class ProblemEdit extends Vue {
+class ProblemEdit extends Vue {
   @Prop() data!: types.ProblemEditPayload;
   @Prop() admins!: types.ProblemAdmin[];
   @Prop() initialTab!: string;
@@ -376,4 +375,5 @@ export default class ProblemEdit extends Vue {
     window.location.href = `/arena/problem/${this.alias}/print/`;
   }
 }
+export default toNative(ProblemEdit);
 </script>

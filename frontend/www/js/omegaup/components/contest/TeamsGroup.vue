@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -57,7 +57,7 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class TeamsGroup extends Vue {
+class TeamsGroup extends Vue {
   @Prop() teamsGroup!: types.ContestGroup;
   @Prop() searchResultTeamsGroups!: types.ListItem[];
   @Prop({ default: false }) hasSubmissions!: boolean;
@@ -80,4 +80,5 @@ export default class TeamsGroup extends Vue {
     this.typeaheadGroup = null;
   }
 }
+export default toNative(TeamsGroup);
 </script>

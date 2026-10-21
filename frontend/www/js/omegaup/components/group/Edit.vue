@@ -153,7 +153,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import group_Identities from './Identities.vue';
 import group_Form from './Form.vue';
 import group_Members from './Members.vue';
@@ -162,12 +162,10 @@ import T from '../../lang';
 import { dao, types } from '../../api_types';
 import * as ui from '../../ui';
 
-export enum AvailableTabs {
-  Edit = 'edit',
-  Members = 'members',
-  Scoreboards = 'scoreboards',
-  Identities = 'identities',
-}
+import { AvailableTabs } from './Edit_types';
+// Declared in ./Edit_types and re-exported here so existing SFC importers keep
+// working while plain `.ts` modules import it from the `.ts` file.
+export { AvailableTabs };
 
 @Component({
   components: {
@@ -177,7 +175,7 @@ export enum AvailableTabs {
     'omegaup-group-scoreboards': group_Scoreboards,
   },
 })
-export default class GroupEdit extends Vue {
+class GroupEdit extends Vue {
   @Prop() groupAlias!: string;
   @Prop() groupDescription!: string;
   @Prop() groupName!: string;
@@ -229,6 +227,7 @@ export default class GroupEdit extends Vue {
     this.currentScoreboards = newValue;
   }
 }
+export default toNative(GroupEdit);
 </script>
 
 <style scoped lang="scss">

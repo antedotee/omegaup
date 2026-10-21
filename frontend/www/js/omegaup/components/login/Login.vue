@@ -98,21 +98,22 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 import omegaup_PasswordInput from '../common/PasswordInput.vue';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
 
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 @Component({
   components: {
     'omegaup-password-input': omegaup_PasswordInput,
   },
 })
-export default class Login extends Vue {
+class Login extends Vue {
   @Prop() facebookUrl!: string;
   @Prop({ default: '' }) githubClientId!: string;
   @Prop({ default: null }) githubState!: string | null;
@@ -282,6 +283,7 @@ export default class Login extends Vue {
     return result;
   }
 }
+export default toNative(Login);
 </script>
 
 <style scoped>

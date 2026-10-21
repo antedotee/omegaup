@@ -1,6 +1,6 @@
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 
 import badge_List from '../components/badge/List.vue';
 
@@ -11,7 +11,7 @@ OmegaUp.on('ready', function () {
     components: {
       'omegaup-badge-list': badge_List,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-badge-list', {
         props: {
           allBadges: new Set(payload.badges) as Set<string>,

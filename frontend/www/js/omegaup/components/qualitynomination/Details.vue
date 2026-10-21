@@ -125,7 +125,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import confirmation from '../common/Confirmation.vue';
@@ -141,7 +141,7 @@ interface QualityNominationContents {
     'omegaup-common-confirmation': confirmation,
   },
 })
-export default class QualityNominationDetails extends Vue {
+class QualityNominationDetails extends Vue {
   @Prop() author!: omegaup.User;
   @Prop() contents!: QualityNominationContents;
   @Prop() initialRationale!: string;
@@ -175,6 +175,7 @@ export default class QualityNominationDetails extends Vue {
     this.showConfirmation = true;
   }
 }
+export default toNative(QualityNominationDetails);
 </script>
 
 <style>

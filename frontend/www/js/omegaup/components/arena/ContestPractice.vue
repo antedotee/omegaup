@@ -120,7 +120,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import * as ui from '../../ui';
 import T from '../../lang';
@@ -134,6 +134,7 @@ import { ContestClarificationType } from '../../arena/clarifications';
 import { SubmissionRequest } from '../../arena/submissions';
 
 @Component({
+  emits: ['clarification-response', 'navigate-to-problem'],
   components: {
     'omegaup-arena-clarification-list': arena_ClarificationList,
     'omegaup-arena': arena_Arena,
@@ -143,7 +144,7 @@ import { SubmissionRequest } from '../../arena/submissions';
     'omegaup-problem-details': problem_Details,
   },
 })
-export default class ArenaContestPractice extends Vue {
+class ArenaContestPractice extends Vue {
   @Prop() contest!: types.ContestPublicDetails;
   @Prop() contestAdmin!: boolean;
   @Prop() problems!: types.NavbarProblemsetProblem[];
@@ -246,6 +247,7 @@ export default class ArenaContestPractice extends Vue {
     this.currentRunDetailsData = newValue;
   }
 }
+export default toNative(ArenaContestPractice);
 </script>
 
 <style lang="scss" scoped>

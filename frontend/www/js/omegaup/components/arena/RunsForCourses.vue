@@ -125,9 +125,9 @@
               <label class="col-6 col-sm pr-1 font-weight-bold"
                 >{{ T.wordsProblem }}:
                 <omegaup-common-typeahead
+                  v-model:value="filterProblem"
                   data-search-problem
                   :existing-options="searchResultProblems"
-                  :value.sync="filterProblem"
                   @update-existing-options="
                     (query) => $emit('update-search-result-problems', query)
                   "
@@ -139,9 +139,9 @@
               <label class="col-5 col-sm font-weight-bold"
                 >{{ T.contestParticipant }}:
                 <omegaup-common-typeahead
+                  v-model:value="filterUsername"
                   data-search-username
                   :existing-options="searchResultUsers"
-                  :value.sync="filterUsername"
                   :max-results="10"
                   @update-existing-options="updateSearchResultUsers"
                 ></omegaup-common-typeahead>
@@ -504,7 +504,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import * as ui from '../../ui';
 import T from '../../lang';
@@ -517,7 +517,6 @@ import { DisqualificationType } from './Runs.vue';
 import omegaup_Countdown from '../Countdown.vue';
 import omegaup_Overlay from '../Overlay.vue';
 
-import { PaginationPlugin } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
@@ -545,8 +544,6 @@ library.add(faClock);
 library.add(faCalendarAlt);
 library.add(faCheckCircle);
 library.add(faTimesCircle);
-
-Vue.use(PaginationPlugin);
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -606,7 +603,7 @@ export enum PopupDisplayed {
     'omegaup-user-username': user_Username,
   },
 })
-export default class RunsForCourses extends Vue {
+class RunsForCourses extends Vue {
   @Prop({ default: false }) isContestFinished!: boolean;
   @Prop({ default: true }) isProblemsetOpened!: boolean;
   @Prop({ default: false }) showContest!: boolean;
@@ -1051,7 +1048,10 @@ export default class RunsForCourses extends Vue {
     this.onEmitFilterChanged({ filter: 'output', value: newValue });
   }
 
-  @Emit('filter-changed')
+  // Not an `@Emit` method: it is also called internally from the filter
+  // watchers for its side effects (keeping the `filters` chip list in sync).
+  // Under vue-facing-decorator an `@Emit`-decorated method called internally is
+  // fragile, so the event is emitted explicitly here instead.
   onEmitFilterChanged({
     filter,
     value,
@@ -1062,6 +1062,7 @@ export default class RunsForCourses extends Vue {
     this.filterOffset = 0;
     if (!value) {
       this.filters = this.filters.filter((item) => item.name !== filter);
+      this.$emit('filter-changed', { filter, value });
       return;
     }
     if (filter === 'contest') {
@@ -1074,6 +1075,7 @@ export default class RunsForCourses extends Vue {
     } else {
       currentFilter.value = value;
     }
+    this.$emit('filter-changed', { filter, value });
   }
 
   @Watch('createdGuid')
@@ -1159,6 +1161,7 @@ export default class RunsForCourses extends Vue {
     this.$emit('update-search-result-users', { query });
   }
 }
+export default toNative(RunsForCourses);
 </script>
 
 <style lang="scss" scoped>

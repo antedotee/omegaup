@@ -1,12 +1,10 @@
-import group_Edit, { AvailableTabs } from '../components/group/Edit.vue';
-import group_Members from '../components/group/Members.vue';
-import group_Scoreboards from '../components/group/Scoreboards.vue';
+import group_Edit from '../components/group/Edit.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as CSV from '@/third_party/js/csv.js/csv.js';
 import {
   downloadCsvFile,
@@ -16,6 +14,33 @@ import {
   identityOptionalFields,
   identityRequiredFields,
 } from '../groups';
+
+enum AvailableTabs {
+  Edit = 'edit',
+  Members = 'members',
+  Scoreboards = 'scoreboards',
+  Identities = 'identities',
+}
+
+interface GroupEditInstance {
+  tab: AvailableTabs | string;
+  identities: types.Identity[];
+  identitiesCsv: types.Identity[];
+  scoreboards: types.GroupScoreboard[];
+}
+
+interface GroupScoreboardsRef {
+  reset: () => void;
+}
+
+interface GroupMembersRef {
+  reset: () => void;
+  showEditForm: boolean;
+  showChangePasswordForm: boolean;
+  identity: types.Identity;
+  username: string;
+  $el: Element;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.GroupEditPayload();
@@ -40,31 +65,34 @@ OmegaUp.on('ready', () => {
       searchResultUsers: [] as types.ListItem[],
       searchResultSchools: searchResultSchools,
     }),
-    beforeDestroy() {
+    beforeUnmount() {
       window.removeEventListener('hashchange', onHashChange);
     },
     methods: {
       refreshGroupScoreboards: (): void => {
         api.Group.details({ group_alias: payload.groupAlias })
           .then((group) => {
-            groupEdit.scoreboards = group.scoreboards;
+            (groupEdit as unknown as GroupEditInstance).scoreboards =
+              group.scoreboards;
           })
           .catch(ui.apiError);
       },
       refreshMemberList: (): void => {
         api.Group.members({ group_alias: payload.groupAlias })
           .then((data) => {
-            groupEdit.identities = data.identities.filter(
-              (identity) => !identity.username.includes(':'),
-            );
-            groupEdit.identitiesCsv = data.identities.filter((identity) =>
-              identity.username.includes(':'),
-            );
+            (groupEdit as unknown as GroupEditInstance).identities =
+              data.identities.filter(
+                (identity) => !identity.username.includes(':'),
+              );
+            (groupEdit as unknown as GroupEditInstance).identitiesCsv =
+              data.identities.filter((identity) =>
+                identity.username.includes(':'),
+              );
           })
           .catch(ui.apiError);
       },
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-group-edit', {
         props: {
           groupAlias: payload.groupAlias,
@@ -98,7 +126,7 @@ OmegaUp.on('ready', () => {
               .catch(ui.apiError);
           },
           'create-scoreboard': (
-            source: group_Scoreboards,
+            source: GroupScoreboardsRef,
             scoreboardName: string,
             scoreboardAlias: string,
             scoreboardDescription: string,
@@ -116,7 +144,7 @@ OmegaUp.on('ready', () => {
               })
               .catch(ui.apiError);
           },
-          'add-member': (source: group_Members, username: string) => {
+          'add-member': (source: GroupMembersRef, username: string) => {
             api.Group.addUser({
               group_alias: payload.groupAlias,
               usernameOrEmail: username,
@@ -129,7 +157,7 @@ OmegaUp.on('ready', () => {
               .catch(ui.apiError);
           },
           'edit-identity': (
-            source: group_Members,
+            source: GroupMembersRef,
             identity: types.Identity,
           ) => {
             source.showEditForm = true;
@@ -163,7 +191,7 @@ OmegaUp.on('ready', () => {
               .catch(ui.apiError);
           },
           'change-password-identity': (
-            source: group_Members,
+            source: GroupMembersRef,
             username: string,
           ) => {
             source.showEditForm = false;
@@ -171,7 +199,7 @@ OmegaUp.on('ready', () => {
             source.username = username;
           },
           'change-password-identity-member': (
-            source: group_Members,
+            source: GroupMembersRef,
             username: string,
             newPassword: string,
             newPasswordRepeat: string,
@@ -205,7 +233,7 @@ OmegaUp.on('ready', () => {
               })
               .catch(ui.apiError);
           },
-          cancel: (source: group_Members) => {
+          cancel: (source: GroupMembersRef) => {
             this.refreshMemberList();
             source.showEditForm = false;
             source.showChangePasswordForm = false;
@@ -336,11 +364,11 @@ OmegaUp.on('ready', () => {
     const hash = window.location.hash.substring(1).split('#')[0];
 
     if (!Object.values(AvailableTabs).includes(hash as AvailableTabs)) {
-      groupEdit.tab = AvailableTabs.Members;
+      (groupEdit as unknown as GroupEditInstance).tab = AvailableTabs.Members;
       return;
     }
 
-    groupEdit.tab = hash as AvailableTabs;
+    (groupEdit as unknown as GroupEditInstance).tab = hash as AvailableTabs;
   }
 
   window.addEventListener('hashchange', onHashChange);

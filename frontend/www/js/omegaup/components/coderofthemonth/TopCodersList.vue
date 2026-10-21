@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
 import country_Flag from '../CountryFlag.vue';
@@ -60,13 +60,14 @@ library.add(faCogs);
     'font-awesome-icon': FontAwesomeIcon,
   },
 })
-export default class CoderOfTheMonthList extends Vue {
+class CoderOfTheMonthList extends Vue {
   @Prop() coders!: types.CoderOfTheMonthList[];
   @Prop() selectedTab!: string;
   @Prop({ default: false }) isDisabled!: boolean;
 
   T = T;
 }
+export default toNative(CoderOfTheMonthList);
 </script>
 
 <style scoped lang="scss">

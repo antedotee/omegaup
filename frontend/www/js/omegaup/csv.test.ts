@@ -2,8 +2,14 @@ import { shallowMount } from '@vue/test-utils';
 import T from './lang';
 import course_ViewProgress from './components/course/ViewProgress.vue';
 import type { types } from './api_types';
-import { escapeCsv, toCsv, Percentage } from './csv';
+import { escapeCsv, toCsv, Percentage, TableCell } from './csv';
 import { formatString } from './ui';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ViewProgressVm {
+  progressTable: TableCell[][] | null;
+}
 
 describe('csv_utils', () => {
   if (typeof window.URL.createObjectURL === 'undefined') {
@@ -115,11 +121,13 @@ describe('csv_utils', () => {
 
   it('Should handle csv content', () => {
     const wrapper = shallowMount(course_ViewProgress, {
-      propsData: baseViewProgressProps,
+      props: baseViewProgressProps,
     });
     const globalScore = `${student.courseProgress.toFixed(2)}%`;
 
-    const csvContent = toCsv(wrapper.vm.progressTable);
+    const csvContent = toCsv(
+      (wrapper.vm as unknown as ViewProgressVm).progressTable,
+    );
     expect(csvContent).toBe(`${T.profileUsername},${T.wordsName},${
       T.courseProgressGlobalScore
     },${assignment.name} ${formatString(T.studentProgressPoints, {

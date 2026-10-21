@@ -163,7 +163,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, toNative } from 'vue-facing-decorator';
 import * as ui from '../../ui';
 import T from '../../lang';
 import { reportAnIssueURL } from '../../errors';
@@ -183,7 +183,7 @@ library.add(faFacebook, faGithub, faDiscord);
     FontAwesomeIcon,
   },
 })
-export default class Footer extends Vue {
+class Footer extends Vue {
   @Prop() isLoggedIn!: boolean;
   @Prop() omegaUpLockDown!: boolean;
 
@@ -204,6 +204,7 @@ export default class Footer extends Vue {
     return getBlogUrl('CodeofConductPolicyURL');
   }
 }
+export default toNative(Footer);
 </script>
 
 <style lang="scss" scoped>

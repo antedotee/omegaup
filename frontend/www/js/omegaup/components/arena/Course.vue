@@ -238,7 +238,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import { omegaup } from '../../omegaup';
@@ -261,6 +261,7 @@ import arena_FeedbackCodeView from './FeedbackCodeView.vue';
 import { ArenaCourseFeedback } from './Feedback.vue';
 
 @Component({
+  emits: ['navigate-to-problem'],
   components: {
     'omegaup-arena': arena_Arena,
     'omegaup-arena-clarification-list': arena_ClarificationList,
@@ -278,7 +279,7 @@ import { ArenaCourseFeedback } from './Feedback.vue';
     'omegaup-arena-feedback-code-view': arena_FeedbackCodeView,
   },
 })
-export default class ArenaCourse extends Vue {
+class ArenaCourse extends Vue {
   @Prop() course!: types.CourseDetails;
   @Prop() currentAssignment!: types.ArenaAssignment;
   @Prop() problems!: types.NavbarProblemsetProblem[];
@@ -475,6 +476,7 @@ export default class ArenaCourse extends Vue {
     this.currentRunDetailsData = newValue;
   }
 }
+export default toNative(ArenaCourse);
 </script>
 
 <style lang="scss" scoped>

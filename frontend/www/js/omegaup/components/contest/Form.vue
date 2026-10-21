@@ -901,7 +901,7 @@
         </div>
       </form>
     </div>
-    <b-modal
+    <BModal
       v-model="showModal"
       :title="T.contestNewFormPresetOverwriteWarningModalTitle"
       :ok-title="T.wordsConfirm"
@@ -912,12 +912,20 @@
       "
     >
       {{ T.contestNewFormPresetOverwriteWarning }}
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
 import DateTimePicker from '../DateTimePicker.vue';
@@ -929,8 +937,7 @@ import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
 import 'v-tooltip/dist/v-tooltip.css';
 import { VTooltip } from 'v-tooltip';
-import { ModalPlugin } from 'bootstrap-vue';
-Vue.use(ModalPlugin);
+import { BModal } from 'bootstrap-vue-next';
 
 import {
   FontAwesomeIcon,
@@ -945,7 +952,7 @@ import * as markdownModule from '../../markdown';
 import omegaup_Markdown from '../Markdown.vue';
 library.add(fas);
 
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 export enum ScoreMode {
   AllOrNothing = 'all_or_nothing',
@@ -1103,6 +1110,7 @@ const markdownConverter = new markdownModule.Converter({ preview: true });
 
 @Component({
   components: {
+    BModal,
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-datetimepicker': DateTimePicker,
     'font-awesome-icon': FontAwesomeIcon,
@@ -1115,7 +1123,7 @@ const markdownConverter = new markdownModule.Converter({ preview: true });
     tooltip: VTooltip,
   },
 })
-export default class Form extends Vue {
+class Form extends Vue {
   @Ref() readonly descriptionButtonBar!: HTMLDivElement;
   @Ref() readonly descriptionInput!: HTMLTextAreaElement;
   markdownEditor: Markdown.Editor | null = null;
@@ -1511,8 +1519,8 @@ export default class Form extends Vue {
       penalty: this.penalty,
       scoreboard: this.scoreboard,
       penalty_type: this.penaltyType,
-      default_show_all_contestants_in_scoreboard: this
-        .defaultShowAllContestantsInScoreboard,
+      default_show_all_contestants_in_scoreboard:
+        this.defaultShowAllContestantsInScoreboard,
       show_scoreboard_after: this.showScoreboardAfter,
       score_mode: this.currentScoreMode,
       needs_basic_information: this.needsBasicInformation,
@@ -1603,6 +1611,7 @@ export default class Form extends Vue {
     this.$emit('update-search-result-teams-groups', query);
   }
 }
+export default toNative(Form);
 </script>
 
 <style lang="scss" scoped>

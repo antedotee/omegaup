@@ -15,14 +15,14 @@ describe('ObjectivesQuestions.vue', () => {
 
   it('Should only display submit button', async () => {
     const wrapper = shallowMount(user_ObjectivesQuestions);
-    await wrapper.find('input[type="radio"][value="none"]').setChecked();
+    await wrapper.find('input[type="radio"][value="none"]').setValue(true);
     expect(wrapper.find('button.btn-primary').exists()).toBe(true);
     expect(wrapper.find('button.btn-next-previous').exists()).toBe(false);
   });
 
   it('Should display previous modal page and submit buttons', async () => {
     const wrapper = shallowMount(user_ObjectivesQuestions);
-    await wrapper.find('input[type="radio"][value="learning"]').setChecked();
+    await wrapper.find('input[type="radio"][value="learning"]').setValue(true);
 
     const buttonNext = wrapper.find('button.btn-next-previous');
     expect(buttonNext.exists()).toBe(true);
@@ -46,7 +46,7 @@ describe('ObjectivesQuestions.vue', () => {
 
   it('Should display 1 as the last modal page counter', async () => {
     const wrapper = shallowMount(user_ObjectivesQuestions);
-    await wrapper.find('input[type="radio"][value="none"]').setChecked();
+    await wrapper.find('input[type="radio"][value="none"]').setValue(true);
     expect(wrapper.text()).toContain(
       ui.formatString(T.userObjectivesModalPageCounter, {
         current: 1,
@@ -75,7 +75,7 @@ describe('ObjectivesQuestions.vue', () => {
       expect(wrapper.text()).toContain(T.userObjectivesModalDescriptionUsage);
       await wrapper
         .find(`input[type="radio"][value="${objective}"]`)
-        .setChecked();
+        .setValue(true);
       await wrapper.find('button.btn-next-previous').trigger('click');
       expect(wrapper.text()).toContain(description);
     },
@@ -193,11 +193,11 @@ describe('ObjectivesQuestions.vue', () => {
       const wrapper = shallowMount(user_ObjectivesQuestions);
       await wrapper
         .find(`input[type="radio"][value="${objectiveA}"]`)
-        .setChecked();
+        .setValue(true);
       await wrapper.find('button.btn-next-previous').trigger('click');
       await wrapper
         .find(`input[type="radio"][value="${objectiveB}"]`)
-        .setChecked();
+        .setValue(true);
       await wrapper.find('button.btn-primary').trigger('click');
       expect(wrapper.emitted('submit')).toBeDefined();
       expect(wrapper.emitted('submit')?.[0]).toEqual([
@@ -213,7 +213,7 @@ describe('ObjectivesQuestions.vue', () => {
 
   it('Should emit correct objectives values when "none" radio button is checked', async () => {
     const wrapper = shallowMount(user_ObjectivesQuestions);
-    await wrapper.find(`input[type="radio"][value="none"]`).setChecked();
+    await wrapper.find(`input[type="radio"][value="none"]`).setValue(true);
     await wrapper.find('button.btn-primary').trigger('click');
     expect(wrapper.emitted('submit')).toBeDefined();
     expect(wrapper.emitted('submit')?.[0]).toEqual([

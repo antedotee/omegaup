@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
@@ -96,7 +96,7 @@ import { getBlogUrl } from '../../urlHelper';
     'omegaup-common-typeahead': common_Typeahead,
   },
 })
-export default class SchoolRank extends Vue {
+class SchoolRank extends Vue {
   @Prop() page!: number;
   @Prop() length!: number;
   @Prop() showHeader!: boolean;
@@ -121,6 +121,7 @@ export default class SchoolRank extends Vue {
     )}/`;
   }
 }
+export default toNative(SchoolRank);
 </script>
 
 <style lang="scss" scoped>

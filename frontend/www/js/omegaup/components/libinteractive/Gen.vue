@@ -1,6 +1,6 @@
 <template>
-  <b-card>
-    <b-card-body>
+  <BCard>
+    <BCardBody>
       <form
         action="/libinteractive/gen/"
         method="post"
@@ -57,39 +57,38 @@
           ></textarea>
         </div>
         <div class="form-group text-right">
-          <b-button variant="primary" type="submit">
-            <b-icon-cloud-download aria-hidden="true"></b-icon-cloud-download>
+          <BButton variant="primary" type="submit">
+            <i class="bi bi-cloud-download" aria-hidden="true"></i>
             {{ T.wordsDownload }}
-          </b-button>
+          </BButton>
         </div>
       </form>
-    </b-card-body>
-    <b-card-body v-if="errorDescription" class="panel-footer">
+    </BCardBody>
+    <BCardBody v-if="errorDescription" class="panel-footer">
       <pre><code class="w-100">{{ errorDescription }}</code></pre>
-    </b-card-body>
-  </b-card>
+    </BCardBody>
+  </BCard>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
-// Import Bootstrap an BootstrapVue CSS files (order is important)
+// Import Bootstrap CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-// Import Only Required Plugins
-import { ButtonPlugin, CardPlugin, BIconCloudDownload } from 'bootstrap-vue';
+import { BButton, BCard, BCardBody } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
-Vue.use(ButtonPlugin);
-Vue.use(CardPlugin);
 
 @Component({
   components: {
-    BIconCloudDownload,
+    BButton,
+    BCard,
+    BCardBody,
   },
 })
-export default class LibinteractiveGen extends Vue {
+class LibinteractiveGen extends Vue {
   @Prop({ default: null }) error!: null | types.LibinteractiveError;
   @Prop() language!: string;
   @Prop() os!: string;
@@ -111,6 +110,7 @@ export default class LibinteractiveGen extends Vue {
     return this.currentError?.field ?? null;
   }
 }
+export default toNative(LibinteractiveGen);
 </script>
 
 <style lang="scss" scoped>

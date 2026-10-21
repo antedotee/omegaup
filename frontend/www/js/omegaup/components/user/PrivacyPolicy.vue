@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 import omegaup_Markdown from '../Markdown.vue';
@@ -34,7 +34,7 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class UserPrivacyPolicy extends Vue {
+class UserPrivacyPolicy extends Vue {
   @Prop() policyMarkdown!: string;
   @Prop({ default: false }) agreed!: boolean;
   @Prop() saved!: boolean;
@@ -42,4 +42,5 @@ export default class UserPrivacyPolicy extends Vue {
   T = T;
   currentAgreed = this.agreed;
 }
+export default toNative(UserPrivacyPolicy);
 </script>

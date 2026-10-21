@@ -1,5 +1,6 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import Sortable from 'sortablejs';
+import type { DirectiveBinding } from 'vue';
 
 import T from '../../lang';
 import { omegaup } from '../../omegaup';
@@ -10,26 +11,28 @@ import course_AssignmentList from './AssignmentList.vue';
 describe('AssignmentList.vue', () => {
   it('Should handle empty content list', () => {
     const wrapper = shallowMount(course_AssignmentList, {
-      propsData: {
+      props: {
         content: [] as types.CourseAssignment[],
         courseAlias: 'course_alias',
+      },
+
+      global: {
+        directives: {
+          Sortable: {
+            mounted: (el: HTMLElement, binding: DirectiveBinding) => {
+              new Sortable(el, binding.value || {});
+            },
+          },
+        },
       },
     });
 
     expect(wrapper.text()).toContain(T.courseContentEmpty);
   });
 
-  const localVue = createLocalVue();
-  localVue.directive('Sortable', {
-    inserted: (el: HTMLElement, binding) => {
-      new Sortable(el, binding.value || {});
-    },
-  });
-
   it('Should handle content list', async () => {
     const wrapper = shallowMount(course_AssignmentList, {
-      localVue,
-      propsData: {
+      props: {
         content: [
           {
             alias: 'CA',
@@ -48,6 +51,15 @@ describe('AssignmentList.vue', () => {
         ] as omegaup.Assignment[],
         courseAlias: 'course_alias',
         assignmentFormMode: omegaup.AssignmentFormMode.Default,
+      },
+      global: {
+        directives: {
+          Sortable: {
+            mounted: (el: HTMLElement, binding: DirectiveBinding) => {
+              new Sortable(el, binding.value || {});
+            },
+          },
+        },
       },
     });
     await wrapper

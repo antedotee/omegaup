@@ -323,7 +323,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { types, messages } from '../../api_types';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -334,7 +335,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 import {
   FontAwesomeIcon,
@@ -370,6 +371,7 @@ const MAX_LENGTH = {
 const DANGER_THRESHOLD_PERCENTAGE = 0.9;
 
 @Component({
+  emits: ['submit'],
   components: {
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-datepicker': DatePicker,
@@ -380,7 +382,7 @@ const DANGER_THRESHOLD_PERCENTAGE = 0.9;
     'vue-multiselect': Multiselect,
   },
 })
-export default class CourseDetails extends Vue {
+class CourseDetails extends Vue {
   @Prop({ default: false }) update!: boolean;
   @Prop({ default: false }) readOnly!: boolean;
   @Prop() course!: types.CourseDetails;
@@ -611,6 +613,7 @@ export default class CourseDetails extends Vue {
     this.reset();
   }
 }
+export default toNative(CourseDetails);
 </script>
 
 <style lang="scss" scoped>

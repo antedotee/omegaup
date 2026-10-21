@@ -41,13 +41,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
 
 @Component
-export default class AdminRoles extends Vue {
+class AdminRoles extends Vue {
   @Prop() roles!: types.UserRole[];
   @Prop() groups!: types.Group[];
 
@@ -74,4 +74,5 @@ export default class AdminRoles extends Vue {
     };
   }
 }
+export default toNative(AdminRoles);
 </script>

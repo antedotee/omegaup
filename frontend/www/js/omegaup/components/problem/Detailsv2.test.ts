@@ -1,15 +1,18 @@
 jest.mock('../../../../third_party/js/diff_match_patch.js');
 
-import { mount, shallowMount, createLocalVue } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 import { types } from '../../api_types';
 import T from '../../lang';
 import arena_EphemeralGrader from '../arena/EphemeralGrader.vue';
 import problem_Details from './Detailsv2.vue';
 
-import BootstrapVue, { BTab } from 'bootstrap-vue';
+import { BTab } from 'bootstrap-vue-next';
 
-const localVue = createLocalVue();
-localVue.use(BootstrapVue);
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface Detailsv2Vm {
+  filteredLanguages: string[];
+}
 
 describe('Detailsv2.vue', () => {
   const problem: types.ProblemDetails = {
@@ -101,7 +104,7 @@ describe('Detailsv2.vue', () => {
 
   it('Should show the tabs', () => {
     const wrapper = shallowMount(problem_Details, {
-      propsData: {
+      props: {
         allRuns: runs,
         problem,
         user: {
@@ -112,21 +115,20 @@ describe('Detailsv2.vue', () => {
         languages: ['py2', 'py3'],
         userRuns: runs,
       },
-      localVue,
     });
 
     const tabs = wrapper.findAllComponents(BTab);
     const expectedTabs = [T.wordsProblem, T.wordsRuns, T.wordsClarifications];
     expect(expectedTabs.length).toBe(tabs.length);
     for (let i = 0; i < expectedTabs.length; i++) {
-      expect(tabs.at(i).attributes('title')).toBe(expectedTabs[i]);
+      expect(tabs[i].attributes('title')).toBe(expectedTabs[i]);
     }
   });
 
   it('Should show the problem tab details', () => {
     const languages = ['py2', 'py3'];
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         allRuns: runs,
         problem,
         user: {
@@ -137,12 +139,13 @@ describe('Detailsv2.vue', () => {
         languages,
         userRuns: runs,
       },
-      localVue,
     });
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect(wrapper.vm.filteredLanguages).toEqual(languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(
+      languages,
+    );
     expect(wrapper.findComponent(arena_EphemeralGrader).exists()).toBe(true);
     expect(wrapper.find('div[data-markdown-statement]').text()).toContain(
       '#include <iostream>',
@@ -152,7 +155,7 @@ describe('Detailsv2.vue', () => {
 
   it('Should show the problem languages', () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         allRuns: runs,
         problem,
         user: {
@@ -162,17 +165,18 @@ describe('Detailsv2.vue', () => {
         },
         userRuns: runs,
       },
-      localVue,
     });
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect(wrapper.vm.filteredLanguages).toEqual(problem.languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(
+      problem.languages,
+    );
   });
 
   it('Should show the problem languages', () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         allRuns: runs,
         problem,
         user: {
@@ -182,17 +186,18 @@ describe('Detailsv2.vue', () => {
         },
         userRuns: runs,
       },
-      localVue,
     });
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect(wrapper.vm.filteredLanguages).toEqual(problem.languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(
+      problem.languages,
+    );
   });
 
   it('Should handle the user runs', async () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         allRuns: runs,
         problem,
         user: {
@@ -202,7 +207,6 @@ describe('Detailsv2.vue', () => {
         },
         userRuns: runs,
       },
-      localVue,
     });
 
     expect(wrapper.find('table.runs tbody').text()).toContain(runs[0].guid);
@@ -211,7 +215,7 @@ describe('Detailsv2.vue', () => {
 
   it('Should handle the runs tab', async () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         allRuns: runs,
         problem,
         user: {
@@ -221,11 +225,10 @@ describe('Detailsv2.vue', () => {
         },
         userRuns: runs,
       },
-      localVue,
     });
 
     const tabsItems = wrapper.findAllComponents(BTab);
-    const runsTab = tabsItems.at(1);
+    const runsTab = tabsItems[1];
     expect(runsTab.text()).toContain(T.wordsSubmissions);
     expect(runsTab.text()).toContain(T.wordsVerdict);
     expect(runsTab.text()).toContain(T.wordsStatus);

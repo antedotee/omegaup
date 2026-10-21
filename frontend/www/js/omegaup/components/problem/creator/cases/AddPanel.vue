@@ -2,12 +2,8 @@
   <b-card :title="T.problemCreatorAdd">
     <form ref="form" @submit.prevent="addItemToStore">
       <div class="h-100">
-        <b-tabs small pills lazy>
-          <b-tab
-            :active="tab === 'case'"
-            name="modal-form"
-            @click="tab = 'case'"
-          >
+        <b-tabs v-model:index="tabIndex" small pills lazy>
+          <b-tab name="modal-form" unmount-lazy>
             <template #title>
               <span name="group" data-problem-creator-add-panel-tab="case">
                 {{ T.problemCreatorCase }}</span
@@ -23,11 +19,7 @@
             >
             <omegaup-problem-creator-case-input ref="case-input" />
           </b-tab>
-          <b-tab
-            :active="tab === 'group'"
-            name="modal-form"
-            @click="tab = 'group'"
-          >
+          <b-tab name="modal-form" unmount-lazy>
             <template #title>
               <span name="group" data-problem-creator-add-panel-tab="group">
                 {{ T.problemCreatorGroup }}</span
@@ -43,11 +35,7 @@
             >
             <omegaup-problem-creator-group-input ref="group-input" />
           </b-tab>
-          <b-tab
-            :active="tab === 'multiplecases'"
-            name="modal-form"
-            @click="tab = 'multiplecases'"
-          >
+          <b-tab name="modal-form" unmount-lazy>
             <template #title>
               <span
                 name="multiple-cases"
@@ -89,12 +77,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Ref, Vue } from 'vue-property-decorator';
+import { Component, Ref, Vue, toNative } from 'vue-facing-decorator';
 import T from '../../../../lang';
 import problemCreator_Cases_CaseInput from './CaseInput.vue';
 import problemCreator_Cases_MultipleCasesInput from './MultipleCasesInput.vue';
 import problemCreator_Cases_GroupInput from './GroupInput.vue';
-import { namespace } from 'vuex-class';
 import {
   Group,
   CaseRequest,
@@ -103,16 +90,18 @@ import {
 } from '@/js/omegaup/problem/creator/types';
 import { NIL, v4 as uuid } from 'uuid';
 
-const casesStore = namespace('casesStore');
+// The tabs in template order.
+const ADD_TABS: AddTabTypes[] = ['case', 'group', 'multiplecases'];
 
 @Component({
   components: {
     'omegaup-problem-creator-case-input': problemCreator_Cases_CaseInput,
-    'omegaup-problem-creator-multiple-cases-input': problemCreator_Cases_MultipleCasesInput,
+    'omegaup-problem-creator-multiple-cases-input':
+      problemCreator_Cases_MultipleCasesInput,
     'omegaup-problem-creator-group-input': problemCreator_Cases_GroupInput,
   },
 })
-export default class AddPanel extends Vue {
+class AddPanel extends Vue {
   tab: AddTabTypes = 'case';
 
   invalidCaseName = false;
@@ -124,12 +113,28 @@ export default class AddPanel extends Vue {
   @Ref('case-input') caseInputRef!: problemCreator_Cases_CaseInput;
   @Ref('group-input') groupInputRef!: problemCreator_Cases_GroupInput;
 
-  @casesStore.Mutation('addCase') addCase!: (caseRequest: CaseRequest) => void;
-  @casesStore.Mutation('addGroup') addGroup!: (groupRequest: Group) => void;
-  @casesStore.Action('addMultipleCases') addMultipleCases!: (
-    multipleCaseRequest: MultipleCaseAddRequest,
-  ) => void;
-  @casesStore.State('groups') groups!: Group[];
+  // vuex-class namespaced decorators do not bind under vue-facing-decorator,
+  // so these are expressed as store accessors directly.
+  addCase(caseRequest: CaseRequest): void {
+    this.$store.commit('casesStore/addCase', caseRequest);
+  }
+  addGroup(groupRequest: Group): void {
+    this.$store.commit('casesStore/addGroup', groupRequest);
+  }
+  addMultipleCases(multipleCaseRequest: MultipleCaseAddRequest): void {
+    this.$store.dispatch('casesStore/addMultipleCases', multipleCaseRequest);
+  }
+  // bootstrap-vue emitted `click` on a tab when its title was clicked;
+  // bootstrap-vue-next does not, so the active tab is bound by index.
+  get tabIndex(): number {
+    return ADD_TABS.indexOf(this.tab);
+  }
+  set tabIndex(index: number) {
+    this.tab = ADD_TABS[index];
+  }
+  get groups(): Group[] {
+    return this.$store.state.casesStore.groups;
+  }
 
   addItemToStore() {
     this.invalidCaseName = false;
@@ -188,10 +193,10 @@ export default class AddPanel extends Vue {
         cases: [],
       });
     } else if (this.tab === 'multiplecases') {
-      const multipleCasesPrefix = this.multipleCasesInputRef
-        .multipleCasesPrefix;
-      const multipleCasesSuffix = this.multipleCasesInputRef
-        .multipleCasesSuffix;
+      const multipleCasesPrefix =
+        this.multipleCasesInputRef.multipleCasesPrefix;
+      const multipleCasesSuffix =
+        this.multipleCasesInputRef.multipleCasesSuffix;
       const multipleCasesCount = this.multipleCasesInputRef.multipleCasesCount;
       const multipleCasesGroup = this.multipleCasesInputRef.multipleCasesGroup;
 
@@ -236,4 +241,5 @@ export default class AddPanel extends Vue {
     this.$emit('close-add-window');
   }
 }
+export default toNative(AddPanel);
 </script>

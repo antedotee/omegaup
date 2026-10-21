@@ -1,9 +1,13 @@
 import course_ViewProgress from '../components/course/ViewProgress.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as api from '../api';
 import * as ui from '../ui';
+
+interface ViewProgressInstance {
+  completeStudentsProgress: types.StudentProgressInCourse[] | null;
+}
 
 OmegaUp.on('ready', function () {
   const payload = types.payloadParsers.StudentsProgressPayload();
@@ -16,7 +20,7 @@ OmegaUp.on('ready', function () {
     data: () => ({
       completeStudentsProgress: null as types.StudentProgressInCourse[] | null,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-viewprogress', {
         props: {
           course: payload.course,
@@ -54,7 +58,8 @@ OmegaUp.on('ready', function () {
         break;
       }
     }
-    ViewProgress.completeStudentsProgress = completeStudentsProgress;
+    (ViewProgress as unknown as ViewProgressInstance).completeStudentsProgress =
+      completeStudentsProgress;
   };
 
   getCSV();

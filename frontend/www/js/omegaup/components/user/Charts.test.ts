@@ -1,5 +1,5 @@
-import { shallowMount, Wrapper } from '@vue/test-utils';
-import Vue from 'vue';
+import { shallowMount, VueWrapper } from '@vue/test-utils';
+import Vue, { type CreateElement } from 'vue';
 import Charts from './Charts.vue';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
@@ -8,7 +8,7 @@ jest.mock('highcharts-vue', () => ({
   Chart: {
     name: 'highcharts',
     props: ['options', 'updateArgs'],
-    render(h: Vue.CreateElement) {
+    render(h: CreateElement) {
       return h('div', { class: 'highcharts-mock' });
     },
   },
@@ -36,9 +36,9 @@ function freshData(): omegaup.RunInfo[] {
 function mountComponent(
   data: omegaup.RunInfo[] = [],
   username = 'testuser',
-): Wrapper<Vue> {
+): VueWrapper {
   return shallowMount(Charts, {
-    propsData: { data, username },
+    props: { data, username },
   });
 }
 
@@ -353,8 +353,8 @@ describe('Charts.vue', () => {
       // B should have its own correct categories
       expect(countsB.month.categories).toEqual(['2025-06', '2025-07']);
 
-      wrapperA.destroy();
-      wrapperB.destroy();
+      wrapperA.unmount();
+      wrapperB.unmount();
     });
 
     // Known Bug 3: groupedPeriods only initializes {WA, PA, AC, TLE, RTE} at

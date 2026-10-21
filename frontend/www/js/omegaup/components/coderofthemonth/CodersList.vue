@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
 import country_Flag from '../CountryFlag.vue';
@@ -52,9 +52,10 @@ import { types } from '../../api_types';
     'omegaup-countryflag': country_Flag,
   },
 })
-export default class CoderOfTheMonthList extends Vue {
+class CoderOfTheMonthList extends Vue {
   @Prop() coders!: types.CoderOfTheMonthList[];
 
   T = T;
 }
+export default toNative(CoderOfTheMonthList);
 </script>

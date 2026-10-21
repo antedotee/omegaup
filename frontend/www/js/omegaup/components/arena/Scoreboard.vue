@@ -65,12 +65,11 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="(user, userIndex) in ranking">
-            <tr
-              v-if="showUser(user.is_invited)"
-              :key="`${user.username}-${user.virtual}`"
-              :class="user.username"
-            >
+          <template
+            v-for="(user, userIndex) in ranking"
+            :key="`${user.username}-${user.virtual}`"
+          >
+            <tr v-if="showUser(user.is_invited)" :class="user.username">
               <td class="legend" :class="legendClass(userIndex)"></td>
               <td class="position" data-table-scoreboard-position>
                 {{ user.place || '—' }}
@@ -130,7 +129,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 
 import * as Highcharts from 'highcharts/highstock';
 import { Chart } from 'highcharts-vue';
@@ -148,7 +147,7 @@ import { SocketStatus } from '../../arena/events_socket';
     'omegaup-countdown': omegaup_Countdown,
   },
 })
-export default class ArenaScoreboard extends Vue {
+class ArenaScoreboard extends Vue {
   @Prop({ default: 10 }) numberOfPositions!: number;
   @Prop() problems!: omegaup.Problem[];
   @Prop() ranking!: types.ScoreboardRankingEntry[];
@@ -256,6 +255,7 @@ export default class ArenaScoreboard extends Vue {
     return userIsInvited || !this.onlyShowExplicitlyInvited;
   }
 }
+export default toNative(ArenaScoreboard);
 </script>
 
 <style lang="scss" scoped>

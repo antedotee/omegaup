@@ -25,11 +25,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class Settings extends Vue {
+class Settings extends Vue {
   T = T;
 
   @Prop({ default: true }) ephemeralGraderEnabled!: boolean;
@@ -41,4 +41,5 @@ export default class Settings extends Vue {
     this.$emit('update-ephemeral-grader', newValue);
   }
 }
+export default toNative(Settings);
 </script>

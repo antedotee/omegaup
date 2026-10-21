@@ -6,7 +6,6 @@
     <div class="switch">
       <input
         v-model="currentCheckedValue"
-        :value="currentCheckedValue"
         :disabled="disabled"
         type="checkbox"
       />
@@ -21,15 +20,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 
-export enum ToggleSwitchSize {
-  Small = 'small',
-  Large = 'large',
-}
+import { ToggleSwitchSize } from './ToggleSwitch_types';
+// Declared in ./ToggleSwitch_types and re-exported here so existing SFC
+// importers keep working while plain `.ts` modules import it from the `.ts`
+// file.
+export { ToggleSwitchSize };
 
-@Component
-export default class ToggleSwitch extends Vue {
+@Component({ emits: ['update:value'] })
+class ToggleSwitch extends Vue {
   @Prop({ default: 'Check' }) textDescription!: string;
   @Prop({ default: true }) checkedValue!: boolean;
   @Prop({ default: ToggleSwitchSize.Large }) size!: ToggleSwitchSize;
@@ -38,9 +38,8 @@ export default class ToggleSwitch extends Vue {
   currentCheckedValue = this.checkedValue;
 
   @Watch('currentCheckedValue')
-  @Emit('update:value')
-  onUpdateInput(newValue: boolean): boolean {
-    return newValue;
+  onUpdateInput(newValue: boolean): void {
+    this.$emit('update:value', newValue);
   }
 
   @Watch('checkedValue')
@@ -48,6 +47,7 @@ export default class ToggleSwitch extends Vue {
     this.currentCheckedValue = newValue;
   }
 }
+export default toNative(ToggleSwitch);
 </script>
 
 <style scoped lang="scss">

@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import { types } from '../../api_types';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -91,7 +91,7 @@ library.add(faTimes);
     'omegaup-common-typeahead': common_Typeahead,
   },
 })
-export default class ProblemSearchBar extends Vue {
+class ProblemSearchBar extends Vue {
   @Prop() tags!: string[];
   @Prop() keyword!: string;
   @Prop() language!: string;
@@ -116,6 +116,7 @@ export default class ProblemSearchBar extends Vue {
     return this.currentKeyword?.value ?? null;
   }
 }
+export default toNative(ProblemSearchBar);
 </script>
 
 <style lang="scss" scoped>

@@ -6,7 +6,7 @@ import { SchoolCoderOfTheMonth } from '../../linkable_resource';
 describe('Profile.vue', () => {
   it('Should handle profile view', () => {
     const wrapper = shallowMount(schools_Profile, {
-      propsData: {
+      props: {
         name: 'omegaUp School',
         rank: 3,
         country: { id: 'mx', name: 'México' },
@@ -23,8 +23,7 @@ describe('Profile.vue', () => {
             type: 'line',
           },
           title: {
-            text:
-              'Total de problemas resueltos mensualmente por los coders de omegaUp school',
+            text: 'Total de problemas resueltos mensualmente por los coders de omegaUp school',
           },
           yAxis: {
             min: 0,

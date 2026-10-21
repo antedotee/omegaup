@@ -7,7 +7,7 @@ import * as time from '../../time';
 
 import problem_Details from './Details.vue';
 import arena_EphemeralGrader from '../arena/EphemeralGrader.vue';
-import { DisqualificationType } from '../arena/Runs.vue';
+import { DisqualificationType } from '../arena/Runs_types';
 
 describe('Details.vue', () => {
   const date = new Date();
@@ -162,7 +162,7 @@ Here we can add code.
 
   it('Should handle details for a problem', () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem,
         runDetailsData,
@@ -178,13 +178,15 @@ Here we can add code.
       },
     });
 
-    expect(wrapper.text()).toContain(problem.points);
+    // Jest's string `toContain` requires a string argument; `problem.points` is
+    // a number, so stringify it to assert the rendered points text.
+    expect(wrapper.text()).toContain(String(problem.points));
     expect(wrapper.text()).toContain(time.formatDate(date));
   });
 
   it('Should handle run details for a problem', async () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem,
         runDetailsData,
@@ -211,7 +213,7 @@ Here we can add code.
 
   it('Should handle run actions for a run in a given problem', async () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem,
         problemAlias: problem.alias,
@@ -329,7 +331,7 @@ Here we can add code.
       },
     ];
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem,
         runDetailsData,
@@ -353,7 +355,7 @@ Here we can add code.
 
   it('Should handle unrecognized source filename error', () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem,
         runDetailsData,
@@ -377,7 +379,7 @@ Here we can add code.
 
   it('Should handle a valid source filename with content', async () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem: {
           ...problem,
@@ -420,7 +422,7 @@ int main() {
 
   it('Should show the ephemeral grader for regular problems', async () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem,
         runDetailsData,
@@ -442,7 +444,7 @@ int main() {
 
   it('Should hide the ephemeral grader for Karel problems', async () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem: {
           ...problem,
@@ -472,7 +474,7 @@ int main() {
 
   it('Should link legacy Karel problems to karel.js', async () => {
     const wrapper = mount(problem_Details, {
-      propsData: {
+      props: {
         initialTab: 'problems',
         problem: {
           ...problem,

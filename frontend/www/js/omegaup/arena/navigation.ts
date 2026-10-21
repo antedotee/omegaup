@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import * as api from '../api';
 import * as ui from '../ui';
 import * as time from '../time';
@@ -6,7 +5,7 @@ import { setLocationHash } from '../location';
 import { types } from '../api_types';
 import { myRunsStore } from './runsStore';
 import problemsStore from './problemStore';
-import { PopupDisplayed } from '../components/problem/Details.vue';
+import { PopupDisplayed } from '../components/problem/Details_types';
 import { trackRun } from './submissions';
 
 export enum ScoreMode {
@@ -20,12 +19,17 @@ export enum NavigationType {
   ForSingleProblemOrCourse,
 }
 
+// The navigation target is the arena `new Vue` instance. Under @vue/compat its
+// instance type does not surface the component's reactive data, so callers pass
+// the instance cast to this structural shape (the fields navigation reads).
+export interface NavigationTarget {
+  problemInfo: types.ProblemInfo | null;
+  popupDisplayed?: PopupDisplayed;
+  problem: types.NavbarProblemsetProblem | null;
+}
+
 interface BaseNavigation {
-  target: Vue & {
-    problemInfo: types.ProblemInfo | null;
-    popupDisplayed?: PopupDisplayed;
-    problem: types.NavbarProblemsetProblem | null;
-  };
+  target: NavigationTarget;
   problem: types.NavbarProblemsetProblem;
   problems: types.NavbarProblemsetProblem[];
 }

@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 export enum HistogramType {
@@ -79,7 +79,7 @@ export enum HistogramType {
 }
 
 @Component
-export default class ProblemHistogram extends Vue {
+class ProblemHistogram extends Vue {
   @Prop() type!: string;
   @Prop() histogram!: number[];
   @Prop() score!: number;
@@ -126,6 +126,7 @@ export default class ProblemHistogram extends Vue {
     return this.customHistogram.map((value) => (value / maxValue) * 100);
   }
 }
+export default toNative(ProblemHistogram);
 </script>
 
 <style lang="scss" scoped>

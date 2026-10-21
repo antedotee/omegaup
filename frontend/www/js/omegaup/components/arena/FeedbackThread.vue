@@ -70,7 +70,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import T from '../../lang';
 import omegaup_Markdown from '../Markdown.vue';
 import user_Username from '../user/Username.vue';
@@ -83,7 +90,7 @@ import { ArenaCourseFeedback, FeedbackStatus } from './Feedback.vue';
     'omegaup-user-username': user_Username,
   },
 })
-export default class FeedbackThread extends Vue {
+class FeedbackThread extends Vue {
   @Prop() feedbackThread!: ArenaCourseFeedback;
   @Prop({ default: false }) saved!: boolean;
   @Ref('feedback-thread-form') feedbackThreadForm!: HTMLTextAreaElement;
@@ -124,6 +131,7 @@ export default class FeedbackThread extends Vue {
     }
   }
 }
+export default toNative(FeedbackThread);
 </script>
 
 <style>

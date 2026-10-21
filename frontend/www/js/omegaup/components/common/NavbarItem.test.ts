@@ -9,7 +9,7 @@ library.add(faVideo);
 describe('NavbarItem.vue', () => {
   it('Should render a simple link with only a title', () => {
     const wrapper = mount(common_NavbarItem, {
-      propsData: {
+      props: {
         title: 'Plain Item',
         href: '/plain/',
       },
@@ -27,7 +27,7 @@ describe('NavbarItem.vue', () => {
 
   it('Should render an icon, title and description when provided', () => {
     const wrapper = mount(common_NavbarItem, {
-      propsData: {
+      props: {
         title: 'Tutorials',
         description: 'Watch the videos',
         icon: ['fas', 'video'],
@@ -49,7 +49,7 @@ describe('NavbarItem.vue', () => {
 
   it('Should accept a plain string icon name', () => {
     const wrapper = mount(common_NavbarItem, {
-      propsData: {
+      props: {
         title: 'Tutorials',
         icon: 'video',
         href: '/videos/',
@@ -61,7 +61,7 @@ describe('NavbarItem.vue', () => {
 
   it('Should mark links that leave the current host', () => {
     const wrapper = mount(common_NavbarItem, {
-      propsData: {
+      props: {
         title: 'Discord',
         href: 'https://discord.example/invite',
       },
@@ -72,7 +72,7 @@ describe('NavbarItem.vue', () => {
 
   it('Should not mark links within the current host', () => {
     const wrapper = mount(common_NavbarItem, {
-      propsData: {
+      props: {
         title: 'Statement editor',
         href: '/problem/statement/',
       },
@@ -83,7 +83,7 @@ describe('NavbarItem.vue', () => {
 
   it('Should default a safe rel on external links', () => {
     const wrapper = mount(common_NavbarItem, {
-      propsData: {
+      props: {
         title: 'Discord',
         href: 'https://discord.example/invite',
       },
@@ -94,7 +94,7 @@ describe('NavbarItem.vue', () => {
 
   it('Should not add a rel to internal links', () => {
     const wrapper = mount(common_NavbarItem, {
-      propsData: {
+      props: {
         title: 'Statement editor',
         href: '/problem/statement/',
       },

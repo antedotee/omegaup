@@ -199,7 +199,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -216,6 +216,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
 
 @Component({
+  emits: ['runs-diff', 'save-problem'],
   components: {
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-problem-versions': problem_Versions,
@@ -224,7 +225,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class CourseProblemList extends Vue {
+class CourseProblemList extends Vue {
   @Prop() assignments!: types.CourseAssignment[];
   @Prop() assignmentProblems!: types.ProblemsetProblem[];
   @Prop() taggedProblems!: omegaup.Problem[];
@@ -446,4 +447,5 @@ export default class CourseProblemList extends Vue {
     this.useLatestVersion = true;
   }
 }
+export default toNative(CourseProblemList);
 </script>

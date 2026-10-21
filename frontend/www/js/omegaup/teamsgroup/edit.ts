@@ -1,12 +1,10 @@
-import teamsgroup_Edit, {
-  AvailableTabs,
-} from '../components/teamsgroup/Edit.vue';
+import teamsgroup_Edit from '../components/teamsgroup/Edit.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import * as CSV from '@/third_party/js/csv.js/csv.js';
 import {
   downloadCsvFile,
@@ -18,6 +16,18 @@ import {
 } from '../groups';
 
 export type CsvTeam = types.Identity & { usernames: string };
+
+enum AvailableTabs {
+  Edit = 'edit',
+  Teams = 'teams',
+  Upload = 'upload',
+}
+
+interface TeamsGroupEditInstance {
+  tab: AvailableTabs | string;
+  teamsIdentities: types.Identity[];
+  teamsMembers: types.TeamMember[];
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.TeamGroupEditPayload();
@@ -41,14 +51,16 @@ OmegaUp.on('ready', () => {
       isLoading: false,
       searchResultSchools: searchResultSchools,
     }),
-    beforeDestroy() {
+    beforeUnmount() {
       window.removeEventListener('hashchange', onHashChange);
     },
     methods: {
       refreshTeamsList: (): void => {
         api.TeamsGroup.teams({ team_group_alias: payload.teamGroup.alias })
           .then((data) => {
-            teamsGroupEdit.teamsIdentities = data.identities;
+            (
+              teamsGroupEdit as unknown as TeamsGroupEditInstance
+            ).teamsIdentities = data.identities;
           })
           .catch(ui.apiError);
       },
@@ -57,12 +69,13 @@ OmegaUp.on('ready', () => {
           team_group_alias: payload.teamGroup.alias,
         })
           .then((data) => {
-            teamsGroupEdit.teamsMembers = data.teamsUsers;
+            (teamsGroupEdit as unknown as TeamsGroupEditInstance).teamsMembers =
+              data.teamsUsers;
           })
           .catch(ui.apiError);
       },
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-teams-group-edit', {
         props: {
           alias: this.teamGroup.alias,
@@ -190,7 +203,9 @@ OmegaUp.on('ready', () => {
                 // group can not be added to another, so they should not be
                 // shown in the dropdown
                 const addedUsers = new Set(
-                  this.teamsMembers.map((user) => user.username),
+                  this.teamsMembers.map(
+                    (user: types.TeamMember) => user.username,
+                  ),
                 );
 
                 this.searchResultUsers = results
@@ -405,11 +420,13 @@ OmegaUp.on('ready', () => {
     const hash = window.location.hash.substring(1).split('#')[0];
 
     if (!Object.values(AvailableTabs).includes(hash as AvailableTabs)) {
-      teamsGroupEdit.tab = AvailableTabs.Teams;
+      (teamsGroupEdit as unknown as TeamsGroupEditInstance).tab =
+        AvailableTabs.Teams;
       return;
     }
 
-    teamsGroupEdit.tab = hash as AvailableTabs;
+    (teamsGroupEdit as unknown as TeamsGroupEditInstance).tab =
+      hash as AvailableTabs;
   }
 
   window.addEventListener('hashchange', onHashChange);

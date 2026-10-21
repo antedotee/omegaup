@@ -4,7 +4,19 @@ import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
 import T from '../../lang';
 import ContestCardv2 from './ContestCardv2.vue';
-import { ContestTab } from './ContestList.vue';
+import { ContestTab } from './ContestList_types';
+
+// `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
+// the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
+// RENDER_FUNCTION disabled, as required for native SFC templates) cannot patch —
+// it throws `InvalidCharacterError: "0" ...`. Stub the icon so the components
+// under test can mount. The arena suites assert on behavior, not icon glyphs.
+const global = {
+  stubs: {
+    FontAwesomeIcon: true,
+    'font-awesome-icon': true,
+  },
+};
 
 describe('ContestCardv2.vue', () => {
   const daySeconds = 24 * 60 * 60 * 1000;
@@ -75,21 +87,25 @@ describe('ContestCardv2.vue', () => {
 
   it('Should show the current contest card', async () => {
     const wrapper = mount(ContestCardv2, {
-      propsData: {
+      props: {
         contest: currentContest,
         contestTab: currentTab,
       },
+      global,
     });
 
-    const contestEnrollStatus = wrapper.findComponent({
-      ref: 'contestEnrollStatus',
-    });
+    // `contestEnrollStatus` is a plain <div> ref. @vue/test-utils 2's
+    // `findComponent({ ref })` only matches component instances, not DOM
+    // elements (it did in v1), so read the ref off the instance instead.
+    const contestEnrollStatus = wrapper.vm as unknown as {
+      $refs: { contestEnrollStatus?: HTMLElement };
+    };
 
     const contestButtonEnter = wrapper.findComponent({
       ref: 'contestButtonEnter',
     });
 
-    expect(contestEnrollStatus.exists()).toBe(true);
+    expect(contestEnrollStatus.$refs.contestEnrollStatus).toBeTruthy();
     expect(contestButtonEnter.text()).toBe(T.contestButtonEnter);
 
     const contestButtonVirtual = wrapper.findComponent({
@@ -105,15 +121,18 @@ describe('ContestCardv2.vue', () => {
 
   it('Should show the future contest card', async () => {
     const wrapper = mount(ContestCardv2, {
-      propsData: {
+      props: {
         contest: futureContest,
         contestTab: futureTab,
       },
+      global,
     });
 
-    const contestEnrollStatus = wrapper.findComponent({
-      ref: 'contestEnrollStatus',
-    });
+    // `contestEnrollStatus` is a plain <div> ref; read it off the instance
+    // (see the note in the current-card test above).
+    const vm = wrapper.vm as unknown as {
+      $refs: { contestEnrollStatus?: HTMLElement };
+    };
     const contestButtonEnter = wrapper.findComponent({
       ref: 'contestButtonEnter',
     });
@@ -124,7 +143,7 @@ describe('ContestCardv2.vue', () => {
       ref: 'contestIconRecommended',
     });
 
-    expect(contestEnrollStatus.exists()).toBe(true);
+    expect(vm.$refs.contestEnrollStatus).toBeTruthy();
     expect(contestButtonEnter.exists()).toBe(true);
     expect(contestIconRecommended.exists()).toBe(true);
     expect(contestButtonSeeDetails.exists()).toBe(false);
@@ -132,10 +151,11 @@ describe('ContestCardv2.vue', () => {
 
   it('Should show the past contest card', async () => {
     const wrapper = mount(ContestCardv2, {
-      propsData: {
+      props: {
         contest: pastContest,
         contestTab: pastTab,
       },
+      global,
     });
 
     const contestButtonScoreboard = wrapper.findComponent({

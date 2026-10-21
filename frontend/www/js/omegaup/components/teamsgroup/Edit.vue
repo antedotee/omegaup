@@ -118,7 +118,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import teamsgroup_FormUpdate from './FormUpdate.vue';
 import teamsgroup_Upload from './Upload.vue';
 import teamsgroup_Teams from './Teams.vue';
@@ -126,11 +126,10 @@ import T from '../../lang';
 import { dao, types } from '../../api_types';
 import * as ui from '../../ui';
 
-export enum AvailableTabs {
-  Edit = 'edit',
-  Teams = 'teams',
-  Upload = 'upload',
-}
+import { AvailableTabs } from './Edit_types';
+// Declared in ./Edit_types and re-exported here so existing SFC importers keep
+// working while plain `.ts` modules import it from the `.ts` file.
+export { AvailableTabs };
 
 @Component({
   components: {
@@ -139,7 +138,7 @@ export enum AvailableTabs {
     'omegaup-teams-group-teams': teamsgroup_Teams,
   },
 })
-export default class TeamsGroupEdit extends Vue {
+class TeamsGroupEdit extends Vue {
   @Prop() alias!: string;
   @Prop() name!: string;
   @Prop() description!: string;
@@ -180,4 +179,5 @@ export default class TeamsGroupEdit extends Vue {
     this.currentTeamsIdentities = newValue;
   }
 }
+export default toNative(TeamsGroupEdit);
 </script>

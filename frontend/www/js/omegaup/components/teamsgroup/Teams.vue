@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { dao, types } from '../../api_types';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
@@ -113,14 +113,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 library.add(faEdit, faLock, faTrashAlt, faUsers);
 
-export enum AvailableForms {
-  None,
-  Edit,
-  ChangePassword,
-  AddMembers,
-}
+import { AvailableForms } from './Teams_types';
+// Declared in ./Teams_types and re-exported here so existing SFC importers keep
+// working while plain `.ts` modules import it from the `.ts` file.
+export { AvailableForms };
 
 @Component({
+  emits: ['add-members', 'edit-identity-team'],
   components: {
     FontAwesomeIcon,
     'omegaup-user-username': user_Username,
@@ -129,7 +128,7 @@ export enum AvailableForms {
     'omegaup-identity-members': teamsgroup_Members,
   },
 })
-export default class Teams extends Vue {
+class Teams extends Vue {
   @Prop() teams!: types.Identity[];
   @Prop() countries!: Array<dao.Countries>;
   @Prop() searchResultUsers!: types.ListItem[];
@@ -182,4 +181,5 @@ export default class Teams extends Vue {
     this.username = null;
   }
 }
+export default toNative(Teams);
 </script>

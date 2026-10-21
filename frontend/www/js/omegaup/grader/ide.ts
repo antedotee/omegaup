@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import grader_EphemeralIDE from '../components/arena/EphemeralGrader.vue';
 
 import * as time from '../time';
@@ -7,6 +7,10 @@ import * as api from '../api';
 import * as ui from '../ui';
 import { types } from '../api_types';
 import { OmegaUp } from '../omegaup';
+
+interface IDEInstance {
+  nextExecutionTimestamp: null | Date;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.FullIDEPayload();
@@ -23,22 +27,24 @@ OmegaUp.on('ready', () => {
     data: () => ({
       nextExecutionTimestamp: null as null | Date,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement(grader_EphemeralIDE, {
         props: {
           acceptedLanguages,
           preferredLanguage,
           isEmbedded: false,
           initialTheme: Util.MonacoThemes.VSDark,
-          nextExecutionTimestamp: this.nextExecutionTimestamp,
+          nextExecutionTimestamp: (this as unknown as IDEInstance)
+            .nextExecutionTimestamp,
         },
         on: {
           'execute-run': () => {
             api.Run.executeForIDE()
               .then(time.remoteTimeAdapter)
               .then((response) => {
-                ideComponent.nextExecutionTimestamp =
-                  response.nextExecutionTimestamp;
+                (
+                  ideComponent as unknown as IDEInstance
+                ).nextExecutionTimestamp = response.nextExecutionTimestamp;
               })
               .catch(ui.apiError);
           },

@@ -63,7 +63,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import T from '../../lang';
 import omegaup_Markdown from '../Markdown.vue';
 import omegaup_ToggleSwitch from '../ToggleSwitch.vue';
@@ -76,13 +77,12 @@ import {
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
-Vue.use(Clipboard);
+VueGlobal.use(Clipboard);
 
-export enum AdmissionMode {
-  Private = 'private',
-  Registration = 'registration',
-  Public = 'public',
-}
+import { AdmissionMode } from './Publish_types';
+// Declared in ./Publish_types and re-exported here so existing SFC importers
+// keep working while plain `.ts` modules import it from the `.ts` file.
+export { AdmissionMode };
 
 @Component({
   components: {
@@ -93,7 +93,7 @@ export enum AdmissionMode {
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class ContestEditPublish extends Vue {
+class ContestEditPublish extends Vue {
   @Prop() admissionMode!: AdmissionMode;
   @Prop() admissionModeDescription!: string;
   @Prop() alias!: string;
@@ -103,8 +103,8 @@ export default class ContestEditPublish extends Vue {
   T = T;
   AdmissionMode = AdmissionMode;
   currentAdmissionMode = this.admissionMode;
-  currentDefaultShowAllContestantsInScoreboard = this
-    .defaultShowAllContestantsInScoreboard;
+  currentDefaultShowAllContestantsInScoreboard =
+    this.defaultShowAllContestantsInScoreboard;
 
   get contestURL(): string {
     return `${window.location.origin}/arena/${this.alias}/startfresh/`;
@@ -113,8 +113,8 @@ export default class ContestEditPublish extends Vue {
   onSubmit(): void {
     this.$emit('update-admission-mode', {
       admissionMode: this.currentAdmissionMode,
-      defaultShowAllContestantsInScoreboard: this
-        .currentDefaultShowAllContestantsInScoreboard,
+      defaultShowAllContestantsInScoreboard:
+        this.currentDefaultShowAllContestantsInScoreboard,
     });
   }
 
@@ -127,4 +127,5 @@ export default class ContestEditPublish extends Vue {
     this.currentAdmissionMode = newValue;
   }
 }
+export default toNative(ContestEditPublish);
 </script>

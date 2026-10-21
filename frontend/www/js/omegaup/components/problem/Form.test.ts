@@ -6,7 +6,7 @@ import * as ui from '../../ui';
 import JSZip from 'jszip';
 
 import Form from './Form.vue';
-import { CreationMethods } from './Form.vue';
+import { CreationMethods } from './Form_types';
 import CreatorWrapper from './CreatorWrapper.vue';
 
 const props: types.ProblemFormPayload = {
@@ -58,27 +58,29 @@ const props: types.ProblemFormPayload = {
 // TODO: Add tests that simulates user interaction
 describe('Settings.vue', () => {
   it('Should call the function that opens collapsed panels', async () => {
-    // We need to use any here because `.options.methods` is not inside the public API, yet that's the only way
-    // to access the method in order to spy on it and check whether or not it has been called.
+    // We need to use any here because `.methods` is not inside the public API, yet that's the only way
+    // to access the method in order to spy on it and check whether or not it has been called. Under
+    // vue-facing-decorator's native component the options live directly on the component (`.methods`),
+    // not under the Vue 2 `.options.methods` namespace.
     const openCollapsed = jest.spyOn(
-      (Form as any).options.methods,
+      (Form as any).methods,
       'openCollapsedIfRequired',
     );
-    const wrapper = shallowMount(Form, { propsData: { data: props } });
+    const wrapper = shallowMount(Form, { props: { data: props } });
     wrapper.find('[type="submit"]').trigger('click');
     await wrapper.vm.$nextTick();
     expect(openCollapsed).toBeCalled();
   });
 
   it('Should handle problem settings', () => {
-    const wrapper = shallowMount(Form, { propsData: { data: props } });
+    const wrapper = shallowMount(Form, { props: { data: props } });
 
     const optionsWrapper = wrapper
       .find('select[name="languages"]')
       .findAll('option');
 
     const optionsObject: { [key: string]: string } = {};
-    optionsWrapper.wrappers.forEach((option) => {
+    optionsWrapper.forEach((option) => {
       const value = option.attributes('value');
       if (typeof value === 'string') {
         optionsObject[value] = option.text();
@@ -89,7 +91,7 @@ describe('Settings.vue', () => {
 
   it('Should show creation method selector when feature flag is enabled', () => {
     const wrapper = shallowMount(Form, {
-      propsData: {
+      props: {
         data: props,
         showCreationMethodSelector: true,
       },
@@ -100,7 +102,7 @@ describe('Settings.vue', () => {
 
   it('Should hide creation method selector on update mode', () => {
     const wrapper = shallowMount(Form, {
-      propsData: {
+      props: {
         data: props,
         isUpdate: true,
         showCreationMethodSelector: true,
@@ -112,7 +114,7 @@ describe('Settings.vue', () => {
 
   it('Should show open creator button when creator method is selected', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: {
+      props: {
         data: props,
         showCreationMethodSelector: true,
       },
@@ -125,7 +127,7 @@ describe('Settings.vue', () => {
 
   it('Should hide open creator button when zip method is selected', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: {
+      props: {
         data: props,
         showCreationMethodSelector: true,
       },
@@ -138,7 +140,7 @@ describe('Settings.vue', () => {
 
   it('Should hide separate file input when feature flag is enabled', () => {
     const wrapper = shallowMount(Form, {
-      propsData: {
+      props: {
         data: props,
         showCreationMethodSelector: true,
       },
@@ -151,7 +153,7 @@ describe('Settings.vue', () => {
 
   it('Should show zip file input in selector area when zip method is selected', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: {
+      props: {
         data: props,
         showCreationMethodSelector: true,
       },
@@ -166,7 +168,7 @@ describe('Settings.vue', () => {
 
   it('Should open creator modal when clicking open creator button', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: {
+      props: {
         data: props,
         showCreationMethodSelector: true,
       },
@@ -181,7 +183,7 @@ describe('Settings.vue', () => {
 
   it('Should close creator modal when clicking close button', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: {
+      props: {
         data: props,
         showCreationMethodSelector: true,
       },
@@ -195,7 +197,7 @@ describe('Settings.vue', () => {
 
   it('Should re-emit show-update-success-message from the creator', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
     });
     await wrapper.setData({ showProblemCreator: true });
 
@@ -208,7 +210,7 @@ describe('Settings.vue', () => {
 
   it('Should re-emit download-input-file with its payload', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
     });
     await wrapper.setData({ showProblemCreator: true });
 
@@ -222,7 +224,7 @@ describe('Settings.vue', () => {
 
   it('Should capture the generated zip from the creator for submission', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
     });
     await wrapper.setData({ showProblemCreator: true });
 
@@ -244,7 +246,7 @@ describe('Settings.vue', () => {
   it('Should block submit in creator mode when no zip has been generated', async () => {
     const uiError = jest.spyOn(ui, 'error').mockImplementation(() => {});
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
     });
     await wrapper.setData({
       currentCreationMethod: CreationMethods.Creator,
@@ -261,7 +263,7 @@ describe('Settings.vue', () => {
   it('Should block submit while the creator zip is being generated', async () => {
     const uiError = jest.spyOn(ui, 'error').mockImplementation(() => {});
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
     });
     await wrapper.setData({
       currentCreationMethod: CreationMethods.Creator,
@@ -285,22 +287,35 @@ describe('Settings.vue', () => {
       }
     };
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
     });
     await wrapper.setData({
       currentCreationMethod: CreationMethods.Creator,
       creatorGeneratedZipBlob: new Blob(['zip'], { type: 'application/zip' }),
     });
 
-    const fakeInput: { files: FileList | null } = { files: null };
-    (wrapper.vm as any).$refs.creatorFileInput = fakeInput;
+    // `creatorFileInputRef` resolves to the real `<input ref="creatorFileInput">`
+    // DOM node. Vue 3 makes `$refs` read-only, so a fake input can't be injected
+    // through it; instead make the node's `files` property writable so the
+    // component's real DataTransfer path can assign to it (jsdom otherwise rejects
+    // a non-FileList value).
+    const fileInputNode = (wrapper.vm as any).$refs
+      .creatorFileInput as HTMLInputElement;
+    let storedFiles: FileList | null = null;
+    Object.defineProperty(fileInputNode, 'files', {
+      configurable: true,
+      get: () => storedFiles,
+      set: (value) => {
+        storedFiles = value;
+      },
+    });
     const ev = { preventDefault: jest.fn() };
     (wrapper.vm as any).handleFormSubmit(ev);
 
     expect(ev.preventDefault).not.toHaveBeenCalled();
     expect(addedFiles).toHaveLength(1);
     expect(addedFiles[0].name).toBe('title.zip');
-    expect(fakeInput.files).toHaveLength(1);
+    expect(storedFiles).toHaveLength(1);
     delete (window as any).DataTransfer;
   });
 
@@ -314,17 +329,23 @@ describe('Settings.vue', () => {
   };
 
   it('Should open the creator pre-populated when a creator zip is uploaded', async () => {
+    // `problemCreatorRef` is a live getter into the read-only `$refs`, so the
+    // creator must be injected as a component stub exposing `importZipFile`
+    // rather than redefined on the vm.
+    const importZipFile = jest.fn().mockResolvedValue(true);
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
+      global: {
+        stubs: {
+          'omegaup-problem-creator': {
+            template: '<div data-stub-creator></div>',
+            methods: { importZipFile },
+          },
+        },
+      },
     });
     await wrapper.setData({ currentCreationMethod: CreationMethods.Zip });
 
-    const importZipFile = jest.fn().mockResolvedValue(true);
-    const mockRef = { importZipFile };
-    Object.defineProperty(wrapper.vm, 'problemCreatorRef', {
-      get: () => mockRef,
-      configurable: true,
-    });
     const file = await makeZipFile({ 'cdp.data': '{}' });
     await (wrapper.vm as any).onUploadFile({ target: { files: [file] } });
 
@@ -336,7 +357,7 @@ describe('Settings.vue', () => {
 
   it('Should keep the zip flow when the uploaded zip is not creator-generated', async () => {
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
     });
     await wrapper.setData({ currentCreationMethod: CreationMethods.Zip });
 
@@ -348,13 +369,20 @@ describe('Settings.vue', () => {
   });
 
   it('Should forward the uploaded creator zip to the embedded creator', async () => {
+    const importZipFile = jest.fn().mockResolvedValue(true);
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
+      global: {
+        stubs: {
+          'omegaup-problem-creator': {
+            template: '<div data-stub-creator></div>',
+            methods: { importZipFile },
+          },
+        },
+      },
     });
     await wrapper.setData({ showProblemCreator: true });
 
-    const importZipFile = jest.fn().mockResolvedValue(true);
-    (wrapper.vm as any).$refs.problemCreator = { importZipFile };
     const file = await makeZipFile({ 'cdp.data': '{}' });
     await (wrapper.vm as any).importZipIntoCreator(file);
 
@@ -363,13 +391,20 @@ describe('Settings.vue', () => {
   });
 
   it('Should revert to the zip flow when the creator import fails', async () => {
+    const importZipFile = jest.fn().mockResolvedValue(false);
     const wrapper = shallowMount(Form, {
-      propsData: { data: props, showCreationMethodSelector: true },
+      props: { data: props, showCreationMethodSelector: true },
+      global: {
+        stubs: {
+          'omegaup-problem-creator': {
+            template: '<div data-stub-creator></div>',
+            methods: { importZipFile },
+          },
+        },
+      },
     });
     await wrapper.setData({ showProblemCreator: true });
 
-    const importZipFile = jest.fn().mockResolvedValue(false);
-    (wrapper.vm as any).$refs.problemCreator = { importZipFile };
     const file = await makeZipFile({ 'cdp.data': 'invalid json' });
     await (wrapper.vm as any).importZipIntoCreator(file);
 

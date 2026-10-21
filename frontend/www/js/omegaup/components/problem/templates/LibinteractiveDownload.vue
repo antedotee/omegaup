@@ -8,15 +8,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, toNative } from 'vue-facing-decorator';
 import T from '../../../lang';
 
 @Component
-export default class LibinteractiveDownload extends Vue {
+class LibinteractiveDownload extends Vue {
   get zipUrl(): string {
     return '/problem/libinteractive/files.zip';
   }
 
   T = T;
 }
+export default toNative(LibinteractiveDownload);
 </script>

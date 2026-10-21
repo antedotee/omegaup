@@ -1,5 +1,5 @@
 import user_Dependents from '../components/user/Dependents.vue';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 
@@ -10,7 +10,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-user-dependents': user_Dependents,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-user-dependents', {
         props: {
           dependents: payload.dependents,

@@ -107,7 +107,7 @@ describe('ContestPractice.vue', () => {
 
   it('Should handle details for a problem in a contest, practice mode', async () => {
     const wrapper = mount(arena_ContestPractice, {
-      propsData: {
+      props: {
         contest,
         problems,
         problemInfo,
@@ -122,7 +122,7 @@ describe('ContestPractice.vue', () => {
     expect(wrapper.find('a[data-problem=otherProblemOmegaUp]').text()).toBe(
       'B. hello other problem omegaUp',
     );
-    expect(wrapper.text()).toContain(problemInfo.points);
+    expect(wrapper.text()).toContain(`${problemInfo.points}`);
     expect(wrapper.text()).toContain(time.formatDateLocal(date));
 
     await wrapper.find('a[data-problem=problemOmegaUp]').trigger('click');
@@ -154,7 +154,7 @@ describe('ContestPractice.vue', () => {
     };
 
     const wrapper = mount(arena_ContestPractice, {
-      propsData: {
+      props: {
         contest,
         problems,
         problem: problems[0],
@@ -170,8 +170,7 @@ describe('ContestPractice.vue', () => {
       [
         {
           guid: '78099022574726af861839e1b4210188',
-          hash:
-            '#problems/problemOmegaUp/show-run:78099022574726af861839e1b4210188',
+          hash: '#problems/problemOmegaUp/show-run:78099022574726af861839e1b4210188',
           isAdmin: false,
         },
       ],

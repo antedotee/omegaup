@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -97,7 +97,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class GroupTeachingAssistants extends Vue {
+class GroupTeachingAssistants extends Vue {
   @Prop() groupTeachingAssistants!: types.ContestGroupAdmin[];
   @Prop() searchResultGroups!: types.ListItem[];
 
@@ -109,4 +109,5 @@ export default class GroupTeachingAssistants extends Vue {
     this.group = null;
   }
 }
+export default toNative(GroupTeachingAssistants);
 </script>

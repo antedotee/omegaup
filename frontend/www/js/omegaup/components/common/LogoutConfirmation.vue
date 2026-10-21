@@ -8,7 +8,7 @@
     cancel-variant="secondary"
     footer-class="logout-confirmation-modal"
     body-class="p-0"
-    static
+    teleport-disabled
     lazy
     @ok="confirmLogout"
   >
@@ -16,25 +16,29 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
-@Component
-export default class LogoutConfirmation extends Vue {
-  @Prop({ default: false }) value!: boolean;
+@Component({
+  emits: ['update:modelValue'],
+  options: { compatConfig: { COMPONENT_V_MODEL: false } },
+})
+class LogoutConfirmation extends Vue {
+  @Prop({ default: false }) modelValue!: boolean;
 
   T = T;
 
   get showModal(): boolean {
-    return this.value;
+    return this.modelValue;
   }
 
   set showModal(value: boolean) {
-    this.$emit('input', value);
+    this.$emit('update:modelValue', value);
   }
 
   confirmLogout(): void {
     window.location.href = '/logout/';
   }
 }
+export default toNative(LogoutConfirmation);
 </script>

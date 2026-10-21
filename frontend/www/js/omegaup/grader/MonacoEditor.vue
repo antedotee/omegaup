@@ -28,8 +28,9 @@
 </template>
 
 <script lang="ts">
+import { markRaw } from 'vue';
 // TODO: replace all instances of any with correct type
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import store from './GraderStore';
 import * as Util from './util';
 import * as monaco from 'monaco-editor';
@@ -46,7 +47,7 @@ library.add(faUndo);
     FontAwesomeIcon,
   },
 })
-export default class MonacoEditor extends Vue {
+class MonacoEditor extends Vue {
   // TODO: place more restrictions on value of keys inside storeMapping
   @Prop({ required: true }) storeMapping!: {
     [key: string]: string;
@@ -149,18 +150,21 @@ export default class MonacoEditor extends Vue {
     const container = this.$refs.editorContainer as HTMLElement;
     if (!container) return;
 
-    this._editor = monaco.editor.create(container, {
-      autoIndent: 'brackets',
-      formatOnPaste: true,
-      formatOnType: true,
-      language: Util.supportedLanguages[this.language].modelMapping,
-      readOnly: this.readOnly,
-      theme: this.theme,
-      value: this.contents,
-      fontSize: this.selectedFontSize,
-    } as monaco.editor.IStandaloneEditorConstructionOptions);
-    this._model = this._editor.getModel();
-    if (!this._model) return;
+    this._editor = markRaw(
+      monaco.editor.create(container, {
+        autoIndent: 'brackets',
+        formatOnPaste: true,
+        formatOnType: true,
+        language: Util.supportedLanguages[this.language].modelMapping,
+        readOnly: this.readOnly,
+        theme: this.theme,
+        value: this.contents,
+        fontSize: this.selectedFontSize,
+      } as monaco.editor.IStandaloneEditorConstructionOptions),
+    );
+    const model = this._editor.getModel();
+    if (!model) return;
+    this._model = markRaw(model);
 
     this._model.onDidChangeContent((e) => {
       store.dispatch(this.storeMapping.contents, this._model?.getValue() || '');
@@ -298,6 +302,7 @@ export default class MonacoEditor extends Vue {
     this.contents = templates.sourceTemplates[extension];
   }
 }
+export default toNative(MonacoEditor);
 </script>
 
 <style lang="scss" scoped>

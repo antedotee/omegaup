@@ -152,7 +152,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -164,46 +165,14 @@ import common_SortControls from '../common/SortControls.vue';
 import course_StudentProgress from './StudentProgress.vue';
 import common_Paginator from '../common/Paginator.vue';
 import { toCsv, TableCell, Percentage } from '../../csv';
+import { escapeXml, toOds } from './ViewProgress_types';
 
-Vue.use(AsyncComputedPlugin);
+VueGlobal.use(AsyncComputedPlugin);
 
-export function escapeXml(cell: TableCell): string {
-  if (typeof cell !== 'string') return '';
-  return cell
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/'/g, '&apos;')
-    .replace(/"/g, '&quot;');
-}
-
-export function toOds(courseName: string, table: TableCell[][] | null): string {
-  if (table === null) return '';
-  let result = `<table:table table:name="${escapeXml(courseName)}">\n`;
-  result += `<table:table-column table:number-columns-repeated="${table[0].length}"/>\n`;
-  for (const row of table) {
-    result += '<table:table-row>\n';
-    for (const cell of row) {
-      if (cell instanceof Percentage) {
-        result += `<table:table-cell office:value-type="percentage" office:value="${cell.value.toFixed(
-          4,
-        )}"><text:p>${cell.toString()}</text:p></table:table-cell>`;
-      } else if (typeof cell === 'number') {
-        const num: number = cell;
-        result += `<table:table-cell office:value-type="float" office:value="${num}"><text:p>${num.toPrecision(
-          2,
-        )}</text:p></table:table-cell>`;
-      } else {
-        result += `<table:table-cell office:value-type="string"><text:p>${escapeXml(
-          cell,
-        )}</text:p></table:table-cell>`;
-      }
-    }
-    result += '</table:table-row>\n';
-  }
-  result += '</table:table>';
-  return result;
-}
+// escapeXml/toOds are declared in ./ViewProgress_types and re-exported here so
+// existing SFC importers keep working while plain `.ts` modules import them
+// from the `.ts` file.
+export { escapeXml, toOds };
 
 @Component({
   components: {
@@ -212,7 +181,7 @@ export function toOds(courseName: string, table: TableCell[][] | null): string {
     'omegaup-common-paginator': common_Paginator,
   },
 })
-export default class CourseViewProgress extends Vue {
+class CourseViewProgress extends Vue {
   @Prop() course!: types.CourseDetails;
   @Prop({ default: null })
   completeStudentsProgress!: types.StudentProgressInCourse[] | null;
@@ -400,6 +369,7 @@ export default class CourseViewProgress extends Vue {
         : omegaup.SortOrder.Descending;
   }
 }
+export default toNative(CourseViewProgress);
 </script>
 
 <style lang="scss" scoped>

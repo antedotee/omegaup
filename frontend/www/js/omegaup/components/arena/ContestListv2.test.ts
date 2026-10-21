@@ -4,12 +4,28 @@ import T from '../../lang';
 import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
 
-import arena_ContestList, {
-  ContestOrder,
-  ContestTab,
-  ContestFilter,
-} from './ContestListv2.vue';
+import arena_ContestList from './ContestListv2.vue';
+import { ContestOrder, ContestTab, ContestFilter } from './ContestListv2_types';
 import each from 'jest-each';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface ContestListv2Vm {
+  currentFilter: ContestFilter;
+  currentOrder: ContestOrder;
+}
+
+// `@fortawesome/vue-fontawesome` v2 is the Vue 2 build; its render function uses
+// the Vue 2 `{ attrs }` vnode-data shape, which @vue/compat (with
+// RENDER_FUNCTION disabled, as required for native SFC templates) cannot patch —
+// it throws `InvalidCharacterError: "0" ...`. Stub the icon so the component
+// under test can mount. These suites assert on behavior, not icon glyphs.
+const global = {
+  stubs: {
+    FontAwesomeIcon: true,
+    'font-awesome-icon': true,
+  },
+};
 
 describe('ContestListv2.vue', () => {
   const daySeconds = 24 * 60 * 60 * 1000;
@@ -155,7 +171,8 @@ describe('ContestListv2.vue', () => {
         description: 'hello contest 3',
         contest_id: 3,
         contestants: 15,
-        finish_time: yesterday /*new Date(yesterday.getTime() - daySeconds * 2)*/,
+        finish_time:
+          yesterday /*new Date(yesterday.getTime() - daySeconds * 2)*/,
         last_updated: new Date(yesterday.getTime() - daySeconds),
         organizer: 'alfadown',
         original_finish_time: yesterday,
@@ -190,10 +207,11 @@ describe('ContestListv2.vue', () => {
 
   it('Should show the current contest list', async () => {
     const wrapper = mount(arena_ContestList, {
-      propsData: {
+      props: {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     const currentContestTab = wrapper.findComponent({
@@ -206,10 +224,11 @@ describe('ContestListv2.vue', () => {
 
   it('Should show the future contest list', async () => {
     const wrapper = mount(arena_ContestList, {
-      propsData: {
+      props: {
         contests,
         tab: ContestTab.Future,
       },
+      global,
     });
 
     const futureContestTab = wrapper.findComponent({
@@ -222,10 +241,11 @@ describe('ContestListv2.vue', () => {
 
   it('Should show the past contest list', async () => {
     const wrapper = mount(arena_ContestList, {
-      propsData: {
+      props: {
         contests,
         tab: ContestTab.Past,
       },
+      global,
     });
 
     const pastContestTab = wrapper.findComponent({
@@ -238,10 +258,11 @@ describe('ContestListv2.vue', () => {
 
   it('Should not render Virtual/Practice dropdown in Current contests', () => {
     const wrapper = mount(arena_ContestList, {
-      propsData: {
+      props: {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     // Virtual/Practice actions are inside the contest dropdown. For the Current tab
@@ -252,10 +273,11 @@ describe('ContestListv2.vue', () => {
 
   it('Should not render Virtual/Practice dropdown in Future contests', () => {
     const wrapper = mount(arena_ContestList, {
-      propsData: {
+      props: {
         contests,
         tab: ContestTab.Future,
       },
+      global,
     });
 
     // Virtual/Practice actions are inside the contest dropdown. For the Future tab
@@ -266,22 +288,29 @@ describe('ContestListv2.vue', () => {
 
   it('Should handle filter buttons', async () => {
     const wrapper = mount(arena_ContestList, {
-      propsData: {
+      props: {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
     const dropdownFilterBy = wrapper.findComponent({
       ref: 'dropdownFilterBy',
     });
     // Current filter "By All" is turned on by default
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.All);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(
+      ContestFilter.All,
+    );
     await dropdownFilterBy.find('[data-filter-by-signed-up]').trigger('click');
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.SignedUp);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(
+      ContestFilter.SignedUp,
+    );
     await dropdownFilterBy
       .find('[data-filter-by-recommended]')
       .trigger('click');
-    expect(wrapper.vm.currentFilter).toBe(ContestFilter.OnlyRecommended);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(
+      ContestFilter.OnlyRecommended,
+    );
   });
 
   const dropdownMapping = [
@@ -297,9 +326,10 @@ describe('ContestListv2.vue', () => {
     'Should show dropdown when "%s" field is selected',
     async (value) => {
       const wrapper = mount(arena_ContestList, {
-        propsData: {
+        props: {
           contests,
         },
+        global,
       });
 
       const dropdownOrderBy = wrapper.findComponent({
@@ -362,26 +392,33 @@ describe('ContestListv2.vue', () => {
     ({ field, name }) => {
       each(tabMapping).it('When selected tab equal to %s', async ({ tab }) => {
         const wrapper = mount(arena_ContestList, {
-          propsData: {
+          props: {
             contests,
             tab,
           },
+          global,
         });
 
         const dropdown = wrapper.findComponent({ ref: 'dropdownOrderBy' });
         expect(dropdown.exists()).toBeTruthy();
-        expect(wrapper.vm.currentOrder).toBe(ContestOrder.None);
+        expect((wrapper.vm as unknown as ContestListv2Vm).currentOrder).toBe(
+          ContestOrder.None,
+        );
 
         // Find and click the dropdown item
         await dropdown.find(`[data-order-by-${name}]`).trigger('click');
         await wrapper.vm.$nextTick();
-        expect(wrapper.vm.currentOrder).toBe(field);
+        expect((wrapper.vm as unknown as ContestListv2Vm).currentOrder).toBe(
+          field,
+        );
 
         const emittedEvents = wrapper.emitted('fetch-page');
 
         // Instead of checking for specific page numbers, check that the event was emitted
         // with the correct sorting order and that the page was reset to 1
-        const lastEmmitedEvent = emittedEvents?.slice(-1)[0];
+        const lastEmmitedEvent = emittedEvents?.slice(-1)[0] as [
+          { params: { sort_order: ContestOrder; page: number } },
+        ];
         expect(lastEmmitedEvent[0].params.sort_order).toBe(field);
         expect(lastEmmitedEvent[0].params.page).toBe(1);
       });
@@ -390,10 +427,11 @@ describe('ContestListv2.vue', () => {
 
   it('Should use replaceState on initial mount to avoid extra history entry', async () => {
     const wrapper = mount(arena_ContestList, {
-      propsData: {
+      props: {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     const emittedEvents = wrapper.emitted('fetch-page') as Array<
@@ -410,10 +448,11 @@ describe('ContestListv2.vue', () => {
 
   it('Should use pushState (replaceState: false) for subsequent user interactions', async () => {
     const wrapper = mount(arena_ContestList, {
-      propsData: {
+      props: {
         contests,
         tab: ContestTab.Current,
       },
+      global,
     });
 
     // Get emitted events from initial mount
@@ -424,7 +463,7 @@ describe('ContestListv2.vue', () => {
     const initialCount = initialEvents.length;
 
     // Simulate a user clicking a different tab
-    ((wrapper.vm as unknown) as { currentTab: ContestTab }).currentTab =
+    (wrapper.vm as unknown as { currentTab: ContestTab }).currentTab =
       ContestTab.Future;
     await wrapper.vm.$nextTick();
 

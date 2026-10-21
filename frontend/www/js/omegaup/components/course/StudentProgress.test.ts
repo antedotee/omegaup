@@ -7,7 +7,7 @@ import T from '../../lang';
 describe('StudentProgress.vue', () => {
   it('Should handle scores', async () => {
     const wrapper = shallowMount(course_StudentProgress, {
-      propsData: {
+      props: {
         assignmentsProblems: [
           {
             alias: 'test-assignment-a',
@@ -80,8 +80,12 @@ describe('StudentProgress.vue', () => {
     expect(wrapper.find('a.bg-green').exists()).toBe(true);
     expect(wrapper.find('a.bg-yellow').exists()).toBe(true);
     expect(wrapper.find('a.bg-red').exists()).toBe(true);
+    // The score and points live in two separate `d-block` spans. Vue 3's
+    // default whitespace:'condense' drops the whitespace-only text node between
+    // them, so `.text()` no longer includes the inter-element space that Vue 2
+    // left in. The rendered DOM (two block spans) is unchanged.
     expect(wrapper.find('td[data-global-score]').text()).toBe(
-      '50% ' +
+      '50%' +
         ui.formatString(T.studentProgressPoints, {
           points: 100,
         }),

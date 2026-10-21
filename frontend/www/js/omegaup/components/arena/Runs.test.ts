@@ -6,13 +6,20 @@ import { types } from '../../api_types';
 
 import T from '../../lang';
 
-import arena_Runs, { DisqualificationType } from './Runs.vue';
+import arena_Runs from './Runs.vue';
+import { DisqualificationType } from './Runs_types';
 import common_EmptyState from '../common/EmptyState.vue';
+
+// Minimal view of the component instance for the internals the tests reach
+// into. The component is `toNative`'d so its class type is not exported.
+interface RunsVm {
+  filterUsername: null | types.ListItem;
+}
 
 describe('Runs.vue', () => {
   it('Should handle empty runs', () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         runs: [],
       },
@@ -25,7 +32,7 @@ describe('Runs.vue', () => {
   it('Should handle runs', async () => {
     const expectedDate = '1/1/2020, 12:00:00 AM';
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         runs: [
           {
@@ -120,7 +127,7 @@ describe('Runs.vue', () => {
 
   it('Should handle order runs', async () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         runs,
         showContest: true,
@@ -135,7 +142,7 @@ describe('Runs.vue', () => {
       },
     });
     expect(
-      wrapper.findAll('acronym[data-run-guid]').wrappers.map((e) => e.text()),
+      wrapper.findAll('acronym[data-run-guid]').map((e) => e.text()),
     ).toEqual(['122000', '121500', '121000', '120500', '120000']);
   });
 
@@ -148,7 +155,7 @@ describe('Runs.vue', () => {
   describe.each(filtersMapping)(`A filter:`, (filter) => {
     it(`whose name is ${filter.filter} should have gotten the value ${filter.value}`, async () => {
       const wrapper = shallowMount(arena_Runs, {
-        propsData: {
+        props: {
           contestAlias: 'admin',
           runs,
           showPager: true,
@@ -156,8 +163,7 @@ describe('Runs.vue', () => {
       });
       await wrapper
         .find(`select[data-select-${filter.filter}]`)
-        .find(`option[value="${filter.value}"]`)
-        .setSelected();
+        .setValue(filter.value);
 
       expect(wrapper.emitted('filter-changed')).toEqual([[filter]]);
     });
@@ -165,7 +171,7 @@ describe('Runs.vue', () => {
 
   it('Should handle change page control', async () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'contest',
         runs,
         showPager: true,
@@ -173,12 +179,14 @@ describe('Runs.vue', () => {
       },
     });
 
+    // Vue 3 renders a bound-true boolean attribute as an empty string and omits
+    // it entirely when false, so presence is checked with (un)defined.
     expect(
       wrapper.find('button[data-button-page-previous]').attributes('disabled'),
-    ).toBeTruthy();
+    ).toBeDefined();
     expect(
       wrapper.find('button[data-button-page-next]').attributes('disabled'),
-    ).toBeFalsy();
+    ).toBeUndefined();
     expect(wrapper.find('.pager-controls').text()).toContain('1');
     await wrapper.find('button[data-button-page-next]').trigger('click');
 
@@ -188,16 +196,16 @@ describe('Runs.vue', () => {
 
     expect(
       wrapper.find('button[data-button-page-previous]').attributes('disabled'),
-    ).toBeFalsy();
+    ).toBeUndefined();
     expect(
       wrapper.find('button[data-button-page-next]').attributes('disabled'),
-    ).toBeFalsy();
+    ).toBeUndefined();
     expect(wrapper.find('.pager-controls').text()).toContain('2');
   });
 
   it('Should handle username filter', async () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'contest',
         runs,
         showPager: true,
@@ -215,7 +223,7 @@ describe('Runs.vue', () => {
 
   it('Should handle problem filter', async () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'contest',
         runs,
         showPager: true,
@@ -233,7 +241,7 @@ describe('Runs.vue', () => {
 
   it('Should handle the new submission button', async () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         problemAlias: 'alias',
         runs,
         showDetails: true,
@@ -253,7 +261,7 @@ describe('Runs.vue', () => {
       type: 'disqualified',
     });
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         problemAlias: 'alias',
         runs,
@@ -311,7 +319,7 @@ describe('Runs.vue', () => {
 
   it('Should handle disqualify in batch buttons for run actions', async () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         problemAlias: 'alias',
         runs,
@@ -343,7 +351,7 @@ describe('Runs.vue', () => {
 
   it('Should handle filterUsername when username changes', async () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         runs,
         showContest: true,
@@ -359,17 +367,19 @@ describe('Runs.vue', () => {
     });
 
     await wrapper.setProps({ username: 'username' });
-    expect(wrapper.vm.filterUsername?.key).toBe('username');
+    expect((wrapper.vm as unknown as RunsVm).filterUsername?.key).toBe(
+      'username',
+    );
 
     await wrapper.setProps({ username: null });
-    expect(wrapper.vm.filterUsername).toBeFalsy();
+    expect((wrapper.vm as unknown as RunsVm).filterUsername).toBeFalsy();
   });
 
   const usernamesToBeFiltered = ['username', 'other_username'];
   describe.each(usernamesToBeFiltered)(`A user:`, (username) => {
     it(`whose username is ${username} should be filtered when they are selected.`, async () => {
       const wrapper = mount(arena_Runs, {
-        propsData: {
+        props: {
           contestAlias: 'admin',
           runs,
           showContest: true,
@@ -387,8 +397,7 @@ describe('Runs.vue', () => {
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
 
       await wrapper
-        .findAll(`td[data-username="${username}"]`)
-        .at(1)
+        .findAll(`td[data-username="${username}"]`)[1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -404,8 +413,7 @@ describe('Runs.vue', () => {
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
 
       await wrapper
-        .findAll(`td[data-username="${username}"]`)
-        .at(1)
+        .findAll(`td[data-username="${username}"]`)[1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -413,13 +421,13 @@ describe('Runs.vue', () => {
 
       // Now all runs should appear
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
-      expect(wrapper.vm.filterUsername).toBeFalsy();
+      expect((wrapper.vm as unknown as RunsVm).filterUsername).toBeFalsy();
     });
   });
 
   it('Should show loading skeleton when loading prop is true', () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         runs,
         loading: true,
@@ -432,7 +440,7 @@ describe('Runs.vue', () => {
 
   it('Should not show loading skeleton when loading prop is false', () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         runs,
         loading: false,
@@ -445,7 +453,7 @@ describe('Runs.vue', () => {
 
   it('Should not show pager when showPager is false', () => {
     const wrapper = shallowMount(arena_Runs, {
-      propsData: {
+      props: {
         contestAlias: 'admin',
         runs,
         showPager: false,

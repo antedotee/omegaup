@@ -361,7 +361,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -381,7 +381,11 @@ import { faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import LogoutConfirmation from './LogoutConfirmation.vue';
 library.add(faSignOutAlt, faUser);
 
-export const EventBus = new Vue();
+// The legacy global event bus lives in ./eventBus and is re-exported here so
+// existing SFC importers keep working while plain `.ts` entry points
+// (login/signin.ts) import it from the `.ts` module, sharing one instance.
+import { EventBus } from './eventBus';
+export { EventBus };
 
 @Component({
   components: {
@@ -397,7 +401,7 @@ export const EventBus = new Vue();
     'omegaup-logout-confirmation': LogoutConfirmation,
   },
 })
-export default class Navbar extends Vue {
+class Navbar extends Vue {
   @Prop() omegaUpLockDown!: boolean;
   @Prop() inContest!: boolean;
   @Prop() isLoggedIn!: boolean;
@@ -529,7 +533,7 @@ export default class Navbar extends Vue {
     this.updateScroll();
   }
 
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('click', this.handleDocumentClick);
     window.removeEventListener('scroll', this.updateScroll);
   }
@@ -547,6 +551,7 @@ export default class Navbar extends Vue {
     }
   }
 }
+export default toNative(Navbar);
 </script>
 
 <style lang="scss">

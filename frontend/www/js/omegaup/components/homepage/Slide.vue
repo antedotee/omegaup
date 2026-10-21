@@ -30,11 +30,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component
-export default class Slide extends Vue {
+class Slide extends Vue {
   @Prop() title!: string;
   @Prop() description!: string;
   @Prop() imageSrc!: string;
@@ -50,6 +50,7 @@ export default class Slide extends Vue {
 
   T = T;
 }
+export default toNative(Slide);
 </script>
 
 <style lang="scss" scoped>

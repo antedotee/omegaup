@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import course_Details from '../components/course/Details.vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
@@ -11,7 +11,7 @@ OmegaUp.on('ready', () => {
     components: {
       'omegaup-course-details': course_Details,
     },
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-course-details', {
         props: {
           course: payload.details,

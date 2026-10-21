@@ -45,7 +45,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
+import VueGlobal from 'vue';
 import * as Markdown from '@/third_party/js/pagedown/Markdown.Editor.js';
 import * as markdown from '../../../../markdown';
 import * as ui from '../../../../ui';
@@ -55,7 +63,7 @@ import introJs from 'intro.js';
 import 'intro.js/introjs.css';
 import VueCookies from 'vue-cookies';
 import ProblemMarkdown from '../../ProblemMarkdown.vue';
-Vue.use(VueCookies, { expires: -1 });
+VueGlobal.use(VueCookies, { expires: -1 });
 
 const markdownConverter = new markdown.Converter({
   preview: true,
@@ -66,7 +74,7 @@ const markdownConverter = new markdown.Converter({
     'omegaup-markdown': ProblemMarkdown,
   },
 })
-export default class SolutionTab extends Vue {
+class SolutionTab extends Vue {
   @Ref() readonly markdownButtonBar!: HTMLDivElement;
   @Ref() readonly markdownInput!: HTMLTextAreaElement;
 
@@ -166,6 +174,7 @@ export default class SolutionTab extends Vue {
     }
   }
 }
+export default toNative(SolutionTab);
 </script>
 
 <style lang="scss" scoped>

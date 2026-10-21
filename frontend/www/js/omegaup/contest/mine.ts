@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { OmegaUp } from '../omegaup';
 import { types } from '../api_types';
 import T from '../lang';
@@ -6,6 +6,10 @@ import * as api from '../api';
 import * as ui from '../ui';
 import contest_Mine from '../components/contest/Mine.vue';
 import { downloadCsvFile } from '../groups';
+
+interface ContestMineInstance {
+  contests: types.Contest[];
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.ContestListMinePayload();
@@ -19,7 +23,7 @@ OmegaUp.on('ready', () => {
     data: () => ({
       contests: payload.contests,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-contest-mine', {
         props: {
           contests: this.contests,
@@ -96,7 +100,8 @@ OmegaUp.on('ready', () => {
     const param = { show_archived: showArchivedContests };
     (showAllContests ? api.Contest.adminList(param) : api.Contest.myList(param))
       .then((result) => {
-        contestMine.contests = result.contests;
+        (contestMine as unknown as ContestMineInstance).contests =
+          result.contests;
       })
       .catch(ui.apiError);
   }

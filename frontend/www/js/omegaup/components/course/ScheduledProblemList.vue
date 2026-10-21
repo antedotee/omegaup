@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -115,7 +115,7 @@ library.add(fas);
     'font-awesome-layers-text': FontAwesomeLayersText,
   },
 })
-export default class CourseScheduledProblemList extends Vue {
+class CourseScheduledProblemList extends Vue {
   @Prop() assignments!: types.CourseAssignment[];
   @Prop() assignmentProblems!: types.ProblemsetProblem[];
   @Prop() taggedProblems!: omegaup.Problem[];
@@ -233,6 +233,7 @@ export default class CourseScheduledProblemList extends Vue {
     this.points = 100;
   }
 }
+export default toNative(CourseScheduledProblemList);
 </script>
 
 <style lang="scss" scoped>

@@ -3,8 +3,14 @@ import { OmegaUp } from '../omegaup';
 import * as api from '../api';
 import * as ui from '../ui';
 import T from '../lang';
-import Vue from 'vue';
+import Vue, { type CreateElement } from 'vue';
 import { types } from '../api_types';
+
+interface AdminUserInstance {
+  experiments: string[];
+  roles: string[];
+  verified: boolean;
+}
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.UserDetailsPayload();
@@ -19,7 +25,7 @@ OmegaUp.on('ready', () => {
       roles: payload.systemRoles,
       verified: payload.verified,
     }),
-    render: function (createElement) {
+    render: function (createElement: CreateElement) {
       return createElement('omegaup-admin-user', {
         props: {
           emails: payload.emails,
@@ -82,7 +88,7 @@ OmegaUp.on('ready', () => {
           'verify-user': (): void => {
             api.User.verifyEmail({ usernameOrEmail: payload.username })
               .then(() => {
-                adminUser.verified = true;
+                (adminUser as unknown as AdminUserInstance).verified = true;
               })
               .catch(ui.apiError);
           },

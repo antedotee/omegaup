@@ -90,11 +90,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
-@Component
-export default class TeamsGroupFormBase extends Vue {
+@Component({
+  emits: [
+    'submit',
+    'update:alias',
+    'update:description',
+    'update:name',
+    'update:numberOfContestants',
+  ],
+})
+class TeamsGroupFormBase extends Vue {
   @Prop() alias!: null | string;
   @Prop() description!: null | string;
   @Prop() name!: null | string;
@@ -108,28 +116,28 @@ export default class TeamsGroupFormBase extends Vue {
   currentName: null | string = this.name;
   currentNumberOfContestants: number = this.numberOfContestants;
 
+  // Stacking @Watch and @Emit on one method does not emit under
+  // vue-facing-decorator here (the watcher invokes the raw method, not the
+  // @Emit wrapper), so each watcher emits the sync event explicitly.
   @Watch('currentAlias')
-  @Emit('update:alias')
-  onAliasUpdated(newValue: string): string {
-    return newValue;
+  onAliasUpdated(newValue: string): void {
+    this.$emit('update:alias', newValue);
   }
 
   @Watch('currentDescription')
-  @Emit('update:description')
-  onDescriptionUpdated(newValue: string): string {
-    return newValue;
+  onDescriptionUpdated(newValue: string): void {
+    this.$emit('update:description', newValue);
   }
 
   @Watch('currentName')
-  @Emit('update:name')
-  onNameUpdated(newValue: string): string {
-    return newValue;
+  onNameUpdated(newValue: string): void {
+    this.$emit('update:name', newValue);
   }
 
   @Watch('currentNumberOfContestants')
-  @Emit('update:numberOfContestants')
-  onNumberOfContestantsUpdated(newValue: number): number {
-    return newValue;
+  onNumberOfContestantsUpdated(newValue: number): void {
+    this.$emit('update:numberOfContestants', newValue);
   }
 }
+export default toNative(TeamsGroupFormBase);
 </script>

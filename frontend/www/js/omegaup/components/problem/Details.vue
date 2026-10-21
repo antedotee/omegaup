@@ -385,7 +385,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Emit, Watch } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Emit,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -418,6 +426,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { SubmissionRequest } from '../../arena/submissions';
 import { ArenaCourseFeedback } from '../arena/Feedback.vue';
+import { PopupDisplayed } from './Details_types';
 library.add(
   faExclamationTriangle,
   faEdit,
@@ -431,16 +440,13 @@ export interface Tab {
   text: string;
 }
 
-export enum PopupDisplayed {
-  None,
-  RunSubmit,
-  RunDetails,
-  Promotion,
-  Demotion,
-  Reviewer,
-}
+// PopupDisplayed is declared in ./Details_types and re-exported here so that
+// existing SFC importers keep working while plain `.ts` entry points import it
+// from the `.ts` module (fork-ts-checker cannot see named SFC exports).
+export { PopupDisplayed };
 
 @Component({
+  emits: ['clarification-response'],
   components: {
     FontAwesomeIcon,
     'omegaup-problem-solution': problem_soltion,
@@ -456,12 +462,15 @@ export enum PopupDisplayed {
     'omegaup-username': user_Username,
     'omegaup-problem-feedback': problem_Feedback,
     'omegaup-problem-settings-summary': problem_SettingsSummary,
-    'omegaup-quality-nomination-reviewer-popup': qualitynomination_ReviewerPopup,
-    'omegaup-quality-nomination-demotion-popup': qualitynomination_DemotionPopup,
-    'omegaup-quality-nomination-promotion-popup': qualitynomination_PromotionPopup,
+    'omegaup-quality-nomination-reviewer-popup':
+      qualitynomination_ReviewerPopup,
+    'omegaup-quality-nomination-demotion-popup':
+      qualitynomination_DemotionPopup,
+    'omegaup-quality-nomination-promotion-popup':
+      qualitynomination_PromotionPopup,
   },
 })
-export default class ProblemDetails extends Vue {
+class ProblemDetails extends Vue {
   @Prop({
     default: () => {
       return [];
@@ -702,17 +711,16 @@ export default class ProblemDetails extends Vue {
     // to inject Vue components into the DOM after it's being rendered, so that
     // all the templating and interactivity can be handled by Vue instead of by
     // JavaScript.
-    const libinteractiveInterfaceNameElement = this.statementMarkdown.$el.querySelector(
-      'span.libinteractive-interface-name',
-    ) as HTMLElement;
+    const libinteractiveInterfaceNameElement =
+      this.statementMarkdown.$el.querySelector(
+        'span.libinteractive-interface-name',
+      ) as HTMLElement;
     if (
       libinteractiveInterfaceNameElement &&
       this.problem.settings?.interactive?.module_name
     ) {
-      libinteractiveInterfaceNameElement.innerText = this.problem.settings.interactive.module_name.replace(
-        /\.idl$/,
-        '',
-      );
+      libinteractiveInterfaceNameElement.innerText =
+        this.problem.settings.interactive.module_name.replace(/\.idl$/, '');
     }
 
     const outputOnlyDownloadElement = this.statementMarkdown.$el.querySelector(
@@ -725,9 +733,10 @@ export default class ProblemDetails extends Vue {
       );
     }
 
-    const libinteractiveDownloadFormElement = this.statementMarkdown.$el.querySelector(
-      '.libinteractive-download form',
-    ) as HTMLElement;
+    const libinteractiveDownloadFormElement =
+      this.statementMarkdown.$el.querySelector(
+        '.libinteractive-download form',
+      ) as HTMLElement;
     if (libinteractiveDownloadFormElement) {
       libinteractiveDownloadFormElement.addEventListener(
         'submit',
@@ -739,9 +748,9 @@ export default class ProblemDetails extends Vue {
           const commit = this.problem.commit;
           const os = (form.querySelector('.download-os') as HTMLInputElement)
             ?.value;
-          const lang = (form.querySelector(
-            '.download-lang',
-          ) as HTMLInputElement)?.value;
+          const lang = (
+            form.querySelector('.download-lang') as HTMLInputElement
+          )?.value;
           const extension = os == 'unix' ? '.tar.bz2' : '.zip';
 
           ui.navigateTo(
@@ -751,9 +760,10 @@ export default class ProblemDetails extends Vue {
       );
     }
 
-    const libinteractiveDownloadLangElement = this.statementMarkdown.$el.querySelector(
-      '.libinteractive-download .download-lang',
-    ) as HTMLSelectElement;
+    const libinteractiveDownloadLangElement =
+      this.statementMarkdown.$el.querySelector(
+        '.libinteractive-download .download-lang',
+      ) as HTMLSelectElement;
     if (libinteractiveDownloadLangElement) {
       libinteractiveDownloadLangElement.addEventListener(
         'change',
@@ -765,9 +775,9 @@ export default class ProblemDetails extends Vue {
             }
             form = form.parentElement;
           }
-          (form.querySelector(
-            '.libinteractive-extension',
-          ) as HTMLElement).innerText = libinteractiveDownloadLangElement.value;
+          (
+            form.querySelector('.libinteractive-extension') as HTMLElement
+          ).innerText = libinteractiveDownloadLangElement.value;
         },
       );
     }
@@ -829,6 +839,7 @@ export default class ProblemDetails extends Vue {
     this.currentRunDetailsData = newValue;
   }
 }
+export default toNative(ProblemDetails);
 </script>
 
 <style lang="scss" scoped>

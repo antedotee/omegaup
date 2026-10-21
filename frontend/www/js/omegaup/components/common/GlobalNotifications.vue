@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, toNative } from 'vue-facing-decorator';
 import notificationsStore from '../../notificationsStore';
 import omegaup_Markdown from '../Markdown.vue';
 
@@ -32,7 +32,7 @@ import omegaup_Markdown from '../Markdown.vue';
     'omegaup-markdown': omegaup_Markdown,
   },
 })
-export default class GlobalNotifications extends Vue {
+class GlobalNotifications extends Vue {
   get visible(): boolean {
     return notificationsStore.getters.isVisible;
   }
@@ -53,6 +53,7 @@ export default class GlobalNotifications extends Vue {
     notificationsStore.dispatch('dismissNotifications');
   }
 }
+export default toNative(GlobalNotifications);
 </script>
 
 <style lang="scss" scoped>
