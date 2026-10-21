@@ -1,8 +1,7 @@
-import { mount, VueWrapper } from '@vue/test-utils';
+import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 
 import AddPanel from './AddPanel.vue';
 import T from '../../../../lang';
-import Vue from 'vue';
 import vuexStore from '../../../../problem/creator/store';
 import { StoreState } from '../../../../problem/creator/types';
 import { Store } from 'vuex';
@@ -20,7 +19,7 @@ describe('AddPanel.vue', () => {
       },
     });
 
-    await Vue.nextTick();
+    await flushPromises();
 
     const nameInput = wrapper.find('input[name="case-name"]');
 
@@ -52,6 +51,7 @@ describe('AddPanel.vue', () => {
     });
 
     await wrapper.setData({ tab: 'group' });
+    await flushPromises();
 
     await wrapper.find('input[name="group-name"]').setValue(testGroup);
 
@@ -75,6 +75,7 @@ describe('AddPanel.vue', () => {
     const groupId = groups[0].groupID;
 
     await wrapper.setData({ tab: 'case' });
+    await flushPromises();
 
     await wrapper.find('input[name="case-name"]').setValue('groupedtestcase');
     await wrapper.find('input[name="case-points"]').setValue(10);
@@ -96,6 +97,7 @@ describe('AddPanel.vue', () => {
     });
 
     await wrapper.setData({ tab: 'case' });
+    await flushPromises();
 
     await wrapper.find('input[name="case-name"]').setValue('testcase');
     await wrapper.find('input[name="case-points"]').setValue(50);
@@ -129,6 +131,7 @@ describe('AddPanel.vue', () => {
     });
 
     await wrapper.setData({ tab: 'multiplecases' });
+    await flushPromises();
 
     await wrapper.find('input[name="multiple-cases-prefix"]').setValue('test');
     await wrapper.find('input[name="multiple-cases-suffix"]').setValue('case');
@@ -181,7 +184,7 @@ describe('AddPanel.vue', () => {
       T.problemCreatorMultipleCases,
     ];
 
-    await Vue.nextTick();
+    await flushPromises();
 
     const tabs = wrapper.findAll('.nav-link');
     expect(tabs.length).toBe(expectedText.length);

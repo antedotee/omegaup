@@ -2,12 +2,8 @@
   <b-card :title="T.problemCreatorAdd">
     <form ref="form" @submit.prevent="addItemToStore">
       <div class="h-100">
-        <b-tabs small pills lazy>
-          <b-tab
-            :active="tab === 'case'"
-            name="modal-form"
-            @click="tab = 'case'"
-          >
+        <b-tabs v-model:index="tabIndex" small pills lazy>
+          <b-tab name="modal-form" unmount-lazy>
             <template #title>
               <span name="group" data-problem-creator-add-panel-tab="case">
                 {{ T.problemCreatorCase }}</span
@@ -23,11 +19,7 @@
             >
             <omegaup-problem-creator-case-input ref="case-input" />
           </b-tab>
-          <b-tab
-            :active="tab === 'group'"
-            name="modal-form"
-            @click="tab = 'group'"
-          >
+          <b-tab name="modal-form" unmount-lazy>
             <template #title>
               <span name="group" data-problem-creator-add-panel-tab="group">
                 {{ T.problemCreatorGroup }}</span
@@ -43,11 +35,7 @@
             >
             <omegaup-problem-creator-group-input ref="group-input" />
           </b-tab>
-          <b-tab
-            :active="tab === 'multiplecases'"
-            name="modal-form"
-            @click="tab = 'multiplecases'"
-          >
+          <b-tab name="modal-form" unmount-lazy>
             <template #title>
               <span
                 name="multiple-cases"
@@ -102,6 +90,9 @@ import {
 } from '@/js/omegaup/problem/creator/types';
 import { NIL, v4 as uuid } from 'uuid';
 
+// The tabs in template order.
+const ADD_TABS: AddTabTypes[] = ['case', 'group', 'multiplecases'];
+
 @Component({
   components: {
     'omegaup-problem-creator-case-input': problemCreator_Cases_CaseInput,
@@ -132,6 +123,14 @@ class AddPanel extends Vue {
   }
   addMultipleCases(multipleCaseRequest: MultipleCaseAddRequest): void {
     this.$store.dispatch('casesStore/addMultipleCases', multipleCaseRequest);
+  }
+  // bootstrap-vue emitted `click` on a tab when its title was clicked;
+  // bootstrap-vue-next does not, so the active tab is bound by index.
+  get tabIndex(): number {
+    return ADD_TABS.indexOf(this.tab);
+  }
+  set tabIndex(index: number) {
+    this.tab = ADD_TABS[index];
   }
   get groups(): Group[] {
     return this.$store.state.casesStore.groups;
