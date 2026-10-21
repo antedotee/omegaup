@@ -23,10 +23,9 @@ import {
 import rankingStore from './rankingStore';
 import { ScoreMode } from './navigation';
 
-// `ts-jest/utils` was removed; Jest 27+ ships `jest.mocked`. The former
-// `mocked(fn, deep)` second argument was a type-only hint, so this wrapper
-// preserves the existing call sites and their runtime behavior.
-function mocked<T>(item: T, _deep = false): jest.MockedFunction<any> {
+// `ts-jest/utils` was removed; Jest 27+ ships `jest.mocked`. This wrapper keeps
+// the call sites loosely typed, as the old `mocked()` helper did.
+function mocked<T>(item: T): jest.MockedFunction<any> {
   return jest.mocked(item) as unknown as jest.MockedFunction<any>;
 }
 
@@ -312,9 +311,9 @@ describe('EventsSocket', () => {
   });
 
   it('should commit the polled scoreboard to the ranking store', async () => {
-    mocked(onRankingChanged, true).mockReset();
-    mocked(onRankingEvents, false).mockReset();
-    mocked(createChart, false).mockReset();
+    mocked(onRankingChanged).mockReset();
+    mocked(onRankingEvents).mockReset();
+    mocked(createChart).mockReset();
 
     const ranking: types.ScoreboardRankingEntry[] = [
       {
@@ -339,14 +338,14 @@ describe('EventsSocket', () => {
     ];
     const lastTimeUpdated = new Date(1674625378734);
 
-    mocked(onRankingChanged, true).mockReturnValue({
+    mocked(onRankingChanged).mockReturnValue({
       users: miniRankingUsers,
       ranking,
       currentRanking: { omegaUp: 0 },
       maxPoints: 200,
       lastTimeUpdated,
     });
-    mocked(onRankingEvents, false).mockReturnValue({
+    mocked(onRankingEvents).mockReturnValue({
       series: [
         {
           type: 'line',
@@ -379,8 +378,8 @@ describe('EventsSocket', () => {
   });
 
   it('should route virtual contests through onVirtualRankingChanged while polling', async () => {
-    mocked(onRankingChanged, true).mockReset();
-    mocked(onVirtualRankingChanged, false).mockReset();
+    mocked(onRankingChanged).mockReset();
+    mocked(onVirtualRankingChanged).mockReset();
 
     const client = new EventsSocket({
       ...options,
@@ -531,8 +530,8 @@ describe('EventsSocket', () => {
     jest.runOnlyPendingTimers();
     await server?.connected;
 
-    const onRankingChangedMock = mocked(onRankingChanged, true);
-    const onRankingEventsMock = mocked(onRankingEvents, false);
+    const onRankingChangedMock = mocked(onRankingChanged);
+    const onRankingEventsMock = mocked(onRankingEvents);
     onRankingChangedMock.mockReturnValueOnce({
       users: [],
       ranking: [],

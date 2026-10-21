@@ -509,7 +509,6 @@ import {
   Component,
   Prop,
   Watch,
-  Emit,
   toNative,
 } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';

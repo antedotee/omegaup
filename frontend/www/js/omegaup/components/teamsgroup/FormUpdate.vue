@@ -1,9 +1,9 @@
 <template>
   <omegaup-teams-group-form
-    :alias="alias"
     v-model:description="currentDescription"
     v-model:name="currentName"
     v-model:number-of-contestants="currentNumberOfContestants"
+    :alias="alias"
     :max-number-of-contestants="maxNumberOfContestants"
     @submit="(request) => $emit('update-teams-group', request)"
   >

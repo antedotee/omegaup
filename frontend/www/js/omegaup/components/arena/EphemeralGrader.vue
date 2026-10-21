@@ -9,7 +9,7 @@
     :initial-theme="initialTheme"
     :next-submission-timestamp="nextSubmissionTimestamp"
     :next-execution-timestamp="nextExecutionTimestamp"
-    @execute-run="() => this.$emit('execute-run')"
+    @execute-run="() => $emit('execute-run')"
   >
   </ephemeral-ide>
 </template>

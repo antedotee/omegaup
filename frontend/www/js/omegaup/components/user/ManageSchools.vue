@@ -3,9 +3,9 @@
     <div class="form-group">
       <label>{{ T.profileSchool }}</label>
       <omegaup-common-typeahead
+        v-model:value="school"
         :existing-options="searchResultSchools"
         :options="searchResultSchools"
-        v-model:value="school"
         data-school-name
         @update-existing-options="
           (query) => $emit('update-search-result-schools', query)
