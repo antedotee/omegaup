@@ -26,6 +26,12 @@ configureCompat({
   // the app and its libraries is a static "true"/"false" string, which renders
   // the same with or without coercion, so keep it on everywhere, unwarned.
   ATTR_ENUMERATED_COERCION: 'suppress-warning',
+  // The Vue 2 deep merge of `data` follows every nested plain object. Class
+  // components built on vue-class-component (vue-slider-component) collect
+  // the internal instance `_` into their data, whose vnode/component graph is
+  // cyclic, so the deep merge never ends. Use Vue 3's shallow merge; no app
+  // component merges `data` from mixins or `extends`.
+  OPTIONS_DATA_MERGE: false,
 });
 
 // Register every BVN component globally so kebab `<b-*>` tags resolve the way
