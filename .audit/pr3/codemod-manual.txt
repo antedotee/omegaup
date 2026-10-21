@@ -1,0 +1,70 @@
+# bs5-cutover codemod run, refactor(bs5): run codemod = 4e88dc6bd (parent c83e140fa)
+# 709 files scanned, 171 changed, 945 replacements; integrity: 161 .vue files checked, 0 failing
+# 9 manual-conversion, 55 manual-review
+
+Manual conversion (Removal_Map needs layout choice):
+  frontend/www/js/omegaup/components/arena/Clarification.vue:59  form-inline  needs a layout choice
+  frontend/www/js/omegaup/components/arena/ClarificationList.vue:46  form-inline  needs a layout choice
+  frontend/www/js/omegaup/components/common/GridPaginator.vue:57  form-inline  needs a layout choice
+  frontend/www/js/omegaup/components/contest/AddProblem.vue:15  input-group-prepend  input-group-append/prepend wrapper is not a bare <div>/<span>, or has other classes, attributes, or no children
+  frontend/www/js/omegaup/components/course/AdmissionMode.vue:51  form-inline  needs a layout choice
+  frontend/www/js/omegaup/components/course/GenerateLinkClone.vue:13  input-group-append  input-group-append/prepend wrapper is not a bare <div>/<span>, or has other classes, attributes, or no children
+  frontend/www/js/omegaup/components/problem/SearchBar.vue:8  form-inline  needs a layout choice
+  frontend/www/js/omegaup/grader/Ephemeral.vue:9  form-inline  needs a layout choice
+  frontend/www/js/omegaup/grader/MonacoEditor.vue:4  form-inline  needs a layout choice
+Manual review (not statically rewritable):
+  frontend/www/js/omegaup/components/OverlayPopup.vue:3  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/OverlayPopup.vue:3  btn-close  btn-close content is not a plain × glyph; BS5 draws the glyph
+  frontend/www/js/omegaup/components/admin/Carousel.vue:489  badge-secondary  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/admin/Carousel.vue:499  badge-danger  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/admin/Carousel.vue:506  badge-success  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/admin/Crons.vue:222  badge-success  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/admin/Crons.vue:223  badge-danger  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/admin/Crons.vue:224  badge-secondary  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/admin/Crons.vue:229  badge-light  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/arena/Feedback.vue:15  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/arena/Feedback.vue:15  btn-close  btn-close content is not a plain × glyph; BS5 draws the glyph
+  frontend/www/js/omegaup/components/arena/FeedbackThread.vue:17  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/arena/FeedbackThread.vue:17  btn-close  btn-close content is not a plain × glyph; BS5 draws the glyph
+  frontend/www/js/omegaup/components/common/Admins.vue:67  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/common/Admins.vue:67  btn-close  btn-close content is not a plain × glyph; BS5 draws the glyph
+  frontend/www/js/omegaup/components/common/Confirmation.vue:6  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/common/GroupAdmins.vue:54  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/common/GroupAdmins.vue:54  btn-close  btn-close content is not a plain × glyph; BS5 draws the glyph
+  frontend/www/js/omegaup/components/common/GroupTeachingAssistants.vue:57  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/common/Navbar.vue:350  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/common/Requests.vue:49  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/common/Requests.vue:69  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/common/Requests.vue:69  btn-close  btn-close content is not a plain × glyph; BS5 draws the glyph
+  frontend/www/js/omegaup/components/common/TeachingAssistants.vue:54  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/contest/AddContestant.vue:82  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/contest/Groups.vue:39  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/course/AddStudents.vue:73  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/course/AssignmentDetails.vue:437  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/course/Clone.vue:74  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/course/ScheduledProblemList.vue:240  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/identity/Edit.test.ts:38  input-group-prepend  selector on generic utility
+  frontend/www/js/omegaup/components/identity/Edit.test.ts:56  input-group-prepend  selector on generic utility
+  frontend/www/js/omegaup/components/notification/Clarifications.test.ts:63  close  BS4 class inside a [class] attribute selector
+  frontend/www/js/omegaup/components/notification/Clarifications.vue:34  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/notification/Clarifications.vue:34  btn-close  btn-close content is not a plain × glyph; BS5 draws the glyph
+  frontend/www/js/omegaup/components/notification/Notification.vue:8  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/notification/Notification.vue:8  btn-close  btn-close content is not a plain × glyph; BS5 draws the glyph
+  frontend/www/js/omegaup/components/problem/BaseList.vue:309  badge-success  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/problem/BaseList.vue:312  badge-warning  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/problem/BaseList.vue:314  badge-secondary  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/problem/Edit.test.ts:55  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/problem/Form.test.ts:149  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/problem/SearchBar.vue:123  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/schools/Profile.vue:112  text-right  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/schools/Profile.vue:118  text-left  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/schools/Profile.vue:120  text-right  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/schools/Rank.test.ts:60  form-row  selector on generic utility
+  frontend/www/js/omegaup/components/schools/Rank.test.ts:72  form-row  selector on generic utility
+  frontend/www/js/omegaup/components/submissions/Feedback.vue:78  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/user/BasicInfov2.vue:150  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/user/BasicInfov2.vue:150  form-group  selector on generic utility
+  frontend/www/js/omegaup/components/user/ManageApiTokens.vue:222  btn-block  selector on generic utility
+  frontend/www/js/omegaup/components/user/NextRegisteredContest.vue:7  btn-close  btn-close needs accessible name, use T.wordsClose
+  frontend/www/js/omegaup/components/user/ViewProfile.vue:441  text-left  BS4-shaped string literal outside a class or selector context
+  frontend/www/js/omegaup/components/user/ViewProfile.vue:442  text-right  BS4-shaped string literal outside a class or selector context
