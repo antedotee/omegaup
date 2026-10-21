@@ -4,7 +4,11 @@ import DiffEditorV2 from '../DiffEditorV2.vue';
 // Mock Monaco Editor since it doesn't run in JSDOM
 jest.mock('monaco-editor', () => ({
   editor: {
-    createModel: jest.fn(),
+    createModel: jest.fn(() => ({
+      getValue: jest.fn(),
+      setValue: jest.fn(),
+      dispose: jest.fn(),
+    })),
     createDiffEditor: jest.fn(() => ({
       setModel: jest.fn(),
       layout: jest.fn(),

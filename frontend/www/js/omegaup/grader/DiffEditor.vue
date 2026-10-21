@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts">
+import { markRaw } from 'vue';
 // TODO: replace all instances of any with correct type
 import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import store from './GraderStore';
@@ -46,21 +47,21 @@ class DiffEditor extends Vue {
   }
 
   mounted(): void {
-    this._originalModel = monaco.editor.createModel(
-      this.originalContents,
-      'text/plain',
+    this._originalModel = markRaw(
+      monaco.editor.createModel(this.originalContents, 'text/plain'),
     );
-    this._modifiedModel = monaco.editor.createModel(
-      this.modifiedContents,
-      'text/plain',
+    this._modifiedModel = markRaw(
+      monaco.editor.createModel(this.modifiedContents, 'text/plain'),
     );
 
     // both sides are either editable or not at the same time
-    this._editor = monaco.editor.createDiffEditor(this.$el as HTMLElement, {
-      theme: this.theme,
-      originalEditable: !this.readOnly,
-      readOnly: this.readOnly,
-    });
+    this._editor = markRaw(
+      monaco.editor.createDiffEditor(this.$el as HTMLElement, {
+        theme: this.theme,
+        originalEditable: !this.readOnly,
+        readOnly: this.readOnly,
+      }),
+    );
 
     this._editor.setModel({
       original: this._originalModel,

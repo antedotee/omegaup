@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import { markRaw } from 'vue';
 // TODO: replace all instances of any with correct type
 import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import store from './GraderStore';
@@ -149,18 +150,21 @@ class MonacoEditor extends Vue {
     const container = this.$refs.editorContainer as HTMLElement;
     if (!container) return;
 
-    this._editor = monaco.editor.create(container, {
-      autoIndent: 'brackets',
-      formatOnPaste: true,
-      formatOnType: true,
-      language: Util.supportedLanguages[this.language].modelMapping,
-      readOnly: this.readOnly,
-      theme: this.theme,
-      value: this.contents,
-      fontSize: this.selectedFontSize,
-    } as monaco.editor.IStandaloneEditorConstructionOptions);
-    this._model = this._editor.getModel();
-    if (!this._model) return;
+    this._editor = markRaw(
+      monaco.editor.create(container, {
+        autoIndent: 'brackets',
+        formatOnPaste: true,
+        formatOnType: true,
+        language: Util.supportedLanguages[this.language].modelMapping,
+        readOnly: this.readOnly,
+        theme: this.theme,
+        value: this.contents,
+        fontSize: this.selectedFontSize,
+      } as monaco.editor.IStandaloneEditorConstructionOptions),
+    );
+    const model = this._editor.getModel();
+    if (!model) return;
+    this._model = markRaw(model);
 
     this._model.onDidChangeContent((e) => {
       store.dispatch(this.storeMapping.contents, this._model?.getValue() || '');
