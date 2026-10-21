@@ -18,6 +18,7 @@
           :title="T.problemCreatorLayoutWordLayouts"
           shadow
           no-header-close
+          no-backdrop
           width="385px"
         >
           <omegaup-problem-creator-layout-sidebar />
@@ -410,6 +411,7 @@ import {
   CaseGroupID,
 } from '@/js/omegaup/problem/creator/types';
 import JSZip from 'jszip';
+import '../../../../../../css/bootstrap5-offcanvas.css';
 
 @Component({
   components: {
