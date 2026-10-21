@@ -47,21 +47,23 @@ for (const [name, exported] of Object.entries(BootstrapVueNext)) {
   Vue.component(name, exported as Component);
 }
 
-// `createBootstrap()` and Vuex 4 stores install through `app.provide` and
-// `app.config.globalProperties`, which the compat `Vue.use` cannot reach: it
-// hands plugins the global constructor, and each `new Vue` root gets its own
-// app. Install them on every root's app before its children are created. The
-// store comes from the root's Vue 2 style `store` option, which Vuex 4 no
-// longer reads itself.
+// `createBootstrap()` installs through `app.provide`, which the compat
+// `Vue.use` cannot reach: it hands plugins the global constructor, and each
+// `new Vue` root gets its own app. Install it on every root's app before its
+// children are created.
+//
+// Vuex 4 no longer reads the Vue 2 `store` component option, which the app
+// sets on a root (problem/creator/creator.ts) and on an embedded component
+// (CreatorWrapper.vue). Install that store on the component's app, which is
+// how Vuex 4 provides `$store`, before the component's children are created.
 Vue.mixin({
   beforeCreate(this: ComponentPublicInstance) {
-    if (this.$.parent !== null) {
-      return;
-    }
     const app = this.$.appContext.app;
-    app.use(createBootstrap());
-    const store = (this.$options as { store?: Plugin }).store;
-    if (store) {
+    if (this.$.parent === null) {
+      app.use(createBootstrap());
+    }
+    const store = (this.$.type as { store?: Plugin }).store;
+    if (store && app.config.globalProperties.$store !== store) {
       app.use(store);
     }
   },
