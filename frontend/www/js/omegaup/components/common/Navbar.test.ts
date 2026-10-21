@@ -1,4 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils';
+import { BModal } from 'bootstrap-vue-next';
 
 import T from '../../lang';
 
@@ -129,6 +130,43 @@ describe('Navbar.vue', () => {
     expect(nextRegisteredContest.text()).toContain('10');
     expect(nextRegisteredContest.text()).toContain('Inicia: ' + startDate);
     expect(nextRegisteredContest.text()).toContain('01:00:00');
+  });
+
+  it('Should log out after confirming in the logout modal', async () => {
+    const original = window.location;
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: '' },
+    });
+    const wrapper = mount(common_Navbar, {
+      props: { ...propsData, ...{ inContest: false } },
+      attachTo: document.body,
+      global: { stubs: { transition: false } },
+    });
+    expect(wrapper.find('.logout-confirmation-modal').exists()).toBe(false);
+
+    await wrapper.find('a[data-logout-button]').trigger('click');
+    // BModal finishes showing over a few animation frames and then emits
+    // `shown`.
+    const modal = wrapper.findComponent(BModal);
+    while (!modal.emitted('shown')) {
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+
+    const confirmButton = wrapper.find(
+      '.logout-confirmation-modal > button.btn-primary',
+    );
+    expect(confirmButton.exists()).toBe(true);
+    expect(confirmButton.isVisible()).toBe(true);
+
+    await confirmButton.trigger('click');
+    expect(window.location.href).toBe('/logout/');
+
+    wrapper.unmount();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: original,
+    });
   });
 
   it('Should not show the information of a next registered contest when the user is not registered to a current or upcoming contest', () => {

@@ -19,18 +19,21 @@
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
-@Component
+@Component({
+  emits: ['update:modelValue'],
+  options: { compatConfig: { COMPONENT_V_MODEL: false } },
+})
 class LogoutConfirmation extends Vue {
-  @Prop({ default: false }) value!: boolean;
+  @Prop({ default: false }) modelValue!: boolean;
 
   T = T;
 
   get showModal(): boolean {
-    return this.value;
+    return this.modelValue;
   }
 
   set showModal(value: boolean) {
-    this.$emit('input', value);
+    this.$emit('update:modelValue', value);
   }
 
   confirmLogout(): void {

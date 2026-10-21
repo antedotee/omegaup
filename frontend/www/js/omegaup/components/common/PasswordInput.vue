@@ -38,6 +38,7 @@ library.add(faEye, faEyeSlash);
 @Component({
   inheritAttrs: false,
   emits: ['update:modelValue'],
+  options: { compatConfig: { COMPONENT_V_MODEL: false } },
   components: {
     FontAwesomeIcon,
   },

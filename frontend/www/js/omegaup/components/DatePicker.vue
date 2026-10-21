@@ -20,7 +20,10 @@ import T from '../lang';
 import * as time from '../time';
 import '../../../third_party/js/bootstrap-datepicker.js';
 
-@Component({ emits: ['update:modelValue'] })
+@Component({
+  emits: ['update:modelValue'],
+  options: { compatConfig: { COMPONENT_V_MODEL: false } },
+})
 class DatePicker extends Vue {
   created() {
     // Props are not bound when class field initializers run under

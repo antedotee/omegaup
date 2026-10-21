@@ -166,7 +166,9 @@ import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
 
-@Component
+@Component({
+  options: { compatConfig: { COMPONENT_V_MODEL: false } },
+})
 class ProblemVersions extends Vue {
   created() {
     // Props are not bound when class field initializers run under

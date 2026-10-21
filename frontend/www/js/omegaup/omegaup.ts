@@ -1,3 +1,4 @@
+import './vue-setup';
 import * as ui from './ui';
 import * as api from './api';
 import { types } from './api_types';
