@@ -1,4 +1,4 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { enableAutoUnmount, shallowMount, mount } from '@vue/test-utils';
 import { BButton } from 'bootstrap-vue-next';
 
 import CaseEdit from './CaseEdit.vue';
@@ -53,6 +53,9 @@ interface CaseEditVm {
   ): string;
 }
 
+// Every test mounts against the shared creator store; unmount each wrapper so
+// earlier ones do not keep re-rendering on later store commits.
+enableAutoUnmount(afterEach);
 describe('CaseEdit.vue', () => {
   const newUngroupedCasegroup = generateGroup({
     name: 'New Ungrouped Case Group',
