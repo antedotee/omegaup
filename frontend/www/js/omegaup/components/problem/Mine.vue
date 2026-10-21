@@ -220,6 +220,8 @@
       </div>
       <BModal
         v-model="showConfirmationModalDeleteAll"
+        lazy
+        unmount-lazy
         :title="T.problemEditDeleteSelectedProblemsRequireConfirmation"
         :ok-title="T.problemEditDeleteOk"
         ok-variant="danger"
