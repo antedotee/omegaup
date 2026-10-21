@@ -9,7 +9,7 @@
     required="required"
     size="16"
     type="date"
-    :disabled="!enabled"
+    :disabled="disabled || !enabled"
     :readonly="usedFallback"
   />
 </template>
@@ -37,6 +37,9 @@ class DatePicker extends Vue {
   @Prop({ default: '' }) name!: string;
   @Prop({ default: null }) modelValue!: Date | null;
   @Prop({ default: true }) enabled!: boolean;
+  // Declared as a prop so a caller's `disabled` combines with `enabled`
+  // instead of replacing the input's own binding as a fallthrough attribute.
+  @Prop({ default: false }) disabled!: boolean;
   @Prop({ default: T.datePickerFormat }) format!: string;
   @Prop({ default: false }) isInvalid!: boolean;
   @Prop({ default: null }) min!: Date | null;

@@ -6,7 +6,7 @@
     required="required"
     size="16"
     type="datetime-local"
-    :disabled="!enabled"
+    :disabled="disabled || !enabled"
     :max="finish ? time.formatDateTimeLocal(finish) : null"
     :min="start ? time.formatDateTimeLocal(addDelay(start)) : null"
     :readonly="readonly || usedFallback"
@@ -33,6 +33,9 @@ class DateTimePicker extends Vue {
 
   @Prop() value!: Date;
   @Prop({ default: true }) enabled!: boolean;
+  // Declared as a prop so a caller's `disabled` combines with `enabled`
+  // instead of replacing the input's own binding as a fallthrough attribute.
+  @Prop({ default: false }) disabled!: boolean;
   @Prop({ default: T.dateTimePickerFormat }) format!: string;
   @Prop({ default: null }) start!: Date;
   @Prop({ default: null }) finish!: Date;
