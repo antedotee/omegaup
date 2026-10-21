@@ -165,7 +165,7 @@ export default toNative(TeamsGroupList);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .btn-archive {
   color: var(--teams-group-archive-btn-color);

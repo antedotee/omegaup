@@ -921,7 +921,7 @@ export default toNative(Runs);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .text-break-all {
   word-break: break-all;

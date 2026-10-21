@@ -296,7 +296,7 @@ export default toNative(IDESettings);
 </script>
 
 <style lang="scss">
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 form {
   &.vs-dark {
     background: var(--vs-dark-background-color);

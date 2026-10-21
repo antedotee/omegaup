@@ -363,7 +363,7 @@ export default toNative(UserRank);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .empty-category {
   color: var(--arena-contest-list-empty-category-font-color);

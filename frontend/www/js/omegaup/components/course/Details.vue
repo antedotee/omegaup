@@ -425,7 +425,7 @@ export default toNative(CourseDetails);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .progress-text {
   font-size: 0.85rem;

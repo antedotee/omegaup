@@ -52,7 +52,7 @@ export default toNative(TextEditor);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 
 textarea {
   font-family: 'Droid Sans Mono', 'Courier New', monospace,

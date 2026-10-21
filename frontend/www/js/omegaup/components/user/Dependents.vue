@@ -136,7 +136,7 @@ export default toNative(UserDependents);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .background-success {
   background-color: var(--status-success-color);

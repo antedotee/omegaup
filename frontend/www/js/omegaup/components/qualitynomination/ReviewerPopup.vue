@@ -186,7 +186,7 @@ export default toNative(ReviewerPopup);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 ul.tag-select {
   height: 225px;
   overflow: auto;

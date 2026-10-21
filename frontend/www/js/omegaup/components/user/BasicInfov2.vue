@@ -145,7 +145,7 @@ export default toNative(UserBasicInfo);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .fields-border > .form-group,
 .fields-border div > .form-group {

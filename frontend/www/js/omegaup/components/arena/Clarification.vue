@@ -194,7 +194,7 @@ export default toNative(ArenaClarification);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .resolved {
   color: var(--clarification-resolved-font-color);

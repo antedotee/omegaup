@@ -233,7 +233,7 @@ export default toNative(ArenaClarificationList);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 // >>> allows child components to inherit the styles (see: https://vue-loader.vuejs.org/guide/scoped-css.html#deep-selectors)
 >>> pre {
   display: block;

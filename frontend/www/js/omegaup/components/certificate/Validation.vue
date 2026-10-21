@@ -72,7 +72,7 @@ export default toNative(Validation);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 p.title {
   font-size: 1.24rem;

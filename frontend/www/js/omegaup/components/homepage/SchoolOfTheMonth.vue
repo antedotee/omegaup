@@ -66,7 +66,7 @@ export default toNative(SchoolOfTheMonth);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .card-header {
   color: $omegaup-white;

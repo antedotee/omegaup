@@ -112,7 +112,7 @@ export default toNative(Signin);
 </script>
 
 <style scoped lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .nav-tabs {
   border-bottom: 1px solid var(--signin-nav-tabs-border-color);

@@ -103,7 +103,7 @@ export default toNative(UserPasswordAdd);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .invalid-input {
   border-color: var(--form-input-error-color);
 }

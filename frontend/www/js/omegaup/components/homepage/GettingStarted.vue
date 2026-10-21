@@ -104,7 +104,7 @@ export default toNative(GettingStarted);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .getting-started-section {
   background-color: $omegaup-white;

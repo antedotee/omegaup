@@ -141,7 +141,7 @@ export default toNative(Arena);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .practice {
   background: var(--arena-practice-background-color) url(/media/gradient.png)
     repeat-x 0 0 !important;

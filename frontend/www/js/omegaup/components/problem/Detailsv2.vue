@@ -331,5 +331,5 @@ export default toNative(ProblemDetails);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 </style>

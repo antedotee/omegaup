@@ -164,7 +164,7 @@ export default toNative(FilteredList);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .empty-category {
   text-align: center;
   font-size: 200%;

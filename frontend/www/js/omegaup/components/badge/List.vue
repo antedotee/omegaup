@@ -75,7 +75,7 @@ export default toNative(BadgeList);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 a.badges-link {
   color: var(--badges-link-font-color);
   font-size: 1rem;

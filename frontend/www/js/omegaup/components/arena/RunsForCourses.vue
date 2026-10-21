@@ -1165,7 +1165,7 @@ export default toNative(RunsForCourses);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .selected {
   background-color: var(--arena-runs-table-row-selected-background-color);

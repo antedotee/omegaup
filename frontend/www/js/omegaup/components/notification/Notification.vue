@@ -136,7 +136,7 @@ export default toNative(Notification);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .close {
   font-size: inherit;
 }

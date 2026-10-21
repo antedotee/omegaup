@@ -208,7 +208,7 @@ export default toNative(Footer);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 @media (min-width: 1000px) {
   .slogan {

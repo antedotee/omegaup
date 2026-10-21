@@ -218,7 +218,7 @@ export default toNative(ProblemStatementEdit);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 @import '../../../../third_party/js/pagedown/demo/browser/demo.css';
 
 .wmd-preview,

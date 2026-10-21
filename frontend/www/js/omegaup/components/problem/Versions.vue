@@ -272,7 +272,7 @@ export default toNative(ProblemVersions);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .scrollable {
   max-height: 600px;
   overflow-y: auto;

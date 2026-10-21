@@ -306,7 +306,7 @@ export default toNative(MonacoEditor);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 
 .editor-toolbar {
   background: var(--monaco-editor-toolbar-background-color);

@@ -127,7 +127,7 @@ export default toNative(AssignmentCard);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .assignment-type {
   font-size: 1.05rem;

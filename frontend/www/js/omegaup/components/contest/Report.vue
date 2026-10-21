@@ -138,7 +138,7 @@ export default toNative(Report);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 h1 {
   font-size: 1.5em;

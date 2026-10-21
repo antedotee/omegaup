@@ -1615,7 +1615,7 @@ export default toNative(Form);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 @import '../../../../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css';
 @import '../../../../third_party/js/pagedown/demo/browser/demo.css';
 

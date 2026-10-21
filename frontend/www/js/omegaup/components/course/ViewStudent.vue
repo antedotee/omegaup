@@ -368,7 +368,7 @@ export default toNative(CourseViewStudent);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .student-runs-table tbody tr {
   cursor: pointer;

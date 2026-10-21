@@ -249,7 +249,7 @@ export default toNative(UserObjectivesQuestions);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 >>> .modal-dialog {
   max-width: 330px;

@@ -182,7 +182,7 @@ export default toNative(SubmissionsList);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 table.submissions-table > tbody > tr > td {
   vertical-align: middle;

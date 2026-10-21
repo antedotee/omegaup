@@ -174,7 +174,7 @@ export default toNative(ContestCard);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .contest-enroll-status {
   color: $omegaup-green;
 }

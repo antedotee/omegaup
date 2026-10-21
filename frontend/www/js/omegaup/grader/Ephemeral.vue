@@ -934,7 +934,7 @@ export default toNative(Ephemeral);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 @import '../../../third_party/css/golden-layout/goldenlayout-base.css';
 
 div > section {

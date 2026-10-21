@@ -555,7 +555,7 @@ export default toNative(Navbar);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .mentor-can-choose-coder {
   margin: 1rem;

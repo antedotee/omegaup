@@ -315,7 +315,7 @@ export default toNative(CodeTab);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../../../sass/main.scss';
+@import '../../../../../../sass/site';
 
 .code-edit {
   background: var(--creator-code-background-color);

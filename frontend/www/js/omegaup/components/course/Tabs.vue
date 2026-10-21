@@ -277,7 +277,7 @@ export default toNative(CourseTabs);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .card > .row.no-gutters {
   background-color: $omegaup-white;

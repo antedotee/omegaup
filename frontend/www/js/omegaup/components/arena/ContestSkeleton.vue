@@ -37,7 +37,7 @@ export default toNative(ArenaContestSkeleton);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .skeleton-line {
   background: var(

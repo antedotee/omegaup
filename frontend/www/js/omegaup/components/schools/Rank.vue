@@ -125,7 +125,7 @@ export default toNative(SchoolRank);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 // FIXME: This prevents wrapping a table cell when the name of the school is too long.
 // So, both tables (users rank and the current one) are perfectly aligned.
 // Another solution should  be taken in the future.

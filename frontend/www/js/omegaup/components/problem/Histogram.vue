@@ -130,7 +130,7 @@ export default toNative(ProblemHistogram);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .omegaup-histogram-container {
   margin: 50px 0;
 }

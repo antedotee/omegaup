@@ -126,7 +126,7 @@ export default toNative(ArenaNavbarProblems);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .problem-list > div {
   width: 19em;

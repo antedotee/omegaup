@@ -50,7 +50,7 @@ export default toNative(ProblemPrint);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 table td {
   padding: 0.5rem;

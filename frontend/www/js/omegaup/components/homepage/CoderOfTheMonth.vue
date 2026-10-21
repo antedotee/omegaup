@@ -96,7 +96,7 @@ export default toNative(CoderOfTheMonth);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .card-header {
   color: var(--coder-of-the-month-card-header-font-color);

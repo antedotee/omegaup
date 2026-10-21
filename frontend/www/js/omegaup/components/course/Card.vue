@@ -104,7 +104,7 @@ export default toNative(CourseCard);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .card > .row.no-gutters {
   background-color: $omegaup-white;

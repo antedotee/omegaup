@@ -57,7 +57,7 @@ export default toNative(GlobalNotifications);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .alert {
   position: fixed;

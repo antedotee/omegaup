@@ -72,7 +72,7 @@ export default toNative(SubmissionFeedback);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .feedback-section {
   margin-top: 1.5em;
   .form-group {

@@ -172,7 +172,7 @@ export default toNative(Carousel);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .carousel {
   background: var(--homepage-carousel-background-color) !important;

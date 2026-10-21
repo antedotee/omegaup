@@ -36,7 +36,7 @@ export default toNative(GraderCountBadge);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .grader-error {
   color: var(--badges-grader-error-font-color);
   background-image: linear-gradient(

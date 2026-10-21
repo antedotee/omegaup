@@ -51,7 +51,7 @@ export default toNative(ToggleSwitch);
 </script>
 
 <style scoped lang="scss">
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 
 .switch {
   position: relative;

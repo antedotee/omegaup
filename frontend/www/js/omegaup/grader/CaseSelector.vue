@@ -229,7 +229,7 @@ export default toNative(CaseSelector);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 
 .case-header {
   padding: 0.5em 0.75em 0;

@@ -186,7 +186,7 @@ export default toNative(ContestCardv2);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .contest-card-vertical {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   border: 1px solid var(--contest-card-border-color);

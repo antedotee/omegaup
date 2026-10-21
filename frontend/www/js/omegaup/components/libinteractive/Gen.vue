@@ -114,5 +114,5 @@ export default toNative(LibinteractiveGen);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 </style>

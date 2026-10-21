@@ -64,7 +64,7 @@ export default toNative(Homepage);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 a.custom-button {
   color: $omegaup-white;

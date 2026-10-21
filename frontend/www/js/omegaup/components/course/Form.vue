@@ -617,7 +617,7 @@ export default toNative(CourseDetails);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 @import '../../../../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css';
 
 .multiselect__tag {

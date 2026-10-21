@@ -209,7 +209,7 @@ export default toNative(CourseIntro);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .course-level {
   color: $omegaup-pink;
 }

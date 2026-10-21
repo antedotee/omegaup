@@ -193,7 +193,7 @@ export default toNative(StudentProgress);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 th {
   position: sticky;

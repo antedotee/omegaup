@@ -137,7 +137,7 @@ export default toNative(CompareCard);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .stats-grid {
   display: grid;

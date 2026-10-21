@@ -264,7 +264,7 @@ export default toNative(FeedbackCodeView);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css';
 
 [data-feedback-code-mirror] {

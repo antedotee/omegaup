@@ -60,7 +60,7 @@ export default toNative(GraderStatus);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .grader-submissions,
 a.grader-submissions-link {
   background-color: var(--grader-status-submissions-link-background-color);

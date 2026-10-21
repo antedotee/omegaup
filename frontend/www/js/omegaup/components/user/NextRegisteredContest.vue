@@ -152,7 +152,7 @@ export default toNative(UserNextRegisteredContest);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 h3.display-4 {
   color: $omegaup-primary--darker;

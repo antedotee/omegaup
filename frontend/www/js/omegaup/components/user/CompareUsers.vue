@@ -166,7 +166,7 @@ export default toNative(CompareUsers);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .compare-winner {
   border-color: var(--user-compare-winner-border-color) !important;

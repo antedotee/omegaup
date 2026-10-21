@@ -14,7 +14,7 @@ export default toNative(OverlayPopup);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 
 div[data-overlay-popup] {
   background: var(--overlay-popup-background-color);

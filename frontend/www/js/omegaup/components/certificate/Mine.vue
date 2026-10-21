@@ -141,7 +141,7 @@ export default toNative(Mine);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .border-selected {
   border-left: 0.25rem solid

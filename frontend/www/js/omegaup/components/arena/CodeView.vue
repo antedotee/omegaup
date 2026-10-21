@@ -143,7 +143,7 @@ export default toNative(CodeView);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 [data-code-mirror] {
   height: 100%;

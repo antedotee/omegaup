@@ -867,7 +867,7 @@ export default toNative(ArenaContestList);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .btn {
   padding: 0.5rem 1rem !important;
