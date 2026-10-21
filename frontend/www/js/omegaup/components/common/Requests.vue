@@ -85,7 +85,6 @@ import T from '../../lang';
 import * as time from '../../time';
 import omegaup_Username from '../user/Username.vue';
 
-
 @Component({
   emits: ['deny-request'],
   components: {

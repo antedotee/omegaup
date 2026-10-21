@@ -32,10 +32,10 @@
                   &times;
                 </button>
                 <input
-                    class="btn btn-primary btn-style btn-md w-100 active nav-link"
-                    type="submit"
-                    :value="T.wordsSearch"
-                  />
+                  class="btn btn-primary btn-style btn-md w-100 active nav-link"
+                  type="submit"
+                  :value="T.wordsSearch"
+                />
               </div>
             </form>
           </b-col>

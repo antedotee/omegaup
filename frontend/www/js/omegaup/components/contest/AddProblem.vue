@@ -55,9 +55,7 @@
             ></omegaup-radio-switch>
           </div>
           <div class="mb-3 col-md-3">
-            <label
-              v-tooltip="T.contestAddproblemProblemPoints"
-              class="fw-bold"
+            <label v-tooltip="T.contestAddproblemProblemPoints" class="fw-bold"
               >{{ T.wordsPoints }}
               <font-awesome-icon icon="info-circle" />
             </label>
@@ -69,9 +67,7 @@
             />
           </div>
           <div class="mb-3 col-md-3">
-            <label
-              v-tooltip="T.contestAddproblemContestOrder"
-              class="fw-bold"
+            <label v-tooltip="T.contestAddproblemContestOrder" class="fw-bold"
               >{{ T.contestAddproblemProblemOrder }}
               <font-awesome-icon icon="info-circle" />
             </label>

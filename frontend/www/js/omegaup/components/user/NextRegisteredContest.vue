@@ -4,7 +4,11 @@
     class="p-4 border bg-light container-fluid"
   >
     <div class="justify-content-end">
-      <button type="button" class="btn-close" @click="showContestInfo = false"></button>
+      <button
+        type="button"
+        class="btn-close"
+        @click="showContestInfo = false"
+      ></button>
     </div>
     <b-container>
       <b-row class="p-1">
@@ -98,7 +102,6 @@ import T from '../../lang';
 import omegaup_Countdown from '../Countdown.vue';
 import { omegaup } from '../../omegaup';
 import { getExternalUrl } from '../../urlHelper';
-
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';

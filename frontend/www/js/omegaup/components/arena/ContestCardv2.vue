@@ -4,10 +4,7 @@
     body-class="d-flex flex-column"
   >
     <div class="d-flex justify-content-between align-items-start mb-2">
-      <h5
-        class="m-0 fw-bold text-truncate w-100"
-        :title="contest.title"
-      >
+      <h5 class="m-0 fw-bold text-truncate w-100" :title="contest.title">
         <a
           :href="getContestURL(contest.alias)"
           class="text-dark text-decoration-none"

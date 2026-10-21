@@ -139,7 +139,6 @@ import omegaup_problemMarkdown from './ProblemMarkdown.vue';
 import omegaup_Overlay from '../Overlay.vue';
 import user_Username from '../user/Username.vue';
 
-
 export interface Tab {
   name: string;
   text: string;

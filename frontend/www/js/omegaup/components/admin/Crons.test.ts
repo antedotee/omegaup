@@ -125,7 +125,9 @@ describe('Crons.vue', () => {
       props: { jobs, runs: [{ ...runs[0], status: 'queued' }] },
     });
 
-    expect(wrapper.find('.cron-run-row .bg-light.text-dark').text()).toBe('queued');
+    expect(wrapper.find('.cron-run-row .bg-light.text-dark').text()).toBe(
+      'queued',
+    );
   });
 
   it('Should dash out the values a run did not record', () => {
