@@ -457,11 +457,7 @@ class Sidebar extends Vue {
   setSelected(CaseGroupsIDToBeSelected: CaseGroupID): void {
     this.$store.commit('casesStore/setSelected', CaseGroupsIDToBeSelected);
   }
-  updateGroup([groupID, newName, newPoints]: [
-    GroupID,
-    string,
-    number,
-  ]): void {
+  updateGroup([groupID, newName, newPoints]: [GroupID, string, number]): void {
     this.$store.commit('casesStore/updateGroup', [groupID, newName, newPoints]);
   }
   getStringifiedLinesFromCaseGroupID(caseGroupID: CaseGroupID): string {

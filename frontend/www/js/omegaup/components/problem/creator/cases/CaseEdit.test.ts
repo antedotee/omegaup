@@ -164,7 +164,9 @@ describe('CaseEdit.vue', () => {
 
     await caseDeleteButton.trigger('click');
     expect(
-      (wrapper.vm as unknown as CaseEditVm).groups.find((_group) => _group.groupID === newGroup.groupID),
+      (wrapper.vm as unknown as CaseEditVm).groups.find(
+        (_group) => _group.groupID === newGroup.groupID,
+      ),
     ).toBeTruthy();
     expect(
       (wrapper.vm as unknown as CaseEditVm).groups
@@ -205,9 +207,17 @@ describe('CaseEdit.vue', () => {
     formInputs[1].setValue('testValue');
     await wrapper.trigger('click');
 
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].label).toBe('testLabel');
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.value).toBe('testValue');
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.kind).toBe('line');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].label,
+    ).toBe('testLabel');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .value,
+    ).toBe('testValue');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('line');
 
     // There are 4 dropdown items for each line:
     // - Line
@@ -220,15 +230,26 @@ describe('CaseEdit.vue', () => {
     expect(dropdowns.length).toBe(dropdownItemCount);
 
     await dropdowns[1].trigger('click');
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.kind).toBe('multiline');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('multiline');
 
     await dropdowns[2].trigger('click');
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.kind).toBe('array');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('array');
 
     await dropdowns[3].trigger('click');
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.kind).toBe('matrix');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('matrix');
 
-    (wrapper.vm as unknown as CaseEditVm).deleteLine((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].lineID);
+    (wrapper.vm as unknown as CaseEditVm).deleteLine(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].lineID,
+    );
     await Vue.nextTick();
 
     const formInputsUpdated = wrapper.find('table').findAll('input');
@@ -316,19 +337,28 @@ describe('CaseEdit.vue', () => {
 
     await saveButton.trigger('click');
 
-    expect((wrapper.vm as unknown as CaseEditVm).getSelectedCase.name).toBe(modifiedName);
-    expect((wrapper.vm as unknown as CaseEditVm).getSelectedGroup.name).toBe(modifiedName);
+    expect((wrapper.vm as unknown as CaseEditVm).getSelectedCase.name).toBe(
+      modifiedName,
+    );
+    expect((wrapper.vm as unknown as CaseEditVm).getSelectedGroup.name).toBe(
+      modifiedName,
+    );
 
     await editButton.trigger('click');
 
-    (wrapper.vm as unknown as CaseEditVm).caseInputRef.caseGroup = newGroup.groupID;
+    (wrapper.vm as unknown as CaseEditVm).caseInputRef.caseGroup =
+      newGroup.groupID;
     (wrapper.vm as unknown as CaseEditVm).updateCaseInfo();
 
     // There's only one group added to the store.
     expect((wrapper.vm as unknown as CaseEditVm).groups.length).toBe(1);
 
-    expect((wrapper.vm as unknown as CaseEditVm).groups[0].cases[0].name).toBe(modifiedName);
-    expect((wrapper.vm as unknown as CaseEditVm).groups[0].cases[0].groupID).toBe(newGroup.groupID);
+    expect((wrapper.vm as unknown as CaseEditVm).groups[0].cases[0].name).toBe(
+      modifiedName,
+    );
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).groups[0].cases[0].groupID,
+    ).toBe(newGroup.groupID);
   });
 
   const arrayInputMapping: {
@@ -535,7 +565,10 @@ describe('CaseEdit.vue', () => {
     const dropdowns = wrapper.findAll('button.dropdown-item');
 
     await dropdowns[2].trigger('click');
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.kind).toBe('array');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('array');
 
     const editSVG = wrapper.find('i.bi-pencil-square');
     expect(editSVG.exists()).toBeTruthy();
@@ -550,7 +583,10 @@ describe('CaseEdit.vue', () => {
     const modalButton = modalBody.find('button[data-array-modal-generate]');
     expect(modalButton.exists()).toBeTruthy();
 
-    const mockGenerate = jest.spyOn((wrapper.vm as unknown as CaseEditVm), 'getArrayContent');
+    const mockGenerate = jest.spyOn(
+      wrapper.vm as unknown as CaseEditVm,
+      'getArrayContent',
+    );
 
     await modalButton.trigger('click');
     expect(mockGenerate).toHaveBeenCalledWith(10, 0, 100, false);
@@ -572,8 +608,10 @@ describe('CaseEdit.vue', () => {
     await modalButton.trigger('click');
 
     expect(
-      (modalBody.find('input[data-array-modal-generated-array]')
-        .element as HTMLInputElement).value,
+      (
+        modalBody.find('input[data-array-modal-generated-array]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('10 10 10 10 10');
 
     // Scope to the array modal's own footer; other modals are now rendered in
@@ -588,9 +626,10 @@ describe('CaseEdit.vue', () => {
 
     await modalFooter.find('button.btn-success').trigger('click');
 
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.value).toBe(
-      '10 10 10 10 10',
-    );
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .value,
+    ).toBe('10 10 10 10 10');
   });
 
   it('Should generate and render matrices', async () => {
@@ -615,7 +654,10 @@ describe('CaseEdit.vue', () => {
     expect(dropdowns.length).toBe(4);
 
     await dropdowns[3].trigger('click');
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.kind).toBe('matrix');
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .kind,
+    ).toBe('matrix');
 
     const editSVG = wrapper.find('i.bi-pencil-square');
     expect(editSVG.exists()).toBeTruthy();
@@ -631,7 +673,10 @@ describe('CaseEdit.vue', () => {
     const modalButton = modalBody.find('button[data-matrix-modal-generate]');
     expect(modalButton.exists).toBeTruthy();
 
-    const mockGenerateMatrix = jest.spyOn((wrapper.vm as unknown as CaseEditVm), 'getMatrixContent');
+    const mockGenerateMatrix = jest.spyOn(
+      wrapper.vm as unknown as CaseEditVm,
+      'getMatrixContent',
+    );
 
     await modalButton.trigger('click');
     expect(mockGenerateMatrix).toHaveBeenCalledWith(3, 3, 0, 100, 'none');
@@ -644,8 +689,10 @@ describe('CaseEdit.vue', () => {
 
     await modalButton.trigger('click');
     expect(
-      (modalBody.find('textarea[data-matrix-modal-generated-matrix]')
-        .element as HTMLInputElement).value,
+      (
+        modalBody.find('textarea[data-matrix-modal-generated-matrix]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('20 20 20\n20 20 20\n20 20 20');
 
     const modalFooter = modalBody.find('div.modal-footer');
@@ -658,9 +705,10 @@ describe('CaseEdit.vue', () => {
       (wrapper.vm as unknown as CaseEditVm).matrixModalEditArray,
     ]);
 
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.value).toBe(
-      '20 20 20\n20 20 20\n20 20 20',
-    );
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+        .value,
+    ).toBe('20 20 20\n20 20 20\n20 20 20');
   });
 
   const matrixDistinctTypeMapping: {
@@ -714,7 +762,10 @@ describe('CaseEdit.vue', () => {
         expect(dropdowns.length).toBe(4);
 
         await dropdowns[3].trigger('click');
-        expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data.kind).toBe('matrix');
+        expect(
+          (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase[0].data
+            .kind,
+        ).toBe('matrix');
 
         const editIcon = wrapper.find(`button[data-line-edit-button]`);
         await editIcon.trigger('click');
@@ -726,7 +777,10 @@ describe('CaseEdit.vue', () => {
         );
         expect(modalButton.exists).toBeTruthy();
 
-        const mockGenerateMatrix = jest.spyOn((wrapper.vm as unknown as CaseEditVm), 'getMatrixContent');
+        const mockGenerateMatrix = jest.spyOn(
+          wrapper.vm as unknown as CaseEditVm,
+          'getMatrixContent',
+        );
 
         await modalBody
           .find(`button[data-matrix-modal-dropdown="${matrixDistinctType}"]`)
@@ -787,18 +841,24 @@ describe('CaseEdit.vue', () => {
     await Vue.nextTick();
 
     // Only one line is added.
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length).toBe(1);
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length,
+    ).toBe(1);
 
     await deleteButton.trigger('click');
 
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length).toBe(0);
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length,
+    ).toBe(0);
 
     (wrapper.vm as unknown as CaseEditVm).addNewLine();
     (wrapper.vm as unknown as CaseEditVm).addNewLine();
     await Vue.nextTick();
 
     // Two lines are added, so!
-    expect((wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length).toBe(2);
+    expect(
+      (wrapper.vm as unknown as CaseEditVm).getLinesFromSelectedCase.length,
+    ).toBe(2);
 
     const dropdownsMultiline = wrapper.findAll(
       `button[data-array-modal-dropdown-kind]`,
@@ -832,7 +892,10 @@ describe('CaseEdit.vue', () => {
       }),
     ).toBe('ome g a\nu\np');
 
-    const mockDownload = jest.spyOn((wrapper.vm as unknown as CaseEditVm), 'downloadInputFile');
+    const mockDownload = jest.spyOn(
+      wrapper.vm as unknown as CaseEditVm,
+      'downloadInputFile',
+    );
 
     await downloadInButton.trigger('click');
     expect(mockDownload).toHaveBeenCalledWith('.in');

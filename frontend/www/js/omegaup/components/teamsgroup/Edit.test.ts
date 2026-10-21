@@ -42,7 +42,9 @@ describe('Edit.vue', () => {
     });
 
     await wrapper.setProps({ tab: AvailableTabs.Edit });
-    expect((wrapper.vm as unknown as TeamsGroupEditVm).selectedTab).toBe(AvailableTabs.Edit);
+    expect((wrapper.vm as unknown as TeamsGroupEditVm).selectedTab).toBe(
+      AvailableTabs.Edit,
+    );
   });
 
   it('Should change an invalid tab', async () => {
@@ -51,7 +53,9 @@ describe('Edit.vue', () => {
     });
 
     await wrapper.setProps({ tab: 'wrong' });
-    expect((wrapper.vm as unknown as TeamsGroupEditVm).selectedTab).toBe(AvailableTabs.Teams);
+    expect((wrapper.vm as unknown as TeamsGroupEditVm).selectedTab).toBe(
+      AvailableTabs.Teams,
+    );
   });
 
   it('Should change teams identities list', async () => {
@@ -71,7 +75,9 @@ describe('Edit.vue', () => {
     await wrapper.setProps({ teamsIdentities });
     // Vue 3 exposes props through a reactive proxy, so a reference-equality
     // check no longer matches the raw array; compare by structural equality.
-    expect((wrapper.vm as unknown as TeamsGroupEditVm).currentTeamsIdentities).toStrictEqual(teamsIdentities);
+    expect(
+      (wrapper.vm as unknown as TeamsGroupEditVm).currentTeamsIdentities,
+    ).toStrictEqual(teamsIdentities);
   });
 
   it('Should keep the updated contestants count across tabs', async () => {

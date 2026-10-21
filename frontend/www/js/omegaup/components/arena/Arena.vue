@@ -66,7 +66,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Emit,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import { Tab } from '../problem/Details.vue';

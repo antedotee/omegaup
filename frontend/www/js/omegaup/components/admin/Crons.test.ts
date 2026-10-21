@@ -143,9 +143,7 @@ describe('Crons.vue', () => {
       },
     });
 
-    expect(wrapper.findAll('[data-cron-jobs] tbody tr td')[1].text()).toBe(
-      '—',
-    );
+    expect(wrapper.findAll('[data-cron-jobs] tbody tr td')[1].text()).toBe('—');
     const cells = wrapper.findAll('.cron-run-row td');
     expect(cells[3].text()).toBe('—');
     expect(cells[4].text()).toBe('—');

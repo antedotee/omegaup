@@ -54,13 +54,21 @@ describe('Requests.vue', () => {
     const buttons = wrapper.findAll('button.text-danger');
     const feedbackModals = wrapper.findAllComponents(BModal);
 
-    expect('test_user_1' in (wrapper.vm as unknown as RequestsVm).modalStates).toBe(false);
+    expect(
+      'test_user_1' in (wrapper.vm as unknown as RequestsVm).modalStates,
+    ).toBe(false);
     await buttons[0].trigger('click');
-    expect((wrapper.vm as unknown as RequestsVm).modalStates['test_user_1']).toBe(true);
+    expect(
+      (wrapper.vm as unknown as RequestsVm).modalStates['test_user_1'],
+    ).toBe(true);
 
-    expect('test_user_2' in (wrapper.vm as unknown as RequestsVm).modalStates).toBe(false);
+    expect(
+      'test_user_2' in (wrapper.vm as unknown as RequestsVm).modalStates,
+    ).toBe(false);
     await buttons[1].trigger('click');
-    expect((wrapper.vm as unknown as RequestsVm).modalStates['test_user_2']).toBe(true);
+    expect(
+      (wrapper.vm as unknown as RequestsVm).modalStates['test_user_2'],
+    ).toBe(true);
 
     (wrapper.vm as unknown as RequestsVm).resolutionText = 'Hello';
     feedbackModals[0].vm.$emit('ok');

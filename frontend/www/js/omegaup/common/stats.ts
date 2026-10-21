@@ -156,7 +156,7 @@ OmegaUp.on('ready', () => {
           events: {
             load: (ev: Event): void => {
               // set up the updating of the chart each second
-              const series = ((ev.target as unknown) as Highcharts.Chart)
+              const series = (ev.target as unknown as Highcharts.Chart)
                 .series[0];
               setInterval(() => {
                 const x = new Date().getTime(), // current time
@@ -209,13 +209,12 @@ OmegaUp.on('ready', () => {
         on: {
           'update-series': (series: types.StatsPayload): void => {
             const inst = statsChart as unknown as StatsChartInstance;
-            inst.verdictChartOptions.series[0].data = normalizeRunCounts(series);
-            inst.distributionChartOptions.series[0].data = getDistribution(
-              series,
-            );
-            inst.distributionChartOptions.xAxis.categories = getCategories(
-              series,
-            );
+            inst.verdictChartOptions.series[0].data =
+              normalizeRunCounts(series);
+            inst.distributionChartOptions.series[0].data =
+              getDistribution(series);
+            inst.distributionChartOptions.xAxis.categories =
+              getCategories(series);
             inst.stats.pending_runs = series.pending_runs;
           },
         },

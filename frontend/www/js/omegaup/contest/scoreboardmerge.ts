@@ -61,9 +61,15 @@ OmegaUp.on('ready', () => {
                   }
                 }
                 // Update the props values
-                (scoreboardMerge as unknown as ScoreboardMergeInstance).aliases = aliases;
-                (scoreboardMerge as unknown as ScoreboardMergeInstance).showPenalty = showPenalty;
-                (scoreboardMerge as unknown as ScoreboardMergeInstance).scoreboard = scoreboard;
+                (
+                  scoreboardMerge as unknown as ScoreboardMergeInstance
+                ).aliases = aliases;
+                (
+                  scoreboardMerge as unknown as ScoreboardMergeInstance
+                ).showPenalty = showPenalty;
+                (
+                  scoreboardMerge as unknown as ScoreboardMergeInstance
+                ).scoreboard = scoreboard;
               })
               .catch(ui.apiError);
           },

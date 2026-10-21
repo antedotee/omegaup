@@ -36,7 +36,9 @@
           <a
             v-for="problem in assignment.problems"
             :key="problem.alias"
-            v-b-tooltip="getProgressTooltipDescription(assignment.alias, problem)"
+            v-b-tooltip="
+              getProgressTooltipDescription(assignment.alias, problem)
+            "
             :class="getProblemColor(assignment.alias, problem)"
             data-toggle="tooltip"
             data-placement="bottom"

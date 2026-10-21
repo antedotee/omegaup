@@ -106,9 +106,7 @@ class Header extends Vue {
   get getStringifiedLinesFromCaseGroupID(): (
     caseGroupID: CaseGroupID,
   ) => string {
-    return this.$store.getters[
-      'casesStore/getStringifiedLinesFromCaseGroupID'
-    ];
+    return this.$store.getters['casesStore/getStringifiedLinesFromCaseGroupID'];
   }
 
   get name(): string {

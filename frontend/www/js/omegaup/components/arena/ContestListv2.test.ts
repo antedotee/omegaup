@@ -5,11 +5,7 @@ import { mount } from '@vue/test-utils';
 import type { types } from '../../api_types';
 
 import arena_ContestList from './ContestListv2.vue';
-import {
-  ContestOrder,
-  ContestTab,
-  ContestFilter,
-} from './ContestListv2_types';
+import { ContestOrder, ContestTab, ContestFilter } from './ContestListv2_types';
 import each from 'jest-each';
 
 // Minimal view of the component instance for the internals the tests reach
@@ -175,7 +171,8 @@ describe('ContestListv2.vue', () => {
         description: 'hello contest 3',
         contest_id: 3,
         contestants: 15,
-        finish_time: yesterday /*new Date(yesterday.getTime() - daySeconds * 2)*/,
+        finish_time:
+          yesterday /*new Date(yesterday.getTime() - daySeconds * 2)*/,
         last_updated: new Date(yesterday.getTime() - daySeconds),
         organizer: 'alfadown',
         original_finish_time: yesterday,
@@ -301,13 +298,19 @@ describe('ContestListv2.vue', () => {
       ref: 'dropdownFilterBy',
     });
     // Current filter "By All" is turned on by default
-    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(ContestFilter.All);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(
+      ContestFilter.All,
+    );
     await dropdownFilterBy.find('[data-filter-by-signed-up]').trigger('click');
-    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(ContestFilter.SignedUp);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(
+      ContestFilter.SignedUp,
+    );
     await dropdownFilterBy
       .find('[data-filter-by-recommended]')
       .trigger('click');
-    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(ContestFilter.OnlyRecommended);
+    expect((wrapper.vm as unknown as ContestListv2Vm).currentFilter).toBe(
+      ContestFilter.OnlyRecommended,
+    );
   });
 
   const dropdownMapping = [
@@ -326,7 +329,7 @@ describe('ContestListv2.vue', () => {
         props: {
           contests,
         },
-      global,
+        global,
       });
 
       const dropdownOrderBy = wrapper.findComponent({
@@ -393,17 +396,21 @@ describe('ContestListv2.vue', () => {
             contests,
             tab,
           },
-      global,
+          global,
         });
 
         const dropdown = wrapper.findComponent({ ref: 'dropdownOrderBy' });
         expect(dropdown.exists()).toBeTruthy();
-        expect((wrapper.vm as unknown as ContestListv2Vm).currentOrder).toBe(ContestOrder.None);
+        expect((wrapper.vm as unknown as ContestListv2Vm).currentOrder).toBe(
+          ContestOrder.None,
+        );
 
         // Find and click the dropdown item
         await dropdown.find(`[data-order-by-${name}]`).trigger('click');
         await wrapper.vm.$nextTick();
-        expect((wrapper.vm as unknown as ContestListv2Vm).currentOrder).toBe(field);
+        expect((wrapper.vm as unknown as ContestListv2Vm).currentOrder).toBe(
+          field,
+        );
 
         const emittedEvents = wrapper.emitted('fetch-page');
 
@@ -456,7 +463,7 @@ describe('ContestListv2.vue', () => {
     const initialCount = initialEvents.length;
 
     // Simulate a user clicking a different tab
-    ((wrapper.vm as unknown) as { currentTab: ContestTab }).currentTab =
+    (wrapper.vm as unknown as { currentTab: ContestTab }).currentTab =
       ContestTab.Future;
     await wrapper.vm.$nextTick();
 

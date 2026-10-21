@@ -86,13 +86,17 @@ describe('Teams.vue', () => {
       username: 'omegaUp:user',
       name: 'user',
     });
-    expect((wrapper.vm as unknown as TeamsVm).formToShow).toBe(AvailableForms.Edit);
+    expect((wrapper.vm as unknown as TeamsVm).formToShow).toBe(
+      AvailableForms.Edit,
+    );
     expect((wrapper.vm as unknown as TeamsVm).username).toBe('omegaUp:user');
 
     await wrapper.find('button[type="reset"]').trigger('click');
 
     expect((wrapper.vm as unknown as TeamsVm).identity).toBe(null);
-    expect((wrapper.vm as unknown as TeamsVm).formToShow).toBe(AvailableForms.None);
+    expect((wrapper.vm as unknown as TeamsVm).formToShow).toBe(
+      AvailableForms.None,
+    );
     expect((wrapper.vm as unknown as TeamsVm).username).toBe(null);
 
     await wrapper

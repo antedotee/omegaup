@@ -378,8 +378,7 @@ OmegaUp.on('ready', () => {
                   'updateUsername',
                   userBasicInformation.username,
                 );
-                const instance =
-                  userProfile as unknown as UserProfileInstance;
+                const instance = userProfile as unknown as UserProfileInstance;
                 instance.profile.username = userBasicInformation.username;
                 instance.profile.name = userBasicInformation.name;
                 instance.profile.gender = userBasicInformation.gender;
@@ -475,8 +474,7 @@ OmegaUp.on('ready', () => {
             })
               .then(() => {
                 ui.success(T.passwordAddRequestSuccess);
-                const instance =
-                  userProfile as unknown as UserProfileInstance;
+                const instance = userProfile as unknown as UserProfileInstance;
                 instance.hasPassword = true;
                 instance.selectedTab = 'change-password';
               })

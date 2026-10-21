@@ -151,7 +151,8 @@ class ArenaScoreboard extends Vue {
   created() {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.onlyShowExplicitlyInvited = !this.showAllContestants && this.showInvitedUsersFilter;
+    this.onlyShowExplicitlyInvited =
+      !this.showAllContestants && this.showInvitedUsersFilter;
   }
   @Prop({ default: 10 }) numberOfPositions!: number;
   @Prop() problems!: omegaup.Problem[];

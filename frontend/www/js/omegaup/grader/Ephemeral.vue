@@ -173,7 +173,14 @@
 <script lang="ts">
 import * as monaco from 'monaco-editor';
 (window as any).monaco = monaco;
-import { Component, Prop, Ref, Watch, Vue, toNative } from 'vue-facing-decorator';
+import {
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  Vue,
+  toNative,
+} from 'vue-facing-decorator';
 import VueGlobal from 'vue';
 import { omegaup } from '../omegaup';
 import type { CreateElement } from 'vue';
@@ -406,9 +413,8 @@ class Ephemeral extends Vue {
         store.commit('updatingSettings', false);
         this.$nextTick(() => {
           if (!this.isEmbedded || !this.goldenLayout?.isInitialised) return;
-          let mainColumn = this.goldenLayout.root.getItemsById(
-            'main-column',
-          )[0];
+          let mainColumn =
+            this.goldenLayout.root.getItemsById('main-column')[0];
           mainColumn.parent.setActiveContentItem(mainColumn);
         });
       })

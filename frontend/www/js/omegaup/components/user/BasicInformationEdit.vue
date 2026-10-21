@@ -105,8 +105,8 @@ class UserBasicInformationEdit extends Vue {
     this.countryId = this.profile.country_id ?? null;
     this.stateId = this.profile.state_id ?? null;
     this.birthDate = this.profile.birth_date
-    ? time.convertLocalDateToGMTDate(this.profile.birth_date)
-    : new Date('');
+      ? time.convertLocalDateToGMTDate(this.profile.birth_date)
+      : new Date('');
   }
   @Prop() data!: types.UserProfileDetailsPayload;
   @Prop() countries!: dao.Countries[];

@@ -310,13 +310,14 @@ class ProblemEdit extends Vue {
     this.alias = this.data.alias;
     this.showTab = this.initialTab;
     this.currentStatement = this.statement;
-    this.currentSolution = this.solution ||
-    ({
-      markdown: '',
-      language: 'es',
-      images: {},
-      sources: {},
-    } as types.ProblemStatement);
+    this.currentSolution =
+      this.solution ||
+      ({
+        markdown: '',
+        language: 'es',
+        images: {},
+        sources: {},
+      } as types.ProblemStatement);
   }
   @Prop() data!: types.ProblemEditPayload;
   @Prop() admins!: types.ProblemAdmin[];
@@ -331,8 +332,7 @@ class ProblemEdit extends Vue {
   alias = undefined;
   showTab = undefined;
   currentStatement: types.ProblemStatement = undefined;
-  currentSolution: types.ProblemStatement =
-    undefined;
+  currentSolution: types.ProblemStatement = undefined;
   showConfirmationModal = false;
 
   get activeTab(): string {

@@ -86,7 +86,7 @@ describe('Mine.vue', () => {
     // methods live directly under `.methods` (there is no Vue 2 `.options`
     // wrapper).
     const defineSpy = jest.spyOn(
-      ((certificate_Mine as unknown) as Mine).methods,
+      (certificate_Mine as unknown as Mine).methods,
       'getVerificationLink',
     );
 
@@ -106,7 +106,7 @@ describe('Mine.vue', () => {
 
   it('Should download a file', async () => {
     const clickSpy = jest.spyOn(
-      ((certificate_Mine as unknown) as Mine).methods,
+      (certificate_Mine as unknown as Mine).methods,
       'getDownloadLink',
     );
 

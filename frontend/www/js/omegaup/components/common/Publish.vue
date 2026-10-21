@@ -108,8 +108,8 @@ class ContestEditPublish extends Vue {
   T = T;
   AdmissionMode = AdmissionMode;
   currentAdmissionMode = undefined;
-  currentDefaultShowAllContestantsInScoreboard = this
-    .defaultShowAllContestantsInScoreboard;
+  currentDefaultShowAllContestantsInScoreboard =
+    this.defaultShowAllContestantsInScoreboard;
 
   get contestURL(): string {
     return `${window.location.origin}/arena/${this.alias}/startfresh/`;
@@ -118,8 +118,8 @@ class ContestEditPublish extends Vue {
   onSubmit(): void {
     this.$emit('update-admission-mode', {
       admissionMode: this.currentAdmissionMode,
-      defaultShowAllContestantsInScoreboard: this
-        .currentDefaultShowAllContestantsInScoreboard,
+      defaultShowAllContestantsInScoreboard:
+        this.currentDefaultShowAllContestantsInScoreboard,
     });
   }
 

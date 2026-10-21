@@ -8,7 +8,9 @@ import { types } from '../api_types';
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.PrivacyPolicyDetailsPayload();
-  interface PrivacyPolicyInstance { saved: boolean; }
+  interface PrivacyPolicyInstance {
+    saved: boolean;
+  }
 
   const privacyPolicy = new Vue({
     el: '#main-container',
@@ -34,7 +36,8 @@ OmegaUp.on('ready', () => {
             })
               .then(() => {
                 ui.info(T.wordsPrivacyPolicyAccepted);
-                (privacyPolicy as unknown as PrivacyPolicyInstance).saved = true;
+                (privacyPolicy as unknown as PrivacyPolicyInstance).saved =
+                  true;
               })
               .catch(ui.apiError);
           },

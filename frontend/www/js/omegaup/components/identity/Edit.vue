@@ -117,17 +117,17 @@ class IdentityEdit extends Vue {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
     this.selectedIdentity = Object.assign(
-    {
-      username: '',
-      classname: '',
-      name: '',
-      gender: '',
-      school: '',
-      country_id: 'MX',
-      state_id: '',
-    } as types.Identity,
-    this.identity,
-  );
+      {
+        username: '',
+        classname: '',
+        name: '',
+        gender: '',
+        school: '',
+        country_id: 'MX',
+        state_id: '',
+      } as types.Identity,
+      this.identity,
+    );
     this.school = this.searchResultSchools[0] ?? null;
   }
   @Prop({ default: null }) identity!: types.Identity | null;

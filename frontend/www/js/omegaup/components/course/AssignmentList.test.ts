@@ -18,7 +18,7 @@ describe('AssignmentList.vue', () => {
 
       global: {
         directives: {
-          'Sortable': {
+          Sortable: {
             mounted: (el: HTMLElement, binding: DirectiveBinding) => {
               new Sortable(el, binding.value || {});
             },
@@ -29,8 +29,6 @@ describe('AssignmentList.vue', () => {
 
     expect(wrapper.text()).toContain(T.courseContentEmpty);
   });
-
-  ;
 
   it('Should handle content list', async () => {
     const wrapper = shallowMount(course_AssignmentList, {
@@ -56,7 +54,7 @@ describe('AssignmentList.vue', () => {
       },
       global: {
         directives: {
-          'Sortable': {
+          Sortable: {
             mounted: (el: HTMLElement, binding: DirectiveBinding) => {
               new Sortable(el, binding.value || {});
             },

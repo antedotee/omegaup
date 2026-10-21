@@ -27,7 +27,8 @@ OmegaUp.on('ready', () => {
     render: function (createElement: CreateElement) {
       return createElement('omegaup-admin-carousel', {
         props: {
-          carouselItems: (this as unknown as AdminCarouselInstance).carouselItems,
+          carouselItems: (this as unknown as AdminCarouselInstance)
+            .carouselItems,
         },
         on: {
           'create-item': (item: types.CarouselItem): void => {
@@ -44,11 +45,18 @@ OmegaUp.on('ready', () => {
             })
               .then(() => {
                 ui.success(T.carouselItemCreated);
-                (adminCarousel as unknown as AdminCarouselInstance).carouselItems = [...(adminCarousel as unknown as AdminCarouselInstance).carouselItems];
+                (
+                  adminCarousel as unknown as AdminCarouselInstance
+                ).carouselItems = [
+                  ...(adminCarousel as unknown as AdminCarouselInstance)
+                    .carouselItems,
+                ];
                 return api.CarouselItems.list({});
               })
               .then((response) => {
-                (adminCarousel as unknown as AdminCarouselInstance).carouselItems = response.carouselItems;
+                (
+                  adminCarousel as unknown as AdminCarouselInstance
+                ).carouselItems = response.carouselItems;
               })
               .catch(ui.apiError);
           },
@@ -70,7 +78,9 @@ OmegaUp.on('ready', () => {
                 return api.CarouselItems.list({});
               })
               .then((response) => {
-                (adminCarousel as unknown as AdminCarouselInstance).carouselItems = response.carouselItems;
+                (
+                  adminCarousel as unknown as AdminCarouselInstance
+                ).carouselItems = response.carouselItems;
               })
               .catch(ui.apiError);
           },
@@ -81,7 +91,9 @@ OmegaUp.on('ready', () => {
                 return api.CarouselItems.list({});
               })
               .then((response) => {
-                (adminCarousel as unknown as AdminCarouselInstance).carouselItems = response.carouselItems;
+                (
+                  adminCarousel as unknown as AdminCarouselInstance
+                ).carouselItems = response.carouselItems;
               })
               .catch(ui.apiError);
           },

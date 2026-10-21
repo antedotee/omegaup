@@ -305,7 +305,8 @@ describe('RunsForCourses.vue', () => {
     expect(paginationComponent.exists()).toBe(true);
 
     // @vue/test-utils 2 removed `setData`; assign the reactive field directly.
-    (wrapper.vm as unknown as RunsForCoursesVm).filterExecution = 'EXECUTION_INTERRUPTED';
+    (wrapper.vm as unknown as RunsForCoursesVm).filterExecution =
+      'EXECUTION_INTERRUPTED';
     await wrapper.vm.$nextTick();
     expect(wrapper.emitted('filter-changed')).toEqual([
       [{ filter: 'execution', value: 'EXECUTION_INTERRUPTED' }],
@@ -483,10 +484,14 @@ describe('RunsForCourses.vue', () => {
     });
 
     await wrapper.setProps({ username: 'username' });
-    expect((wrapper.vm as unknown as RunsForCoursesVm).filterUsername?.key).toBe('username');
+    expect(
+      (wrapper.vm as unknown as RunsForCoursesVm).filterUsername?.key,
+    ).toBe('username');
 
     await wrapper.setProps({ username: null });
-    expect((wrapper.vm as unknown as RunsForCoursesVm).filterUsername).toBeFalsy();
+    expect(
+      (wrapper.vm as unknown as RunsForCoursesVm).filterUsername,
+    ).toBeFalsy();
   });
 
   const usernamesToBeFiltered = ['username', 'other_username'];
@@ -507,14 +512,13 @@ describe('RunsForCourses.vue', () => {
           username: null,
           itemsPerPage: 100,
         },
-      global: faStubs,
+        global: faStubs,
       });
 
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
 
       await wrapper
-        .findAll(`td[data-username="${username}"]`)
-        [1]
+        .findAll(`td[data-username="${username}"]`)[1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -530,8 +534,7 @@ describe('RunsForCourses.vue', () => {
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
 
       await wrapper
-        .findAll(`td[data-username="${username}"]`)
-        [1]
+        .findAll(`td[data-username="${username}"]`)[1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -539,7 +542,9 @@ describe('RunsForCourses.vue', () => {
 
       // Now all runs should appear
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
-      expect((wrapper.vm as unknown as RunsForCoursesVm).filterUsername).toBeFalsy();
+      expect(
+        (wrapper.vm as unknown as RunsForCoursesVm).filterUsername,
+      ).toBeFalsy();
     });
   });
 });

@@ -143,7 +143,9 @@ describe('Detailsv2.vue', () => {
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(
+      languages,
+    );
     expect(wrapper.findComponent(arena_EphemeralGrader).exists()).toBe(true);
     expect(wrapper.find('div[data-markdown-statement]').text()).toContain(
       '#include <iostream>',
@@ -167,7 +169,9 @@ describe('Detailsv2.vue', () => {
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(problem.languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(
+      problem.languages,
+    );
   });
 
   it('Should show the problem languages', () => {
@@ -186,7 +190,9 @@ describe('Detailsv2.vue', () => {
 
     const problemTab = wrapper.findComponent(BTab);
     expect(problemTab.text()).toContain(problem.title);
-    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(problem.languages);
+    expect((wrapper.vm as unknown as Detailsv2Vm).filteredLanguages).toEqual(
+      problem.languages,
+    );
   });
 
   it('Should handle the user runs', async () => {

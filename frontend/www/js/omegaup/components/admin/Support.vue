@@ -372,7 +372,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Emit,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import VueGlobal from 'vue';
 import Clipboard from 'v-clipboard';
 import T from '../../lang';

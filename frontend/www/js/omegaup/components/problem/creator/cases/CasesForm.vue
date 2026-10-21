@@ -48,7 +48,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Inject, Watch, toNative } from 'vue-facing-decorator';
+import {
+  Component,
+  Vue,
+  Prop,
+  Inject,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import T from '../../../../lang';
 import { Case, Group, CaseLine } from '@/js/omegaup/problem/creator/types';
 import * as ui from '@/js/omegaup/ui';

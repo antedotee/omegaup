@@ -121,7 +121,8 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            (contestEdit as unknown as ContestEditInstance).groups = response.groups;
+            (contestEdit as unknown as ContestEditInstance).groups =
+              response.groups;
           })
           .catch(ui.apiError);
       },
@@ -130,20 +131,28 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            (contestEdit as unknown as ContestEditInstance).problems = response.problems;
+            (contestEdit as unknown as ContestEditInstance).problems =
+              response.problems;
             if (
               problemAdded &&
-              !(contestEdit as unknown as ContestEditInstance).details.languages.includes('cat') &&
-              (contestEdit as unknown as ContestEditInstance).problems.some((problem) =>
-                problem.languages.split(',').includes('cat'),
+              !(
+                contestEdit as unknown as ContestEditInstance
+              ).details.languages.includes('cat') &&
+              (contestEdit as unknown as ContestEditInstance).problems.some(
+                (problem) => problem.languages.split(',').includes('cat'),
               )
             ) {
               api.Contest.update({
-                contest_alias: (contestEdit as unknown as ContestEditInstance).details.alias,
-                languages: (contestEdit as unknown as ContestEditInstance).details.languages.concat(['cat']),
+                contest_alias: (contestEdit as unknown as ContestEditInstance)
+                  .details.alias,
+                languages: (
+                  contestEdit as unknown as ContestEditInstance
+                ).details.languages.concat(['cat']),
               })
                 .then(() => {
-                  (contestEdit as unknown as ContestEditInstance).details.languages.push('cat');
+                  (
+                    contestEdit as unknown as ContestEditInstance
+                  ).details.languages.push('cat');
                   ui.warning(T.contestEditCatLanguageAddedWarning);
                 })
                 .catch(ui.apiError);
@@ -156,7 +165,8 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            (contestEdit as unknown as ContestEditInstance).requests = response.users;
+            (contestEdit as unknown as ContestEditInstance).requests =
+              response.users;
           })
           .catch(ui.apiError);
       },
@@ -165,7 +175,8 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            (contestEdit as unknown as ContestEditInstance).users = response.users;
+            (contestEdit as unknown as ContestEditInstance).users =
+              response.users;
           })
           .catch(ui.apiError);
       },
@@ -174,7 +185,8 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            (contestEdit as unknown as ContestEditInstance).admins = response.admins;
+            (contestEdit as unknown as ContestEditInstance).admins =
+              response.admins;
           })
           .catch(ui.apiError);
       },
@@ -183,7 +195,8 @@ OmegaUp.on('ready', () => {
           contest_alias: payload.details.alias,
         })
           .then((response) => {
-            (contestEdit as unknown as ContestEditInstance).groupAdmins = response.group_admins;
+            (contestEdit as unknown as ContestEditInstance).groupAdmins =
+              response.group_admins;
           })
           .catch(ui.apiError);
       },
@@ -399,7 +412,8 @@ OmegaUp.on('ready', () => {
                 }
                 for (const revision of result.log) {
                   if (publishedCommitHash === revision.commit) {
-                    target.selectedRevision = target.publishedRevision = revision;
+                    target.selectedRevision = target.publishedRevision =
+                      revision;
                     break;
                   }
                 }
@@ -446,11 +460,17 @@ OmegaUp.on('ready', () => {
             api.Contest.update({
               contest_alias: payload.details.alias,
               admission_mode: admissionMode,
-              default_show_all_contestants_in_scoreboard: defaultShowAllContestantsInScoreboard,
+              default_show_all_contestants_in_scoreboard:
+                defaultShowAllContestantsInScoreboard,
             })
               .then(() => {
-                (contestEdit as unknown as ContestEditInstance).details.admission_mode = admissionMode;
-                (contestEdit as unknown as ContestEditInstance).details.default_show_all_contestants_in_scoreboard = defaultShowAllContestantsInScoreboard;
+                (
+                  contestEdit as unknown as ContestEditInstance
+                ).details.admission_mode = admissionMode;
+                (
+                  contestEdit as unknown as ContestEditInstance
+                ).details.default_show_all_contestants_in_scoreboard =
+                  defaultShowAllContestantsInScoreboard;
                 ui.success(
                   ui.formatString(T.contestEditContestEdited, {
                     alias: payload.details.alias,
@@ -696,8 +716,12 @@ OmegaUp.on('ready', () => {
               contest_alias: payload.details.alias,
             })
               .then(() => {
-                (contestEdit as unknown as ContestEditInstance).certificatesDetails.certificatesStatus = 'queued';
-                (contestEdit as unknown as ContestEditInstance).certificatesDetails.certificateCutoff = certificateCutoff;
+                (
+                  contestEdit as unknown as ContestEditInstance
+                ).certificatesDetails.certificatesStatus = 'queued';
+                (
+                  contestEdit as unknown as ContestEditInstance
+                ).certificatesDetails.certificateCutoff = certificateCutoff;
                 ui.success(T.contestCertificatesGenerateSuccessfully);
               })
               .catch(ui.apiError);

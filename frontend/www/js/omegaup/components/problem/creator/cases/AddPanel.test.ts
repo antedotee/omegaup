@@ -34,7 +34,8 @@ describe('AddPanel.vue', () => {
     // We need to use any since vue components methods are not stored in vm's type
     await (wrapper.vm as any).addItemToStore();
 
-    const store = (wrapper.vm as unknown as { $store: Store<StoreState> }).$store;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> })
+      .$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(1);
@@ -61,7 +62,8 @@ describe('AddPanel.vue', () => {
 
     await (wrapper.vm as any).addItemToStore();
 
-    const store = (wrapper.vm as unknown as { $store: Store<StoreState> }).$store;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> })
+      .$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(1);
@@ -109,7 +111,8 @@ describe('AddPanel.vue', () => {
 
     await wrapper.find('form').trigger('submit.prevent');
 
-    const store = (wrapper.vm as unknown as { $store: Store<StoreState> }).$store;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> })
+      .$store;
     const [ungroupedCase] = store.state.casesStore.groups;
 
     expect(ungroupedCase.name).toBe('testcase');
@@ -132,21 +135,28 @@ describe('AddPanel.vue', () => {
     await wrapper.find('input[name="multiple-cases-count"]').setValue(10);
 
     expect(
-      (wrapper.find('input[name="multiple-cases-prefix"]')
-        .element as HTMLInputElement).value,
+      (
+        wrapper.find('input[name="multiple-cases-prefix"]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('test');
     expect(
-      (wrapper.find('input[name="multiple-cases-suffix"]')
-        .element as HTMLInputElement).value,
+      (
+        wrapper.find('input[name="multiple-cases-suffix"]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('case');
     expect(
-      (wrapper.find('input[name="multiple-cases-count"]')
-        .element as HTMLInputElement).value,
+      (
+        wrapper.find('input[name="multiple-cases-count"]')
+          .element as HTMLInputElement
+      ).value,
     ).toBe('10');
 
     await wrapper.find('form').trigger('submit.prevent');
 
-    const store = (wrapper.vm as unknown as { $store: Store<StoreState> }).$store;
+    const store = (wrapper.vm as unknown as { $store: Store<StoreState> })
+      .$store;
     const groups = store.state.casesStore.groups;
 
     expect(groups.length).toBe(10);

@@ -23,7 +23,9 @@ describe('SortControls.vue', () => {
 
     expect((wrapper.vm as unknown as SortControlsVm).selected).toBe(false);
     expect((wrapper.vm as unknown as SortControlsVm).toggleSort).toBe('asc');
-    expect((wrapper.vm as unknown as SortControlsVm).iconDisplayed).toBe('sort-amount-down');
+    expect((wrapper.vm as unknown as SortControlsVm).iconDisplayed).toBe(
+      'sort-amount-down',
+    );
   });
 
   it('Should handle the correct sort icons', async () => {

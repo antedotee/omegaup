@@ -451,7 +451,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Emit, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Watch,
+  Emit,
+  toNative,
+} from 'vue-facing-decorator';
 import infiniteScroll from '../../directives/infiniteScroll';
 import T from '../../lang';
 import { types } from '../../api_types';

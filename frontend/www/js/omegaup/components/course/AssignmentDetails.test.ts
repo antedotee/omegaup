@@ -30,7 +30,9 @@ describe('AssignmentDetails.vue', () => {
   };
 
   it('Should handle empty assignments and progress as admin', () => {
-    const wrapper = shallowMount(course_AssignmentDetails, { props: propsData });
+    const wrapper = shallowMount(course_AssignmentDetails, {
+      props: propsData,
+    });
 
     expect(wrapper.find('form button[type=submit].submit').text()).toBe(
       T.courseAssignmentNewFormSchedule,

@@ -45,10 +45,8 @@ describe('PreferencesEdit.vue', () => {
       props: { profile },
     });
 
-    await wrapper
-      .find('select[data-locale]').setValue('en');
-    await wrapper
-      .find('select[data-preferred-language]').setValue('rb');
+    await wrapper.find('select[data-locale]').setValue('en');
+    await wrapper.find('select[data-preferred-language]').setValue('rb');
     await wrapper.find('input[data-is-private]').setValue(true);
     await wrapper.find('input[data-hide-problem-tags]').setValue(true);
 
@@ -78,7 +76,8 @@ describe('PreferencesEdit.vue', () => {
       props: { profile },
     });
     await wrapper
-      .find('select[data-learning-teaching-objective]').setValue('none');
+      .find('select[data-learning-teaching-objective]')
+      .setValue('none');
     expect(
       wrapper.find('select[data-scholar-competitive-objective]').element,
     ).toBeDisabled();
@@ -266,7 +265,8 @@ describe('PreferencesEdit.vue', () => {
       props: { profile },
     });
     await wrapper
-      .find('select[data-learning-teaching-objective]').setValue('none');
+      .find('select[data-learning-teaching-objective]')
+      .setValue('none');
     await wrapper.find('button[type="submit"]').trigger('submit');
     expect(wrapper.emitted('update-user-preferences')).toBeDefined();
     expect(wrapper.emitted('update-user-preferences')).toEqual([

@@ -11,7 +11,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Prop, Emit, Ref, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Watch,
+  Prop,
+  Emit,
+  Ref,
+  toNative,
+} from 'vue-facing-decorator';
 
 @Component
 class Autocomplete extends Vue {

@@ -124,7 +124,7 @@ interface NavbarVueInstance {
   popupDisplayed?: PopupDisplayed;
   problem: types.NavbarProblemsetProblem | null;
 }
-const vueInstance = (new Vue({
+const vueInstance = new Vue({
   components: {
     'omegaup-arena-contest-practice': arena_ContestPractice,
   },
@@ -136,7 +136,7 @@ const vueInstance = (new Vue({
       },
     });
   },
-}) as unknown) as NavbarVueInstance;
+}) as unknown as NavbarVueInstance;
 vueInstance.problemInfo = problemDetails;
 const navbarProblems: types.NavbarProblemsetProblem[] = [
   {

@@ -219,8 +219,8 @@ OmegaUp.on('ready', async () => {
           runDetailsData: this.runDetailsData,
           nextSubmissionTimestamp: this.nextSubmissionTimestamp,
           nextExecutionTimestamp: this.nextExecutionTimestamp,
-          shouldShowFirstAssociatedIdentityRunWarning: this
-            .shouldShowFirstAssociatedIdentityRunWarning,
+          shouldShowFirstAssociatedIdentityRunWarning:
+            this.shouldShowFirstAssociatedIdentityRunWarning,
           submissionDeadline: payload.submissionDeadline,
           isBlocked: this.isBlocked,
           blockedMessage: this.blockedMessage,
@@ -493,8 +493,7 @@ OmegaUp.on('ready', async () => {
   });
 
   const onProblemListChanged = (): void => {
-    const instance =
-      contestContestant as unknown as ContestContestantInstance;
+    const instance = contestContestant as unknown as ContestContestantInstance;
     api.Contest.details({
       contest_alias: payload.contest.alias,
     })
@@ -663,8 +662,7 @@ OmegaUp.on('ready', async () => {
     const locationHash = window.location.hash.replace('#', '').split('/');
     const tab = getSelectedValidTab(locationHash[0], contestAdmin);
 
-    const instance =
-      contestContestant as unknown as ContestContestantInstance;
+    const instance = contestContestant as unknown as ContestContestantInstance;
     if (instance.activeTab !== tab) {
       instance.activeTab = tab;
     }

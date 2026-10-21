@@ -23,7 +23,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Emit, Watch, Prop, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Emit,
+  Watch,
+  Prop,
+  toNative,
+} from 'vue-facing-decorator';
 import T from '../../lang';
 
 @Component

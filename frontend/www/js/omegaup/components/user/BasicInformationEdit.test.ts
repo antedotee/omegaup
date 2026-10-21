@@ -72,8 +72,7 @@ describe('BasicInformationEdit.vue', () => {
     const wrapper = mount(user_Basic_Information_Edit, {
       props: basicInformationEditProps,
     });
-    await wrapper
-      .find('select[data-countries]').setValue('CA');
+    await wrapper.find('select[data-countries]').setValue('CA');
     expect(wrapper.find('select[data-countries]').element).toBeEnabled();
   });
 
@@ -92,12 +91,9 @@ describe('BasicInformationEdit.vue', () => {
       .findComponent(date_Picker)
       .find('input')
       .setValue('2001-01-01');
-    await wrapper
-      .find('select[data-gender]').setValue('other');
-    await wrapper
-      .find('select[data-countries]').setValue('CA');
-    await wrapper
-      .find('select[data-states]').setValue('AB');
+    await wrapper.find('select[data-gender]').setValue('other');
+    await wrapper.find('select[data-countries]').setValue('CA');
+    await wrapper.find('select[data-states]').setValue('AB');
 
     await wrapper.find('button[type="submit"]').trigger('submit');
     expect(wrapper.emitted('update-user-basic-information')).toBeDefined();

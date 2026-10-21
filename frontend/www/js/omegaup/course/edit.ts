@@ -29,11 +29,11 @@ interface CourseEditComponentRef {
 
 // @vue/compat maps the legacy `inserted` directive hook at runtime, but the
 // Vue 3 `Directive` type only knows the new hook names, so cast through unknown.
-Vue.directive('Sortable', ({
+Vue.directive('Sortable', {
   inserted: (el: HTMLElement, binding: { value?: Sortable.Options }) => {
     new Sortable(el, binding.value || {});
   },
-} as unknown) as Directive);
+} as unknown as Directive);
 
 OmegaUp.on('ready', () => {
   const payload = types.payloadParsers.CourseEditPayload();
@@ -73,12 +73,15 @@ OmegaUp.on('ready', () => {
       refreshStudentList: (): void => {
         api.Course.listStudents({ course_alias: courseAlias })
           .then((response) => {
-            (courseEdit as unknown as CourseEditInstance).data.students = response.students;
+            (courseEdit as unknown as CourseEditInstance).data.students =
+              response.students;
           })
           .catch(ui.apiError);
         api.Course.requests({ course_alias: courseAlias })
           .then((response) => {
-            (courseEdit as unknown as CourseEditInstance).data.identityRequests = response.users;
+            (
+              courseEdit as unknown as CourseEditInstance
+            ).data.identityRequests = response.users;
           })
           .catch(ui.apiError);
       },
@@ -103,10 +106,16 @@ OmegaUp.on('ready', () => {
       refreshCourseAdminsAndTeachingAssistants: (): void => {
         api.Course.admins({ course_alias: courseAlias })
           .then((response) => {
-            (courseEdit as unknown as CourseEditInstance).data.admins = response.admins;
-            (courseEdit as unknown as CourseEditInstance).data.groupsAdmins = response.group_admins;
-            (courseEdit as unknown as CourseEditInstance).data.teachingAssistants = response.teaching_assistants;
-            (courseEdit as unknown as CourseEditInstance).data.groupsTeachingAssistants =
+            (courseEdit as unknown as CourseEditInstance).data.admins =
+              response.admins;
+            (courseEdit as unknown as CourseEditInstance).data.groupsAdmins =
+              response.group_admins;
+            (
+              courseEdit as unknown as CourseEditInstance
+            ).data.teachingAssistants = response.teaching_assistants;
+            (
+              courseEdit as unknown as CourseEditInstance
+            ).data.groupsTeachingAssistants =
               response.group_teaching_assistants;
           })
           .catch(ui.apiError);
@@ -328,7 +337,8 @@ OmegaUp.on('ready', () => {
                 }
                 for (const revision of result.log) {
                   if (publishedCommitHash === revision.commit) {
-                    target.selectedRevision = target.publishedRevision = revision;
+                    target.selectedRevision = target.publishedRevision =
+                      revision;
                     break;
                   }
                 }
@@ -423,7 +433,9 @@ OmegaUp.on('ready', () => {
             admissionMode: AdmissionMode;
             showInPublicCoursesList: boolean;
           }) => {
-            (courseEdit as unknown as CourseEditInstance).data.course.admission_mode = admissionMode;
+            (
+              courseEdit as unknown as CourseEditInstance
+            ).data.course.admission_mode = admissionMode;
             api.Course.update({
               alias: courseAlias,
               admission_mode: admissionMode,
@@ -670,8 +682,8 @@ OmegaUp.on('ready', () => {
       });
     },
   });
-  const component = (courseEdit.$refs
-    .component as unknown) as CourseEditComponentRef;
+  const component = courseEdit.$refs
+    .component as unknown as CourseEditComponentRef;
 
   // Handle browser back/forward navigation for hash-based tabs
   const onHashChange = () => {

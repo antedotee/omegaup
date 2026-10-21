@@ -367,7 +367,9 @@ describe('Runs.vue', () => {
     });
 
     await wrapper.setProps({ username: 'username' });
-    expect((wrapper.vm as unknown as RunsVm).filterUsername?.key).toBe('username');
+    expect((wrapper.vm as unknown as RunsVm).filterUsername?.key).toBe(
+      'username',
+    );
 
     await wrapper.setProps({ username: null });
     expect((wrapper.vm as unknown as RunsVm).filterUsername).toBeFalsy();
@@ -395,8 +397,7 @@ describe('Runs.vue', () => {
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
 
       await wrapper
-        .findAll(`td[data-username="${username}"]`)
-        [1]
+        .findAll(`td[data-username="${username}"]`)[1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 
@@ -412,8 +413,7 @@ describe('Runs.vue', () => {
       expect(wrapper.findAll('table tbody tr').length).toBe(runs.length);
 
       await wrapper
-        .findAll(`td[data-username="${username}"]`)
-        [1]
+        .findAll(`td[data-username="${username}"]`)[1]
         .find(`a[title="${username}"]`)
         .trigger('click');
 

@@ -111,7 +111,8 @@ class GridPaginator extends Vue {
   created() {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.currentSortOption = this.sortOptions.length > 0 ? this.sortOptions[0].value : '';
+    this.currentSortOption =
+      this.sortOptions.length > 0 ? this.sortOptions[0].value : '';
     this.filteredItems = this.items;
   }
   @Prop() items!: LinkableResource[];
@@ -124,8 +125,7 @@ class GridPaginator extends Vue {
 
   private T = T;
   private currentPageNumber = 0;
-  private currentSortOption =
-    undefined;
+  private currentSortOption = undefined;
   filter: null | string = null;
   filteredItems: LinkableResource[] = [];
 

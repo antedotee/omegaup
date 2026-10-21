@@ -68,7 +68,9 @@ OmegaUp.on('ready', () => {
               share_user_information: shareUserInformation,
             })
               .then(() => {
-                (courseIntro as unknown as CourseIntroInstance).userRegistrationRequested = true;
+                (
+                  courseIntro as unknown as CourseIntroInstance
+                ).userRegistrationRequested = true;
               })
               .catch(ui.error);
           },

@@ -46,9 +46,7 @@ export const infiniteScroll: Directive = {
       if (disabledAttr === 'true' || disabledAttr === '') {
         return;
       }
-      const distance = Number(
-        readAttr(el, 'infinite-scroll-distance') ?? '0',
-      );
+      const distance = Number(readAttr(el, 'infinite-scroll-distance') ?? '0');
 
       let bottomDelta: number;
       if (scroller === window) {
@@ -57,9 +55,7 @@ export const infiniteScroll: Directive = {
       } else {
         const container = scroller as HTMLElement;
         bottomDelta =
-          container.scrollHeight -
-          container.scrollTop -
-          container.clientHeight;
+          container.scrollHeight - container.scrollTop - container.clientHeight;
       }
 
       if (bottomDelta <= distance) {

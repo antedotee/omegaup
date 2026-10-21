@@ -58,7 +58,9 @@ OmegaUp.on('ready', () => {
       refreshTeamsList: (): void => {
         api.TeamsGroup.teams({ team_group_alias: payload.teamGroup.alias })
           .then((data) => {
-            (teamsGroupEdit as unknown as TeamsGroupEditInstance).teamsIdentities = data.identities;
+            (
+              teamsGroupEdit as unknown as TeamsGroupEditInstance
+            ).teamsIdentities = data.identities;
           })
           .catch(ui.apiError);
       },
@@ -67,7 +69,8 @@ OmegaUp.on('ready', () => {
           team_group_alias: payload.teamGroup.alias,
         })
           .then((data) => {
-            (teamsGroupEdit as unknown as TeamsGroupEditInstance).teamsMembers = data.teamsUsers;
+            (teamsGroupEdit as unknown as TeamsGroupEditInstance).teamsMembers =
+              data.teamsUsers;
           })
           .catch(ui.apiError);
       },
@@ -417,11 +420,13 @@ OmegaUp.on('ready', () => {
     const hash = window.location.hash.substring(1).split('#')[0];
 
     if (!Object.values(AvailableTabs).includes(hash as AvailableTabs)) {
-      (teamsGroupEdit as unknown as TeamsGroupEditInstance).tab = AvailableTabs.Teams;
+      (teamsGroupEdit as unknown as TeamsGroupEditInstance).tab =
+        AvailableTabs.Teams;
       return;
     }
 
-    (teamsGroupEdit as unknown as TeamsGroupEditInstance).tab = hash as AvailableTabs;
+    (teamsGroupEdit as unknown as TeamsGroupEditInstance).tab =
+      hash as AvailableTabs;
   }
 
   window.addEventListener('hashchange', onHashChange);

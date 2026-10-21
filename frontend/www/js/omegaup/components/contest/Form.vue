@@ -917,7 +917,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import VueGlobal from 'vue';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
@@ -1135,8 +1142,8 @@ class Form extends Vue {
     this.currentScoreMode = this.scoreMode;
     this.startTime = this.initialStartTime;
     this.submissionsGap = this.initialSubmissionsGap
-    ? this.initialSubmissionsGap / 60
-    : 1;
+      ? this.initialSubmissionsGap / 60
+      : 1;
     this.title = this.initialTitle;
     this.windowLength = this.initialWindowLength;
     this.windowLengthEnabled = this.initialWindowLength !== null;
@@ -1537,8 +1544,8 @@ class Form extends Vue {
       penalty: this.penalty,
       scoreboard: this.scoreboard,
       penalty_type: this.penaltyType,
-      default_show_all_contestants_in_scoreboard: this
-        .defaultShowAllContestantsInScoreboard,
+      default_show_all_contestants_in_scoreboard:
+        this.defaultShowAllContestantsInScoreboard,
       show_scoreboard_after: this.showScoreboardAfter,
       score_mode: this.currentScoreMode,
       needs_basic_information: this.needsBasicInformation,

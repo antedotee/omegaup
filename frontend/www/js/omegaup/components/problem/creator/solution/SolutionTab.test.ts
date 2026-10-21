@@ -27,7 +27,9 @@ describe('SolutionTab.vue', () => {
     expect(textArea.exists()).toBe(true);
     textArea.setValue('Hello omegaUp');
 
-    expect((wrapper.vm as unknown as SolutionTabVm).currentSolutionMarkdown).toBe('Hello omegaUp');
+    expect(
+      (wrapper.vm as unknown as SolutionTabVm).currentSolutionMarkdown,
+    ).toBe('Hello omegaUp');
 
     const markdownContent = wrapper.findComponent(ProblemMarkdown);
     expect(markdownContent.exists()).toBe(true);
@@ -38,14 +40,18 @@ describe('SolutionTab.vue', () => {
       T.problemCreatorMarkdownPreviewInitialRender + 'Hello omegaUp',
     );
 
-    expect((wrapper.vm as unknown as SolutionTabVm).$store.state.problemSolutionMarkdown).toBe('');
+    expect(
+      (wrapper.vm as unknown as SolutionTabVm).$store.state
+        .problemSolutionMarkdown,
+    ).toBe('');
 
     const markdownSaveButton = wrapper.find('button.btn-primary');
     expect(markdownSaveButton.exists()).toBe(true);
     await markdownSaveButton.trigger('click');
 
-    expect((wrapper.vm as unknown as SolutionTabVm).$store.state.problemSolutionMarkdown).toBe(
-      'Hello omegaUp',
-    );
+    expect(
+      (wrapper.vm as unknown as SolutionTabVm).$store.state
+        .problemSolutionMarkdown,
+    ).toBe('Hello omegaUp');
   });
 });

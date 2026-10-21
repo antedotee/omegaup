@@ -26,7 +26,10 @@ OmegaUp.on('ready', () => {
       exported != null &&
       (typeof exported === 'object' || typeof exported === 'function')
     ) {
-      Vue.component(exportName, exported as Parameters<typeof Vue.component>[1]);
+      Vue.component(
+        exportName,
+        exported as Parameters<typeof Vue.component>[1],
+      );
     }
   }
 

@@ -49,8 +49,7 @@ describe('ManageSchools.vue', () => {
       },
     });
 
-    await wrapper
-      .find('select').setValue('bachelors');
+    await wrapper.find('select').setValue('bachelors');
     await wrapper
       .findComponent(omegaupRadioSwitch)
       .find('input[value="false"]')
@@ -59,7 +58,10 @@ describe('ManageSchools.vue', () => {
     // string-to-Date conversion runs and emits a Date, matching how the picker
     // behaves for a user. Calling setValue on the component wrapper would push
     // the raw string straight into the model and skip that conversion.
-    await wrapper.findComponent(datePicker).find('input').setValue('2010-10-10');
+    await wrapper
+      .findComponent(datePicker)
+      .find('input')
+      .setValue('2010-10-10');
 
     await wrapper.find('button[type="submit"]').trigger('submit');
     expect(wrapper.emitted('update-user-schools')).toBeDefined();

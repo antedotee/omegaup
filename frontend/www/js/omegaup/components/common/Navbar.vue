@@ -406,8 +406,8 @@ class Navbar extends Vue {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
     this.hasTeachingObjective = this.teachingUserTypes.some((teachingType) =>
-    this.userTypes.includes(teachingType),
-  );
+      this.userTypes.includes(teachingType),
+    );
   }
   @Prop() omegaUpLockDown!: boolean;
   @Prop() inContest!: boolean;

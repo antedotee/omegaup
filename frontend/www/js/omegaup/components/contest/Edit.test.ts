@@ -91,7 +91,9 @@ describe('Edit.vue', () => {
       props: propsData,
     });
 
-    expect((wrapper.vm as unknown as ContestEditVm).showTab).toBe('contestants');
+    expect((wrapper.vm as unknown as ContestEditVm).showTab).toBe(
+      'contestants',
+    );
   });
 
   it('Should handle a virtual contest from an original private contest', () => {

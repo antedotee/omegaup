@@ -64,7 +64,9 @@ describe('MultiUserAddArea.vue', () => {
     await listItem.find('.tags-input-remove').trigger('click');
     await (wrapper.vm as unknown as MultiUserAddAreaVm).$nextTick();
 
-    expect((wrapper.vm as unknown as MultiUserAddAreaVm).removeUser).toHaveBeenCalled();
+    expect(
+      (wrapper.vm as unknown as MultiUserAddAreaVm).removeUser,
+    ).toHaveBeenCalled();
   });
 
   it('should parse users when user paste them in the textarea', async () => {

@@ -222,12 +222,14 @@ describe('Sidebar.vue', () => {
     await editModal.find('button.btn-success').trigger('click');
 
     expect(
-      (wrapper.vm as unknown as SidebarVm).groups.find((_group) => _group.groupID === newGroup.groupID)
-        ?.name,
+      (wrapper.vm as unknown as SidebarVm).groups.find(
+        (_group) => _group.groupID === newGroup.groupID,
+      )?.name,
     ).toBe(modifiedName);
     expect(
-      (wrapper.vm as unknown as SidebarVm).groups.find((_group) => _group.groupID === newGroup.groupID)
-        ?.points,
+      (wrapper.vm as unknown as SidebarVm).groups.find(
+        (_group) => _group.groupID === newGroup.groupID,
+      )?.points,
     ).toBe(modifiedPoints);
   });
 
@@ -251,7 +253,10 @@ describe('Sidebar.vue', () => {
       '[data-sidebar-edit-group-dropdown="download .txt"]',
     );
 
-    const mockDownload = jest.spyOn((wrapper.vm as unknown as SidebarVm), 'downloadGroupInput');
+    const mockDownload = jest.spyOn(
+      wrapper.vm as unknown as SidebarVm,
+      'downloadGroupInput',
+    );
 
     await downloadInButton.trigger('click');
     expect(mockDownload).toHaveBeenCalledWith(newGroup.groupID, '.in');

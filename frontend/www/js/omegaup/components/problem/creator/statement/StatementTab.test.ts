@@ -28,7 +28,9 @@ describe('StatementTab.vue', () => {
     expect(textArea.exists()).toBe(true);
     textArea.setValue('Hello omegaUp');
 
-    expect((wrapper.vm as unknown as StatementTabVm).currentMarkdown).toBe('Hello omegaUp');
+    expect((wrapper.vm as unknown as StatementTabVm).currentMarkdown).toBe(
+      'Hello omegaUp',
+    );
 
     const markdownContent = wrapper.findComponent(ProblemMarkdown);
     expect(markdownContent.exists()).toBe(true);
@@ -39,13 +41,17 @@ describe('StatementTab.vue', () => {
       T.problemCreatorMarkdownPreviewInitialRender + 'Hello omegaUp',
     );
 
-    expect((wrapper.vm as unknown as StatementTabVm).$store.state.problemMarkdown).toBe('');
+    expect(
+      (wrapper.vm as unknown as StatementTabVm).$store.state.problemMarkdown,
+    ).toBe('');
 
     const markdownSaveButton = wrapper.find('button.btn-primary');
     expect(markdownSaveButton.exists()).toBe(true);
     await markdownSaveButton.trigger('click');
 
-    expect((wrapper.vm as unknown as StatementTabVm).$store.state.problemMarkdown).toBe('Hello omegaUp');
+    expect(
+      (wrapper.vm as unknown as StatementTabVm).$store.state.problemMarkdown,
+    ).toBe('Hello omegaUp');
   });
 
   describe('Image size validation', () => {

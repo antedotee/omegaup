@@ -31,7 +31,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch, Inject, toNative } from 'vue-facing-decorator';
+import {
+  Component,
+  Prop,
+  Vue,
+  Watch,
+  Inject,
+  toNative,
+} from 'vue-facing-decorator';
 import T from '../../../../lang';
 import * as ui from '@/js/omegaup/ui';
 @Component

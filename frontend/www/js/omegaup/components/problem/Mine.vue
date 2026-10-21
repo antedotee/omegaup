@@ -155,9 +155,8 @@
                       class="badge custom-badge m-1 p-1 p-lg-2"
                       :class="[
                         {
-                          'custom-badge-quality': tag.name.includes(
-                            'problemLevel',
-                          ),
+                          'custom-badge-quality':
+                            tag.name.includes('problemLevel'),
                         },
                         `custom-badge-${
                           tag.source.includes('quality') ? 'owner' : tag.source
@@ -321,9 +320,8 @@ class ProblemMine extends Vue {
   }
 
   toggleConfirmationModal(problemAlias: string): void {
-    this.confirmationModal[problemAlias] = !this.confirmationModal[
-      problemAlias
-    ];
+    this.confirmationModal[problemAlias] =
+      !this.confirmationModal[problemAlias];
   }
 
   onChangeVisibility(): void {

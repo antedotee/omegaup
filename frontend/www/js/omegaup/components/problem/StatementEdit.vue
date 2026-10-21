@@ -103,7 +103,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Emit, Prop, Watch, Ref, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Emit,
+  Prop,
+  Watch,
+  Ref,
+  toNative,
+} from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';

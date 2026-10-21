@@ -385,7 +385,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Emit, Watch, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Emit,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -453,9 +461,12 @@ export { PopupDisplayed };
     'omegaup-username': user_Username,
     'omegaup-problem-feedback': problem_Feedback,
     'omegaup-problem-settings-summary': problem_SettingsSummary,
-    'omegaup-quality-nomination-reviewer-popup': qualitynomination_ReviewerPopup,
-    'omegaup-quality-nomination-demotion-popup': qualitynomination_DemotionPopup,
-    'omegaup-quality-nomination-promotion-popup': qualitynomination_PromotionPopup,
+    'omegaup-quality-nomination-reviewer-popup':
+      qualitynomination_ReviewerPopup,
+    'omegaup-quality-nomination-demotion-popup':
+      qualitynomination_DemotionPopup,
+    'omegaup-quality-nomination-promotion-popup':
+      qualitynomination_PromotionPopup,
   },
 })
 class ProblemDetails extends Vue {
@@ -465,7 +476,8 @@ class ProblemDetails extends Vue {
     this.selectedTab = this.activeTab;
     this.currentClarifications = this.clarifications;
     this.currentPopupDisplayed = this.popupDisplayed;
-    this.hasUnreadClarifications = this.clarifications?.length > 0 && this.activeTab !== 'clarifications';
+    this.hasUnreadClarifications =
+      this.clarifications?.length > 0 && this.activeTab !== 'clarifications';
     this.currentRunDetailsData = this.runDetailsData;
   }
   @Prop({
@@ -528,8 +540,7 @@ class ProblemDetails extends Vue {
   selectedTab = undefined;
   currentClarifications = undefined;
   currentPopupDisplayed = undefined;
-  hasUnreadClarifications =
-    undefined;
+  hasUnreadClarifications = undefined;
   currentRunDetailsData = undefined;
 
   get isReKarelProblem(): boolean {
@@ -708,17 +719,16 @@ class ProblemDetails extends Vue {
     // to inject Vue components into the DOM after it's being rendered, so that
     // all the templating and interactivity can be handled by Vue instead of by
     // JavaScript.
-    const libinteractiveInterfaceNameElement = this.statementMarkdown.$el.querySelector(
-      'span.libinteractive-interface-name',
-    ) as HTMLElement;
+    const libinteractiveInterfaceNameElement =
+      this.statementMarkdown.$el.querySelector(
+        'span.libinteractive-interface-name',
+      ) as HTMLElement;
     if (
       libinteractiveInterfaceNameElement &&
       this.problem.settings?.interactive?.module_name
     ) {
-      libinteractiveInterfaceNameElement.innerText = this.problem.settings.interactive.module_name.replace(
-        /\.idl$/,
-        '',
-      );
+      libinteractiveInterfaceNameElement.innerText =
+        this.problem.settings.interactive.module_name.replace(/\.idl$/, '');
     }
 
     const outputOnlyDownloadElement = this.statementMarkdown.$el.querySelector(
@@ -731,9 +741,10 @@ class ProblemDetails extends Vue {
       );
     }
 
-    const libinteractiveDownloadFormElement = this.statementMarkdown.$el.querySelector(
-      '.libinteractive-download form',
-    ) as HTMLElement;
+    const libinteractiveDownloadFormElement =
+      this.statementMarkdown.$el.querySelector(
+        '.libinteractive-download form',
+      ) as HTMLElement;
     if (libinteractiveDownloadFormElement) {
       libinteractiveDownloadFormElement.addEventListener(
         'submit',
@@ -745,9 +756,9 @@ class ProblemDetails extends Vue {
           const commit = this.problem.commit;
           const os = (form.querySelector('.download-os') as HTMLInputElement)
             ?.value;
-          const lang = (form.querySelector(
-            '.download-lang',
-          ) as HTMLInputElement)?.value;
+          const lang = (
+            form.querySelector('.download-lang') as HTMLInputElement
+          )?.value;
           const extension = os == 'unix' ? '.tar.bz2' : '.zip';
 
           ui.navigateTo(
@@ -757,9 +768,10 @@ class ProblemDetails extends Vue {
       );
     }
 
-    const libinteractiveDownloadLangElement = this.statementMarkdown.$el.querySelector(
-      '.libinteractive-download .download-lang',
-    ) as HTMLSelectElement;
+    const libinteractiveDownloadLangElement =
+      this.statementMarkdown.$el.querySelector(
+        '.libinteractive-download .download-lang',
+      ) as HTMLSelectElement;
     if (libinteractiveDownloadLangElement) {
       libinteractiveDownloadLangElement.addEventListener(
         'change',
@@ -771,9 +783,9 @@ class ProblemDetails extends Vue {
             }
             form = form.parentElement;
           }
-          (form.querySelector(
-            '.libinteractive-extension',
-          ) as HTMLElement).innerText = libinteractiveDownloadLangElement.value;
+          (
+            form.querySelector('.libinteractive-extension') as HTMLElement
+          ).innerText = libinteractiveDownloadLangElement.value;
         },
       );
     }

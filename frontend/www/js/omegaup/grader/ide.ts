@@ -42,8 +42,9 @@ OmegaUp.on('ready', () => {
             api.Run.executeForIDE()
               .then(time.remoteTimeAdapter)
               .then((response) => {
-                (ideComponent as unknown as IDEInstance).nextExecutionTimestamp =
-                  response.nextExecutionTimestamp;
+                (
+                  ideComponent as unknown as IDEInstance
+                ).nextExecutionTimestamp = response.nextExecutionTimestamp;
               })
               .catch(ui.apiError);
           },

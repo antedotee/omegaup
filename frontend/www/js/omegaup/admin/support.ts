@@ -85,12 +85,18 @@ OmegaUp.on('ready', () => {
             (adminSupport as unknown as AdminSupportInstance).email = null;
             api.User.extraInformation({ usernameOrEmail })
               .then((data) => {
-                (adminSupport as unknown as AdminSupportInstance).username = data.username;
-                (adminSupport as unknown as AdminSupportInstance).verified = data.verified;
-                (adminSupport as unknown as AdminSupportInstance).lastLogin = data.last_login ?? null;
-                (adminSupport as unknown as AdminSupportInstance).birthDate = data.birth_date ?? null;
-                (adminSupport as unknown as AdminSupportInstance).roles = data.roles ?? [];
-                (adminSupport as unknown as AdminSupportInstance).email = data.email ?? null;
+                (adminSupport as unknown as AdminSupportInstance).username =
+                  data.username;
+                (adminSupport as unknown as AdminSupportInstance).verified =
+                  data.verified;
+                (adminSupport as unknown as AdminSupportInstance).lastLogin =
+                  data.last_login ?? null;
+                (adminSupport as unknown as AdminSupportInstance).birthDate =
+                  data.birth_date ?? null;
+                (adminSupport as unknown as AdminSupportInstance).roles =
+                  data.roles ?? [];
+                (adminSupport as unknown as AdminSupportInstance).email =
+                  data.email ?? null;
               })
               .catch(ui.apiError);
           },
@@ -107,7 +113,8 @@ OmegaUp.on('ready', () => {
           'verify-user': (usernameOrEmail: string): void => {
             api.User.verifyEmail({ usernameOrEmail })
               .then(() => {
-                (adminSupport as unknown as AdminSupportInstance).verified = true;
+                (adminSupport as unknown as AdminSupportInstance).verified =
+                  true;
                 ui.success(T.userVerified);
               })
               .catch(ui.apiError);
@@ -116,7 +123,8 @@ OmegaUp.on('ready', () => {
             api.Reset.generateToken({ email })
               .then((data) => {
                 ui.success(T.passwordResetTokenWasGeneratedSuccessfully);
-                (adminSupport as unknown as AdminSupportInstance).link = data.link;
+                (adminSupport as unknown as AdminSupportInstance).link =
+                  data.link;
               })
               .catch(ui.apiError);
           },
@@ -135,7 +143,8 @@ OmegaUp.on('ready', () => {
           }): void => {
             if (role.selected) {
               api.User.addRole({
-                username: (adminSupport as unknown as AdminSupportInstance).username,
+                username: (adminSupport as unknown as AdminSupportInstance)
+                  .username,
                 role: role.value.name,
               })
                 .then(() => {
@@ -144,7 +153,8 @@ OmegaUp.on('ready', () => {
                 .catch(ui.apiError);
             } else {
               api.User.removeRole({
-                username: (adminSupport as unknown as AdminSupportInstance).username,
+                username: (adminSupport as unknown as AdminSupportInstance)
+                  .username,
                 role: role.value.name,
               })
                 .then(() => {
@@ -154,22 +164,32 @@ OmegaUp.on('ready', () => {
             }
           },
           'search-contest': (contestAlias: string): void => {
-            (adminSupport as unknown as AdminSupportInstance).contestFound = false;
-            (adminSupport as unknown as AdminSupportInstance).contestTitle = null;
-            (adminSupport as unknown as AdminSupportInstance).isContestRecommended = false;
+            (adminSupport as unknown as AdminSupportInstance).contestFound =
+              false;
+            (adminSupport as unknown as AdminSupportInstance).contestTitle =
+              null;
+            (
+              adminSupport as unknown as AdminSupportInstance
+            ).isContestRecommended = false;
 
             api.Contest.details({ contest_alias: contestAlias })
               .then((data) => {
-                (adminSupport as unknown as AdminSupportInstance).contestAlias = contestAlias;
-                (adminSupport as unknown as AdminSupportInstance).contestTitle = data.title;
-                (adminSupport as unknown as AdminSupportInstance).contestFound = true;
-                (adminSupport as unknown as AdminSupportInstance).isContestRecommended = data.recommended;
+                (adminSupport as unknown as AdminSupportInstance).contestAlias =
+                  contestAlias;
+                (adminSupport as unknown as AdminSupportInstance).contestTitle =
+                  data.title;
+                (adminSupport as unknown as AdminSupportInstance).contestFound =
+                  true;
+                (
+                  adminSupport as unknown as AdminSupportInstance
+                ).isContestRecommended = data.recommended;
               })
               .catch(ui.apiError);
           },
           'toggle-recommended': (isNowRecommended: boolean): void => {
             api.Contest.setRecommended({
-              contest_alias: (adminSupport as unknown as AdminSupportInstance).contestAlias,
+              contest_alias: (adminSupport as unknown as AdminSupportInstance)
+                .contestAlias,
               value: isNowRecommended,
             })
               .then(() => {
@@ -182,10 +202,15 @@ OmegaUp.on('ready', () => {
               .catch(ui.apiError);
           },
           'reset-contest': () => {
-            (adminSupport as unknown as AdminSupportInstance).contestAlias = null;
-            (adminSupport as unknown as AdminSupportInstance).contestTitle = null;
-            (adminSupport as unknown as AdminSupportInstance).contestFound = false;
-            (adminSupport as unknown as AdminSupportInstance).isContestRecommended = false;
+            (adminSupport as unknown as AdminSupportInstance).contestAlias =
+              null;
+            (adminSupport as unknown as AdminSupportInstance).contestTitle =
+              null;
+            (adminSupport as unknown as AdminSupportInstance).contestFound =
+              false;
+            (
+              adminSupport as unknown as AdminSupportInstance
+            ).isContestRecommended = false;
           },
           'toggle-maintenance': (enabled: boolean): void => {
             if (!enabled) {

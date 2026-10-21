@@ -84,7 +84,9 @@ OmegaUp.on('ready', () => {
             })
               .then(() => api.Notification.myList())
               .then((data) => {
-                (commonNavbar as unknown as CommonNavbarInstance).notifications = data.notifications;
+                (
+                  commonNavbar as unknown as CommonNavbarInstance
+                ).notifications = data.notifications;
                 if (redirectTo) {
                   ui.navigateTo(redirectTo);
                 }
@@ -134,7 +136,8 @@ OmegaUp.on('ready', () => {
     mainStore.commit('updateUsername', payload.currentUsername);
     api.Notification.myList()
       .then((data) => {
-        (commonNavbar as unknown as CommonNavbarInstance).notifications = data.notifications;
+        (commonNavbar as unknown as CommonNavbarInstance).notifications =
+          data.notifications;
       })
       .catch(ui.apiError);
   }
@@ -143,16 +146,20 @@ OmegaUp.on('ready', () => {
     const updateGraderStatus = () => {
       api.Grader.status()
         .then((stats) => {
-          (commonNavbar as unknown as CommonNavbarInstance).graderInfo = stats.grader;
+          (commonNavbar as unknown as CommonNavbarInstance).graderInfo =
+            stats.grader;
           if (stats.grader.queue) {
-            (commonNavbar as unknown as CommonNavbarInstance).graderQueueLength =
+            (
+              commonNavbar as unknown as CommonNavbarInstance
+            ).graderQueueLength =
               stats.grader.queue.run_queue_length +
               stats.grader.queue.running.length;
           }
           (commonNavbar as unknown as CommonNavbarInstance).errorMessage = null;
         })
         .catch((stats) => {
-          (commonNavbar as unknown as CommonNavbarInstance).errorMessage = stats.error;
+          (commonNavbar as unknown as CommonNavbarInstance).errorMessage =
+            stats.error;
         });
     };
 

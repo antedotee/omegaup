@@ -70,7 +70,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import T from '../../lang';
 import omegaup_Markdown from '../Markdown.vue';
 import user_Username from '../user/Username.vue';

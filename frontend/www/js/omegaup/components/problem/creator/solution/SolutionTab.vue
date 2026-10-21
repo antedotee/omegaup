@@ -45,7 +45,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Ref,
+  Watch,
+  toNative,
+} from 'vue-facing-decorator';
 import VueGlobal from 'vue';
 import * as Markdown from '@/third_party/js/pagedown/Markdown.Editor.js';
 import * as markdown from '../../../../markdown';

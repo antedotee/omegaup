@@ -153,14 +153,24 @@ describe('Form.vue', () => {
       },
     });
 
-    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'partial',
+    );
     await wrapper.find('[data-contest-icpc]').trigger('click');
-    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('all_or_nothing');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'all_or_nothing',
+    );
     await wrapper.find('[data-contest-preioi]').trigger('click');
-    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'partial',
+    );
     await wrapper.find('[data-contest-omi]').trigger('click');
-    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'partial',
+    );
     await wrapper.find('[data-contest-conacup]').trigger('click');
-    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe('partial');
+    expect((wrapper.vm as unknown as ContestFormVm).currentScoreMode).toBe(
+      'partial',
+    );
   });
 });

@@ -97,7 +97,7 @@ describe('ContestCardv2.vue', () => {
     // `contestEnrollStatus` is a plain <div> ref. @vue/test-utils 2's
     // `findComponent({ ref })` only matches component instances, not DOM
     // elements (it did in v1), so read the ref off the instance instead.
-    const contestEnrollStatus = (wrapper.vm as unknown) as {
+    const contestEnrollStatus = wrapper.vm as unknown as {
       $refs: { contestEnrollStatus?: HTMLElement };
     };
 
@@ -130,7 +130,7 @@ describe('ContestCardv2.vue', () => {
 
     // `contestEnrollStatus` is a plain <div> ref; read it off the instance
     // (see the note in the current-card test above).
-    const vm = (wrapper.vm as unknown) as {
+    const vm = wrapper.vm as unknown as {
       $refs: { contestEnrollStatus?: HTMLElement };
     };
     const contestButtonEnter = wrapper.findComponent({

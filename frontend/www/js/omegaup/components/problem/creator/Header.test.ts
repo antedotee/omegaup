@@ -58,18 +58,19 @@ describe('Header.vue', () => {
       },
     });
 
-    const resetButton = wrapper.find(
-      'button[data-create-new-problem-button]',
-    );
+    const resetButton = wrapper.find('button[data-create-new-problem-button]');
     expect(resetButton.exists()).toBe(true);
 
     const testText = 'Hello';
     const emptyText = '';
     (wrapper.vm as unknown as HeaderVm).$store.state.problemName = testText;
     (wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown = testText;
-    (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent = testText;
-    (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension = testText;
-    (wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown = testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent =
+      testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension =
+      testText;
+    (wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown =
+      testText;
 
     await resetButton.trigger('click');
 
@@ -81,10 +82,18 @@ describe('Header.vue', () => {
     expect((wrapper.vm as unknown as HeaderVm).$store.state.problemName).toBe(
       T.problemCreatorNewProblem,
     );
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown).toBe(emptyText);
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent).toBe(emptyText);
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension).toBe(emptyText);
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown).toBe(emptyText);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown,
+    ).toBe(emptyText);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent,
+    ).toBe(emptyText);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension,
+    ).toBe(emptyText);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown,
+    ).toBe(emptyText);
 
     jest.restoreAllMocks();
     Object.defineProperty(window, 'location', {
@@ -100,7 +109,10 @@ describe('Header.vue', () => {
       },
     });
 
-    const generateProblemSpy = jest.spyOn((wrapper.vm as unknown as HeaderVm), 'generateProblem');
+    const generateProblemSpy = jest.spyOn(
+      wrapper.vm as unknown as HeaderVm,
+      'generateProblem',
+    );
 
     const downloadButton = wrapper.find('button[data-download-zip]');
     expect(downloadButton.exists()).toBe(true);
@@ -163,7 +175,7 @@ describe('Header.vue', () => {
 
     const emitted = wrapper.emitted('download-zip-file');
     expect(emitted).toBeTruthy();
-    const { zipContent } = (emitted?.slice(-1)[0][0] as unknown) as {
+    const { zipContent } = emitted?.slice(-1)[0][0] as unknown as {
       zipContent: JSZip;
     };
     expect(Object.keys(zipContent.files)).toStrictEqual(fileFolderList);
@@ -189,7 +201,7 @@ describe('Header.vue', () => {
     });
 
     const mockReadFileMethod = jest
-      .spyOn((wrapper.vm as unknown as HeaderVm), 'readFile')
+      .spyOn(wrapper.vm as unknown as HeaderVm, 'readFile')
       .mockImplementation(() => testZipFile);
 
     const loadFileButton = wrapper.find('button[data-load-problem-button]');
@@ -288,24 +300,26 @@ describe('Header.vue', () => {
       [emittedStoreData],
     ]);
 
-    expect((wrapper.vm as unknown as HeaderVm).nameInternal).toBe(emittedStoreData.problemName);
+    expect((wrapper.vm as unknown as HeaderVm).nameInternal).toBe(
+      emittedStoreData.problemName,
+    );
     expect((wrapper.vm as unknown as HeaderVm).$store.state.problemName).toBe(
       emittedStoreData.problemName,
     );
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent).toBe(
-      emittedStoreData.problemCodeContent,
-    );
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension).toBe(
-      emittedStoreData.problemCodeExtension,
-    );
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown).toBe(
-      emittedStoreData.problemMarkdown,
-    );
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown).toBe(
-      emittedStoreData.problemSolutionMarkdown,
-    );
-    expect((wrapper.vm as unknown as HeaderVm).$store.state.casesStore).toStrictEqual(
-      emittedStoreData.casesStore,
-    );
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeContent,
+    ).toBe(emittedStoreData.problemCodeContent);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemCodeExtension,
+    ).toBe(emittedStoreData.problemCodeExtension);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemMarkdown,
+    ).toBe(emittedStoreData.problemMarkdown);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.problemSolutionMarkdown,
+    ).toBe(emittedStoreData.problemSolutionMarkdown);
+    expect(
+      (wrapper.vm as unknown as HeaderVm).$store.state.casesStore,
+    ).toStrictEqual(emittedStoreData.casesStore);
   });
 });

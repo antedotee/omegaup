@@ -149,7 +149,10 @@ describe('List.vue', () => {
         },
       });
 
-      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 1');
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 1');
     });
 
     it('Should sort by problem title in descending order', async () => {
@@ -170,7 +173,10 @@ describe('List.vue', () => {
         },
       });
 
-      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 1');
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 1');
 
       const sortControlByTitle = wrapper.findComponent({
         ref: 'sortControlByTitle',
@@ -182,7 +188,10 @@ describe('List.vue', () => {
 
       button.trigger('click');
 
-      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 3');
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 3');
     });
 
     it('Should sort by time', async () => {
@@ -203,10 +212,15 @@ describe('List.vue', () => {
         },
       });
 
-      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 1');
-      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].time.getTime()).toBe(
-        new Date('2021-02-01 00:00:00').getTime(),
-      );
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 1');
+      expect(
+        (
+          wrapper.vm as unknown as QualityNominationListVm
+        ).orderedNominations[0].time.getTime(),
+      ).toBe(new Date('2021-02-01 00:00:00').getTime());
 
       const sortControlByTime = wrapper.findComponent({
         ref: 'sortControlByTime',
@@ -218,10 +232,15 @@ describe('List.vue', () => {
 
       button.trigger('click');
 
-      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].problem.title).toBe('Problem 3');
-      expect((wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0].time.getTime()).toBe(
-        new Date('2021-02-03 00:00:00').getTime(),
-      );
+      expect(
+        (wrapper.vm as unknown as QualityNominationListVm).orderedNominations[0]
+          .problem.title,
+      ).toBe('Problem 3');
+      expect(
+        (
+          wrapper.vm as unknown as QualityNominationListVm
+        ).orderedNominations[0].time.getTime(),
+      ).toBe(new Date('2021-02-03 00:00:00').getTime());
     });
   });
 

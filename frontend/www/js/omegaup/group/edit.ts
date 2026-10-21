@@ -72,19 +72,22 @@ OmegaUp.on('ready', () => {
       refreshGroupScoreboards: (): void => {
         api.Group.details({ group_alias: payload.groupAlias })
           .then((group) => {
-            (groupEdit as unknown as GroupEditInstance).scoreboards = group.scoreboards;
+            (groupEdit as unknown as GroupEditInstance).scoreboards =
+              group.scoreboards;
           })
           .catch(ui.apiError);
       },
       refreshMemberList: (): void => {
         api.Group.members({ group_alias: payload.groupAlias })
           .then((data) => {
-            (groupEdit as unknown as GroupEditInstance).identities = data.identities.filter(
-              (identity) => !identity.username.includes(':'),
-            );
-            (groupEdit as unknown as GroupEditInstance).identitiesCsv = data.identities.filter((identity) =>
-              identity.username.includes(':'),
-            );
+            (groupEdit as unknown as GroupEditInstance).identities =
+              data.identities.filter(
+                (identity) => !identity.username.includes(':'),
+              );
+            (groupEdit as unknown as GroupEditInstance).identitiesCsv =
+              data.identities.filter((identity) =>
+                identity.username.includes(':'),
+              );
           })
           .catch(ui.apiError);
       },

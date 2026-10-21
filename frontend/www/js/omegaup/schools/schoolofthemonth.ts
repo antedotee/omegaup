@@ -42,7 +42,9 @@ OmegaUp.on('ready', () => {
             })
               .then(() => {
                 ui.success(T.schoolOfTheMonthSelectedSuccessfully);
-                (schoolOfTheMonthList as unknown as SchoolListInstance).schoolIsSelected = true;
+                (
+                  schoolOfTheMonthList as unknown as SchoolListInstance
+                ).schoolIsSelected = true;
               })
               .catch(ui.apiError);
           },

@@ -40,7 +40,8 @@ OmegaUp.on('ready', () => {
           usernameOrEmail: student,
         })
           .then((data) => {
-            (viewStudent as unknown as ViewStudentInstance).problems = data.problems;
+            (viewStudent as unknown as ViewStudentInstance).problems =
+              data.problems;
           })
           .catch(ui.apiError);
       },
@@ -81,17 +82,17 @@ OmegaUp.on('ready', () => {
                     ? T.feedbackSuccessfullyUpdated
                     : T.feedbackSuccessfullyAdded,
                 );
-                (viewStudent as unknown as ViewStudentInstance).refreshStudentProgress(
-                  studentUsername,
-                  assignmentAlias,
-                );
+                (
+                  viewStudent as unknown as ViewStudentInstance
+                ).refreshStudentProgress(studentUsername, assignmentAlias);
                 api.Course.studentProgress({
                   course_alias: payload.course.alias,
                   assignment_alias: assignmentAlias,
                   usernameOrEmail: studentUsername,
                 })
                   .then((data) => {
-                    (viewStudent as unknown as ViewStudentInstance).problems = data.problems;
+                    (viewStudent as unknown as ViewStudentInstance).problems =
+                      data.problems;
                   })
                   .catch(ui.apiError);
               })
@@ -104,7 +105,9 @@ OmegaUp.on('ready', () => {
             student: string;
             assignmentAlias: string;
           }) => {
-            (viewStudent as unknown as ViewStudentInstance).refreshStudentProgress(student, assignmentAlias);
+            (
+              viewStudent as unknown as ViewStudentInstance
+            ).refreshStudentProgress(student, assignmentAlias);
           },
           'push-state': (student: string, title: string, url: string) => {
             window.history.pushState(student, title, url);

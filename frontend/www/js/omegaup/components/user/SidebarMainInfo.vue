@@ -115,9 +115,9 @@ class UserSidebarMainInfo extends Vue {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
     this.currentSelectedTab = this.getSelectedValidTab(
-    this.selectedTab,
-    this.currentUrlMapping,
-  );
+      this.selectedTab,
+      this.currentUrlMapping,
+    );
   }
   @Prop({ default: null }) data!: types.ExtraProfileDetails | null;
   @Prop() profile!: types.UserProfileInfo;

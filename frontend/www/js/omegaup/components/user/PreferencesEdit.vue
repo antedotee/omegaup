@@ -164,7 +164,8 @@ class UserPreferencesEdit extends Vue {
     this.programmingLanguages = this.profile.programming_languages;
     this.isPrivate = this.profile.is_private;
     this.hideProblemTags = this.profile.hide_problem_tags;
-    this.hasCompetitiveObjective = this.profile.has_competitive_objective ?? false;
+    this.hasCompetitiveObjective =
+      this.profile.has_competitive_objective ?? false;
     this.hasLearningObjective = this.profile.has_learning_objective ?? true;
     this.hasScholarObjective = this.profile.has_scholar_objective ?? true;
     this.hasTeachingObjective = this.profile.has_teaching_objective ?? false;

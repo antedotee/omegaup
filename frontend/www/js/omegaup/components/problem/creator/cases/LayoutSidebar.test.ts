@@ -64,7 +64,9 @@ describe('LayoutSidebar.vue', () => {
       },
     });
 
-    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length).toBe(1);
+    expect(
+      (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length,
+    ).toBe(1);
     expect(
       (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.filter(
         (_layout) => _layout.name === T.problemCreatorLayoutNew,
@@ -137,17 +139,21 @@ describe('LayoutSidebar.vue', () => {
     );
     await copyLayoutButton.trigger('click');
 
-    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length).toBe(2);
-    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts[1].name).toBe(
-      T.problemCreatorLayoutNew + T.problemCreatorLayoutWordCopy,
-    );
+    expect(
+      (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length,
+    ).toBe(2);
+    expect(
+      (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts[1].name,
+    ).toBe(T.problemCreatorLayoutNew + T.problemCreatorLayoutWordCopy);
 
     const deleteLayoutButton = layoutDropdown.find(
       'button[data-layout-dropdown-delete]',
     );
     await deleteLayoutButton.trigger('click');
 
-    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length).toBe(1);
+    expect(
+      (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length,
+    ).toBe(1);
     expect(
       (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.filter(
         (_layout) => _layout.name === T.problemCreatorLayoutNew,
@@ -164,9 +170,7 @@ describe('LayoutSidebar.vue', () => {
 
     store.commit('casesStore/addLayoutFromSelectedCase');
     await Vue.nextTick();
-    const layoutDropdownNew = wrapper
-      .findAll('div[data-layout-dropdown]')
-      [1];
+    const layoutDropdownNew = wrapper.findAll('div[data-layout-dropdown]')[1];
     expect(layoutDropdownNew.text()).toContain(
       newUngroupedCasegroup.name + '_' + newUngroupedCase.name,
     );
@@ -181,7 +185,9 @@ describe('LayoutSidebar.vue', () => {
       },
     });
 
-    expect((wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length).toBe(1);
+    expect(
+      (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.length,
+    ).toBe(1);
     expect(
       (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts.filter(
         (_layout) => _layout.name === T.problemCreatorLayoutNew,
@@ -208,7 +214,8 @@ describe('LayoutSidebar.vue', () => {
       layoutName,
     );
 
-    const targetLayout = (wrapper.vm as unknown as LayoutSidebarVm).getAllLayouts[0];
+    const targetLayout = (wrapper.vm as unknown as LayoutSidebarVm)
+      .getAllLayouts[0];
     (wrapper.vm as unknown as LayoutSidebarVm).editLayoutName([
       targetLayout.layoutID,
       (renameLayoutForm.element as HTMLInputElement).value,

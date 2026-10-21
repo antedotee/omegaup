@@ -50,7 +50,9 @@ OmegaUp.on('ready', () => {
                     ? T.coderOfTheMonthSelectedSuccessfully
                     : T.coderOfTheMonthFemaleSelectedSuccessfully,
                 );
-                (coderOfTheMonthList as unknown as CoderOfTheMonthInstance).coderIsSelected = true;
+                (
+                  coderOfTheMonthList as unknown as CoderOfTheMonthInstance
+                ).coderIsSelected = true;
               })
               .catch(ui.apiError);
           },

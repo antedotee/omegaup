@@ -26,7 +26,12 @@ describe('Identities.vue', () => {
 
     const invalidFile = new File([''], 'fake.html', { type: 'text/html' });
     const mockReadFileMethod = jest
-      .spyOn(wrapper.vm as unknown as { readFile: (e: HTMLInputElement) => File | null }, 'readFile')
+      .spyOn(
+        wrapper.vm as unknown as {
+          readFile: (e: HTMLInputElement) => File | null;
+        },
+        'readFile',
+      )
       .mockImplementation(() => invalidFile);
     const fileInput = wrapper.find('input[type=file]');
     await fileInput.trigger('change');
@@ -45,7 +50,12 @@ describe('Identities.vue', () => {
 
     const validFile = new File([''], 'users.csv', { type: 'text/csv' });
     const mockReadFileMethod = jest
-      .spyOn(wrapper.vm as unknown as { readFile: (e: HTMLInputElement) => File | null }, 'readFile')
+      .spyOn(
+        wrapper.vm as unknown as {
+          readFile: (e: HTMLInputElement) => File | null;
+        },
+        'readFile',
+      )
       .mockImplementation(() => validFile);
     const fileInput = wrapper.find('input[type=file]');
     await fileInput.trigger('change');

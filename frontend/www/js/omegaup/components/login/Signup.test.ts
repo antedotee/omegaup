@@ -36,9 +36,7 @@ describe('Signup.vue', () => {
   });
 
   // Shared factory for mounting the component
-  function createWrapper(
-    propsData: Record<string, unknown> = {},
-  ): VueWrapper {
+  function createWrapper(propsData: Record<string, unknown> = {}): VueWrapper {
     return shallowMount(login_Signup, {
       props: {
         validateRecaptcha: false,

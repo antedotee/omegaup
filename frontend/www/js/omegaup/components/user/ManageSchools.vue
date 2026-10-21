@@ -83,8 +83,8 @@ class UserManageSchools extends Vue {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
     this.graduationDate = this.profile.graduation_date
-    ? time.convertLocalDateToGMTDate(this.profile.graduation_date)
-    : new Date('');
+      ? time.convertLocalDateToGMTDate(this.profile.graduation_date)
+      : new Date('');
     this.school = this.searchResultSchools[0] ?? null;
     this.scholarDegree = this.profile.scholar_degree;
     this.isCurrentlyEnrolled = !this.profile.graduation_date;

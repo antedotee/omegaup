@@ -282,9 +282,10 @@ class ArenaCourse extends Vue {
   created() {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
-    this.isAdmin = this.course.is_admin ||
-    this.course.is_curator ||
-    this.course.is_teaching_assistant;
+    this.isAdmin =
+      this.course.is_admin ||
+      this.course.is_curator ||
+      this.course.is_teaching_assistant;
     this.currentClarifications = this.clarifications;
     this.activeProblem = this.problem;
     this.currentRunDetailsData = this.runDetailsData;
@@ -326,8 +327,7 @@ class ArenaCourse extends Vue {
   T = T;
   omegaup = omegaup;
   PopupDisplayed = PopupDisplayed;
-  isAdmin =
-    undefined;
+  isAdmin = undefined;
   currentClarifications = undefined;
   activeProblem: types.NavbarProblemsetProblem | null = null;
   currentRunDetailsData = undefined;

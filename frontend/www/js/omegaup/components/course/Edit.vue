@@ -320,7 +320,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Ref, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Watch,
+  Ref,
+  toNative,
+} from 'vue-facing-decorator';
 import course_Form from './Form.vue';
 import course_AssignmentList from './AssignmentList.vue';
 import common_Archive from '../common/Archive.vue';

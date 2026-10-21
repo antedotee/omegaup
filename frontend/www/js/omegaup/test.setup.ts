@@ -75,11 +75,11 @@ config.global.renderStubDefaultSlot = true;
 
 // @vue/compat maps the Vue 2 `inserted` directive hook at runtime; the Vue 3
 // Directive type does not list it, so cast the definition.
-Vue.directive('Sortable', ({
+Vue.directive('Sortable', {
   inserted: (el: HTMLElement, binding: { value?: Sortable.Options }) => {
     new Sortable(el, binding.value || {});
   },
-} as unknown) as Parameters<typeof Vue.directive>[1]);
+} as unknown as Parameters<typeof Vue.directive>[1]);
 
 // Intercept all API calls. Only let `API.Session.currentSession()` work and
 // fail everything else.
@@ -133,12 +133,12 @@ global.URL.createObjectURL = jest.fn();
 
 // This is needed for CodeMirror to work.
 global.document.createRange = () => {
-  return ({
+  return {
     setEnd: () => {},
     setStart: () => {},
     getBoundingClientRect: () => {},
     getClientRects: () => [],
-  } as any) as Range;
+  } as any as Range;
 };
 
 // Any write to console.error() will cause a test failure.

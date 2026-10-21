@@ -372,18 +372,21 @@ class ViewProfile extends Vue {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
     this.contests = Object.values(
-    this.data?.contests ?? ({} as types.UserProfileContests),
-  )
-    .map((contest) => {
-      const now = new Date();
-      if (contest.place === null || now <= contest.data.finish_time) {
-        return null;
-      }
-      return new ContestResult(contest);
-    })
-    .filter((contest) => Boolean(contest));
+      this.data?.contests ?? ({} as types.UserProfileContests),
+    )
+      .map((contest) => {
+        const now = new Date();
+        if (contest.place === null || now <= contest.data.finish_time) {
+          return null;
+        }
+        return new ContestResult(contest);
+      })
+      .filter((contest) => Boolean(contest));
     this.charts = this.data?.stats ?? [];
-    this.currentSelectedTab = getInitialSelectedTab(this.profile, this.selectedTab);
+    this.currentSelectedTab = getInitialSelectedTab(
+      this.profile,
+      this.selectedTab,
+    );
     this.currentReadme = this.profile.readme ?? null;
   }
   @Prop() data!: types.ExtraProfileDetails | null;

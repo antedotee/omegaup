@@ -565,7 +565,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch, Ref, toNative } from 'vue-facing-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  Watch,
+  Ref,
+  toNative,
+} from 'vue-facing-decorator';
 import VueGlobal from 'vue';
 import problem_Settings from './Settings.vue';
 import problem_Tags from './Tags.vue';
