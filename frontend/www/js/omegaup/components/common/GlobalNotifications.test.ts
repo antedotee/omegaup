@@ -131,7 +131,7 @@ describe('GlobalNotifications.vue', () => {
       },
     });
 
-    const closeButton = wrapper.find('.close');
+    const closeButton = wrapper.find('.btn-close');
     expect(closeButton.exists()).toBe(true);
 
     await closeButton.trigger('click');

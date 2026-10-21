@@ -15,8 +15,7 @@
               readonly
               @focus="$event.target.select()"
             />
-            <div class="input-group-append">
-              <button
+            <button
                 v-clipboard="() => cloneCourseURL"
                 class="btn btn-outline-secondary"
                 type="button"
@@ -27,7 +26,6 @@
               >
                 <font-awesome-icon icon="clipboard" />
               </button>
-            </div>
           </div>
         </div>
       </form>

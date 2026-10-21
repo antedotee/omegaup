@@ -88,12 +88,10 @@
             <button
               v-if="groups.length > 1"
               :aria-label="T.wordsClose"
-              class="close"
+              class="btn-close"
               type="button"
               @click.prevent.stop="removeCase(item.name)"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
+            ></button>
           </button>
         </template>
       </div>
@@ -341,11 +339,11 @@ input[type='number']::-webkit-outer-spin-button {
   color: var(--vs-dark-font-color);
 }
 
-.vs-dark .close {
+.vs-dark .btn-close {
   color: var(--vs-dark-close-color);
 }
 
-.vs-dark .close:hover {
+.vs-dark .btn-close:hover {
   color: var(--vs-dark-close-color--hover);
 }
 

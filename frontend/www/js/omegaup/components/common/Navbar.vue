@@ -1,12 +1,12 @@
 <template>
   <header>
     <nav
-      class="navbar navbar-expand-lg navbar-color fixed-top p-0 text-right"
+      class="navbar navbar-expand-lg navbar-color fixed-top p-0 text-end"
       data-enable-hover-dropdown
     >
-      <div class="container-xl pl-0 pl-xl-3">
+      <div class="container-xl ps-0 ps-xl-3">
         <a
-          class="navbar-brand p-3 mr-0 mr-sm-3"
+          class="navbar-brand p-3 me-0 me-sm-3"
           href="/"
           :title="logoTooltip"
           @click.prevent="handleLogoClick"
@@ -42,10 +42,10 @@
               @read="readNotifications"
             ></omegaup-notification-list>
           </div>
-          <ul v-if="!isLoggedIn" class="navbar-nav navbar-right d-lg-flex mr-2">
+          <ul v-if="!isLoggedIn" class="navbar-nav navbar-right d-lg-flex me-2">
             <li class="nav-item d-flex align-items-center">
               <a
-                class="nav-link nav-login-text pr-0"
+                class="nav-link nav-login-text pe-0"
                 :href="formattedLoginURL"
                 data-login-button
                 @click.prevent="emitActiveTab(AvailableTabs.Login)"
@@ -54,7 +54,7 @@
               </a>
               <span class="nav-link nav-login-text px-1">/</span>
               <a
-                class="nav-link nav-login-text pl-0"
+                class="nav-link nav-login-text ps-0"
                 :href="formattedSignupURL"
                 data-signup-button
                 @click.prevent="emitActiveTab(AvailableTabs.Signup)"
@@ -64,7 +64,7 @@
             </li>
           </ul>
           <button
-            class="navbar-toggler mr-2"
+            class="navbar-toggler me-2"
             type="button"
             data-toggle="collapse"
             data-target=".omegaup-navbar"
@@ -121,20 +121,20 @@
                   <img
                     :src="gravatarURL51"
                     height="45"
-                    class="pr-1 pt-1"
+                    class="pe-1 pt-1"
                     :alt="T.navUserAvatarAlt"
-                  /><span class="username mr-2" :title="currentUsername">{{
+                  /><span class="username me-2" :title="currentUsername">{{
                     currentUsername
                   }}</span>
                   <omegaup-common-grader-badge
                     v-show="isAdmin"
                     :queue-length="graderQueueLength"
                     :error="errorMessage !== null"
-                    class="mr-1"
+                    class="me-1"
                   ></omegaup-common-grader-badge>
                 </a>
                 <div
-                  class="dropdown-menu dropdown-menu-right allow-overflow h-auto overflow-auto"
+                  class="dropdown-menu dropdown-menu-end allow-overflow h-auto overflow-auto"
                   data-dropdown-menu
                 >
                   <template v-if="!omegaUpLockDown && (!inContest || isAdmin)">
@@ -190,7 +190,7 @@
                           <img
                             :src="gravatarURL51"
                             height="45"
-                            class="rounded-circle mr-3"
+                            class="rounded-circle me-3"
                             :title="identity.username"
                             :alt="identity.username"
                           />{{ identity.username }}
@@ -238,7 +238,7 @@
                           aria-controls="collapse-links"
                         ></button>
                       </div>
-                      <div class="collapse collapse-links pl-3">
+                      <div class="collapse collapse-links ps-3">
                         <a class="dropdown-item" href="/problem/mine">{{
                           T.navMyProblems
                         }}</a>
@@ -302,7 +302,7 @@
               @click.prevent="logoutModalVisible = true"
             >
               <font-awesome-icon :icon="['fas', 'power-off']" />
-              <span class="ml-2">
+              <span class="ms-2">
                 {{ T.omegaupTitleLogout }}
               </span>
             </a>
@@ -347,9 +347,7 @@
         class="alert alert-info alert-dismissible fade show mentor-can-choose-coder"
         role="alert"
       >
-        <button type="button" class="close" data-dismiss="alert">
-          &times;
-        </button>
+        <button type="button" class="btn-close" data-dismiss="alert"></button>
         <omegaup-markdown
           :markdown="T.coderOfTheMonthCanBeChosenManually"
         ></omegaup-markdown>

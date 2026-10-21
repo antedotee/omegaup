@@ -33,7 +33,7 @@
       data-slide="prev"
     >
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">{{ T.wordsPrevious }}</span>
+      <span class="visually-hidden">{{ T.wordsPrevious }}</span>
     </a>
     <a
       class="carousel-control-next"
@@ -42,7 +42,7 @@
       data-slide="next"
     >
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">{{ T.wordsNext }}</span>
+      <span class="visually-hidden">{{ T.wordsNext }}</span>
     </a>
   </div>
 </template>

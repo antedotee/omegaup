@@ -222,7 +222,7 @@ export default toNative(ProblemFinderWizard);
   overflow: auto;
 }
 
-.close {
+.btn-close {
   float: none;
   text-align: right;
   width: 100%;

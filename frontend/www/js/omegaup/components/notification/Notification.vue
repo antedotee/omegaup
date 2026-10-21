@@ -6,7 +6,7 @@
         {{ date }}
       </div>
       <button
-        class="close"
+        class="btn-close"
         @click.prevent="$emit('remove', notification, null)"
       >
         ❌
@@ -137,7 +137,7 @@ export default toNative(Notification);
 
 <style lang="scss" scoped>
 @import '../../../../sass/site';
-.close {
+.btn-close {
   font-size: inherit;
 }
 

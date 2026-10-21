@@ -10,7 +10,7 @@
         ></omegaup-user-username>
       </a>
     </th>
-    <td data-global-score class="text-center font-weight-bold align-middle">
+    <td data-global-score class="text-center fw-bold align-middle">
       <span class="d-block"
         >{{ studentProgress.courseProgress.toFixed(0) }}%</span
       >

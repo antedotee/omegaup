@@ -86,7 +86,7 @@
                         event.event.problem
                       }}</a>
                     </span>
-                    <span v-if="event.event.courseAlias" class="mr-2">
+                    <span v-if="event.event.courseAlias" class="me-2">
                       <a :href="`/course/${event.event.courseAlias}/`">{{
                         event.event.courseName
                       }}</a>

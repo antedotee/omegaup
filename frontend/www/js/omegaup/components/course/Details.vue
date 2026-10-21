@@ -24,7 +24,7 @@
           student_count: course.student_count,
         })
       }}</span>
-      <div class="mt-2 row float-sm-right">
+      <div class="mt-2 row float-sm-end">
         <div v-if="course.is_admin" class="col">
           <div class="dropdown">
             <a
@@ -147,15 +147,15 @@
                 <td class="align-middle">
                   <template v-if="assignment.assignment_type === 'homework'">
                     <font-awesome-icon icon="file-alt" />
-                    <span class="ml-2">{{ T.wordsHomework }}</span>
+                    <span class="ms-2">{{ T.wordsHomework }}</span>
                   </template>
                   <template v-else-if="assignment.assignment_type === 'lesson'">
                     <font-awesome-icon icon="chalkboard-teacher" />
-                    <span class="ml-2">{{ T.wordsLesson }}</span>
+                    <span class="ms-2">{{ T.wordsLesson }}</span>
                   </template>
                   <template v-else>
                     <font-awesome-icon icon="list-alt" />
-                    <span class="ml-2">{{ T.wordsExam }}</span>
+                    <span class="ms-2">{{ T.wordsExam }}</span>
                   </template>
                 </td>
                 <td>
@@ -176,7 +176,7 @@
                 <td v-if="isAdminOrTeachingAssistant" class="align-middle">
                   <a
                     data-course-scoreboard-button
-                    class="mr-2"
+                    class="me-2"
                     :href="`/course/${course.alias}/assignment/${assignment.alias}/scoreboard/${assignment.scoreboard_url}/`"
                   >
                     <font-awesome-icon :icon="['fas', 'link']" />{{
@@ -185,7 +185,7 @@
                   >
                   <a
                     data-course-submisson-button
-                    class="mr-2"
+                    class="me-2"
                     :href="`/course/${course.alias}/assignment/${assignment.alias}/#runs`"
                   >
                     <font-awesome-icon :icon="['fas', 'tachometer-alt']" />
@@ -283,7 +283,7 @@
             :full-width="true"
           ></omegaup-markdown>
           <div class="row m-0 mt-4">
-            <div v-if="course.objective" class="col-md-8 mb-4 p-0 pr-md-5">
+            <div v-if="course.objective" class="col-md-8 mb-4 p-0 pe-md-5">
               <h5 class="intro-subtitle pb-1">
                 {{ T.courseNewFormObjective }}
               </h5>

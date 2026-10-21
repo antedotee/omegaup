@@ -1,6 +1,6 @@
 <template>
   <div data-overlay-popup>
-    <button type="button" class="close" @click="$emit('dismiss')">❌</button>
+    <button type="button" class="btn-close" @click="$emit('dismiss')">❌</button>
     <slot></slot>
   </div>
 </template>
@@ -34,7 +34,7 @@ div[data-overlay-popup] {
   right: 0;
   z-index: -1;
 
-  button.close {
+  button.btn-close {
     position: sticky;
     position: -webkit-sticky;
     top: 0;

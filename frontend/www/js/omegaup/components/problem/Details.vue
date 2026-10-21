@@ -21,7 +21,7 @@
           <span
             v-if="tab.name === 'clarifications'"
             class="clarifications-count"
-            :class="{ 'font-weight-bold': hasUnreadClarifications }"
+            :class="{ 'fw-bold': hasUnreadClarifications }"
             >{{ clarificationsCount }}</span
           >
         </a>
@@ -63,7 +63,7 @@
           ></omegaup-markdown>
         </div>
         <hr class="my-3" />
-        <div class="font-italic">
+        <div class="fst-italic">
           {{ `${T.wordsSource}: ${problem.source}` }}
         </div>
         <template v-if="problem.problemsetter">

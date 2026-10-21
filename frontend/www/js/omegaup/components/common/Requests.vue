@@ -3,7 +3,7 @@
     <h5 class="card-header">
       {{ T.pendingRegistrations }}
     </h5>
-    <label class="text-right m-3">
+    <label class="text-end m-3">
       <input v-model="showAllRequests" type="checkbox" />
       {{ T.pendingRegistrationsShowAll }}
     </label>
@@ -47,11 +47,9 @@
           <td v-else></td>
           <td v-if="!request.accepted" class="text-center">
             <button
-              class="close float-none text-danger mx-2"
+              class="btn-close float-none text-danger mx-2"
               @click="toggleFeedbackModal(request.username)"
-            >
-              ×
-            </button>
+            ></button>
             <b-modal
               v-model="modalStates[request.username]"
               :title="T.submitFeedbackRequireConfirmation"
@@ -67,7 +65,7 @@
               ></b-form-input>
             </b-modal>
             <button
-              class="close float-none text-success mx-2"
+              class="btn-close float-none text-success mx-2"
               @click="$emit('accept-request', { username: request.username })"
             >
               ✓

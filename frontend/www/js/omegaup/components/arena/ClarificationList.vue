@@ -48,7 +48,7 @@
           {{ T.wordsFilterByHomework }}
           <select
             v-model="selectedAssignment"
-            class="form-control custom-select ml-1"
+            class="form-control form-select ms-1"
             name="problem"
           >
             <option
@@ -60,11 +60,11 @@
             </option>
           </select>
         </label>
-        <label :class="{ 'ml-md-4': allowFilterByAssignment }">
+        <label :class="{ 'ms-md-4': allowFilterByAssignment }">
           {{ T.wordsFilterByProblem }}
           <select
             v-model="selectedProblem"
-            class="form-control custom-select ml-1"
+            class="form-control form-select ms-1"
           >
             <option
               v-for="problemName in problemsNames"

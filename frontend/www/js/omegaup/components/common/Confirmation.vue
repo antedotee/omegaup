@@ -4,13 +4,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <button
-            class="close"
+            class="btn-close"
             type="button"
             data-dismiss="modal"
             @click.prevent="$emit('close')"
-          >
-            ×
-          </button>
+          ></button>
         </div>
         <div class="modal-body">
           <p>{{ question }}</p>

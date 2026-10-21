@@ -7,11 +7,11 @@
     </div>
     <div class="card-body">
       <form>
-        <div class="form-group col-md-3">
+        <div class="mb-3 col-md-3">
           <label>{{ T.courseStudentSelectStudent }}</label>
           <select
             v-model="selectedStudent"
-            class="ml-1 form-control"
+            class="ms-1 form-control"
             data-student
           >
             <option
@@ -25,11 +25,11 @@
         </div>
       </form>
       <form>
-        <div class="form-group col-md-3">
+        <div class="mb-3 col-md-3">
           <label>{{ T.courseStudentSelectAssignment }}</label>
           <select
             v-model="selectedAssignment"
-            class="ml-1 form-control"
+            class="ms-1 form-control"
             data-assignment
           >
             <option
@@ -136,7 +136,7 @@
                     @click="showFeedbackForm = !showFeedbackForm"
                     >{{ T.submissionFeedbackSendButton }}</a
                   >
-                  <div v-show="showFeedbackForm" class="form-group">
+                  <div v-show="showFeedbackForm" class="mb-3">
                     <p>{{ T.submissionFeedbackAnimationButton }}</p>
                     <img
                       src="/media/submission_feedback_demo.gif"

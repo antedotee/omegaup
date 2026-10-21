@@ -11,12 +11,12 @@
       <font-awesome-icon :icon="['fas', 'bell']" />
       <span
         v-show="!!notifications.length"
-        class="badge badge-danger count-badge"
+        class="badge bg-danger count-badge"
         >{{ notifications.length }}</span
       ></a
     >
     <div
-      class="dropdown-menu dropdown-menu-right notification-dropdown position-absolute mt-2"
+      class="dropdown-menu dropdown-menu-end notification-dropdown position-absolute mt-2"
     >
       <div v-if="notifications.length === 0" class="text-center">
         {{ T.notificationsNoNewNotifications }}

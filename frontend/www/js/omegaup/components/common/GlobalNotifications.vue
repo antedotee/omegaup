@@ -9,12 +9,10 @@
       <button
         data-alert-close
         type="button"
-        class="close"
+        class="btn-close"
         aria-label="Close"
         @click="dismiss"
-      >
-        &times;
-      </button>
+      ></button>
       <span v-if="message" class="message">
         <omegaup-markdown :markdown="message"></omegaup-markdown>
       </span>
@@ -69,7 +67,7 @@ export default toNative(GlobalNotifications);
   border-radius: 0.3rem;
   overflow: hidden;
 
-  .close {
+  .btn-close {
     position: absolute;
     right: 1rem;
     top: 50%;

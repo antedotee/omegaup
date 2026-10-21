@@ -33,7 +33,7 @@
       />
       {{ T.scoreboardShowOnlyInvitedIdentities }}</label
     >
-    <label class="float-right"
+    <label class="float-end"
       >{{ T.scoreboardShowParticipantsNames }}:
       <select
         v-model="nameDisplayOptions"

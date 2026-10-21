@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid max-width card pr-0 pl-0 custom-card">
+  <div class="container-fluid max-width card pe-0 ps-0 custom-card">
     <ul class="nav nav-tabs introjs-tabs" role="tablist">
       <li
         v-for="(tabName, tabKey) in tabNames"
@@ -17,7 +17,7 @@
           >{{ tabName }}</a
         >
       </li>
-      <li class="ml-auto">
+      <li class="ms-auto">
         <a class="nav-link border-0" href="/course/home/">{{
           T.wordsReadMore
         }}</a>
@@ -25,7 +25,7 @@
     </ul>
     <div class="tab-content">
       <div class="row m-0 mt-4 course-filters">
-        <div class="col-md-4 col-lg-3 p-0 ml-4">
+        <div class="col-md-4 col-lg-3 p-0 ms-4">
           <input
             v-model="searchText"
             class="form-control introjs-search"
@@ -35,7 +35,7 @@
         </div>
         <div
           v-if="currentSelectedTab === Tab.Public"
-          class="col-md-4 col-lg-3 p-0 ml-3"
+          class="col-md-4 col-lg-3 p-0 ms-3"
         >
           <select v-model="levelFilter" class="form-control">
             <option :value="Level.All">{{ T.courseLevelAllLevels }}</option>
@@ -279,7 +279,7 @@ export default toNative(CourseTabs);
 <style lang="scss">
 @import '../../../../sass/site';
 
-.card > .row.no-gutters {
+.card > .row.g-0 {
   background-color: $omegaup-white;
   min-height: 13.5rem;
   overflow-y: visible;

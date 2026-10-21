@@ -10,8 +10,8 @@
     </h3>
     <div class="card">
       <div class="card-header">
-        <form class="form-group mb-0">
-          <div class="form-row">
+        <form class="mb-3 mb-0">
+          <div class="row g-2">
             <label class="col-form-label">{{ T.wordsSearchBy }}</label>
             <div class="col-md-4 mb-1">
               <select v-model="selectColumn" name="column" class="form-control">

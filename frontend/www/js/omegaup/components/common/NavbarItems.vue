@@ -1,5 +1,5 @@
 <template>
-  <div class="mr-auto mt-2 mt-lg-0">
+  <div class="me-auto mt-2 mt-lg-0">
     <ul
       v-if="!omegaUpLockDown && (!inContest || isAdmin)"
       class="navbar-nav align-items-start px-3"
@@ -174,7 +174,7 @@
         </div>
       </li>
     </ul>
-    <ul v-else class="navbar-nav mr-auto"></ul>
+    <ul v-else class="navbar-nav me-auto"></ul>
   </div>
 </template>
 

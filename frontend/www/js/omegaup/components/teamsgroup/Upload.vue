@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="mb-4">
         <omegaup-markdown :markdown="T.teamsGroupsCsvHelp"></omegaup-markdown>
-        <div class="w-100 text-right">
+        <div class="w-100 text-end">
           <a target="_blank" :href="SolutionViewFeatureGuideURL">
             {{ T.teamsGroupsCsvHelpMoreInfo }}
           </a>
@@ -70,7 +70,7 @@
             >
               <font-awesome-icon
                 :icon="['fas', 'user-plus']"
-                class="mr-2"
+                class="me-2"
               ></font-awesome-icon>
               <BBadge variant="light">{{ row.item.usernames.length }}</BBadge>
             </BButton>
@@ -106,7 +106,7 @@
             <font-awesome-icon
               v-if="isLoading"
               :icon="['fas', 'spinner']"
-              class="ml-2 fa-spin"
+              class="ms-2 fa-spin"
             ></font-awesome-icon>
           </button>
           <div>

@@ -7,7 +7,7 @@
           data-toggle-layout-sidebar
           size="sm"
           variant="primary"
-          class="mr-2"
+          class="me-2"
           @click="showLayoutSidebar = !showLayoutSidebar"
         >
           <i class="bi bi-layout-sidebar" />
@@ -60,7 +60,7 @@
           data-add-window
           size="sm"
           variant="success"
-          class="mr-2"
+          class="me-2"
           :pressed="showWindow"
           @click="$emit('open-add-window')"
         >
@@ -112,14 +112,14 @@
               @click="showUngroupedCases = !showUngroupedCases"
             >
               <div class="d-flex justify-content-between">
-                <div class="mr-2 text-truncate">
+                <div class="me-2 text-truncate">
                   {{ T.problemCreatorUngrouped }}
                 </div>
                 <div class="d-inline-block text-nowrap">
                   <b-badge
                     data-sidebar-ungrouped-cases="count"
                     variant="primary"
-                    class="mr-1"
+                    class="me-1"
                     >{{ ungroupedCases.length }}</b-badge
                   >
                   <b-badge data-sidebar-ungrouped-cases="points" variant="info">
@@ -171,7 +171,7 @@
                   @click="editCase(groupID, cases[0].caseID)"
                 >
                   <div class="d-flex justify-content-between">
-                    <div class="mr-2 text-truncate">{{ name }}</div>
+                    <div class="me-2 text-truncate">{{ name }}</div>
                     <div class="d-inline-block text-nowrap">
                       <b-badge variant="info">
                         {{ Math.round(points || 0) }}
@@ -213,12 +213,12 @@
             @click="showCases[groupID] = !showCases[groupID]"
           >
             <div class="d-flex justify-content-between">
-              <div class="mr-2 text-truncate">{{ name }}</div>
+              <div class="me-2 text-truncate">{{ name }}</div>
               <div class="d-inline-block text-nowrap">
                 <b-badge
                   data-sidebar-groups="count"
                   variant="primary"
-                  class="mr-1"
+                  class="me-1"
                   >{{ cases.length }}</b-badge
                 >
                 <b-badge data-sidebar-groups="points" variant="info"
@@ -312,7 +312,7 @@
                   @click="editCase(groupID, caseID)"
                 >
                   <div class="d-flex justify-content-between">
-                    <div class="mr-2 text-truncate">{{ caseName }}</div>
+                    <div class="me-2 text-truncate">{{ caseName }}</div>
                     <div class="d-inline-block text-nowrap">
                       <b-badge variant="info">
                         {{ Math.round(casePoints || 0) }}
