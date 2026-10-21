@@ -110,6 +110,13 @@ class ArenaRunSubmitPopup extends Vue {
     // Props are not bound when class field initializers run under
     // vue-facing-decorator, so prop-derived fields are assigned here.
     this.selectedLanguage = this.preferredLanguage;
+    // The `selectedLanguage` watcher already ran (immediately, with the field
+    // initializer value) and only reacts to this assignment on the next flush,
+    // after the code editor is created but before it is mounted, so the editor
+    // would receive its boilerplate too early. Load it before the first render.
+    if (this.selectedLanguage) {
+      this.loadBoilerplateForLanguage(this.selectedLanguage);
+    }
   }
   @Ref() inputFile!: HTMLInputElement;
   @Prop() languages!: string[];
