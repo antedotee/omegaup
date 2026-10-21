@@ -90,6 +90,7 @@ import omegaup_Username from '../user/Username.vue';
 import 'bootstrap/dist/css/bootstrap.css';
 
 @Component({
+  emits: ['deny-request'],
   components: {
     'omegaup-username': omegaup_Username,
   },

@@ -83,6 +83,7 @@ library.add(fas);
 
 import { BBreadcrumb, BBreadcrumbItem } from 'bootstrap-vue-next';
 @Component({
+  emits: ['navigate-to-problem'],
   components: {
     'font-awesome-icon': FontAwesomeIcon,
     'font-awesome-layers': FontAwesomeLayers,

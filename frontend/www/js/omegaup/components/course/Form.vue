@@ -371,6 +371,7 @@ const MAX_LENGTH = {
 const DANGER_THRESHOLD_PERCENTAGE = 0.9;
 
 @Component({
+  emits: ['submit'],
   components: {
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-datepicker': DatePicker,

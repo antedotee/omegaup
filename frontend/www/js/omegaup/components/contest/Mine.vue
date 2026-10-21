@@ -209,6 +209,7 @@ library.add(
 );
 
 @Component({
+  emits: ['change-admission-mode'],
   components: {
     FontAwesomeIcon,
   },

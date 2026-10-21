@@ -61,6 +61,7 @@ import * as time from '../../time';
 import DateTimePicker from '../DateTimePicker.vue';
 
 @Component({
+  emits: ['submit'],
   components: {
     'omegaup-datetimepicker': DateTimePicker,
   },

@@ -239,6 +239,7 @@ import { faEdit, faLock, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 library.add(faEdit, faLock, faTrashAlt);
 
 @Component({
+  emits: ['add-member'],
   components: {
     FontAwesomeIcon,
     'omegaup-common-typeahead': common_Typeahead,

@@ -261,6 +261,7 @@ import arena_FeedbackCodeView from './FeedbackCodeView.vue';
 import { ArenaCourseFeedback } from './Feedback.vue';
 
 @Component({
+  emits: ['navigate-to-problem'],
   components: {
     'omegaup-arena': arena_Arena,
     'omegaup-arena-clarification-list': arena_ClarificationList,

@@ -216,6 +216,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 library.add(fas);
 
 @Component({
+  emits: ['runs-diff', 'save-problem'],
   components: {
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-problem-versions': problem_Versions,

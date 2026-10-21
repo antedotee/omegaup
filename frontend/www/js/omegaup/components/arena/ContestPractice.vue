@@ -134,6 +134,7 @@ import { ContestClarificationType } from '../../arena/clarifications';
 import { SubmissionRequest } from '../../arena/submissions';
 
 @Component({
+  emits: ['clarification-response', 'navigate-to-problem'],
   components: {
     'omegaup-arena-clarification-list': arena_ClarificationList,
     'omegaup-arena': arena_Arena,

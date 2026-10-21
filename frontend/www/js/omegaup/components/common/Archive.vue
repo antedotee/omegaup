@@ -47,7 +47,7 @@
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 
-@Component
+@Component({ emits: ['archive'] })
 class Archive extends Vue {
   @Prop() alreadyArchived!: boolean;
   @Prop() archiveHelpText!: string;

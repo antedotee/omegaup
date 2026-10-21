@@ -271,6 +271,7 @@ library.add(
 import { BModal } from 'bootstrap-vue-next';
 
 @Component({
+  emits: ['change-visibility'],
   components: {
     BModal,
     FontAwesomeIcon,

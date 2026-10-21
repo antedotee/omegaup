@@ -136,6 +136,7 @@ export enum PopupDisplayed {
 }
 
 @Component({
+  emits: ['new-clarification'],
   components: {
     'omegaup-clarification': arena_Clarification,
     'omegaup-arena-new-clarification-popup': arena_NewClarification,

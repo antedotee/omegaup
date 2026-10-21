@@ -139,6 +139,7 @@ export enum ObjectivesAnswers {
 }
 
 @Component({
+  emits: ['submit'],
   components: {
     'font-awesome-icon': FontAwesomeIcon,
     'font-awesome-layers': FontAwesomeLayers,

@@ -119,6 +119,7 @@ import { AvailableForms } from './Teams_types';
 export { AvailableForms };
 
 @Component({
+  emits: ['add-members', 'edit-identity-team'],
   components: {
     FontAwesomeIcon,
     'omegaup-user-username': user_Username,

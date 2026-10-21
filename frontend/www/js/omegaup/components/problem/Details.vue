@@ -446,6 +446,7 @@ export interface Tab {
 export { PopupDisplayed };
 
 @Component({
+  emits: ['clarification-response'],
   components: {
     FontAwesomeIcon,
     'omegaup-problem-solution': problem_soltion,

@@ -256,6 +256,7 @@ import arena_Summary from './Summary.vue';
 library.add(fas);
 
 @Component({
+  emits: ['navigate-to-problem'],
   components: {
     'omegaup-arena-clarification-list': arena_ClarificationList,
     'omegaup-arena': arena_Arena,

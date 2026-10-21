@@ -150,6 +150,7 @@ import { getExternalUrl } from '../../urlHelper';
 import 'bootstrap/dist/css/bootstrap.css';
 
 @Component({
+  emits: ['update-user-preferences'],
   components: {
     FontAwesomeIcon,
   },

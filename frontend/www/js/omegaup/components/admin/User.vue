@@ -89,6 +89,7 @@ import { types } from '../../api_types';
 library.add(fas);
 
 @Component({
+  emits: ['verify-user'],
   components: {
     'font-awesome-icon': FontAwesomeIcon,
     'font-awesome-layers': FontAwesomeLayers,

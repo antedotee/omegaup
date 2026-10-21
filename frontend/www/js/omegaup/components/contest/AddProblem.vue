@@ -199,6 +199,7 @@ export enum SearchTypes {
 }
 
 @Component({
+  emits: ['add-problem', 'get-versions', 'runs-diff'],
   components: {
     'omegaup-problem-versions': problem_Versions,
     'omegaup-common-typeahead': common_Typeahead,

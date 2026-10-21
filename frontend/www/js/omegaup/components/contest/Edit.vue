@@ -328,6 +328,7 @@ import common_Publish from '../common/Publish.vue';
 import contest_Certificates from './Certificates.vue';
 
 @Component({
+  emits: ['archive-contest'],
   components: {
     'omegaup-contest-add-problem': contest_AddProblem,
     'omegaup-common-admins': common_Admins,

@@ -216,6 +216,7 @@ interface GroupVisibility {
 const EMPTY_FIELD = '∅';
 
 @Component({
+  emits: ['save-feedback-list', 'submit-feedback-thread'],
   components: {
     FontAwesomeIcon,
     'omegaup-arena-diff-view': arena_DiffView,

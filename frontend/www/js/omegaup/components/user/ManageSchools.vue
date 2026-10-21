@@ -72,6 +72,7 @@ import DatePicker from '../DatePicker.vue';
 import OmegaupRadioSwitch from '../RadioSwitch.vue';
 
 @Component({
+  emits: ['update-user-schools'],
   components: {
     'omegaup-datepicker': DatePicker,
     'omegaup-common-typeahead': common_Typeahead,

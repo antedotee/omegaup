@@ -95,6 +95,7 @@ interface QualityLevel {
 }
 
 @Component({
+  emits: ['dismiss', 'submit'],
   components: {
     'omegaup-overlay-popup': omegaup_OverlayPopup,
   },

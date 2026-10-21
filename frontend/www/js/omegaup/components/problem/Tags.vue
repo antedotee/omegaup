@@ -177,6 +177,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 library.add(faTrash);
 
 @Component({
+  emits: ['select-problem-level'],
   components: {
     FontAwesomeIcon,
     VueTypeaheadBootstrap,

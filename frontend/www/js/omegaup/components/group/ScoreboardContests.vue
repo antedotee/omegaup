@@ -106,6 +106,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 library.add(faTrash);
 
 @Component({
+  emits: ['add-contest'],
   components: {
     FontAwesomeIcon,
     'omegaup-radio-switch': omegaup_RadioSwitch,

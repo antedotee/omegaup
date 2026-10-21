@@ -127,6 +127,7 @@ library.add(
 );
 
 @Component({
+  emits: ['toggle-bookmark'],
   components: {
     FontAwesomeIcon,
   },

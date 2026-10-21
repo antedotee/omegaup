@@ -16,6 +16,12 @@ import problem_Creator from './creator/Creator.vue';
 import creatorStore from '../../problem/creator/store';
 
 @Component({
+  emits: [
+    'download-input-file',
+    'download-zip-file',
+    'show-update-success-message',
+    'upload-zip-file',
+  ],
   components: {
     'omegaup-problem-creator': problem_Creator,
   },

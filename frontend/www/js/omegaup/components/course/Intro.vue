@@ -148,6 +148,7 @@ interface Statement {
 }
 
 @Component({
+  emits: ['submit'],
   components: {
     FontAwesomeIcon,
     'omegaup-markdown': omegaup_Markdown,

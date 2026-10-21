@@ -91,6 +91,7 @@ export enum AvailableViews {
 }
 
 @Component({
+  emits: ['submit'],
   components: {
     'omegaup-overlay-popup': omegaup_OverlayPopup,
   },

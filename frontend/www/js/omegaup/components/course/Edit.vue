@@ -378,6 +378,7 @@ const emptyAssignment: types.CourseAssignment = {
 };
 
 @Component({
+  emits: ['archive-course', 'cancel'],
   components: {
     'omegaup-course-form': course_Form,
     'omegaup-common-archive': common_Archive,

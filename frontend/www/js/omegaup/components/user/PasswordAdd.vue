@@ -59,6 +59,7 @@ import T from '../../lang';
 import omegaup_PasswordInput from '../common/PasswordInput.vue';
 
 @Component({
+  emits: ['add-password'],
   components: {
     'omegaup-password-input': omegaup_PasswordInput,
   },

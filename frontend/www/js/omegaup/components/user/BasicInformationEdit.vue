@@ -91,6 +91,7 @@ import * as iso3166 from '@/third_party/js/iso-3166-2.js/iso3166.min.js';
 import DatePicker from '../DatePicker.vue';
 
 @Component({
+  emits: ['update-user-basic-information'],
   components: {
     'omegaup-datepicker': DatePicker,
   },

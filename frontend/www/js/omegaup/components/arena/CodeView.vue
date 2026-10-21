@@ -80,6 +80,7 @@ export interface EditorOptions {
 }
 
 @Component({
+  emits: ['change', 'input'],
   components: {
     'codemirror-editor': codemirror,
   },
