@@ -1,8 +1,8 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <div class="form-group">
-        <label class="font-weight-bold">{{ T.wordsPublicTags }}</label>
+      <div class="mb-3">
+        <label class="fw-bold">{{ T.wordsPublicTags }}</label>
         <vue-typeahead-bootstrap
           v-if="canAddNewTags"
           v-model="newPublicTag"
@@ -23,12 +23,11 @@
             <th class="text-center w-50" scope="col">
               {{ T.contestEditTagName }}
             </th>
-            <th class="pl-5" scope="col">
+            <th class="ps-5" scope="col">
               {{ T.contestEditTagDelete }}
               <a
                 v-if="!isLecture"
-                data-toggle="tooltip"
-                rel="tooltip"
+                v-b-tooltip.hover.top
                 :title="T.problemEditTagPublicRequired"
               >
                 <span class="question"></span>
@@ -58,8 +57,8 @@
           </tr>
         </tbody>
       </table>
-      <div class="form-group">
-        <label class="font-weight-bold">{{ T.wordsPrivateTags }}</label>
+      <div class="mb-3">
+        <label class="fw-bold">{{ T.wordsPrivateTags }}</label>
         <div class="input-group">
           <input
             v-model="newPrivateTag"
@@ -67,16 +66,14 @@
             class="form-control"
             :placeholder="T.privateTagsPlaceholder"
           />
-          <div class="input-group-append">
-            <button
-              class="btn btn-outline-primary"
-              type="button"
-              :disabled="newPrivateTag === ''"
-              @click.prevent="addPrivateTag"
-            >
-              {{ T.wordsAddTag }}
-            </button>
-          </div>
+          <button
+            class="btn btn-outline-primary"
+            type="button"
+            :disabled="newPrivateTag === ''"
+            @click.prevent="addPrivateTag"
+          >
+            {{ T.wordsAddTag }}
+          </button>
         </div>
       </div>
       <table class="table table-striped">
@@ -85,7 +82,7 @@
             <th class="text-center w-50" scope="col">
               {{ T.contestEditTagName }}
             </th>
-            <th class="pl-5" scope="col">
+            <th class="ps-5" scope="col">
               {{ T.contestEditTagDelete }}
             </th>
           </tr>
@@ -110,8 +107,8 @@
         </tbody>
       </table>
       <div class="row mx-1">
-        <div class="form-group w-100">
-          <label class="font-weight-bold">{{ T.wordsLevel }}</label>
+        <div class="mb-3 w-100">
+          <label class="fw-bold">{{ T.wordsLevel }}</label>
           <select
             v-model="problemLevelTag"
             required
@@ -139,7 +136,7 @@
             </button>
             <button
               type="button"
-              class="btn btn-danger ml-1"
+              class="btn btn-danger ms-1"
               :disabled="!problemLevel"
               @click.prevent="onDeleteProblemLevel"
             >
@@ -148,7 +145,7 @@
           </template>
         </div>
       </div>
-      <div class="form-group">
+      <div class="mb-3">
         <omegaup-toggle-switch
           :value.sync="allowTags"
           :checked-value="allowTags"
@@ -174,6 +171,7 @@ import omegaup_ToggleSwitch from '../ToggleSwitch.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { vBTooltip } from 'bootstrap-vue-next';
 library.add(faTrash);
 
 @Component({
@@ -182,6 +180,9 @@ library.add(faTrash);
     FontAwesomeIcon,
     VueTypeaheadBootstrap,
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
+  },
+  directives: {
+    'b-tooltip': vBTooltip,
   },
 })
 class ProblemTags extends Vue {

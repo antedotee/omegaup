@@ -104,7 +104,7 @@ export default toNative(Typeahead);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .tags-input-remove::before,
 .tags-input-remove::after,

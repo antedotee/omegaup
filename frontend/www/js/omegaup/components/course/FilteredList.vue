@@ -1,23 +1,17 @@
 <template>
   <div>
-    <ul class="nav nav-tabs">
+    <BNav tabs>
       <template v-for="filteredCourses in courses.filteredCourses">
-        <li
+        <BNavItem
           v-if="filteredCourses.courses"
           :key="filteredCourses.timeType"
-          class="nav-item"
+          :active="showTab === filteredCourses.timeType"
+          href="#"
           @click="showTab = filteredCourses.timeType"
+          >{{ getTabName(filteredCourses.timeType) }}</BNavItem
         >
-          <a
-            data-toggle="tab"
-            class="nav-link"
-            href="#"
-            :class="{ active: activeTab === filteredCourses.timeType }"
-            >{{ getTabName(filteredCourses.timeType) }}</a
-          >
-        </li>
       </template>
-    </ul>
+    </BNav>
 
     <div class="tab-content">
       <template v-for="filteredCourses in courses.filteredCourses">
@@ -128,6 +122,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -143,6 +138,8 @@ library.add(fas);
 
 @Component({
   components: {
+    BNav,
+    BNavItem,
     'font-awesome-icon': FontAwesomeIcon,
     'font-awesome-layers': FontAwesomeLayers,
     'font-awesome-layers-text': FontAwesomeLayersText,

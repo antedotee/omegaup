@@ -5,48 +5,38 @@
         <a :href="typeUrl">{{ alias }}</a> — {{ T.activityReport }}
       </h1>
       <p>{{ wordsReportSummary }}</p>
-      <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <a
-            class="nav-link"
-            data-toggle="tab"
-            href="#report"
-            role="tab"
-            aria-controls="report"
-            aria-selected="true"
-            :class="{ active: showTab === 'report' }"
-            @click="onTabChange('report')"
-            >{{ T.activityReportReport }}</a
-          >
-        </li>
-        <li class="nav-item" role="presentation">
-          <a
-            class="nav-link"
-            data-toggle="tab"
-            href="#users"
-            role="tab"
-            aria-controls="users"
-            aria-selected="false"
-            :class="{ active: showTab === 'users' }"
-            @click="onTabChange('users')"
-            >{{ T.activityReportUsers }}</a
-          >
-        </li>
-        <li class="nav-item" role="presentation">
-          <a
-            class="nav-link"
-            data-toggle="tab"
-            href="#origins"
-            role="tab"
-            aria-controls="origins"
-            aria-selected="false"
-            :class="{ active: showTab === 'origins' }"
-            @click="onTabChange('origins')"
-            >{{ T.activityReportOrigins }}</a
-          >
-        </li>
-      </ul>
+      <BNav tabs>
+        <BNavItem
+          :active="showTab === 'report'"
+          href="#report"
+          :link-attrs="{
+            'aria-controls': 'report',
+            'aria-selected': showTab === 'report' ? 'true' : 'false',
+          }"
+          @click="onTabChange('report')"
+          >{{ T.activityReportReport }}</BNavItem
+        >
+        <BNavItem
+          :active="showTab === 'users'"
+          href="#users"
+          :link-attrs="{
+            'aria-controls': 'users',
+            'aria-selected': showTab === 'users' ? 'true' : 'false',
+          }"
+          @click="onTabChange('users')"
+          >{{ T.activityReportUsers }}</BNavItem
+        >
+        <BNavItem
+          :active="showTab === 'origins'"
+          href="#origins"
+          :link-attrs="{
+            'aria-controls': 'origins',
+            'aria-selected': showTab === 'origins' ? 'true' : 'false',
+          }"
+          @click="onTabChange('origins')"
+          >{{ T.activityReportOrigins }}</BNavItem
+        >
+      </BNav>
       <!-- Tab panes -->
       <div class="tab-content mt-2">
         <div
@@ -86,7 +76,7 @@
                         event.event.problem
                       }}</a>
                     </span>
-                    <span v-if="event.event.courseAlias" class="mr-2">
+                    <span v-if="event.event.courseAlias" class="me-2">
                       <a :href="`/course/${event.event.courseAlias}/`">{{
                         event.event.courseName
                       }}</a>
@@ -192,6 +182,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -218,6 +209,8 @@ interface Origin {
 
 @Component({
   components: {
+    BNav,
+    BNavItem,
     'omegaup-user-username': user_Username,
     'omegaup-common-paginator': common_Paginator,
   },

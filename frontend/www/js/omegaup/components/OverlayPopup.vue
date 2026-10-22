@@ -1,20 +1,28 @@
 <template>
   <div data-overlay-popup>
-    <button type="button" class="close" @click="$emit('dismiss')">❌</button>
+    <button
+      type="button"
+      class="btn-close float-end"
+      :aria-label="T.wordsClose"
+      @click="$emit('dismiss')"
+    ></button>
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, toNative } from 'vue-facing-decorator';
+import T from '../lang';
 
 @Component
-class OverlayPopup extends Vue {}
+class OverlayPopup extends Vue {
+  T = T;
+}
 export default toNative(OverlayPopup);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 
 div[data-overlay-popup] {
   background: var(--overlay-popup-background-color);
@@ -34,7 +42,7 @@ div[data-overlay-popup] {
   right: 0;
   z-index: -1;
 
-  button.close {
+  button.btn-close {
     position: sticky;
     position: -webkit-sticky;
     top: 0;

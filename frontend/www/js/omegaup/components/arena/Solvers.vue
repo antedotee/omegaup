@@ -58,7 +58,7 @@ export default toNative(Solvers);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 table {
   width: 100%;
   border: 1px solid var(--arena-solvers-table-border-color);

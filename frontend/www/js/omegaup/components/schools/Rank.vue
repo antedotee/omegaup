@@ -19,9 +19,9 @@
         {{ T.wordsRankingMeasurement }}
       </a>
     </h5>
-    <div v-if="!showHeader" class="card-body form-row">
+    <div v-if="!showHeader" class="card-body row g-2">
       <omegaup-common-typeahead
-        class="col col-md-4 pl-0 pr-2"
+        class="col col-md-4 ps-0 pe-2"
         :existing-options="searchResultSchools"
         :value.sync="searchedSchool"
         :max-results="10"
@@ -125,7 +125,7 @@ export default toNative(SchoolRank);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 // FIXME: This prevents wrapping a table cell when the name of the school is too long.
 // So, both tables (users rank and the current one) are perfectly aligned.
 // Another solution should  be taken in the future.

@@ -251,7 +251,7 @@ export default toNative(ArenaContestPractice);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .navleft {
   overflow: hidden;
 }

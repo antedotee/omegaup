@@ -24,7 +24,7 @@
           ></omegaup-markdown>
         </div>
         <hr class="my-3" />
-        <div class="font-italic">
+        <div class="fst-italic">
           {{
             ui.formatString(T.problemDetailsSource, {
               source: problem.source,
@@ -138,8 +138,6 @@ import problem_SettingsSummary from './SettingsSummary.vue';
 import omegaup_problemMarkdown from './ProblemMarkdown.vue';
 import omegaup_Overlay from '../Overlay.vue';
 import user_Username from '../user/Username.vue';
-
-import 'bootstrap/dist/css/bootstrap.css';
 
 export interface Tab {
   name: string;
@@ -331,5 +329,5 @@ export default toNative(ProblemDetails);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 </style>

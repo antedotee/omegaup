@@ -5,8 +5,8 @@
         class="form"
         @submit.prevent="$emit('add-group-admin', groupAlias.key)"
       >
-        <div class="form-group mb-0">
-          <label class="font-weight-bold w-100"
+        <div class="mb-0">
+          <label class="fw-bold w-100"
             >{{ T.wordsGroupAdmin }}
             <font-awesome-icon
               :title="T.courseEditAddGroupAdminsTooltip"
@@ -53,8 +53,9 @@
           <td class="text-center">
             <button
               v-if="groupAdmin.name !== 'admin'"
-              class="close float-none"
+              class="btn btn-link p-0 text-body"
               type="button"
+              :aria-label="T.wordsDelete"
               @click="$emit('remove-group-admin', groupAdmin.alias)"
             >
               <font-awesome-icon :icon="['fas', 'trash']" size="xs" />

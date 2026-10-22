@@ -25,40 +25,38 @@
         "
         type="button"
         class="btn btn-primary d-block mx-auto"
-        data-toggle="modal"
-        data-target=".modal"
         data-button-generate
+        @click="showModal = true"
       >
         {{ T.contestCertificatesGenerate }}
       </button>
-      <div class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-body">
-              {{ T.contestCertificatesConfirmGenerate }}
-              <div class="d-flex justify-content-around mt-4">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                  data-button-close
-                >
-                  {{ T.wordsClose }}
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-dismiss="modal"
-                  data-button-confirm
-                  @click="$emit('generate', certificateCutoff)"
-                >
-                  {{ T.wordsConfirm }}
-                </button>
-              </div>
-            </div>
+      <BModal v-model="showModal" centered lazy unmount-lazy no-header>
+        {{ T.contestCertificatesConfirmGenerate }}
+        <template #footer>
+          <div class="d-flex justify-content-around w-100">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-button-close
+              data-modal-dismiss
+              @click="showModal = false"
+            >
+              {{ T.wordsClose }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-button-confirm
+              @click="
+                $emit('generate', certificateCutoff);
+                showModal = false;
+              "
+            >
+              {{ T.wordsConfirm }}
+            </button>
           </div>
-        </div>
-      </div>
+        </template>
+      </BModal>
     </div>
   </div>
 </template>
@@ -66,13 +64,15 @@
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { types } from '../../api_types';
+import { BModal } from 'bootstrap-vue-next';
 import T from '../../lang';
 
-@Component
+@Component({ components: { BModal }, emits: ['generate'] })
 class Certificates extends Vue {
   @Prop() certificatesDetails!: types.ContestCertificatesAdminDetails;
 
   T = T;
+  showModal = false;
   certificateCutoff = this.certificatesDetails.certificateCutoff;
 }
 export default toNative(Certificates);

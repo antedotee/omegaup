@@ -59,7 +59,7 @@ export default toNative(Username);
 </script>
 
 <style lang="scss" scope>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 span {
   display: inline-block;

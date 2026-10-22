@@ -6,11 +6,10 @@
         data-course-admission-mode-form
         @submit.prevent="onSubmit"
       >
-        <div class="form-group">
+        <div class="mb-3">
           <label>{{ T.courseEditAdmissionModeSelect }}</label>
           <a
-            data-toggle="tooltip"
-            rel="tooltip"
+            v-b-tooltip.hover.top
             :title="T.courseEditAdmissionModeDescription"
           >
             <img
@@ -18,7 +17,7 @@
               :alt="T.courseEditAdmissionModeDescription"
             />
           </a>
-          <div class="form-group">
+          <div class="mb-3">
             <select
               v-model="currentAdmissionMode"
               class="form-control"
@@ -40,7 +39,7 @@
               currentAdmissionMode === AdmissionMode.Registration ||
               currentAdmissionMode === AdmissionMode.Public
             "
-            class="form-group"
+            class="mb-3"
           >
             <input
               class="form-control mb-2 mt-2"
@@ -48,7 +47,7 @@
               readonly
               :value="courseURL"
             />
-            <div class="form-inline">
+            <div class="d-flex flex-wrap align-items-center">
               <button
                 v-clipboard="courseURL"
                 class="btn btn-primary"
@@ -57,7 +56,7 @@
               >
                 {{ T.wordsCopyToClipboard }}
               </button>
-              <span v-if="copiedToClipboard === true" class="ml-3">
+              <span v-if="copiedToClipboard === true" class="ms-3">
                 <font-awesome-icon
                   icon="check-circle"
                   size="2x"
@@ -69,7 +68,7 @@
           </div>
           <div
             v-if="currentAdmissionMode === AdmissionMode.Public"
-            class="form-group"
+            class="mb-3"
             data-toggle-public-course-list
           >
             <omegaup-toggle-switch
@@ -84,7 +83,7 @@
             ></omegaup-markdown>
           </div>
         </div>
-        <div class="text-right">
+        <div class="text-end">
           <button class="btn btn-primary change-admission-mode" type="submit">
             {{ T.wordsSaveChanges }}
           </button>
@@ -110,6 +109,7 @@ import {
 } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { vBTooltip } from 'bootstrap-vue-next';
 library.add(fas);
 VueGlobal.use(Clipboard);
 
@@ -120,6 +120,9 @@ VueGlobal.use(Clipboard);
     'font-awesome-layers-text': FontAwesomeLayersText,
     'omegaup-markdown': omegaup_Markdown,
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
+  },
+  directives: {
+    'b-tooltip': vBTooltip,
   },
 })
 class CourseAdmissionMode extends Vue {

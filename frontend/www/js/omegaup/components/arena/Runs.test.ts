@@ -1,7 +1,7 @@
 jest.mock('../../../../third_party/js/diff_match_patch.js');
 jest.mock('vue-infinite-scroll', () => ({}));
 
-import { mount, shallowMount } from '@vue/test-utils';
+import { flushPromises, mount, shallowMount } from '@vue/test-utils';
 import { types } from '../../api_types';
 
 import T from '../../lang';
@@ -16,6 +16,14 @@ interface RunsVm {
   filterUsername: null | types.ListItem;
 }
 
+// shallowMount stubs every child, including the BootstrapVueNext dropdown
+// parts. Render them for real so item clicks reach the component handlers.
+const dropdownStubs = {
+  BDropdown: false,
+  BButton: false,
+  BDropdownItemButton: false,
+  BDropdownDivider: false,
+};
 describe('Runs.vue', () => {
   it('Should handle empty runs', () => {
     const wrapper = shallowMount(arena_Runs, {
@@ -66,10 +74,13 @@ describe('Runs.vue', () => {
         username: null,
       },
     });
-    const selectedRun = wrapper.find('td button[data-toggle=popover]');
-
-    expect(selectedRun.attributes('data-content')).toContain(T.verdictWA);
-    expect(selectedRun.attributes('data-content')).toContain(T.verdictHelpWA);
+    const selectedRun = wrapper.find('[data-run-status-help]');
+    expect(selectedRun.exists()).toBe(true);
+    expect(selectedRun.attributes('data-toggle')).toBeUndefined();
+    await selectedRun.trigger('focus');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain(T.verdictWA);
+    expect(wrapper.text()).toContain(T.verdictHelpWA);
   });
 
   const baseRunData: types.Run = {
@@ -261,6 +272,7 @@ describe('Runs.vue', () => {
       type: 'disqualified',
     });
     const wrapper = shallowMount(arena_Runs, {
+      global: { stubs: dropdownStubs },
       props: {
         contestAlias: 'admin',
         problemAlias: 'alias',
@@ -319,6 +331,7 @@ describe('Runs.vue', () => {
 
   it('Should handle disqualify in batch buttons for run actions', async () => {
     const wrapper = shallowMount(arena_Runs, {
+      global: { stubs: dropdownStubs },
       props: {
         contestAlias: 'admin',
         problemAlias: 'alias',
@@ -347,6 +360,51 @@ describe('Runs.vue', () => {
         },
       ],
     ]);
+  });
+
+  it('Should render the actions dropdown with the Cypress hooks', async () => {
+    const wrapper = shallowMount(arena_Runs, {
+      global: { stubs: dropdownStubs },
+      props: {
+        contestAlias: 'admin',
+        problemAlias: 'alias',
+        runs,
+        showDetails: true,
+        showDisqualify: true,
+        showRejudge: true,
+        inContest: true,
+      },
+    });
+    const cell = wrapper.find('[data-actions="120000"]');
+    const toggle = cell.find('button[data-runs-actions-button]');
+    expect(toggle.exists()).toBe(true);
+    expect(toggle.classes()).toEqual(
+      expect.arrayContaining(['btn', 'btn-secondary', 'dropdown-toggle']),
+    );
+    expect(toggle.text()).toBe(T.arenaRunsActions);
+    expect(toggle.attributes('aria-expanded')).toBe('false');
+    for (const hook of [
+      'data-runs-show-details-button',
+      'data-run-details="120000"',
+      'data-actions-rejudge="120000"',
+      'data-actions-disqualify-by-guid="120000"',
+      'data-actions-disqualify-by-problem="120000"',
+      'data-actions-disqualify-by-user="120000"',
+    ]) {
+      const item = cell.find(`ul.dropdown-menu button.dropdown-item[${hook}]`);
+      expect(item.exists()).toBe(true);
+    }
+    expect(cell.find('ul.dropdown-menu hr.dropdown-divider').exists()).toBe(
+      true,
+    );
+
+    await toggle.trigger('click');
+    // BDropdown opens through its show/hide timers, not synchronously.
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    await flushPromises();
+    expect(toggle.attributes('aria-expanded')).toBe('true');
+    await cell.find('[data-runs-show-details-button]').trigger('click');
+    expect(wrapper.emitted('details')).toBeDefined();
   });
 
   it('Should handle filterUsername when username changes', async () => {

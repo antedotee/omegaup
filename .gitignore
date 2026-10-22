@@ -144,3 +144,5 @@ frontend/www/*.woff
 frontend/www/*.woff2
 frontend/www/*.ttf
 frontend/www/*.eot
+# bs5-cutover codemod snapshot (read by integrity.mjs)
+stuff/bs5-cutover/.last-run/

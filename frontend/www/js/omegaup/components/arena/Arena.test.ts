@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount, shallowMount } from '@vue/test-utils';
 import { types } from '../../api_types';
 
 import arena_Arena from './Arena.vue';
@@ -20,7 +20,7 @@ describe('Arena.vue', () => {
   });
 
   it('Should mark as read clarifications tab', async () => {
-    const wrapper = shallowMount(arena_Arena, {
+    const wrapper = mount(arena_Arena, {
       props: {
         title: 'Hello omegaUp',
         activeTab: 'problems',

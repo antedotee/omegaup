@@ -2,8 +2,8 @@
   <div class="card">
     <div class="card-body">
       <div v-if="showEditControls" class="row">
-        <div class="form-group col-md-6">
-          <label class="font-weight-bold">{{ T.statementLanguage }}</label>
+        <div class="mb-3 col-md-6">
+          <label class="fw-bold">{{ T.statementLanguage }}</label>
           <select v-model="currentLanguage" class="form-control">
             <option
               v-for="language in languages"
@@ -16,7 +16,7 @@
           </select>
         </div>
         <div
-          class="form-group col-md-6"
+          class="mb-3 col-md-6"
           :class="{ 'has-error': errors.includes('message') }"
         >
           <label class="control-label">{{ T.problemEditCommitMessage }}</label>
@@ -218,7 +218,7 @@ export default toNative(ProblemStatementEdit);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 @import '../../../../third_party/js/pagedown/demo/browser/demo.css';
 
 .wmd-preview,

@@ -57,7 +57,7 @@ describe('SchoolRank.vue', () => {
       props: propsData,
     });
 
-    expect(wrapper.find('.form-row').exists()).toBe(true);
+    expect(wrapper.find('.card-body.row.g-2').exists()).toBe(true);
     expect(wrapper.find('button.btn-primary').text()).toBe(T.searchSchool);
   });
 
@@ -69,6 +69,6 @@ describe('SchoolRank.vue', () => {
       },
     });
 
-    expect(wrapper.find('.form-row').exists()).toBe(false);
+    expect(wrapper.find('.card-body.row.g-2').exists()).toBe(false);
   });
 });

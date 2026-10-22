@@ -4,10 +4,7 @@
     body-class="d-flex flex-column"
   >
     <div class="d-flex justify-content-between align-items-start mb-2">
-      <h5
-        class="m-0 font-weight-bold text-truncate w-100"
-        :title="contest.title"
-      >
+      <h5 class="m-0 fw-bold text-truncate w-100" :title="contest.title">
         <a
           :href="getContestURL(contest.alias)"
           class="text-dark text-decoration-none"
@@ -18,14 +15,14 @@
       <font-awesome-icon
         v-if="contest.recommended"
         ref="contestIconRecommended"
-        class="text-warning ml-2"
+        class="text-warning ms-2"
         icon="award"
       />
     </div>
 
     <div class="mb-3 text-muted small">
       <div class="d-flex align-items-center mb-1">
-        <font-awesome-icon icon="clipboard-list" class="mr-2" />
+        <font-awesome-icon icon="clipboard-list" class="me-2" />
         <span class="text-truncate" :title="contest.organizer">{{
           contest.organizer
         }}</span>
@@ -34,7 +31,7 @@
         <slot name="text-contest-date"></slot>
       </div>
       <div class="d-flex align-items-center">
-        <font-awesome-icon icon="stopwatch" class="mr-2" />
+        <font-awesome-icon icon="stopwatch" class="me-2" />
         <span>{{
           ui.formatString(T.contestDuration, {
             duration: contestDuration,
@@ -46,16 +43,16 @@
     <div class="mt-auto">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex align-items-center text-muted">
-          <font-awesome-icon icon="users" class="mr-2" />
+          <font-awesome-icon icon="users" class="me-2" />
           <span>{{ contest.contestants }}</span>
         </div>
         <slot name="contest-enroll-status">
           <div
             v-if="contest.participating"
             ref="contestEnrollStatus"
-            class="text-success d-flex align-items-center small font-weight-bold"
+            class="text-success d-flex align-items-center small fw-bold"
           >
-            <font-awesome-icon class="mr-1" icon="check-circle" />
+            <font-awesome-icon class="me-1" icon="check-circle" />
             {{ T.contestEnrollStatus }}
           </div>
         </slot>
@@ -85,7 +82,7 @@
             size="sm"
             class="mb-2 d-flex align-items-center justify-content-center"
           >
-            <font-awesome-icon class="mr-1" icon="sign-in-alt" />
+            <font-awesome-icon class="me-1" icon="sign-in-alt" />
             {{ T.contestButtonSeeDetails }}
           </b-button>
         </slot>
@@ -98,7 +95,7 @@
             size="sm"
             class="mb-2 d-flex align-items-center justify-content-center text-white"
           >
-            <font-awesome-icon class="mr-1" icon="table" />
+            <font-awesome-icon class="me-1" icon="table" />
             {{ T.contestButtonScoreboard }}
           </b-button>
         </slot>
@@ -111,7 +108,7 @@
             size="sm"
             class="mb-2 d-flex align-items-center justify-content-center"
           >
-            <font-awesome-icon class="mr-1" icon="gamepad" />
+            <font-awesome-icon class="me-1" icon="gamepad" />
             {{ T.contestVirtualMode }}
           </b-button>
         </slot>
@@ -124,7 +121,7 @@
             size="sm"
             class="mb-2 d-flex align-items-center justify-content-center"
           >
-            <font-awesome-icon class="mr-1" icon="flask" />
+            <font-awesome-icon class="me-1" icon="flask" />
             {{ T.contestPracticeMode }}
           </b-button>
         </slot>
@@ -139,9 +136,6 @@ import { types } from '../../api_types';
 import * as time from '../../time';
 import * as ui from '../../ui';
 import T from '../../lang';
-
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -186,7 +180,7 @@ export default toNative(ContestCardv2);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .contest-card-vertical {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   border: 1px solid var(--contest-card-border-color);

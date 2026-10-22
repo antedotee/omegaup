@@ -29,15 +29,15 @@
             <td class="align-middle">
               <template v-if="assignment.assignment_type === 'homework'">
                 <font-awesome-icon icon="file-alt" />
-                <span class="ml-2">{{ T.wordsHomework }}</span>
+                <span class="ms-2">{{ T.wordsHomework }}</span>
               </template>
               <template v-else-if="assignment.assignment_type === 'lesson'">
                 <font-awesome-icon icon="chalkboard-teacher" />
-                <span class="ml-2">{{ T.wordsLesson }}</span>
+                <span class="ms-2">{{ T.wordsLesson }}</span>
               </template>
               <template v-else>
                 <font-awesome-icon icon="list-alt" />
-                <span class="ml-2">{{ T.wordsExam }}</span>
+                <span class="ms-2">{{ T.wordsExam }}</span>
               </template>
             </td>
             <td class="align-middle">
@@ -63,8 +63,6 @@
                 v-if="assignment.has_runs"
                 v-b-tooltip="T.assignmentRemoveAlreadyHasRuns"
                 class="btn btn-link"
-                data-toggle="tooltip"
-                data-placement="bottom"
               >
                 <font-awesome-icon icon="trash" class="disabled" />
               </button>
@@ -98,8 +96,8 @@
     >
       <form class="new">
         <div class="row">
-          <div class="form-group col-md-12 mb-0">
-            <div class="text-right">
+          <div class="col-md-12 mb-0">
+            <div class="text-end">
               <button
                 data-course-add-new-content
                 class="btn btn-primary"

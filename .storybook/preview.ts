@@ -1,4 +1,4 @@
-import '../frontend/www/third_party/bootstrap-4.5.0/css/bootstrap.min.css';
+import '../frontend/www/css/dist/omegaup_styles.css';
 
 // 1. Force Storybook's iframe to load FontAwesome
 const fontAwesome = document.createElement('link');

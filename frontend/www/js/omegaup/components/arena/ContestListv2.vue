@@ -37,13 +37,11 @@
                     >
                       &times;
                     </button>
-                    <div class="input-group-append">
-                      <input
-                        class="btn btn-primary btn-style btn-md btn-block active nav-link"
-                        type="submit"
-                        :value="T.wordsSearch"
-                      />
-                    </div>
+                    <input
+                      class="btn btn-primary btn-style btn-md w-100 active nav-link"
+                      type="submit"
+                      :value="T.wordsSearch"
+                    />
                   </div>
                 </form>
               </b-col>
@@ -61,7 +59,7 @@
                         {{ activeOrderLabel }}
                         <font-awesome-icon
                           icon="times-circle"
-                          class="ml-1 reset-icon"
+                          class="ms-1 reset-icon"
                           :title="T.contestOrderBy"
                           @click.stop="orderByEnds"
                         />
@@ -77,7 +75,7 @@
                     <font-awesome-icon
                       v-if="currentOrder === ContestOrder.Ends"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestOrderByEnds }}</b-dropdown-item
                   >
                   <b-dropdown-item
@@ -88,7 +86,7 @@
                     <font-awesome-icon
                       v-if="currentOrder === ContestOrder.Title"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestOrderByTitle }}</b-dropdown-item
                   >
                   <b-dropdown-item
@@ -99,7 +97,7 @@
                     <font-awesome-icon
                       v-if="currentOrder === ContestOrder.Duration"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestOrderByDuration }}</b-dropdown-item
                   >
                   <b-dropdown-item
@@ -110,7 +108,7 @@
                     <font-awesome-icon
                       v-if="currentOrder === ContestOrder.Organizer"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestOrderByOrganizer }}</b-dropdown-item
                   >
                   <b-dropdown-item
@@ -121,7 +119,7 @@
                     <font-awesome-icon
                       v-if="currentOrder === ContestOrder.Contestants"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestOrderByContestants }}</b-dropdown-item
                   >
                   <b-dropdown-item
@@ -132,13 +130,13 @@
                     <font-awesome-icon
                       v-if="currentOrder === ContestOrder.SignedUp"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestOrderBySignedUp }}</b-dropdown-item
                   >
                 </b-dropdown>
                 <b-dropdown
                   ref="dropdownFilterBy"
-                  class="mr-0"
+                  class="me-0"
                   no-caret
                   data-dropdown-filter
                   :variant="isNonDefaultFilter ? 'primary' : 'light'"
@@ -149,7 +147,7 @@
                       {{ activeFilterLabel }}
                       <font-awesome-icon
                         icon="times-circle"
-                        class="ml-1 reset-icon"
+                        class="ms-1 reset-icon"
                         :title="T.contestFilterBy"
                         @click.stop="filterByAll"
                       />
@@ -164,7 +162,7 @@
                     <font-awesome-icon
                       v-if="currentFilter === ContestFilter.All"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestFilterByAll }}</b-dropdown-item
                   >
                   <b-dropdown-item
@@ -175,7 +173,7 @@
                     <font-awesome-icon
                       v-if="currentFilter === ContestFilter.SignedUp"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestFilterBySignedUp }}</b-dropdown-item
                   >
                   <b-dropdown-item
@@ -186,7 +184,7 @@
                     <font-awesome-icon
                       v-if="currentFilter === ContestFilter.OnlyRecommended"
                       icon="check"
-                      class="mr-1"
+                      class="me-1"
                     />{{ T.contestFilterByRecommended }}</b-dropdown-item
                   >
                 </b-dropdown>
@@ -423,9 +421,6 @@ import { types } from '../../api_types';
 import * as time from '../../time';
 import T from '../../lang';
 import { getExternalUrl } from '../../urlHelper';
-
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
 
 // Import Only Required Plugins
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -750,7 +745,7 @@ export default toNative(ArenaContestList);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .btn {
   padding: 0.5rem 1rem !important;

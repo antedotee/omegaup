@@ -3,7 +3,7 @@
     <div class="card contestants-input-area">
       <div class="card-body">
         <form class="form" @submit.prevent="onSubmit">
-          <div class="form-group">
+          <div class="mb-3">
             <label>{{ T.addUsersMultipleOrSingleUser }}</label>
             <omegaup-common-multi-typeahead
               :existing-options="searchResultUsers"
@@ -18,7 +18,7 @@
             {{ T.contestAdduserAddUsers }}
           </button>
           <hr />
-          <div class="form-group">
+          <div class="mb-3">
             <!-- TODO: Replace word multiple user with ("Separados por espacio, coma, o salto de linea") -->
             <label>{{ T.wordsMultipleUser }}</label>
             <omegaup-multi-user-add-area
@@ -80,13 +80,12 @@
             </td>
             <td class="text-center">
               <button
-                class="close float-none"
+                class="btn-close"
                 type="button"
                 :title="T.contestAdduserRegisteredUserDelete"
+                :aria-label="T.contestAdduserRegisteredUserDelete"
                 @click="$emit('remove-user', user)"
-              >
-                ×
-              </button>
+              ></button>
             </td>
           </tr>
         </tbody>

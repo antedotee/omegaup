@@ -47,7 +47,7 @@ export default toNative(ArenaNavbarMiniranking);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .navbar .mini-ranking {
   width: 18em;
   margin-top: 2em;

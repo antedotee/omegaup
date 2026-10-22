@@ -2,7 +2,7 @@
   <div class="container mt-4">
     <div class="card">
       <div class="card-header d-flex justify-content-center">
-        <h1 class="h4 mb-0 font-weight-bold">{{ T.compareUsersTitle }}</h1>
+        <h1 class="h4 mb-0 fw-bold">{{ T.compareUsersTitle }}</h1>
       </div>
       <div class="card-body">
         <!-- User Input Section -->
@@ -52,7 +52,7 @@
         <!-- Loading State -->
         <div v-if="isLoading" class="text-center py-5">
           <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">{{ T.spinnerLoadingMessage }}</span>
+            <span class="visually-hidden">{{ T.spinnerLoadingMessage }}</span>
           </div>
         </div>
 
@@ -166,7 +166,7 @@ export default toNative(CompareUsers);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .compare-winner {
   border-color: var(--user-compare-winner-border-color) !important;

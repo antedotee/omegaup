@@ -1,11 +1,22 @@
 import { mount, shallowMount } from '@vue/test-utils';
-import { BModal } from 'bootstrap-vue-next';
+import { BCollapse, BModal } from 'bootstrap-vue-next';
 
 import T from '../../lang';
 
 import common_Navbar from './Navbar.vue';
 import UserObjectivesQuestions from '../user/ObjectivesQuestions.vue';
 import user_NextRegisteredContest from '../user/NextRegisteredContest.vue';
+
+// BCollapse shows and hides over a few animation frames, then emits
+// `shown`/`hidden`.
+async function waitForEmit(
+  wrapper: { emitted: (event: string) => unknown[] | undefined },
+  event: string,
+): Promise<void> {
+  while (!wrapper.emitted(event)) {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+}
 
 describe('Navbar.vue', () => {
   const propsData = {
@@ -167,6 +178,64 @@ describe('Navbar.vue', () => {
       configurable: true,
       value: original,
     });
+  });
+
+  it('Should toggle the navbar collapse and close it on an outside click', async () => {
+    const wrapper = mount(common_Navbar, {
+      props: { ...propsData, ...{ inContest: false } },
+      attachTo: document.body,
+    });
+    const toggler = wrapper.find('button.navbar-toggler');
+    const collapse = wrapper.find('.omegaup-navbar');
+    const [collapseComponent] = wrapper
+      .findAllComponents(BCollapse)
+      .filter((c) => c.props('isNav'));
+    expect(collapseComponent.exists()).toBe(true);
+    expect(toggler.attributes('data-toggle')).toBeUndefined();
+    expect(toggler.attributes('aria-expanded')).toBe('false');
+    expect(collapse.classes()).toContain('navbar-collapse');
+    expect(collapse.isVisible()).toBe(false);
+
+    await toggler.trigger('click');
+    expect(toggler.attributes('aria-expanded')).toBe('true');
+    await waitForEmit(collapseComponent, 'shown');
+    expect(collapse.classes()).toContain('show');
+    expect(collapse.isVisible()).toBe(true);
+
+    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await wrapper.vm.$nextTick();
+    expect(toggler.attributes('aria-expanded')).toBe('false');
+    await waitForEmit(collapseComponent, 'hidden');
+    expect(collapse.isVisible()).toBe(false);
+
+    wrapper.unmount();
+  });
+
+  it('Should toggle the user content links with their own state', async () => {
+    const wrapper = mount(common_Navbar, {
+      props: { ...propsData, ...{ inContest: false } },
+    });
+    const toggler = wrapper.find('.collapse-submenu button.dropdown-toggle');
+    const links = wrapper.find('.collapse-links');
+    const [linksComponent] = wrapper
+      .findAllComponents(BCollapse)
+      .filter((c) => !c.props('isNav'));
+    expect(linksComponent.exists()).toBe(true);
+    expect(toggler.attributes('data-target')).toBeUndefined();
+    expect(toggler.attributes('aria-expanded')).toBe('false');
+    // The links sit inside the closed navbar collapse and the user dropdown,
+    // so check the element's own state rather than isVisible().
+    expect(links.classes()).not.toContain('show');
+    expect(links.attributes('style')).toContain('display: none');
+
+    await toggler.trigger('click');
+    expect(toggler.attributes('aria-expanded')).toBe('true');
+    await waitForEmit(linksComponent, 'shown');
+    expect(links.classes()).toContain('show');
+    expect(links.attributes('style') ?? '').not.toContain('display: none');
+    expect(
+      wrapper.find('button.navbar-toggler').attributes('aria-expanded'),
+    ).toBe('false');
   });
 
   it('Should not show the information of a next registered contest when the user is not registered to a current or upcoming contest', () => {

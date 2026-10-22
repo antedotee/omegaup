@@ -29,7 +29,7 @@ export default toNative(Overlay);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 
 [data-overlay] {
   display: block !important;

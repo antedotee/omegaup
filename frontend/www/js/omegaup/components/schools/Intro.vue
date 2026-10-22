@@ -53,7 +53,7 @@ export default toNative(Intro);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .header-bg {
   background-image: url(/media/teacher3.jpg);
   background-position-x: -200px;

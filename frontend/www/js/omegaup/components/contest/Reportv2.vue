@@ -3,7 +3,7 @@
     class="mb-5"
     :header="ui.formatString(T.contestReport, { contest_alias: contestAlias })"
   >
-    <BCardText class="text-right">
+    <BCardText class="text-end">
       <a :href="`/contest/${contestAlias}/report/print/`">
         <i class="bi bi-printer"></i>
       </a>
@@ -84,8 +84,7 @@ import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
 
-// Import Bootstrap CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css';
+// Import Bootstrap Icons
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import { BCard, BCardText, BTable, BButton } from 'bootstrap-vue-next';
@@ -157,7 +156,7 @@ export default toNative(Report);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 h1 {
   font-size: 1.5em;

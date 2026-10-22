@@ -1,67 +1,67 @@
 <template>
-  <li class="nav-item dropdown d-none d-lg-flex align-items-center">
-    <audio v-if="isAdmin" ref="notification-audio" data-notification-audio>
-      <source src="/media/notification.mp3" type="audio/mpeg" />
-    </audio>
-    <a
-      aria-expanded="false"
-      aria-haspopup="true"
-      class="nav-link dropdown-toggle px-2 notification-toggle"
-      data-toggle="dropdown"
-      href="#"
-      role="button"
-    >
+  <!-- BNavItemDropdown's root is the <li>, so the audio stays a sibling and
+       does not land inside the menu. -->
+  <audio v-if="isAdmin" ref="notification-audio" data-notification-audio>
+    <source src="/media/notification.mp3" type="audio/mpeg" />
+  </audio>
+  <BNavItemDropdown
+    class="d-none d-lg-flex align-items-center"
+    no-wrapper
+    no-fade
+    placement="bottom-end"
+    toggle-class="px-2 notification-toggle"
+    :toggle-attrs="navToggleAttrs()"
+    menu-class="dropdown-menu-end notification-dropdown"
+  >
+    <template #button-content>
       <font-awesome-icon :icon="['fas', 'bell']" />
       <span
         v-if="unreadClarifications && unreadClarifications.length > 0"
-        class="badge badge-danger count-badge"
+        class="badge bg-danger count-badge"
         >{{ unreadClarifications.length }}</span
-      ></a
-    >
-    <div class="dropdown-menu dropdown-menu-right notification-dropdown">
-      <div v-if="unreadClarifications.length === 0" class="text-center">
-        {{ T.notificationsNoNewNotifications }}
-      </div>
-      <transition-group name="list">
-        <div
-          v-for="clarification in unreadClarifications"
-          :key="clarification.clarification_id"
-          :data-clarification="clarification.clarification_id"
-          class="d-flex align-items-center flex-wrap px-4"
-        >
-          <hr class="w-100 my-2" />
-          <div class="w-100 justify-content-between">
-            <button
-              class="close"
-              @click.prevent="onCloseClicked(clarification)"
-            >
-              ❌
-            </button>
-          </div>
-          <div class="w-100 align-items-center pt-1 notification-link">
-            <a :href="anchor(clarification)">
-              <span>{{ clarification.problem_alias }}</span> —
-              <span>{{ clarification.author }}</span>
-              <pre>{{ clarification.message }}</pre>
-              <template v-if="clarification.answer">
-                <hr />
-                <pre>{{ clarification.answer }}</pre>
-              </template>
-            </a>
-          </div>
-        </div>
-      </transition-group>
-      <template v-if="unreadClarifications && unreadClarifications.length > 1">
-        <li class="divider" role="separator"></li>
-        <li data-mark-all-as-read-button>
-          <a href="#" @click.prevent="onMarkAllAsRead"
-            ><font-awesome-icon :icon="['fas', 'align-right']" />
-            {{ T.notificationsMarkAllAsRead }}</a
-          >
-        </li>
-      </template>
+      >
+    </template>
+    <div v-if="unreadClarifications.length === 0" class="text-center">
+      {{ T.notificationsNoNewNotifications }}
     </div>
-  </li>
+    <transition-group name="list">
+      <div
+        v-for="clarification in unreadClarifications"
+        :key="clarification.clarification_id"
+        :data-clarification="clarification.clarification_id"
+        class="d-flex align-items-center flex-wrap px-4"
+      >
+        <hr class="w-100 my-2" />
+        <div class="w-100 justify-content-between">
+          <button
+            class="btn-close float-end"
+            :aria-label="T.wordsClose"
+            @click.prevent="onCloseClicked(clarification)"
+          ></button>
+        </div>
+        <div class="w-100 align-items-center pt-1 notification-link">
+          <a :href="anchor(clarification)">
+            <span>{{ clarification.problem_alias }}</span> —
+            <span>{{ clarification.author }}</span>
+            <pre>{{ clarification.message }}</pre>
+            <template v-if="clarification.answer">
+              <hr />
+              <pre>{{ clarification.answer }}</pre>
+            </template>
+          </a>
+        </div>
+      </div>
+    </transition-group>
+    <template v-if="unreadClarifications && unreadClarifications.length > 1">
+      <li class="divider" role="separator"></li>
+      <li data-mark-all-as-read-button>
+        <a href="#" @click.prevent="onMarkAllAsRead"
+          ><font-awesome-icon :icon="['fas', 'align-right']" />
+          {{ T.notificationsMarkAllAsRead }}</a
+        >
+      </li>
+    </template>
+  </BNavItemDropdown>
 </template>
 
 <script lang="ts">
@@ -69,6 +69,7 @@ import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
 import type { types } from '../../api_types';
 import T from '../../lang';
 import { SafeStorage } from '../../safe_storage';
+import { navToggleAttrs } from '../common/navDropdown';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faBell, faAlignRight } from '@fortawesome/free-solid-svg-icons';
@@ -84,6 +85,7 @@ class Clarifications extends Vue {
 
   @Prop() isAdmin!: boolean;
   T = T;
+  navToggleAttrs = navToggleAttrs;
 
   flashInterval: number = 0;
   unreadClarifications = this.clarifications;
@@ -155,9 +157,9 @@ export default toNative(Clarifications);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
-.close {
+.btn-close {
   font-size: inherit;
 }
 

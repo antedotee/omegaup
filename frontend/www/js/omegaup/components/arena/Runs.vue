@@ -19,7 +19,7 @@
       }"
     >
       <div>
-        <span class="font-weight-bold">{{ T.wordsSubmissions }}</span>
+        <span class="fw-bold">{{ T.wordsSubmissions }}</span>
         <div v-if="showPager" class="pager-controls">
           <button
             data-button-page-previous
@@ -42,7 +42,7 @@
 
         <div v-if="shouldShowFilters">
           <div class="filters row">
-            <label class="col-3 col-sm pr-0 font-weight-bold"
+            <label class="col-3 col-sm pe-0 fw-bold"
               >{{ T.wordsVerdict }}:
               <select
                 v-model="filterVerdict"
@@ -65,7 +65,7 @@
               </select>
             </label>
 
-            <label class="col-3 col-sm pr-0 font-weight-bold"
+            <label class="col-3 col-sm pe-0 fw-bold"
               >{{ T.wordsStatus }}:
               <select
                 v-model="filterStatus"
@@ -81,7 +81,7 @@
               </select>
             </label>
 
-            <label class="col-5 col-sm pr-0 font-weight-bold"
+            <label class="col-5 col-sm pe-0 fw-bold"
               >{{ T.wordsLanguage }}:
               <select
                 v-model="filterLanguage"
@@ -117,7 +117,7 @@
             </label>
 
             <template v-if="showProblem">
-              <label class="col-6 col-sm pr-1 font-weight-bold"
+              <label class="col-6 col-sm pe-1 fw-bold"
                 >{{ T.wordsProblem }}:
                 <omegaup-common-typeahead
                   data-search-problem
@@ -131,7 +131,7 @@
             </template>
 
             <template v-if="showUser">
-              <label class="col-5 col-sm font-weight-bold"
+              <label class="col-5 col-sm fw-bold"
                 >{{ T.contestParticipant }}:
                 <omegaup-common-typeahead
                   data-search-username
@@ -149,9 +149,9 @@
               <span
                 v-for="filter in filtersExcludingOffset"
                 :key="filter.name"
-                class="btn-secondary mr-3"
+                class="btn-secondary me-3"
               >
-                <span class="mr-2">{{ filter.name }}: {{ filter.value }}</span>
+                <span class="me-2">{{ filter.name }}: {{ filter.value }}</span>
                 <a
                   :data-remove-filter="filter.name"
                   @click="onRemoveFilter(filter.name)"
@@ -164,7 +164,7 @@
                 data-remove-all-filters
                 @click="onRemoveFilter('all')"
               >
-                <span class="mr-2">{{ T.wordsRemoveFilter }}</span>
+                <span class="me-2">{{ T.wordsRemoveFilter }}</span>
               </a>
             </div>
           </div>
@@ -253,7 +253,7 @@
                       (filterUsername = { key: username, value: username })
                   "
                 ></omegaup-user-username>
-                <a :href="`/profile/${run.username}/`" class="ml-2">
+                <a :href="`/profile/${run.username}/`" class="ms-2">
                   <font-awesome-icon :icon="['fas', 'external-link-alt']" />
                 </a>
               </td>
@@ -271,7 +271,7 @@
                 <a
                   v-if="run.contest_alias"
                   :href="`/arena/${run.contest_alias}/`"
-                  class="ml-2"
+                  class="ms-2"
                 >
                   <font-awesome-icon :icon="['fas', 'external-link-alt']" />
                 </a>
@@ -283,7 +283,7 @@
                 <a
                   problem-navigation-button
                   :href="`/arena/problem/${run.alias}/`"
-                  class="ml-2"
+                  class="ms-2"
                 >
                   <font-awesome-icon :icon="['fas', 'external-link-alt']" />
                 </a>
@@ -291,17 +291,16 @@
               <td
                 :class="statusClass(run)"
                 data-run-status
-                class="text-center opacity-4 font-weight-bold"
+                class="text-center opacity-4 fw-bold"
               >
-                <span class="mr-1">{{ status(run) }}</span>
+                <span class="me-1">{{ status(run) }}</span>
                 <button
                   v-if="!!statusHelp(run)"
+                  v-b-popover.focus.right="{ body: statusHelp(run) }"
                   type="button"
-                  :data-content="statusHelp(run)"
-                  data-toggle="popover"
-                  data-trigger="focus"
+                  data-run-status-help
                   class="btn-outline-dark btn-sm"
-                  @click="showVerdictHelp"
+                  @click="focusStatusHelp"
                 >
                   <font-awesome-icon :icon="['fas', 'question-circle']" />
                 </button>
@@ -335,90 +334,75 @@
                 v-else-if="showDetails || showDisqualify || showRejudge"
                 :data-actions="run.guid"
               >
-                <div class="dropdown">
-                  <button
-                    data-runs-actions-button
-                    class="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+                <BDropdown
+                  variant="secondary"
+                  :text="T.arenaRunsActions"
+                  :toggle-attrs="{ 'data-runs-actions-button': '' }"
+                >
+                  <BDropdownItemButton
+                    v-if="showDetails"
+                    data-runs-show-details-button
+                    :data-run-details="run.guid"
+                    @click="onRunDetails(run)"
                   >
-                    {{ T.arenaRunsActions }}
-                  </button>
-                  <div class="dropdown-menu">
-                    <button
-                      v-if="showDetails"
-                      data-runs-show-details-button
-                      :data-run-details="run.guid"
-                      class="btn-link dropdown-item"
-                      @click="onRunDetails(run)"
-                    >
-                      {{ T.arenaRunsActionsDetails }}
-                    </button>
-                    <button
-                      v-if="showRejudge"
-                      :data-actions-rejudge="run.guid"
-                      class="btn-link dropdown-item"
-                      @click="$emit('rejudge', run)"
-                    >
-                      {{ T.arenaRunsActionsRejudge }}
-                    </button>
-                    <template v-if="showDisqualify">
-                      <div class="dropdown-divider"></div>
-                      <template v-if="run.type === 'normal'">
-                        <button
-                          :data-actions-disqualify-by-guid="run.guid"
-                          class="btn-link dropdown-item"
+                    {{ T.arenaRunsActionsDetails }}
+                  </BDropdownItemButton>
+                  <BDropdownItemButton
+                    v-if="showRejudge"
+                    :data-actions-rejudge="run.guid"
+                    @click="$emit('rejudge', run)"
+                  >
+                    {{ T.arenaRunsActionsRejudge }}
+                  </BDropdownItemButton>
+                  <template v-if="showDisqualify">
+                    <BDropdownDivider />
+                    <template v-if="run.type === 'normal'">
+                      <BDropdownItemButton
+                        :data-actions-disqualify-by-guid="run.guid"
+                        @click="
+                          $emit('disqualify', {
+                            run,
+                            disqualificationType: DisqualificationType.ByGUID,
+                          })
+                        "
+                      >
+                        {{ T.arenaRunsActionsDisqualifyByGUID }}
+                      </BDropdownItemButton>
+                      <template v-if="inContest">
+                        <BDropdownItemButton
+                          :data-actions-disqualify-by-problem="run.guid"
                           @click="
                             $emit('disqualify', {
                               run,
-                              disqualificationType: DisqualificationType.ByGUID,
+                              disqualificationType:
+                                DisqualificationType.ByProblem,
                             })
                           "
                         >
-                          {{ T.arenaRunsActionsDisqualifyByGUID }}
-                        </button>
-                        <template v-if="inContest">
-                          <button
-                            :data-actions-disqualify-by-problem="run.guid"
-                            class="btn-link dropdown-item"
-                            @click="
-                              $emit('disqualify', {
-                                run,
-                                disqualificationType:
-                                  DisqualificationType.ByProblem,
-                              })
-                            "
-                          >
-                            {{ T.arenaRunsActionsDisqualifyByProblem }}
-                          </button>
-                          <button
-                            :data-actions-disqualify-by-user="run.guid"
-                            class="btn-link dropdown-item"
-                            @click="
-                              $emit('disqualify', {
-                                run,
-                                disqualificationType:
-                                  DisqualificationType.ByUser,
-                              })
-                            "
-                          >
-                            {{ T.arenaRunsActionsDisqualifyByUser }}
-                          </button>
-                        </template>
+                          {{ T.arenaRunsActionsDisqualifyByProblem }}
+                        </BDropdownItemButton>
+                        <BDropdownItemButton
+                          :data-actions-disqualify-by-user="run.guid"
+                          @click="
+                            $emit('disqualify', {
+                              run,
+                              disqualificationType: DisqualificationType.ByUser,
+                            })
+                          "
+                        >
+                          {{ T.arenaRunsActionsDisqualifyByUser }}
+                        </BDropdownItemButton>
                       </template>
-                      <button
-                        v-else-if="run.type === 'disqualified'"
-                        :data-actions-requalify="run.guid"
-                        class="btn-link dropdown-item"
-                        @click="$emit('requalify', run)"
-                      >
-                        {{ T.arenaRunsActionsRequalify }}
-                      </button>
                     </template>
-                  </div>
-                </div>
+                    <BDropdownItemButton
+                      v-else-if="run.type === 'disqualified'"
+                      :data-actions-requalify="run.guid"
+                      @click="$emit('requalify', run)"
+                    >
+                      {{ T.arenaRunsActionsRequalify }}
+                    </BDropdownItemButton>
+                  </template>
+                </BDropdown>
               </td>
               <td v-else></td>
             </tr>
@@ -480,19 +464,13 @@ import {
   faExternalLinkAlt,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
+import { vBPopover } from 'bootstrap-vue-next';
 library.add(faQuestionCircle);
 library.add(faRedoAlt);
 library.add(faBan);
 library.add(faSearchPlus);
 library.add(faExternalLinkAlt);
 library.add(faTimes);
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface JQuery {
-    popover(action: string): JQuery;
-  }
-}
 
 // DisqualificationType and PopupDisplayed are declared in ./Runs_types and
 // re-exported here so existing SFC importers keep working while plain `.ts`
@@ -510,6 +488,7 @@ export { DisqualificationType, PopupDisplayed };
   },
   directives: {
     infiniteScroll,
+    'b-popover': vBPopover,
   },
 })
 class Runs extends Vue {
@@ -708,8 +687,8 @@ class Runs extends Vue {
     return '—';
   }
 
-  showVerdictHelp(ev: Event): void {
-    $(ev.target as HTMLElement).popover('show');
+  focusStatusHelp(ev: Event): void {
+    (ev.currentTarget as HTMLElement).focus();
   }
 
   statusClass(run: types.Run): string {
@@ -921,7 +900,7 @@ export default toNative(Runs);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .text-break-all {
   word-break: break-all;

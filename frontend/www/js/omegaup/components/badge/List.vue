@@ -3,7 +3,7 @@
     <div v-if="!isProfile" class="card-header">
       <h4 class="card-title">
         {{ T.omegaupTitleBadges }}
-        <span class="badge badge-secondary">{{ badges.length }} </span>
+        <span class="badge bg-secondary">{{ badges.length }} </span>
       </h4>
     </div>
     <div class="card-body">
@@ -75,7 +75,7 @@ export default toNative(BadgeList);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 a.badges-link {
   color: var(--badges-link-font-color);
   font-size: 1rem;

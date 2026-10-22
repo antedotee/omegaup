@@ -1,0 +1,25 @@
+// Element-level Bootstrap 4.5 reboot behavior that Bootstrap 5.3 changed.
+// Element selectors only: no Bootstrap class may appear here (Requirement 5.14).
+// Bootstrap class rules (.nav, .list-unstyled, .form-check, ...) still win over
+// these by specificity, as they did in BS4.
+
+// BS4 reboot: `label { display: inline-block; margin-bottom: .5rem; }`.
+// BS5 keeps inline-block but drops the margin, which collapses the gap between
+// labels and their inputs in the 88 templates that use bare <label>.
+label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+// BS4 left list indentation at the browser default (40px); BS5 reboot sets
+// `ol, ul { padding-left: 2rem; }`, shifting every bare list 8px left.
+ol,
+ul {
+  padding-left: 2.5rem;
+}
+
+// BS4 `_type.scss`: `small { font-size: 80%; font-weight: 400; }`. BS5 drops the
+// weight, so <small> inside headings inherits 500. Size comes from $small-font-size.
+small {
+  font-weight: 400;
+}
