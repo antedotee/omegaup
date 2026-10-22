@@ -88,10 +88,12 @@
             <button
               v-if="groups.length > 1"
               :aria-label="T.wordsClose"
-              class="btn-close"
+              class="close"
               type="button"
               @click.prevent.stop="removeCase(item.name)"
-            ></button>
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
           </button>
         </template>
       </div>
@@ -339,11 +341,30 @@ input[type='number']::-webkit-outer-spin-button {
   color: var(--vs-dark-font-color);
 }
 
-.vs-dark .btn-close {
-  color: var(--vs-dark-close-color);
+.close {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  opacity: 0.5;
 }
 
-.vs-dark .btn-close:hover {
+.close:hover,
+.close:focus {
+  color: #000;
+  opacity: 0.75;
+}
+
+.vs-dark .close {
+  color: var(--vs-dark-close-color);
+  opacity: 1;
+}
+
+.vs-dark .close:hover,
+.vs-dark .close:focus {
   color: var(--vs-dark-close-color--hover);
 }
 
@@ -351,6 +372,10 @@ input[type='number']::-webkit-outer-spin-button {
   background-color: var(--vs-dark-background-color);
   color: var(--vs-dark-font-color);
   border-color: var(--vs-dark-border-color-medium);
+}
+
+.vs-dark .input-group input.form-control::placeholder {
+  color: #6c757d;
 }
 
 .vs-dark input[type='number']::-webkit-inner-spin-button,
