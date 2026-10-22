@@ -1,7 +1,7 @@
 <template>
   <div :class="['h-100', 'd-flex', 'flex-column', theme]">
     <div
-      class="editor-toolbar d-flex align-items-center justify-content-between p-1 form-inline"
+      class="editor-toolbar d-flex flex-wrap align-items-center justify-content-between p-1"
     >
       <div class="d-flex align-items-center">
         <label class="me-1 mb-0 p-1">{{ T.fontSize }}</label>

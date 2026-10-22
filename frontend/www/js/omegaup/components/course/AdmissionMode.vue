@@ -48,7 +48,7 @@
               readonly
               :value="courseURL"
             />
-            <div class="form-inline">
+            <div class="d-flex flex-wrap align-items-center">
               <button
                 v-clipboard="courseURL"
                 class="btn btn-primary"

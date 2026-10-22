@@ -54,12 +54,12 @@
     </table>
     <form
       v-if="shouldShowFilterInput"
-      class="form-inline m-3"
+      class="d-flex flex-wrap align-items-center m-3"
       @submit.prevent=""
     >
       <input
         v-model="filter"
-        class="form-control me-sm-2 mb-2"
+        class="form-control w-auto me-sm-2 mb-2"
         type="search"
         :placeholder="filterByProblemText"
       />

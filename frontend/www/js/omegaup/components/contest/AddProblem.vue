@@ -12,18 +12,16 @@
               disabled="disabled"
             />
             <div v-else class="input-group w-100">
-              <div class="input-group-prepend w-25">
-                <select v-model="selectedSearchType" class="form-select">
-                  <option
-                    v-for="searchType in availableSearchTypes"
-                    :key="searchType.key"
-                    :value="searchType.key"
-                    :selected="selectedSearchType === searchType.key"
-                  >
-                    {{ searchType.value }}
-                  </option>
-                </select>
-              </div>
+              <select v-model="selectedSearchType" class="form-select w-25">
+                <option
+                  v-for="searchType in availableSearchTypes"
+                  :key="searchType.key"
+                  :value="searchType.key"
+                  :selected="selectedSearchType === searchType.key"
+                >
+                  {{ searchType.value }}
+                </option>
+              </select>
               <omegaup-common-typeahead
                 class="w-75"
                 :existing-options="searchResultProblems"

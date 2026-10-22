@@ -10,7 +10,7 @@
               {{ T.courseCloneGenerateLinkButton }}
             </button>
             <input
-              class="form-control input-group-append"
+              class="form-control"
               :value="cloneCourseURL"
               readonly
               @focus="$event.target.select()"

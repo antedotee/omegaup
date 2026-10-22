@@ -43,12 +43,12 @@
           </omegaup-overlay>
         </div>
       </slot>
-      <div class="form-inline">
-        <label v-if="allowFilterByAssignment">
+      <div class="d-flex flex-wrap align-items-center">
+        <label v-if="allowFilterByAssignment" class="d-flex align-items-center">
           {{ T.wordsFilterByHomework }}
           <select
             v-model="selectedAssignment"
-            class="form-control form-select ms-1"
+            class="form-control form-select w-auto ms-1"
             name="problem"
           >
             <option
@@ -60,11 +60,14 @@
             </option>
           </select>
         </label>
-        <label :class="{ 'ms-md-4': allowFilterByAssignment }">
+        <label
+          class="d-flex align-items-center"
+          :class="{ 'ms-md-4': allowFilterByAssignment }"
+        >
           {{ T.wordsFilterByProblem }}
           <select
             v-model="selectedProblem"
-            class="form-control form-select ms-1"
+            class="form-control form-select w-auto ms-1"
           >
             <option
               v-for="problemName in problemsNames"

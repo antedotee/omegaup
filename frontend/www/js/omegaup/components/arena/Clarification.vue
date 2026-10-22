@@ -56,14 +56,14 @@
       </template>
       <form
         v-if="!clarification.answer || showUpdateAnswer"
-        class="form-inline justify-content-between"
+        class="d-flex flex-wrap align-items-center justify-content-between"
         data-form-clarification-answer
         @submit.prevent="sendClarificationResponse"
       >
-        <div class="mb-3 mb-0">
+        <div class="mb-0">
           <select
             v-model="selectedResponse"
-            class="form-control"
+            class="form-control w-auto"
             data-select-answer
           >
             <option
@@ -75,7 +75,7 @@
             </option>
           </select>
         </div>
-        <div v-if="selectedResponse === 'other'" class="mb-3 mt-1 mb-0">
+        <div v-if="selectedResponse === 'other'" class="mt-1 mb-0">
           <textarea v-model="message" :placeholder="T.wordsAnswer"> </textarea>
         </div>
         <div class="d-flex justify-content-between w-100">

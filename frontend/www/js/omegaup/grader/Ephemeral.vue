@@ -6,9 +6,11 @@
         <sup>&alpha;</sup>
       </span>
 
-      <form class="form-inline my-2 my-lg-0 ephemeral-form">
+      <form
+        class="d-flex flex-wrap align-items-center my-2 my-lg-0 ephemeral-form"
+      >
         <template v-if="!isEmbedded">
-          <label>
+          <label class="d-flex align-items-center mb-0">
             <a class="btn btn-secondary btn-sm me-sm-2" role="button">
               <font-awesome-icon
                 :icon="['fas', 'upload']"
@@ -24,7 +26,7 @@
               @change="handleUpload"
             />
           </label>
-          <label>
+          <label class="d-flex align-items-center mb-0">
             <a
               class="btn btn-secondary btn-sm me-sm-2"
               role="button"
@@ -40,7 +42,7 @@
               />
             </a>
           </label>
-          <label>
+          <label class="d-flex align-items-center mb-0">
             <button
               class="btn btn-secondary btn-sm me-2"
               @click.prevent="toggleTheme"
@@ -68,7 +70,7 @@
         </template>
         <select
           v-model="selectedLanguage"
-          class="form-control form-control-sm me-sm-2"
+          class="form-control form-control-sm w-auto me-sm-2"
           data-language-select
         >
           <optgroup v-if="languages.length > 1" :label="T.detectLanguage">
@@ -84,7 +86,7 @@
             </option>
           </optgroup>
         </select>
-        <label>
+        <label class="d-flex align-items-center mb-0">
           <button
             class="btn btn-secondary btn-sm me-2"
             :title="T.resetTemplate"
