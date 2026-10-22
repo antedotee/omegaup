@@ -27,8 +27,7 @@
               {{ T.contestEditTagDelete }}
               <a
                 v-if="!isLecture"
-                data-toggle="tooltip"
-                rel="tooltip"
+                v-b-tooltip.hover.top
                 :title="T.problemEditTagPublicRequired"
               >
                 <span class="question"></span>
@@ -172,6 +171,7 @@ import omegaup_ToggleSwitch from '../ToggleSwitch.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { vBTooltip } from 'bootstrap-vue-next';
 library.add(faTrash);
 
 @Component({
@@ -180,6 +180,9 @@ library.add(faTrash);
     FontAwesomeIcon,
     VueTypeaheadBootstrap,
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
+  },
+  directives: {
+    'b-tooltip': vBTooltip,
   },
 })
 class ProblemTags extends Vue {

@@ -9,8 +9,7 @@
         <div class="mb-3">
           <label>{{ T.courseEditAdmissionModeSelect }}</label>
           <a
-            data-toggle="tooltip"
-            rel="tooltip"
+            v-b-tooltip.hover.top
             :title="T.courseEditAdmissionModeDescription"
           >
             <img
@@ -110,6 +109,7 @@ import {
 } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { vBTooltip } from 'bootstrap-vue-next';
 library.add(fas);
 VueGlobal.use(Clipboard);
 
@@ -120,6 +120,9 @@ VueGlobal.use(Clipboard);
     'font-awesome-layers-text': FontAwesomeLayersText,
     'omegaup-markdown': omegaup_Markdown,
     'omegaup-toggle-switch': omegaup_ToggleSwitch,
+  },
+  directives: {
+    'b-tooltip': vBTooltip,
   },
 })
 class CourseAdmissionMode extends Vue {

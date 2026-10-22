@@ -42,4 +42,17 @@ describe('Tags.vue', () => {
 
     expect(wrapper.text()).toContain(T.updateProblemLevel);
   });
+  it('Should mount the public-tag help as a v-b-tooltip', () => {
+    const wrapper = mount(problem_Tags, {
+      props: baseProblemTagsPropsData,
+    });
+    // vBTooltip moves the native title into data-original-title on mount.
+    const help = wrapper.find(
+      `a[data-original-title="${T.problemEditTagPublicRequired}"]`,
+    );
+    expect(help.exists()).toBe(true);
+    expect(help.attributes('title')).toBeUndefined();
+    expect(help.attributes('data-toggle')).toBeUndefined();
+    expect(help.attributes('rel')).toBeUndefined();
+  });
 });

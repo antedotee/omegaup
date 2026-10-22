@@ -58,10 +58,9 @@
           <div class="col-sm-3">
             <strong>{{ T.banProblemFormQuestion }}</strong>
             <span
+              v-b-tooltip.hover.top
               aria-hidden="true"
               class="glyphicon glyphicon-info-sign"
-              data-placement="top"
-              data-toggle="tooltip"
               :title="T.banProblemFormComments"
             ></span>
           </div>
@@ -129,6 +128,7 @@ import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import confirmation from '../common/Confirmation.vue';
+import { vBTooltip } from 'bootstrap-vue-next';
 
 interface QualityNominationContents {
   original: string;
@@ -139,6 +139,9 @@ interface QualityNominationContents {
 @Component({
   components: {
     'omegaup-common-confirmation': confirmation,
+  },
+  directives: {
+    'b-tooltip': vBTooltip,
   },
 })
 class QualityNominationDetails extends Vue {

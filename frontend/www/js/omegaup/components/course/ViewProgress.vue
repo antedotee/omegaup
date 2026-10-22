@@ -74,8 +74,7 @@
                         }}
                         <a
                           v-if="assignment.points === 0"
-                          data-toggle="tooltip"
-                          rel="tooltip"
+                          v-b-tooltip.hover.top
                           :title="T.studentProgressOnlyLecturesDescription"
                           ><img
                             src="/media/question.png"
@@ -165,6 +164,7 @@ import * as ui from '../../ui';
 import AsyncComputedPlugin from 'vue-async-computed';
 import AsyncComputed from 'vue-async-computed-decorator';
 import JSZip from 'jszip';
+import { vBTooltip } from 'bootstrap-vue-next';
 import common_SortControls from '../common/SortControls.vue';
 import course_StudentProgress from './StudentProgress.vue';
 import common_Paginator from '../common/Paginator.vue';
@@ -183,6 +183,9 @@ export { escapeXml, toOds };
     'omegaup-common-sort-controls': common_SortControls,
     'omegaup-course-student-progress': course_StudentProgress,
     'omegaup-common-paginator': common_Paginator,
+  },
+  directives: {
+    'b-tooltip': vBTooltip,
   },
 })
 class CourseViewProgress extends Vue {

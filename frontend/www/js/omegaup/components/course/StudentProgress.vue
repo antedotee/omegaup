@@ -40,8 +40,6 @@
               getProgressTooltipDescription(assignment.alias, problem)
             "
             :class="getProblemColor(assignment.alias, problem)"
-            data-toggle="tooltip"
-            data-placement="bottom"
             :href="
               getStudentProgressUrlWithAssignmentAndProblem(
                 assignment.alias,
