@@ -151,27 +151,30 @@ export default toNative(SchoolOfTheMonthList);
 
 <style scoped>
 /* BNavItem renders the anchor, so these rules have to cross that boundary. */
-:deep(.nav-link.active),
-:deep(.nav-link:hover) {
+>>> .nav-link.active,
+>>> .nav-link:hover {
   border: none;
   border-left: 0.0625rem solid #dee2e6;
   border-right: 0.0625rem solid #dee2e6;
-  border-top-left-radius: 0rem;
-  border-top-right-radius: 0rem;
-}
-.nav .nav-tabs {
-  border-bottom: 0rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
-:deep(.nav-link) {
+.nav .nav-tabs {
+  border-bottom: 0;
+}
+
+>>> .nav-link {
   font-weight: medium;
   letter-spacing: 0.022rem;
   padding: 0.65rem 1rem;
 }
+
 .ranking-width {
   max-width: 55rem;
   margin: 0 auto;
 }
+
 .system-in-maintainance {
   font-size: 180%;
   color: var(--general-in-maintainance-color);

@@ -139,23 +139,23 @@ export default toNative(CoderOfTheMonthList);
 
 <style scoped>
 /* BNavItem renders the anchor, so these rules have to cross that boundary. */
-:deep(.nav-link.active),
-:deep(.nav-link:hover) {
+>>> .nav-link.active,
+>>> .nav-link:hover {
   border: none;
   border-left: 0.0625rem solid #dee2e6;
   border-right: 0.0625rem solid #dee2e6;
-  border-top-left-radius: 0rem;
-  border-top-right-radius: 0rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .nav-tabs {
-  border-bottom: 0rem;
+  border-bottom: 0;
   flex-wrap: nowrap !important;
   overflow-x: auto;
   overflow-y: hidden;
 }
 
-:deep(.nav-link) {
+>>> .nav-link {
   font-weight: medium;
   letter-spacing: 0.022rem;
   padding: 0.65rem 1rem;

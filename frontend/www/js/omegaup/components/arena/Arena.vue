@@ -154,12 +154,13 @@ export default toNative(Arena);
 
 <style lang="scss" scoped>
 @import '../../../../sass/site';
+
 .practice {
   background: var(--arena-practice-background-color) url(/media/gradient.png)
     repeat-x 0 0 !important;
 
   /* BNavItem renders the anchor, so this rule has to cross that boundary. */
-  .nav-tabs :deep(.nav-link) {
+  .nav-tabs >>> .nav-link {
     background-color: var(--arena-contest-navtabs-link-background-color);
     border-top-color: var(--arena-contest-navtabs-link-border-top-color);
   }
@@ -221,6 +222,7 @@ export default toNative(Arena);
       margin-left: 20em;
     }
   }
+
   .problem {
     margin-top: -1.5em;
     margin-right: -1em;

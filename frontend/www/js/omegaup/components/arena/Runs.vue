@@ -296,8 +296,8 @@
                 <span class="me-1">{{ status(run) }}</span>
                 <button
                   v-if="!!statusHelp(run)"
-                  type="button"
                   v-b-popover.focus.right="{ body: statusHelp(run) }"
+                  type="button"
                   data-run-status-help
                   class="btn-outline-dark btn-sm"
                   @click="focusStatusHelp"

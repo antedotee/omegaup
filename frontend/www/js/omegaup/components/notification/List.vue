@@ -71,8 +71,8 @@ export default toNative(NotificationList);
 
 <style scoped>
 /* The toggle and the menu <ul> are rendered by BNavItemDropdown and carry no
-   scope id, so their rules go through :deep() under the scoped root <li>. */
-:deep(.notification-toggle) {
+   scope id, so their rules go through >>> under the scoped root <li>. */
+>>> .notification-toggle {
   font-size: 1.4rem;
   position: relative;
 }
@@ -85,14 +85,15 @@ export default toNative(NotificationList);
   display: block;
 }
 
-.navbar-expand-lg .navbar-nav :deep(.dropdown-menu) {
+.navbar-expand-lg .navbar-nav >>> .dropdown-menu {
   min-width: 84vw;
+
   @media only screen and (min-width: 767px) {
     min-width: 35rem;
   }
 }
 
-:deep(.notification-dropdown) {
+>>> .notification-dropdown {
   max-width: 100vw;
   max-height: 600px;
   overflow-y: auto;
@@ -110,7 +111,7 @@ export default toNative(NotificationList);
 }
 
 @media only screen and (max-width: 991px) {
-  :deep(.notification-dropdown) {
+  >>> .notification-dropdown {
     position: fixed !important;
     transform: none !important; /* floating-ui writes an inline translate */
     top: 60px !important;

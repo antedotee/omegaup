@@ -274,7 +274,7 @@ export default toNative(NavbarItems);
 <style lang="scss" scoped>
 // The menu <ul> is rendered by BNavItemDropdown, so it carries no scope id.
 @media only screen and (max-width: 992px) {
-  :deep(.navbar-item-dropdown) {
+  >>> .navbar-item-dropdown {
     min-width: auto !important;
     width: auto !important;
     max-width: 85vw !important;
@@ -295,8 +295,8 @@ export default toNative(NavbarItems);
 }
 
 .menu-divider {
-  margin-top: 0em;
-  margin-bottom: 0em;
+  margin-top: 0;
+  margin-bottom: 0;
   border-width: 2px;
 }
 </style>
