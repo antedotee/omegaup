@@ -1,18 +1,13 @@
 <template>
   <div>
-    <div
+    <BAlert
       v-if="privateProblemsAlert"
-      class="alert alert-info alert-dismissible fade show"
-      role="alert"
+      :model-value="true"
+      dismissible
+      variant="info"
     >
       {{ T.messageMakeYourProblemsPublic }}
-      <button
-        type="button"
-        class="btn-close"
-        data-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>
+    </BAlert>
     <div class="card">
       <h5 class="card-header">{{ T.myproblemsListMyProblems }}</h5>
       <div class="card-body px-2 px-sm-4">
@@ -270,11 +265,12 @@ library.add(
   faExclamationTriangle,
   faBan,
 );
-import { BModal } from 'bootstrap-vue-next';
+import { BAlert, BModal } from 'bootstrap-vue-next';
 
 @Component({
   emits: ['change-visibility'],
   components: {
+    BAlert,
     BModal,
     FontAwesomeIcon,
     'omegaup-common-paginator': common_Paginator,

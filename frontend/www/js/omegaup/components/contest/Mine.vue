@@ -1,18 +1,13 @@
 <template>
   <div>
-    <div
+    <BAlert
       v-if="privateContestsAlert"
-      class="alert alert-info alert-dismissable fade show"
-      role="alert"
+      :model-value="true"
+      dismissible
+      variant="info"
     >
       {{ T.messageMakeYourContestsPublic }}
-      <button
-        type="button"
-        class="btn-close"
-        data-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>
+    </BAlert>
     <h3 class="text-center mb-4">{{ T.wordsMyContests }}</h3>
     <div class="card">
       <div class="card-header">
@@ -205,10 +200,12 @@ library.add(
   faPrint,
   faFileDownload,
 );
+import { BAlert } from 'bootstrap-vue-next';
 
 @Component({
   emits: ['change-admission-mode'],
   components: {
+    BAlert,
     FontAwesomeIcon,
   },
 })

@@ -344,21 +344,17 @@
         :next-registered-contest="nextRegisteredContest"
         @redirect="(alias) => $emit('redirect-next-registered-contest', alias)"
       ></omegaup-user-next-registered-contest>
-      <div
+      <BAlert
         v-if="mentorCanChooseCoder"
-        class="alert alert-info alert-dismissible fade show mentor-can-choose-coder"
-        role="alert"
+        v-model="mentorAlertVisible"
+        dismissible
+        variant="info"
+        class="mentor-can-choose-coder"
       >
-        <button
-          type="button"
-          class="btn-close"
-          :aria-label="T.wordsClose"
-          data-dismiss="alert"
-        ></button>
         <omegaup-markdown
           :markdown="T.coderOfTheMonthCanBeChosenManually"
         ></omegaup-markdown>
-      </div>
+      </BAlert>
     </template>
     <omegaup-logout-confirmation v-model="logoutModalVisible">
     </omegaup-logout-confirmation>
@@ -367,6 +363,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BAlert } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as ui from '../../ui';
@@ -395,6 +392,7 @@ export { EventBus };
 
 @Component({
   components: {
+    BAlert,
     FontAwesomeIcon,
     'omegaup-notification-list': notifications_List,
     'omegaup-notifications-clarifications': notifications_Clarifications,
@@ -440,6 +438,7 @@ class Navbar extends Vue {
   AvailableTabs = AvailableTabs;
   navToggleAttrs = navToggleAttrs;
   logoutModalVisible = false;
+  mentorAlertVisible = true;
   navbarExpanded = false;
   linksExpanded = false;
   scrollY: number = 0;
