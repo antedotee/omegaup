@@ -96,7 +96,6 @@ export default toNative(NotificationList);
 .list-leave-to {
   opacity: 0;
 }
-
 </style>
 
 <style>

@@ -5,7 +5,7 @@ import T from '../../lang';
 
 import contest_Form from './Form.vue';
 
-import { Multiselect } from 'vue-multiselect';
+import Multiselect from 'vue-multiselect/src/Multiselect.vue';
 
 import { types } from '../../api_types';
 
