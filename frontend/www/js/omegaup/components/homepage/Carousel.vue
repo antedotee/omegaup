@@ -3,6 +3,7 @@
   <BCarousel
     id="carousel-display"
     class="text-center py-5 py-md-0"
+    background="transparent"
     controls
     indicators
     ride="carousel"

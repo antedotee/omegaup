@@ -70,33 +70,20 @@ export default toNative(NotificationList);
 </script>
 
 <style scoped>
-/* The toggle and the menu <ul> are rendered by BNavItemDropdown and carry no
-   scope id, so their rules go through >>> under the scoped root <li>. */
+/* The toggle is rendered by BNavItemDropdown and has no scope id. */
 >>> .notification-toggle {
   font-size: 1.4rem;
   position: relative;
 }
 
-.count-badge {
+.notification-toggle .count-badge {
   position: absolute;
+  top: auto;
   bottom: 0;
   right: 0.9rem;
+  height: auto;
   font-size: 0.75rem;
   display: block;
-}
-
-.navbar-expand-lg .navbar-nav >>> .dropdown-menu {
-  min-width: 84vw;
-
-  @media only screen and (min-width: 767px) {
-    min-width: 35rem;
-  }
-}
-
->>> .notification-dropdown {
-  max-width: 100vw;
-  max-height: 600px;
-  overflow-y: auto;
 }
 
 /* Transitions */
@@ -110,8 +97,19 @@ export default toNative(NotificationList);
   opacity: 0;
 }
 
+</style>
+
+<style>
+/* BDropdown teleports the menu to body, so a scoped selector never matches it. */
+.notification-dropdown {
+  min-width: 35rem;
+  max-width: 100vw;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
 @media only screen and (max-width: 991px) {
-  >>> .notification-dropdown {
+  .notification-dropdown {
     position: fixed !important;
     transform: none !important; /* floating-ui writes an inline translate */
     top: 60px !important;

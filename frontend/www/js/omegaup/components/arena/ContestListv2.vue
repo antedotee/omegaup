@@ -38,7 +38,7 @@
                       &times;
                     </button>
                     <input
-                      class="btn btn-primary btn-style btn-md w-100 active nav-link"
+                      class="btn btn-primary btn-style btn-md active nav-link"
                       type="submit"
                       :value="T.wordsSearch"
                     />
@@ -53,19 +53,17 @@
                   :variant="isNonDefaultOrder ? 'primary' : 'light'"
                 >
                   <template #button-content>
-                    <div>
-                      <font-awesome-icon icon="sort-amount-down" />
-                      <span v-if="isNonDefaultOrder">
-                        {{ activeOrderLabel }}
-                        <font-awesome-icon
-                          icon="times-circle"
-                          class="ms-1 reset-icon"
-                          :title="T.contestOrderBy"
-                          @click.stop="orderByEnds"
-                        />
-                      </span>
-                      <span v-else>{{ T.contestOrderBy }}</span>
-                    </div>
+                    <font-awesome-icon icon="sort-amount-down" />
+                    <span v-if="isNonDefaultOrder">
+                      {{ activeOrderLabel }}
+                      <font-awesome-icon
+                        icon="times-circle"
+                        class="ms-1 reset-icon"
+                        :title="T.contestOrderBy"
+                        @click.stop="orderByEnds"
+                      />
+                    </span>
+                    <span v-else>{{ T.contestOrderBy }}</span>
                   </template>
                   <b-dropdown-item
                     href="#"

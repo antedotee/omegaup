@@ -52,7 +52,7 @@
               <h2 class="mb-0">
                 <button
                   ref="basicInfo"
-                  class="btn btn-link w-100 text-start"
+                  class="btn btn-link w-100 text-center"
                   :class="{ collapsed: !openSections['basic-info'] }"
                   type="button"
                   data-section-toggle="basic-info"
@@ -370,7 +370,7 @@
               <h2 class="mb-0">
                 <button
                   ref="logistics"
-                  class="btn btn-link w-100 text-start"
+                  class="btn btn-link w-100 text-center"
                   :class="{ collapsed: !openSections['logistics'] }"
                   type="button"
                   data-section-toggle="logistics"
@@ -585,7 +585,7 @@
               <h2 class="mb-0">
                 <button
                   ref="scoringRules"
-                  class="btn btn-link w-100 text-start"
+                  class="btn btn-link w-100 text-center"
                   :class="{ collapsed: !openSections['scoring-rules'] }"
                   type="button"
                   data-section-toggle="scoring-rules"
@@ -828,7 +828,7 @@
               <h2 class="mb-0">
                 <button
                   ref="privacy"
-                  class="btn btn-link w-100 text-start"
+                  class="btn btn-link w-100 text-center"
                   :class="{ collapsed: !openSections['privacy'] }"
                   type="button"
                   data-section-toggle="privacy"
@@ -944,7 +944,7 @@ import VueGlobal from 'vue';
 import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
 import DateTimePicker from '../DateTimePicker.vue';
-import Multiselect from 'vue-multiselect';
+import Multiselect from 'vue-multiselect/src/Multiselect.vue';
 import { types } from '../../api_types';
 import * as ui from '../../ui';
 import 'intro.js/introjs.css';
@@ -1734,8 +1734,8 @@ export default toNative(Form);
 // Overwrite default bootstrap focus styles
 .btn-group .btn:focus {
   box-shadow: none !important;
-  background-color: var(--secondary) !important;
-  border-color: var(--secondary) !important;
+  background-color: var(--bs-secondary) !important;
+  border-color: var(--bs-secondary) !important;
   z-index: 0;
 }
 .btn-group .btn:hover {

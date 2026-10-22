@@ -56,6 +56,7 @@
     </b-form-group>
     <b-form-group :label="T.problemCreatorGroupName" label-for="case-group">
       <b-form-select
+        class="w-auto"
         :model-value="multipleCasesGroup"
         :options="options"
         name="multiple-cases-group"
