@@ -50,6 +50,9 @@ module.exports = {
     // Route the bare `vue` specifier to the Vue 3 migration build (compat).
     '^vue$': '<rootDir>/node_modules/@vue/compat/dist/vue.cjs.js',
   },
+  // The codemod keeps pre-run copies of rewritten files (gitignored) under
+  // stuff/bs5-cutover/.last-run/; never collect them as suites.
+  testPathIgnorePatterns: ['/node_modules/', '/stuff/bs5-cutover/\\.last-run/'],
   setupFilesAfterEnv: ['<rootDir>/frontend/www/js/omegaup/test.setup.ts'],
   transform: {
     '.*\\.vue$': [
