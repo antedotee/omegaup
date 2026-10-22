@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+import { BCollapse } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 
 import T from '../../lang';
@@ -70,6 +71,58 @@ describe('Settings.vue', () => {
     wrapper.find('[type="submit"]').trigger('click');
     await wrapper.vm.$nextTick();
     expect(openCollapsed).toBeCalled();
+  });
+
+  it('Should toggle a section from its data-section-toggle header', async () => {
+    const wrapper = shallowMount(Form, {
+      props: { data: props },
+      global: { stubs: { BCollapse: false } },
+      attachTo: document.body,
+    });
+    const expanded: Record<string, string> = {
+      'basic-info': 'true',
+      tags: 'true',
+      validation: 'true',
+      limits: 'false',
+      access: 'false',
+      evaluation: 'false',
+    };
+    for (const [section, initial] of Object.entries(expanded)) {
+      const toggle = wrapper.find(`[data-section-toggle="${section}"]`);
+      expect(toggle.exists()).toBe(true);
+      expect(toggle.attributes('data-toggle')).toBeUndefined();
+      expect(toggle.attributes('data-target')).toBeUndefined();
+      expect(toggle.attributes('aria-expanded')).toBe(initial);
+      expect(wrapper.find(`.collapse.${section}`).exists()).toBe(true);
+    }
+    const access = wrapper.find('[data-section-toggle="access"]');
+    const accessBody = wrapper.find('.collapse.access');
+    const accessComponent = wrapper
+      .findAllComponents(BCollapse)
+      // BCollapse renders a fragment, so match on the class it was given.
+      .find((c) => String(c.vm.$attrs.class).split(' ').includes('access'));
+    if (!accessComponent) throw new Error('access BCollapse not found');
+    expect(accessBody.isVisible()).toBe(false);
+
+    await access.trigger('click');
+    expect(access.attributes('aria-expanded')).toBe('true');
+    await waitForEmit(accessComponent, 'shown');
+    expect(accessBody.isVisible()).toBe(true);
+    expect(wrapper.find('[data-problem-access-radio-yes]').isVisible()).toBe(
+      true,
+    );
+    wrapper.unmount();
+  });
+
+  it('Should reopen a collapsed section that has an empty field on submit', async () => {
+    const wrapper = shallowMount(Form, { props: { data: props } });
+    const basicInfo = wrapper.find('[data-section-toggle="basic-info"]');
+    await basicInfo.trigger('click');
+    expect(basicInfo.attributes('aria-expanded')).toBe('false');
+
+    await wrapper.find('input[name="title"]').setValue('');
+    await wrapper.find('[type="submit"]').trigger('click');
+    expect(basicInfo.attributes('aria-expanded')).toBe('true');
   });
 
   it('Should handle problem settings', () => {
@@ -411,3 +464,14 @@ describe('Settings.vue', () => {
     expect((wrapper.vm as any).showProblemCreator).toBe(false);
   });
 });
+
+// BCollapse shows and hides over a few animation frames, then emits
+// `shown`/`hidden`.
+async function waitForEmit(
+  wrapper: { emitted: (event: string) => unknown[] | undefined },
+  event: string,
+): Promise<void> {
+  while (!wrapper.emitted(event)) {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+}

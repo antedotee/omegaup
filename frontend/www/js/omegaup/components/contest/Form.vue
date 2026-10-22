@@ -53,11 +53,11 @@
                 <button
                   ref="basicInfo"
                   class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['basic-info'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".basic-info"
-                  aria-expanded="true"
-                  aria-controls="basic-info-collapse"
+                  data-section-toggle="basic-info"
+                  :aria-expanded="openSections['basic-info'] ? 'true' : 'false'"
+                  @click="toggleSection('basic-info')"
                 >
                   {{ T.contestNewFormBasicInfo }}
                   <font-awesome-icon
@@ -68,7 +68,10 @@
                 </button>
               </h2>
             </div>
-            <div class="collapse show card-body basic-info">
+            <BCollapse
+              v-model="openSections['basic-info']"
+              class="card-body basic-info"
+            >
               <div class="row">
                 <div class="mb-3 col-md-6">
                   <label>
@@ -358,7 +361,7 @@
                   </small>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
 
           <!-- Logistics Section -->
@@ -367,13 +370,12 @@
               <h2 class="mb-0">
                 <button
                   ref="logistics"
-                  class="btn btn-link w-100 text-start collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['logistics'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".logistics"
-                  aria-expanded="false"
-                  aria-controls="logistics-collapse"
-                  @click.prevent
+                  data-section-toggle="logistics"
+                  :aria-expanded="openSections['logistics'] ? 'true' : 'false'"
+                  @click="toggleSection('logistics')"
                 >
                   {{ T.contestNewFormLogistics }}
                   <font-awesome-icon
@@ -384,7 +386,10 @@
                 </button>
               </h2>
             </div>
-            <div class="collapse card-body logistics">
+            <BCollapse
+              v-model="openSections['logistics']"
+              class="card-body logistics"
+            >
               <div class="row">
                 <div class="mb-3 col-md-6">
                   <label>
@@ -571,7 +576,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
 
           <!-- Scoring Rules Section -->
@@ -580,11 +585,14 @@
               <h2 class="mb-0">
                 <button
                   ref="scoringRules"
-                  class="btn btn-link w-100 text-start collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['scoring-rules'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".scoring-rules"
-                  aria-expanded="false"
+                  data-section-toggle="scoring-rules"
+                  :aria-expanded="
+                    openSections['scoring-rules'] ? 'true' : 'false'
+                  "
+                  @click="toggleSection('scoring-rules')"
                 >
                   {{ T.contestNewFormScoringRules }}
                   <font-awesome-icon
@@ -595,7 +603,10 @@
                 </button>
               </h2>
             </div>
-            <div class="collapse card-body scoring-rules">
+            <BCollapse
+              v-model="openSections['scoring-rules']"
+              class="card-body scoring-rules"
+            >
               <div class="row">
                 <div class="mb-3 col-md-6">
                   <label>
@@ -808,7 +819,7 @@
                   }}</small>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
 
           <!-- Privacy Section -->
@@ -817,17 +828,21 @@
               <h2 class="mb-0">
                 <button
                   ref="privacy"
-                  class="btn btn-link w-100 text-start collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['privacy'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".privacy"
-                  aria-expanded="false"
+                  data-section-toggle="privacy"
+                  :aria-expanded="openSections['privacy'] ? 'true' : 'false'"
+                  @click="toggleSection('privacy')"
                 >
                   {{ T.contestNewFormPrivacy }}
                 </button>
               </h2>
             </div>
-            <div class="collapse card-body privacy">
+            <BCollapse
+              v-model="openSections['privacy']"
+              class="card-body privacy"
+            >
               <div class="row">
                 <div class="mb-3 col-md-6">
                   <label>
@@ -872,7 +887,7 @@
                   </select>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
         </div>
 
@@ -937,7 +952,7 @@ import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
 import 'v-tooltip/dist/v-tooltip.css';
 import { VTooltip } from 'v-tooltip';
-import { BModal } from 'bootstrap-vue-next';
+import { BCollapse, BModal } from 'bootstrap-vue-next';
 
 import {
   FontAwesomeIcon,
@@ -986,6 +1001,12 @@ export enum SectionName {
   Logistics = 'logistics',
   Scoring = 'scoring',
 }
+
+/**
+ * Collapsible accordion sections. Each name is also the value of the
+ * `data-section-toggle` hook on that section's header button.
+ */
+type FormSection = 'basic-info' | 'logistics' | 'scoring-rules' | 'privacy';
 
 interface LocalErrors {
   [key: string]: string;
@@ -1110,6 +1131,7 @@ const markdownConverter = new markdownModule.Converter({ preview: true });
 
 @Component({
   components: {
+    BCollapse,
     BModal,
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-datetimepicker': DateTimePicker,
@@ -1165,6 +1187,13 @@ class Form extends Vue {
   @Prop({ default: false }) canSetRecommended!: boolean;
   @Prop({ default: false }) initialRecommended!: boolean;
 
+  // Basic info starts expanded; the other sections start collapsed.
+  openSections: Record<FormSection, boolean> = {
+    'basic-info': true,
+    logistics: false,
+    'scoring-rules': false,
+    privacy: false,
+  };
   alias = this.initialAlias;
   description = this.initialDescription;
   feedback = this.initialFeedback;
@@ -1324,6 +1353,10 @@ class Form extends Vue {
         invalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
+  }
+
+  toggleSection(section: FormSection): void {
+    this.openSections[section] = !this.openSections[section];
   }
 
   hasErrorsInSection(section: SectionName): boolean {
