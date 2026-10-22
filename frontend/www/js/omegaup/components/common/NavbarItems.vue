@@ -4,72 +4,58 @@
       v-if="!omegaUpLockDown && (!inContest || isAdmin)"
       class="navbar-nav align-items-start px-3"
     >
-      <li
+      <BNavItemDropdown
         v-if="isLoggedIn"
-        class="nav-item dropdown nav-contests nav-item-align"
+        class="nav-contests nav-item-align"
         :class="{ active: navbarSection === 'contests' }"
+        no-wrapper
+        no-fade
+        toggle-class="px-2"
+        :toggle-attrs="navToggleAttrs('data-nav-contests')"
+        menu-class="fullwidth-mobile-fit-lg navbar-item-dropdown"
       >
-        <a
-          class="nav-link px-2 dropdown-toggle"
-          href="#"
-          role="button"
-          data-nav-contests
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          {{ T.wordsContests }}
-        </a>
-        <div class="dropdown-menu fullwidth-mobile-fit-lg navbar-item-dropdown">
-          <slot name="contests-items">
-            <omegaup-navbar-item
-              v-for="(entry, index) in contestsEntries"
-              :key="`contests-item-${index}`"
-              :title="entry.title"
-              :description="entry.description"
-              :icon="entry.icon"
-              :href="entry.href"
-              v-bind="entry.dataAttr ? { [entry.dataAttr]: '' } : {}"
-            />
-          </slot>
-        </div>
-      </li>
+        <template #button-content>{{ T.wordsContests }}</template>
+        <slot name="contests-items">
+          <omegaup-navbar-item
+            v-for="(entry, index) in contestsEntries"
+            :key="`contests-item-${index}`"
+            :title="entry.title"
+            :description="entry.description"
+            :icon="entry.icon"
+            :href="entry.href"
+            v-bind="entry.dataAttr ? { [entry.dataAttr]: '' } : {}"
+          />
+        </slot>
+      </BNavItemDropdown>
       <li v-else :class="{ active: navbarSection === 'contests' }">
         <a class="nav-link px-2" href="/arena/" data-nav-contests-arena>{{
           T.wordsContests
         }}</a>
       </li>
 
-      <li
+      <BNavItemDropdown
         v-if="isLoggedIn"
-        class="nav-item dropdown nav-courses nav-item-align"
+        class="nav-courses nav-item-align"
         :class="{ active: navbarSection === 'courses' }"
+        no-wrapper
+        no-fade
+        toggle-class="px-2"
+        :toggle-attrs="navToggleAttrs('data-nav-courses')"
+        menu-class="fullwidth-mobile-fit-lg navbar-item-dropdown"
       >
-        <a
-          class="nav-link px-2 dropdown-toggle"
-          href="#"
-          role="button"
-          data-nav-courses
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          {{ T.navCourses }}
-        </a>
-        <div class="dropdown-menu fullwidth-mobile-fit-lg navbar-item-dropdown">
-          <slot name="courses-items">
-            <omegaup-navbar-item
-              v-for="(entry, index) in coursesEntries"
-              :key="`courses-item-${index}`"
-              :title="entry.title"
-              :description="entry.description"
-              :icon="entry.icon"
-              :href="entry.href"
-              v-bind="entry.dataAttr ? { [entry.dataAttr]: '' } : {}"
-            />
-          </slot>
-        </div>
-      </li>
+        <template #button-content>{{ T.navCourses }}</template>
+        <slot name="courses-items">
+          <omegaup-navbar-item
+            v-for="(entry, index) in coursesEntries"
+            :key="`courses-item-${index}`"
+            :title="entry.title"
+            :description="entry.description"
+            :icon="entry.icon"
+            :href="entry.href"
+            v-bind="entry.dataAttr ? { [entry.dataAttr]: '' } : {}"
+          />
+        </slot>
+      </BNavItemDropdown>
       <li
         v-else
         :class="{ active: navbarSection === 'course' }"
@@ -78,101 +64,84 @@
         <a class="nav-link px-2" href="/course/home/">{{ T.navCourses }}</a>
       </li>
 
-      <li
-        class="nav-item dropdown nav-problems nav-item-align"
+      <BNavItemDropdown
+        class="nav-problems nav-item-align"
         :class="{ active: navbarSection === 'problems' }"
+        no-wrapper
+        no-fade
+        toggle-class="px-2"
+        :toggle-attrs="navToggleAttrs('data-nav-problems')"
+        menu-class="fullwidth-mobile-fit-lg navbar-item-dropdown"
       >
-        <a
-          class="nav-link px-2 dropdown-toggle"
-          href="#"
-          role="button"
-          data-toggle="dropdown"
-          data-nav-problems
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          {{ T.wordsProblems }}
-        </a>
-        <div class="dropdown-menu fullwidth-mobile-fit-lg navbar-item-dropdown">
-          <slot name="problems-items">
-            <template v-for="(entry, index) in problemsEntries">
-              <hr
-                v-if="entry.divider"
-                :key="`problems-divider-${index}`"
-                class="menu-divider"
-              />
-              <omegaup-navbar-item
-                v-else
-                :key="`problems-item-${index}`"
-                :title="entry.title"
-                :description="entry.description"
-                :icon="entry.icon"
-                :href="entry.href"
-                v-bind="entry.dataAttr ? { [entry.dataAttr]: '' } : {}"
-              />
-            </template>
-          </slot>
-        </div>
-      </li>
-
-      <li
-        class="nav-item dropdown nav-rank nav-item-align"
-        :class="{ active: navbarSection === 'rank' }"
-      >
-        <a
-          class="nav-link px-2 dropdown-toggle"
-          href="#"
-          role="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          {{ T.navRanking }}
-        </a>
-        <div class="dropdown-menu fullwidth-mobile-fit-lg navbar-item-dropdown">
-          <omegaup-navbar-item
-            v-for="(entry, index) in rankingEntries"
-            :key="`ranking-item-${index}`"
-            :title="entry.title"
-            :description="entry.description"
-            :icon="entry.icon"
-            :href="entry.href"
-            v-bind="entry.dataAttr ? { [entry.dataAttr]: '' } : {}"
-          />
-        </div>
-      </li>
-
-      <li class="nav-item dropdown nav-item-align">
-        <a
-          class="nav-link px-2 dropdown-toggle"
-          href="#"
-          role="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          {{ T.navHelp }}
-        </a>
-        <div class="dropdown-menu fullwidth-mobile-fit-lg navbar-item-dropdown">
-          <template v-for="(entry, index) in helpEntries">
+        <template #button-content>{{ T.wordsProblems }}</template>
+        <slot name="problems-items">
+          <template v-for="(entry, index) in problemsEntries">
             <hr
               v-if="entry.divider"
-              :key="`help-divider-${index}`"
+              :key="`problems-divider-${index}`"
               class="menu-divider"
             />
             <omegaup-navbar-item
               v-else
-              :key="`help-item-${index}`"
+              :key="`problems-item-${index}`"
               :title="entry.title"
               :description="entry.description"
               :icon="entry.icon"
               :href="entry.href"
-              :target="entry.target"
-              :rel="entry.rel"
+              v-bind="entry.dataAttr ? { [entry.dataAttr]: '' } : {}"
             />
           </template>
-        </div>
-      </li>
+        </slot>
+      </BNavItemDropdown>
+
+      <BNavItemDropdown
+        class="nav-rank nav-item-align"
+        :class="{ active: navbarSection === 'rank' }"
+        no-wrapper
+        no-fade
+        toggle-class="px-2"
+        :toggle-attrs="navToggleAttrs()"
+        menu-class="fullwidth-mobile-fit-lg navbar-item-dropdown"
+      >
+        <template #button-content>{{ T.navRanking }}</template>
+        <omegaup-navbar-item
+          v-for="(entry, index) in rankingEntries"
+          :key="`ranking-item-${index}`"
+          :title="entry.title"
+          :description="entry.description"
+          :icon="entry.icon"
+          :href="entry.href"
+          v-bind="entry.dataAttr ? { [entry.dataAttr]: '' } : {}"
+        />
+      </BNavItemDropdown>
+
+      <BNavItemDropdown
+        class="nav-item-align"
+        no-wrapper
+        no-fade
+        toggle-class="px-2"
+        :toggle-attrs="navToggleAttrs()"
+        menu-class="fullwidth-mobile-fit-lg navbar-item-dropdown"
+      >
+        <template #button-content>{{ T.navHelp }}</template>
+        <template v-for="(entry, index) in helpEntries">
+          <hr
+            v-if="entry.divider"
+            :key="`help-divider-${index}`"
+            class="menu-divider"
+          />
+          <omegaup-navbar-item
+            v-else
+            :key="`help-item-${index}`"
+            :title="entry.title"
+            :description="entry.description"
+            :icon="entry.icon"
+            :href="entry.href"
+            :target="entry.target"
+            :rel="entry.rel"
+          />
+        </template>
+      </BNavItemDropdown>
     </ul>
     <ul v-else class="navbar-nav me-auto"></ul>
   </div>
@@ -221,6 +190,7 @@ import {
   faVideo,
 } from '@fortawesome/free-solid-svg-icons';
 import NavbarItem from './NavbarItem.vue';
+import { navToggleAttrs } from './navDropdown';
 
 library.add(
   faAward,
@@ -267,6 +237,7 @@ class NavbarItems extends Vue {
   @Prop() isUnder13User!: boolean;
 
   T = T;
+  navToggleAttrs = navToggleAttrs;
 
   get access(): NavbarAccess {
     return {
@@ -301,8 +272,9 @@ export default toNative(NavbarItems);
 </script>
 
 <style lang="scss" scoped>
+// The menu <ul> is rendered by BNavItemDropdown, so it carries no scope id.
 @media only screen and (max-width: 992px) {
-  .navbar-item-dropdown {
+  :deep(.navbar-item-dropdown) {
     min-width: auto !important;
     width: auto !important;
     max-width: 85vw !important;

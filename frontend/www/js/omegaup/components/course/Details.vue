@@ -26,74 +26,60 @@
       }}</span>
       <div class="mt-2 row float-sm-end">
         <div v-if="course.is_admin" class="col">
-          <div class="dropdown">
+          <BDropdown
+            variant="primary"
+            no-fade
+            toggle-class="p-1 p-sm-2"
+            :toggle-attrs="{ 'data-button-statistics': '' }"
+            :text="T.wordsStatistics"
+          >
             <a
-              data-button-statistics
-              class="btn btn-primary dropdown-toggle p-1 p-sm-2"
-              href="#"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
+              data-button-progress-students
+              class="dropdown-item"
+              :href="`/course/${course.alias}/students/`"
+              >{{ T.courseStudentsProgress }}</a
             >
-              {{ T.wordsStatistics }}
-            </a>
-            <div class="dropdown-menu">
-              <a
-                data-button-progress-students
-                class="dropdown-item"
-                :href="`/course/${course.alias}/students/`"
-                >{{ T.courseStudentsProgress }}</a
-              >
-              <a
-                data-button-activity-report
-                class="dropdown-item"
-                :href="`/course/${course.alias}/activity/`"
-                >{{ T.activityReport }}</a
-              >
-              <a
-                data-button-activity-report
-                class="dropdown-item"
-                :href="`/course/${course.alias}/statistics/`"
-                >{{ T.omegaupTitleCourseStatistics }}</a
-              >
-            </div>
-          </div>
+            <a
+              data-button-activity-report
+              class="dropdown-item"
+              :href="`/course/${course.alias}/activity/`"
+              >{{ T.activityReport }}</a
+            >
+            <a
+              data-button-activity-report
+              class="dropdown-item"
+              :href="`/course/${course.alias}/statistics/`"
+              >{{ T.omegaupTitleCourseStatistics }}</a
+            >
+          </BDropdown>
         </div>
         <div v-if="course.is_admin" class="col d-flex justify-content-center">
-          <div class="dropdown">
+          <BDropdown
+            variant="primary"
+            no-fade
+            toggle-class="p-1 p-sm-2"
+            :toggle-attrs="{ 'data-button-manage-course': '' }"
+            :text="T.courseDetailsSettings"
+          >
             <a
-              data-button-manage-course
-              class="btn btn-primary dropdown-toggle p-1 p-sm-2"
-              href="#"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
+              data-button-manage-students
+              class="dropdown-item"
+              :href="`/course/${course.alias}/edit/#students`"
+              >{{ T.wordsAddStudent }}</a
             >
-              {{ T.courseDetailsSettings }}
-            </a>
-            <div class="dropdown-menu">
-              <a
-                data-button-manage-students
-                class="dropdown-item"
-                :href="`/course/${course.alias}/edit/#students`"
-                >{{ T.wordsAddStudent }}</a
-              >
-              <a
-                data-button-manage-content
-                class="dropdown-item"
-                :href="`/course/${course.alias}/edit/#content`"
-                >{{ T.wordsContentEdit }}</a
-              >
-              <a
-                data-button-manage-content
-                class="dropdown-item"
-                :href="`/course/${course.alias}/edit/#clone`"
-                >{{ T.wordsCloneThisCourse }}</a
-              >
-            </div>
-          </div>
+            <a
+              data-button-manage-content
+              class="dropdown-item"
+              :href="`/course/${course.alias}/edit/#content`"
+              >{{ T.wordsContentEdit }}</a
+            >
+            <a
+              data-button-manage-content
+              class="dropdown-item"
+              :href="`/course/${course.alias}/edit/#clone`"
+              >{{ T.wordsCloneThisCourse }}</a
+            >
+          </BDropdown>
         </div>
         <div class="col">
           <a
@@ -224,31 +210,19 @@
         </div>
       </div>
       <div class="d-flex justify-content-end py-3 px-5 mx-3 p-sm-0 mx-sm-0">
-        <div class="dropdown">
+        <BDropdown variant="primary" no-fade :text="T.wordsActions">
           <a
-            class="btn btn-primary dropdown-toggle"
-            href="#"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
+            :href="`/course/${course.alias}/clarification/`"
+            class="dropdown-item"
+            >{{ T.wordsMyClarifications }}</a
           >
-            {{ T.wordsActions }}
-          </a>
-          <div class="dropdown-menu">
-            <a
-              :href="`/course/${course.alias}/clarification/`"
-              class="dropdown-item"
-              >{{ T.wordsMyClarifications }}</a
-            >
-            <a
-              v-if="course.admission_mode === 'public'"
-              :href="`/course/${course.alias}/clone/`"
-              class="dropdown-item"
-              >{{ T.wordsCloneThisCourse }}</a
-            >
-          </div>
-        </div>
+          <a
+            v-if="course.admission_mode === 'public'"
+            :href="`/course/${course.alias}/clone/`"
+            class="dropdown-item"
+            >{{ T.wordsCloneThisCourse }}</a
+          >
+        </BDropdown>
       </div>
       <ul class="nav nav-tabs" role="tablist">
         <li

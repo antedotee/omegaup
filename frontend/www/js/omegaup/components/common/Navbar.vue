@@ -108,19 +108,17 @@
                   @read="readNotifications"
                 ></omegaup-notification-list>
               </li>
-              <li
-                class="nav-item dropdown nav-user nav-item-align"
+              <BNavItemDropdown
+                class="nav-user nav-item-align"
                 data-nav-right
+                no-wrapper
+                no-fade
+                placement="bottom-end"
+                toggle-class="px-2 nav-user-link"
+                :toggle-attrs="navToggleAttrs('data-nav-user')"
+                menu-class="dropdown-menu-end allow-overflow h-auto overflow-auto"
               >
-                <a
-                  class="nav-link px-2 dropdown-toggle nav-user-link"
-                  href="#"
-                  role="button"
-                  data-nav-user
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
+                <template #button-content>
                   <img
                     :src="gravatarURL51"
                     height="45"
@@ -135,168 +133,167 @@
                     :error="errorMessage !== null"
                     class="me-1"
                   ></omegaup-common-grader-badge>
-                </a>
-                <div
-                  class="dropdown-menu dropdown-menu-end allow-overflow h-auto overflow-auto"
-                  data-dropdown-menu
-                >
-                  <template v-if="!omegaUpLockDown && (!inContest || isAdmin)">
-                    <div class="text-center mb-1">
-                      <img
-                        :src="gravatarURL128"
-                        height="70"
-                        class="rounded-circle mb-1"
-                        :title="currentUsername"
-                        :alt="T.navUserAvatarAlt"
-                      />
-                      <h5 v-if="currentName !== ''" class="mx-2">
-                        {{ currentName }}
-                      </h5>
-                      <h5 v-else class="mx-2">{{ currentUsername }}</h5>
-                      <h6 class="mx-2">{{ currentEmail }}</h6>
-                    </div>
-                    <a
-                      v-show="!omegaUpLockDown && (!inContest || isAdmin)"
-                      class="dropdown-item text-center"
-                      data-nav-profile
-                      href="/profile/"
+                </template>
+                <template v-if="!omegaUpLockDown && (!inContest || isAdmin)">
+                  <div class="text-center mb-1">
+                    <img
+                      :src="gravatarURL128"
+                      height="70"
+                      class="rounded-circle mb-1"
+                      :title="currentUsername"
+                      :alt="T.navUserAvatarAlt"
+                    />
+                    <h5 v-if="currentName !== ''" class="mx-2">
+                      {{ currentName }}
+                    </h5>
+                    <h5 v-else class="mx-2">{{ currentUsername }}</h5>
+                    <h6 class="mx-2">{{ currentEmail }}</h6>
+                  </div>
+                  <a
+                    v-show="!omegaUpLockDown && (!inContest || isAdmin)"
+                    class="dropdown-item text-center"
+                    data-nav-profile
+                    href="/profile/"
+                  >
+                    <font-awesome-icon :icon="['fas', 'user']" />
+                    {{ T.navViewProfile }}
+                    <div
+                      v-if="profileProgress !== 0"
+                      class="progress mt-2 position-relative"
                     >
-                      <font-awesome-icon :icon="['fas', 'user']" />
-                      {{ T.navViewProfile }}
                       <div
-                        v-if="profileProgress !== 0"
-                        class="progress mt-2 position-relative"
-                      >
-                        <div
-                          class="progress-bar progress-bar-striped bg-info"
-                          role="progressbar"
-                          :style="{ width: `${profileProgress}%` }"
-                          :aria-valuenow="profileProgress"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
-                        <small class="progress-text">
-                          {{ profileProgress.toFixed(1) }}%
-                        </small>
-                      </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <div v-if="identitiesNotLoggedIn.length > 0" class="mb-1">
-                      <div
-                        v-for="identity in identitiesNotLoggedIn"
-                        :key="identity.username"
-                      >
-                        <button
-                          class="btn btn-link dropdown-item"
-                          @click="$emit('change-account', identity.username)"
-                        >
-                          <img
-                            :src="gravatarURL51"
-                            height="45"
-                            class="rounded-circle me-3"
-                            :title="identity.username"
-                            :alt="identity.username"
-                          />{{ identity.username }}
-                        </button>
-                      </div>
-                      <div class="dropdown-divider"></div>
+                        class="progress-bar progress-bar-striped bg-info"
+                        role="progressbar"
+                        :style="{ width: `${profileProgress}%` }"
+                        :aria-valuenow="profileProgress"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                      <small class="progress-text">
+                        {{ profileProgress.toFixed(1) }}%
+                      </small>
                     </div>
-                    <a class="dropdown-item" href="/badge/list/">{{
-                      T.navViewBadges
-                    }}</a>
-                    <a class="dropdown-item" href="/profile/#problems">{{
-                      T.navProfileProblems
-                    }}</a>
-                    <a
-                      class="dropdown-item"
-                      href="/course/#enrolled"
-                      data-nav-courses-mine
-                      >{{ T.navCoursesEnrolled }}</a
-                    >
-                    <a
-                      class="dropdown-item"
-                      href="/arena/?page=1&tab_name=current&sort_order=none&filter=signedup"
-                      data-nav-user-contests-enrolled
-                      >{{ T.navContestsEnrolled }}</a
-                    >
-                    <a
-                      v-if="!isUnder13User"
-                      class="dropdown-item"
-                      href="/dependents"
-                      >{{ T.navDependents }}</a
-                    >
-                    <form v-if="!isUnder13User" class="collapse-submenu">
-                      <div class="btn-group">
-                        <a
-                          class="dropdown-item"
-                          href="/profile/#created-content"
-                          >{{ T.navMyContent }}</a
-                        >
-                        <button
-                          type="button"
-                          class="btn dropdown-item dropdown-toggle dropdown-toggle-split"
-                          :aria-expanded="linksExpanded ? 'true' : 'false'"
-                          aria-controls="collapse-links"
-                          @click="linksExpanded = !linksExpanded"
-                        ></button>
-                      </div>
-                      <b-collapse
-                        v-model="linksExpanded"
-                        class="collapse-links ps-3"
-                      >
-                        <a class="dropdown-item" href="/problem/mine">{{
-                          T.navMyProblems
-                        }}</a>
-                        <a
-                          class="dropdown-item"
-                          href="/course/mine"
-                          data-nav-courses-mine
-                          >{{ T.navMyCourses }}</a
-                        >
-                        <a
-                          class="dropdown-item"
-                          href="/contest/mine"
-                          data-nav-user-contests
-                          >{{ T.navMyContests }}</a
-                        >
-                      </b-collapse>
-                    </form>
-
-                    <a
-                      class="dropdown-item"
-                      href="/group/"
-                      data-nav-user-groups
-                      >{{ T.navMyGroups }}</a
-                    >
-                    <a
-                      class="dropdown-item"
-                      href="/teamsgroup/"
-                      data-nav-user-teams-groups
-                      >{{ T.navMyTeamsGroups }}</a
-                    >
-                    <a class="dropdown-item" href="/nomination/mine/">{{
-                      T.navMyQualityNomination
-                    }}</a>
-                  </template>
+                  </a>
                   <div class="dropdown-divider"></div>
-                  <!-- Logout button for desktop - navbar menu -->
+                  <div v-if="identitiesNotLoggedIn.length > 0" class="mb-1">
+                    <div
+                      v-for="identity in identitiesNotLoggedIn"
+                      :key="identity.username"
+                    >
+                      <button
+                        class="btn btn-link dropdown-item"
+                        @click="$emit('change-account', identity.username)"
+                      >
+                        <img
+                          :src="gravatarURL51"
+                          height="45"
+                          class="rounded-circle me-3"
+                          :title="identity.username"
+                          :alt="identity.username"
+                        />{{ identity.username }}
+                      </button>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                  </div>
+                  <a class="dropdown-item" href="/badge/list/">{{
+                    T.navViewBadges
+                  }}</a>
+                  <a class="dropdown-item" href="/profile/#problems">{{
+                    T.navProfileProblems
+                  }}</a>
                   <a
                     class="dropdown-item"
-                    href="#"
-                    data-logout-button
-                    @click.prevent="logoutModalVisible = true"
+                    href="/course/#enrolled"
+                    data-nav-courses-mine
+                    >{{ T.navCoursesEnrolled }}</a
                   >
-                    <font-awesome-icon :icon="['fas', 'power-off']" />
-                    {{ T.omegaupTitleLogout }}
-                  </a>
-                  <omegaup-common-grader-status
-                    v-show="isAdmin"
-                    :status="errorMessage !== null ? 'down' : 'ok'"
-                    :error="errorMessage"
-                    :grader-info="graderInfo"
-                  ></omegaup-common-grader-status>
-                </div>
-              </li>
+                  <a
+                    class="dropdown-item"
+                    href="/arena/?page=1&tab_name=current&sort_order=none&filter=signedup"
+                    data-nav-user-contests-enrolled
+                    >{{ T.navContestsEnrolled }}</a
+                  >
+                  <a
+                    v-if="!isUnder13User"
+                    class="dropdown-item"
+                    href="/dependents"
+                    >{{ T.navDependents }}</a
+                  >
+                  <form
+                    v-if="!isUnder13User"
+                    class="collapse-submenu"
+                    @click.stop
+                  >
+                    <div class="btn-group">
+                      <a
+                        class="dropdown-item"
+                        href="/profile/#created-content"
+                        >{{ T.navMyContent }}</a
+                      >
+                      <button
+                        type="button"
+                        class="btn dropdown-item dropdown-toggle dropdown-toggle-split"
+                        :aria-expanded="linksExpanded ? 'true' : 'false'"
+                        aria-controls="collapse-links"
+                        @click="linksExpanded = !linksExpanded"
+                      ></button>
+                    </div>
+                    <b-collapse
+                      v-model="linksExpanded"
+                      class="collapse-links ps-3"
+                    >
+                      <a class="dropdown-item" href="/problem/mine">{{
+                        T.navMyProblems
+                      }}</a>
+                      <a
+                        class="dropdown-item"
+                        href="/course/mine"
+                        data-nav-courses-mine
+                        >{{ T.navMyCourses }}</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        href="/contest/mine"
+                        data-nav-user-contests
+                        >{{ T.navMyContests }}</a
+                      >
+                    </b-collapse>
+                  </form>
+
+                  <a
+                    class="dropdown-item"
+                    href="/group/"
+                    data-nav-user-groups
+                    >{{ T.navMyGroups }}</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    href="/teamsgroup/"
+                    data-nav-user-teams-groups
+                    >{{ T.navMyTeamsGroups }}</a
+                  >
+                  <a class="dropdown-item" href="/nomination/mine/">{{
+                    T.navMyQualityNomination
+                  }}</a>
+                </template>
+                <div class="dropdown-divider"></div>
+                <!-- Logout button for desktop - navbar menu -->
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  data-logout-button
+                  @click.prevent="logoutModalVisible = true"
+                >
+                  <font-awesome-icon :icon="['fas', 'power-off']" />
+                  {{ T.omegaupTitleLogout }}
+                </a>
+                <omegaup-common-grader-status
+                  v-show="isAdmin"
+                  :status="errorMessage !== null ? 'down' : 'ok'"
+                  :error="errorMessage"
+                  :grader-info="graderInfo"
+                ></omegaup-common-grader-status>
+              </BNavItemDropdown>
             </ul>
 
             <!-- Logout button for mobile -->
@@ -381,6 +378,7 @@ import common_GraderBadge from '../common/GraderBadge.vue';
 import user_objectives_questions from '../user/ObjectivesQuestions.vue';
 import user_next_registered_contest from '../user/NextRegisteredContest.vue';
 import navbar_items from './NavbarItems.vue';
+import { navToggleAttrs } from './navDropdown';
 import { AvailableTabs } from '../login/Signin.vue';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -440,6 +438,7 @@ class Navbar extends Vue {
   T = T;
   ui = ui;
   AvailableTabs = AvailableTabs;
+  navToggleAttrs = navToggleAttrs;
   logoutModalVisible = false;
   navbarExpanded = false;
   linksExpanded = false;
@@ -673,20 +672,37 @@ nav.navbar {
     width: 100%;
   }
 
-  .navbar-nav:not(:has(.dropdown.show)) .dropdown:hover > .dropdown-menu {
-    display: block;
+  // BButton always renders `.btn`. On a nav toggle that adds button padding
+  // and a link underline the Bootstrap 4 `.nav-link` did not have.
+  .navbar-nav .dropdown-toggle.nav-link.btn {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    font-weight: inherit;
+    line-height: inherit;
+    text-decoration: none;
   }
 
-  .navbar-right:not(:has(.dropdown.show)) .dropdown:hover > .dropdown-menu {
-    display: block;
-  }
-
-  .dropdown.show > .dropdown-menu {
+  // Hover reveal for the BNavItemDropdown menus. BVN marks an open menu with
+  // `.dropdown-menu.show` (not `.dropdown.show`) and hides a closed one with
+  // an inline `display: none`, hence `!important`. A hover-revealed menu is
+  // not positioned by floating-ui, so it gets Bootstrap 4's static navbar
+  // placement (below the toggle, start- or end-aligned).
+  .navbar-nav:not(:has(.dropdown-menu.show)) .dropdown:hover > .dropdown-menu {
     display: block !important;
+    top: 100% !important;
+    left: 0 !important;
+    transform: none !important;
+
+    &.dropdown-menu-end {
+      left: auto !important;
+      right: 0 !important;
+    }
   }
 
-  .navbar-collapse:has(.dropdown.show)
-    .dropdown:not(.show):hover
+  .navbar-collapse:has(.dropdown-menu.show)
+    .dropdown:not(:has(> .dropdown-menu.show)):hover
     > .dropdown-menu {
     display: none !important;
   }
