@@ -424,54 +424,44 @@
                     </span>
                   </button>
                 </div>
-                <div class="dropdown d-inline-block">
-                  <button
-                    data-runs-actions-button
-                    class="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+                <BDropdown
+                  variant="secondary"
+                  class="d-inline-block"
+                  :text="T.arenaRunsActions"
+                  :toggle-attrs="{ 'data-runs-actions-button': '' }"
+                >
+                  <BDropdownItemButton
+                    v-if="showRejudge"
+                    :data-actions-rejudge="run.guid"
+                    @click="$emit('rejudge', run)"
                   >
-                    {{ T.arenaRunsActions }}
-                  </button>
-                  <div class="dropdown-menu">
-                    <button
-                      v-if="showRejudge"
-                      :data-actions-rejudge="run.guid"
-                      class="btn-link dropdown-item"
-                      @click="$emit('rejudge', run)"
-                    >
-                      {{ T.arenaRunsActionsRejudge }}
-                    </button>
-                    <template v-if="showDisqualify">
-                      <div class="dropdown-divider"></div>
-                      <template v-if="run.type === 'normal'">
-                        <button
-                          :data-actions-disqualify="run.guid"
-                          class="btn-link dropdown-item"
-                          @click="
-                            $emit('disqualify', {
-                              run,
-                              disqualificationType: DisqualificationType.ByGUID,
-                            })
-                          "
-                        >
-                          {{ T.arenaRunsActionsDisqualifyByGUID }}
-                        </button>
-                      </template>
-
-                      <button
-                        v-else-if="run.type === 'disqualified'"
-                        :data-actions-requalify="run.guid"
-                        class="btn-link dropdown-item"
-                        @click="$emit('requalify', run)"
+                    {{ T.arenaRunsActionsRejudge }}
+                  </BDropdownItemButton>
+                  <template v-if="showDisqualify">
+                    <BDropdownDivider />
+                    <template v-if="run.type === 'normal'">
+                      <BDropdownItemButton
+                        :data-actions-disqualify="run.guid"
+                        @click="
+                          $emit('disqualify', {
+                            run,
+                            disqualificationType: DisqualificationType.ByGUID,
+                          })
+                        "
                       >
-                        {{ T.arenaRunsActionsRequalify }}
-                      </button>
+                        {{ T.arenaRunsActionsDisqualifyByGUID }}
+                      </BDropdownItemButton>
                     </template>
-                  </div>
-                </div>
+
+                    <BDropdownItemButton
+                      v-else-if="run.type === 'disqualified'"
+                      :data-actions-requalify="run.guid"
+                      @click="$emit('requalify', run)"
+                    >
+                      {{ T.arenaRunsActionsRequalify }}
+                    </BDropdownItemButton>
+                  </template>
+                </BDropdown>
               </td>
               <td v-else></td>
             </tr>
