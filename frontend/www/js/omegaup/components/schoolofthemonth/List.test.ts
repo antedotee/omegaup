@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 
 import T from '../../lang';
 
@@ -6,7 +6,7 @@ import schoolOfTheMonth_List from './List.vue';
 
 describe('List.vue', () => {
   it('Should handle empty lists', () => {
-    const wrapper = shallowMount(schoolOfTheMonth_List, {
+    const wrapper = mount(schoolOfTheMonth_List, {
       props: {
         schoolsOfPreviousMonth: [],
         schoolsOfPreviousMonths: [],

@@ -224,24 +224,16 @@
           >
         </BDropdown>
       </div>
-      <ul class="nav nav-tabs" role="tablist">
-        <li
+      <BNav tabs>
+        <BNavItem
           v-for="(tabName, tabKey) in tabNames"
           :key="tabKey"
-          class="nav-item"
-          role="presentation"
+          :active="selectedTab === tabKey"
+          :href="'#' + tabKey"
+          @click="selectedTab = tabKey"
+          >{{ tabName }}</BNavItem
         >
-          <a
-            class="nav-link"
-            :href="`#${tabKey}`"
-            :class="{ active: selectedTab === tabKey }"
-            data-toggle="tab"
-            role="tab"
-            @click="selectedTab = tabKey"
-            >{{ tabName }}</a
-          >
-        </li>
-      </ul>
+      </BNav>
       <div class="tab-content">
         <div
           class="tab-pane fade py-4 px-2"
@@ -302,6 +294,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import T from '../../lang';
 import * as ui from '../../ui';
 import * as time from '../../time';
@@ -327,6 +320,8 @@ export enum Tab {
 
 @Component({
   components: {
+    BNav,
+    BNavItem,
     FontAwesomeIcon,
     'omegaup-markdown': omegaup_Markdown,
     'omegaup-assignment-card': course_AssignmentCard,

@@ -52,42 +52,36 @@
             <template v-if="points(selectedAssignment) === 0">
               {{ T.studentProgressOnlyLecturesDescription }}
             </template>
-            <ul v-else class="nav nav-pills card-header-pills">
-              <li
+            <BNav v-else pills card-header>
+              <!-- BNavItem only forwards extra anchor attributes through link-attrs. -->
+              <BNavItem
                 v-for="problem in problemsWithPoints"
                 :key="problem.alias"
-                class="nav-item"
-                role="presentation"
+                :active="
+                  selectedProblem != null &&
+                  problem.alias === selectedProblem.alias
+                "
+                href="#home"
+                :link-attrs="{
+                  'data-problem-alias': problem.alias,
+                  'aria-controls': 'home',
+                }"
+                @click="selectedProblem = problem"
               >
-                <a
-                  aria-controls="home"
-                  data-toggle="tab"
-                  href="#home"
-                  class="nav-link"
-                  :class="{
-                    active:
-                      selectedProblem &&
-                      problem.alias === selectedProblem.alias,
-                  }"
-                  role="tab"
-                  :data-problem-alias="problem.alias"
-                  @click="selectedProblem = problem"
+                <template v-if="problem.runs.length > 0">
+                  {{ bestScore(problem) * problem.points }} /
+                  {{ problem.points }}
+                </template>
+                <template v-if="problem.is_extra_problem">
+                  {{ T.studentProgressExtraProblem }}
+                </template>
+                <template
+                  v-if="problem.runs.length > 0 || problem.is_extra_problem"
+                  >-</template
                 >
-                  <template v-if="problem.runs.length > 0">
-                    {{ bestScore(problem) * problem.points }} /
-                    {{ problem.points }}
-                  </template>
-                  <template v-if="problem.is_extra_problem">
-                    {{ T.studentProgressExtraProblem }}
-                  </template>
-                  <template
-                    v-if="problem.runs.length > 0 || problem.is_extra_problem"
-                    >-</template
-                  >
-                  {{ problem.title }} ({{ problem.runs.length }})
-                </a>
-              </li>
-            </ul>
+                {{ problem.title }} ({{ problem.runs.length }})
+              </BNavItem>
+            </BNav>
           </div>
           <div v-if="!selectedProblem">
             <div class="empty-category px-10 py-10"></div>
@@ -185,6 +179,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch, toNative } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import { omegaup } from '../../omegaup';
 import { types } from '../../api_types';
 
@@ -197,6 +192,8 @@ import * as time from '../../time';
 
 @Component({
   components: {
+    BNav,
+    BNavItem,
     'omegaup-markdown': omegaup_problemMarkdown,
     'omegaup-user-username': user_Username,
   },

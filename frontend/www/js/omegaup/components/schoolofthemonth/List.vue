@@ -1,51 +1,43 @@
 <template>
   <div class="card ranking-width">
-    <ul class="nav nav-tabs justify-content-around">
-      <li class="nav-item">
-        <a
-          href="#"
-          class="nav-link"
-          data-toggle="tab"
-          role="tab"
-          aria-controls="allSchoolsOfTheMonth"
-          :class="{ active: selectedTab === 'allSchoolsOfTheMonth' }"
-          :aria-selected="selectedTab === 'allSchoolsOfTheMonth'"
-          @click="selectedTab = 'allSchoolsOfTheMonth'"
-        >
-          {{ T.schoolsOfTheMonth }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          href="#"
-          class="nav-link"
-          data-toggle="tab"
-          role="tab"
-          aria-controls="schoolsOfPreviousMonth"
-          :class="{ active: selectedTab === 'schoolsOfPreviousMonth' }"
-          :aria-selected="selectedTab === 'schoolsOfPreviousMonth'"
-          @click="selectedTab = 'schoolsOfPreviousMonth'"
-        >
-          {{ T.schoolsOfTheMonthRank }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          href="#"
-          class="nav-link"
-          data-toggle="tab"
-          role="tab"
-          aria-controls="candidatesToSchoolOfTheMonth"
-          :class="{
-            active: selectedTab === 'candidatesToSchoolOfTheMonth',
-          }"
-          :aria-selected="selectedTab === 'candidatesToSchoolOfTheMonth'"
-          @click="selectedTab = 'candidatesToSchoolOfTheMonth'"
-        >
-          {{ T.schoolsOfTheMonthCandidates }}
-        </a>
-      </li>
-    </ul>
+    <BNav tabs align="around">
+      <BNavItem
+        :active="selectedTab === 'allSchoolsOfTheMonth'"
+        href="#"
+        :link-attrs="{
+          'aria-controls': 'allSchoolsOfTheMonth',
+          'aria-selected':
+            selectedTab === 'allSchoolsOfTheMonth' ? 'true' : 'false',
+        }"
+        @click="selectedTab = 'allSchoolsOfTheMonth'"
+      >
+        {{ T.schoolsOfTheMonth }}
+      </BNavItem>
+      <BNavItem
+        :active="selectedTab === 'schoolsOfPreviousMonth'"
+        href="#"
+        :link-attrs="{
+          'aria-controls': 'schoolsOfPreviousMonth',
+          'aria-selected':
+            selectedTab === 'schoolsOfPreviousMonth' ? 'true' : 'false',
+        }"
+        @click="selectedTab = 'schoolsOfPreviousMonth'"
+      >
+        {{ T.schoolsOfTheMonthRank }}
+      </BNavItem>
+      <BNavItem
+        :active="selectedTab === 'candidatesToSchoolOfTheMonth'"
+        href="#"
+        :link-attrs="{
+          'aria-controls': 'candidatesToSchoolOfTheMonth',
+          'aria-selected':
+            selectedTab === 'candidatesToSchoolOfTheMonth' ? 'true' : 'false',
+        }"
+        @click="selectedTab = 'candidatesToSchoolOfTheMonth'"
+      >
+        {{ T.schoolsOfTheMonthCandidates }}
+      </BNavItem>
+    </BNav>
     <div v-if="isDisabled" class="system-in-maintainance m-5 text-center">
       <omegaup-markdown
         :markdown="T.schoolOfTheMonthSystemInMaintainance"
@@ -111,6 +103,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import { omegaup } from '../../omegaup';
 import T from '../../lang';
 import country_Flag from '../CountryFlag.vue';
@@ -122,6 +115,8 @@ library.add(faCogs);
 
 @Component({
   components: {
+    BNav,
+    BNavItem,
     'omegaup-country-flag': country_Flag,
     'omegaup-markdown': omegaup_Markdown,
     'font-awesome-icon': FontAwesomeIcon,
@@ -155,8 +150,9 @@ export default toNative(SchoolOfTheMonthList);
 </script>
 
 <style scoped>
-.nav-link.active,
-.nav-link:hover {
+/* BNavItem renders the anchor, so these rules have to cross that boundary. */
+:deep(.nav-link.active),
+:deep(.nav-link:hover) {
   border: none;
   border-left: 0.0625rem solid #dee2e6;
   border-right: 0.0625rem solid #dee2e6;
@@ -167,7 +163,7 @@ export default toNative(SchoolOfTheMonthList);
   border-bottom: 0rem;
 }
 
-.nav-link {
+:deep(.nav-link) {
   font-weight: medium;
   letter-spacing: 0.022rem;
   padding: 0.65rem 1rem;

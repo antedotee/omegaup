@@ -1,37 +1,34 @@
 <template>
   <div class="mt-4">
-    <ul v-if="shouldShowTabs" class="nav justify-content-center nav-tabs">
-      <li
+    <BNav v-if="shouldShowTabs" tabs align="center">
+      <BNavItem
         v-for="tab in availableTabs"
         :key="tab.name"
-        class="nav-item"
-        role="tablist"
+        :active="selectedTab === tab.name"
+        :href="'#' + tab.name"
+        :link-attrs="{
+          'aria-controls': tab.name,
+          'aria-selected': selectedTab === tab.name ? 'true' : 'false',
+        }"
+        @click="onTabSelected(tab.name)"
       >
-        <a
-          :href="`#${tab.name}`"
-          class="nav-link"
-          data-toggle="tab"
-          role="tab"
-          :aria-controls="tab.name"
-          :class="{ active: selectedTab === tab.name }"
-          :aria-selected="selectedTab === tab.name"
-          @click="onTabSelected(tab.name)"
+        {{ tab.text }}
+        <span
+          v-if="tab.name === 'clarifications'"
+          class="clarifications-count"
+          :class="{ 'fw-bold': hasUnreadClarifications }"
+          >{{ clarificationsCount }}</span
         >
-          {{ tab.text }}
-          <span
-            v-if="tab.name === 'clarifications'"
-            class="clarifications-count"
-            :class="{ 'fw-bold': hasUnreadClarifications }"
-            >{{ clarificationsCount }}</span
-          >
-        </a>
-      </li>
-    </ul>
+      </BNavItem>
+    </BNav>
     <div class="tab-content">
       <div
         v-if="problem"
         class="tab-pane fade py-4 p-lg-4"
-        :class="{ 'show active': selectedTab === 'problems' }"
+        :class="{
+          show: selectedTab === 'problems',
+          active: selectedTab === 'problems',
+        }"
       >
         <omegaup-problem-settings-summary
           :problem="problem"
@@ -264,7 +261,10 @@
       </div>
       <div
         class="tab-pane fade p-4"
-        :class="{ 'show active': selectedTab === 'runs' }"
+        :class="{
+          show: selectedTab === 'runs',
+          active: selectedTab === 'runs',
+        }"
       >
         <omegaup-arena-runs
           v-if="!useNewVerdictTable"
@@ -353,7 +353,10 @@
       </div>
       <div
         class="tab-pane fade p-4"
-        :class="{ 'show active': selectedTab === 'clarifications' }"
+        :class="{
+          show: selectedTab === 'clarifications',
+          active: selectedTab === 'clarifications',
+        }"
       >
         <omegaup-arena-clarification-list
           :clarifications="currentClarifications"
@@ -368,7 +371,10 @@
       </div>
       <div
         class="tab-pane fade p-4"
-        :class="{ 'show active': selectedTab === 'solution' }"
+        :class="{
+          show: selectedTab === 'solution',
+          active: selectedTab === 'solution',
+        }"
       >
         <omegaup-problem-solution
           :status="solutionStatus"
@@ -394,6 +400,7 @@ import {
   Watch,
   toNative,
 } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
@@ -448,6 +455,8 @@ export { PopupDisplayed };
 @Component({
   emits: ['clarification-response'],
   components: {
+    BNav,
+    BNavItem,
     FontAwesomeIcon,
     'omegaup-problem-solution': problem_soltion,
     'omegaup-arena-clarification-list': arena_ClarificationList,

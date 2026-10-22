@@ -1,28 +1,20 @@
 <template>
   <div class="container-fluid max-width card pe-0 ps-0 custom-card">
-    <ul class="nav nav-tabs introjs-tabs" role="tablist">
-      <li
+    <BNav tabs class="introjs-tabs">
+      <BNavItem
         v-for="(tabName, tabKey) in tabNames"
         :key="tabKey"
-        class="nav-item"
-        role="presentation"
+        :active="currentSelectedTab === tabKey"
+        :href="'#' + tabKey"
+        @click="currentSelectedTab = tabKey"
+        >{{ tabName }}</BNavItem
       >
-        <a
-          class="nav-link"
-          :href="`#${tabKey}`"
-          :class="{ active: currentSelectedTab === tabKey }"
-          data-toggle="tab"
-          role="tab"
-          @click="currentSelectedTab = tabKey"
-          >{{ tabName }}</a
-        >
-      </li>
       <li class="ms-auto">
         <a class="nav-link border-0" href="/course/home/">{{
           T.wordsReadMore
         }}</a>
       </li>
-    </ul>
+    </BNav>
     <div class="tab-content">
       <div class="row m-0 mt-4 course-filters">
         <div class="col-md-4 col-lg-3 p-0 ms-4">
@@ -130,6 +122,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import VueGlobal from 'vue';
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -160,6 +153,8 @@ export enum Level {
 
 @Component({
   components: {
+    BNav,
+    BNavItem,
     'omegaup-course-card-public': course_CardPublic,
     'omegaup-course-card-enrolled': course_CardEnrolled,
     'omegaup-course-card-finished': course_CardFinished,

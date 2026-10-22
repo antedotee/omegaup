@@ -10,54 +10,60 @@
       </h2>
       <slot name="clock"><div class="clock">∞</div></slot>
     </div>
-    <ul class="nav justify-content-center nav-tabs mt-4">
-      <li
+    <BNav tabs align="center" class="mt-4">
+      <BNavItem
         v-for="tab in availableTabs"
         :key="tab.name"
-        class="nav-item"
-        role="tablist"
+        :active="selectedTab === tab.name"
+        :href="'#' + tab.name"
+        :link-attrs="{
+          'aria-controls': tab.name,
+          'aria-selected': selectedTab === tab.name ? 'true' : 'false',
+        }"
+        @click="onTabSelected(tab.name)"
       >
-        <a
-          :href="`#${tab.name}`"
-          class="nav-link"
-          data-toggle="tab"
-          role="tab"
-          :aria-controls="tab.name"
-          :class="{ active: selectedTab === tab.name }"
-          :aria-selected="selectedTab === tab.name"
-          @click="onTabSelected(tab.name)"
+        {{ tab.text }}
+        <span
+          v-if="tab.name === 'clarifications' && clarifications.length"
+          :class="{ unread: unreadClarifications }"
+          >({{ clarifications.length }})</span
         >
-          {{ tab.text }}
-          <span
-            v-if="tab.name === 'clarifications' && clarifications.length"
-            :class="{ unread: unreadClarifications }"
-            >({{ clarifications.length }})</span
-          >
-        </a>
-      </li>
-    </ul>
+      </BNavItem>
+    </BNav>
     <div class="tab-content">
       <div
         class="tab-pane fade"
-        :class="{ 'show active': selectedTab === 'problems' }"
+        :class="{
+          show: selectedTab === 'problems',
+          active: selectedTab === 'problems',
+        }"
       >
         <slot name="arena-problems"></slot>
       </div>
       <div
         class="tab-pane fade"
-        :class="{ 'show active': selectedTab === 'ranking' }"
+        :class="{
+          show: selectedTab === 'ranking',
+          active: selectedTab === 'ranking',
+        }"
       >
         <slot name="arena-scoreboard"></slot>
       </div>
       <div
         class="tab-pane fade"
-        :class="{ 'show active': selectedTab === 'runs' }"
+        :class="{
+          show: selectedTab === 'runs',
+          active: selectedTab === 'runs',
+        }"
       >
         <slot name="arena-runs"></slot>
       </div>
       <div
         class="tab-pane fade"
-        :class="{ 'show active': selectedTab === 'clarifications' }"
+        :class="{
+          show: selectedTab === 'clarifications',
+          active: selectedTab === 'clarifications',
+        }"
       >
         <slot name="arena-clarifications"></slot>
       </div>
@@ -74,11 +80,17 @@ import {
   Watch,
   toNative,
 } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import { types } from '../../api_types';
 import T from '../../lang';
 import { Tab } from '../problem/Details.vue';
 
-@Component
+@Component({
+  components: {
+    BNav,
+    BNavItem,
+  },
+})
 class Arena extends Vue {
   @Prop({ default: false }) shouldShowRuns!: boolean;
   @Prop({ default: true }) shouldShowRanking!: boolean;
@@ -146,7 +158,8 @@ export default toNative(Arena);
   background: var(--arena-practice-background-color) url(/media/gradient.png)
     repeat-x 0 0 !important;
 
-  .nav-tabs .nav-link {
+  /* BNavItem renders the anchor, so this rule has to cross that boundary. */
+  .nav-tabs :deep(.nav-link) {
     background-color: var(--arena-contest-navtabs-link-background-color);
     border-top-color: var(--arena-contest-navtabs-link-border-top-color);
   }
