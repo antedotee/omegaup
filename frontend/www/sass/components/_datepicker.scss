@@ -1,3 +1,4 @@
-// Datepicker styles for the Bootstrap 5 cutover.
-// Intentionally empty: rules land here when the datepicker component needs
-// styling that Bootstrap 5 no longer provides.
+.datepicker.dropdown-menu,
+.bootstrap-datetimepicker-widget.dropdown-menu {
+  z-index: $zindex-popover;
+}

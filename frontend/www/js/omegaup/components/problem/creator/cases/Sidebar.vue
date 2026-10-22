@@ -106,7 +106,6 @@
             <b-button
               data-sidebar-groups="ungrouped"
               variant="light"
-              data-placement="top"
               :title="T.problemCreatorUngroupedCases"
               class="w-84"
               @click="showUngroupedCases = !showUngroupedCases"
@@ -164,7 +163,6 @@
               >
                 <b-button
                   variant="light"
-                  data-placement="top"
                   :data-sidebar-cases-ungrouped="groupID"
                   :title="name"
                   class="w-82"
@@ -207,7 +205,6 @@
           <b-button
             data-sidebar-groups="grouped"
             variant="light"
-            data-placement="top"
             :title="name"
             class="w-84"
             @click="showCases[groupID] = !showCases[groupID]"
@@ -306,7 +303,6 @@
               >
                 <b-button
                   variant="light"
-                  data-placement="top"
                   :title="caseName"
                   class="w-82"
                   @click="editCase(groupID, caseID)"

@@ -7,7 +7,9 @@
 //   css   main.scss Bootstrap import and overrides, plus the built
 //         css/dist/omegaup_styles.css (Requirements 1.2-1.5, 1.7-1.9).
 //         Run the style build first.
-// Later tasks add more sections to SECTIONS below.
+//   scope picker files, libinteractive pages, submodules, panel-* and
+//         Font Awesome counts versus the PR2 tip (Requirements 10.1,
+//         10.3, 10.4, 10.5, 10.6, 10.10).
 //
 // Usage: node stuff/bs5-cutover/smoke.mjs [--section <name>]...
 // With no --section, every section runs. Exits 0 when all checks pass and 1
@@ -25,7 +27,11 @@ const DEP_SECTIONS = [
   'resolutions',
 ];
 const REMOVED_PACKAGES = ['bootstrap-vue', 'popper.js'];
-const UNCHANGED_PACKAGES = ['jquery', 'bootstrap-vue-next'];
+const UNCHANGED_PACKAGES = [
+  'jquery',
+  'bootstrap-vue-next',
+  'vue-typeahead-bootstrap',
+];
 const SOURCE_EXT = /\.(vue|ts|tsx|js|jsx|mjs|cjs)$/;
 // Excluded_Paths: any node_modules or dist segment, plus these prefixes.
 const EXCLUDED_PREFIXES = [
@@ -136,11 +142,13 @@ function depsSection(fail) {
     } catch {
       continue; // deleted in the working tree
     }
-    stripComments(text).split('\n').forEach((line, i) => {
-      for (const m of line.matchAll(SPECIFIER_RE)) {
-        fail(`${file}:${i + 1} references module ${m[2]}${m[3] ?? ''}`);
-      }
-    });
+    stripComments(text)
+      .split('\n')
+      .forEach((line, i) => {
+        for (const m of line.matchAll(SPECIFIER_RE)) {
+          fail(`${file}:${i + 1} references module ${m[2]}${m[3] ?? ''}`);
+        }
+      });
   }
   return `scanned ${files.length} source files`;
 }
@@ -153,14 +161,21 @@ const STYLES_CSS = 'frontend/www/css/dist/omegaup_styles.css';
 const BOOTSTRAP_SCSS_RE =
   /@(?:import|use|forward)\s+(['"])[^'"]*bootstrap\/scss(?:\/[^'"]*)?\1/;
 const SCSS_VAR_RE = /^\s*\$[\w-]+\s*:/;
-const BS5_SELECTORS = ['.visually-hidden', '.form-select', '.offcanvas', '.ms-1'];
+const BS5_SELECTORS = [
+  '.visually-hidden',
+  '.form-select',
+  '.offcanvas',
+  '.ms-1',
+];
 const BS4_SELECTORS = ['.sr-only', '.custom-select', '.ml-1', '.form-row'];
 // Stable omegaUp rule from frontend/www/sass/components/_buttons.scss.
 const SITE_SELECTOR = '.btn-cancel';
 const WHITE_TEXT_BUTTONS = ['.btn-success', '.btn-info'];
 function walk(dir) {
   const out = [];
-  for (const entry of readdirSync(path.join(root, dir), { withFileTypes: true })) {
+  for (const entry of readdirSync(path.join(root, dir), {
+    withFileTypes: true,
+  })) {
     const rel = `${dir}/${entry.name}`;
     if (entry.isDirectory()) out.push(...walk(rel));
     else out.push(rel);
@@ -169,9 +184,11 @@ function walk(dir) {
 }
 function bootstrapImports(text) {
   const lines = [];
-  stripComments(text).split('\n').forEach((line, i) => {
-    if (BOOTSTRAP_SCSS_RE.test(line)) lines.push(i + 1);
-  });
+  stripComments(text)
+    .split('\n')
+    .forEach((line, i) => {
+      if (BOOTSTRAP_SCSS_RE.test(line)) lines.push(i + 1);
+    });
   return lines;
 }
 // Matches a class selector exactly: `.ml-1` but not `.ml-10` or `.ml-1x`.
@@ -290,7 +307,152 @@ function cssSection(fail) {
   }
   return `${overrides} overrides, ${scssFiles.length} sass partials, ${vueFiles.length} SFCs, ${rules.length} CSS rules`;
 }
-const SECTIONS = { deps: depsSection, css: cssSection };
+
+const FROZEN_PATHS = [
+  'frontend/www/third_party/js/bootstrap-date*',
+  'frontend/www/third_party/js/locales',
+  'frontend/www/third_party/css/bootstrap-date*',
+  'frontend/www/libinteractive',
+  'frontend/www/docs/libinteractive',
+  ':!frontend/www/libinteractive/gen/index.php',
+];
+const TYPEAHEAD_PATHS = [
+  'frontend/www/js/omegaup/components/common/Typeahead.vue',
+  'frontend/www/js/omegaup/components/common/MultiTypeahead.vue',
+];
+// A preceding word character means this is a longer identifier, not a panel-* class.
+const PANEL_RE = '(^|[^A-Za-z0-9_-])panel-[A-Za-z0-9_-]+';
+const FONT_AWESOME_RE =
+  '@fortawesome/|font-awesome-icon|fontawesome|font-awesome|fa-[a-z0-9-]+|(^|[^A-Za-z0-9_-])fa([^A-Za-z0-9_-]|$)';
+// Fixtures and the decision trail name these tokens on purpose.
+const COUNT_EXCLUDES = [':(exclude)stuff/bs5-cutover', ':(exclude).audit'];
+
+function runGit(args) {
+  try {
+    return {
+      status: 0,
+      stdout: execFileSync('git', args, { cwd: root, encoding: 'utf8' }),
+    };
+  } catch (err) {
+    return {
+      status: err.status ?? 1,
+      stdout: typeof err.stdout === 'string' ? err.stdout : '',
+      stderr: typeof err.stderr === 'string' ? err.stderr : '',
+    };
+  }
+}
+
+function occurrenceCount(pattern, rev, fail) {
+  const args = ['grep', '-o', '-E', '-I', pattern];
+  if (rev) args.push(rev);
+  args.push('--', '.', ...COUNT_EXCLUDES);
+  const result = runGit(args);
+  if (result.status !== 0 && result.status !== 1) {
+    fail(`git grep exited ${result.status}: ${result.stderr.trim()}`);
+    return null;
+  }
+  return result.stdout.split('\n').filter((line) => line).length;
+}
+
+function scopeSection(fail) {
+  const diff = runGit([
+    'diff',
+    '--exit-code',
+    '--name-only',
+    PR2_TIP,
+    '--',
+    ...FROZEN_PATHS,
+  ]);
+  if (diff.status !== 0) {
+    const names = diff.stdout.trim();
+    fail(
+      names
+        ? `paths differ from ${PR2_TIP}: ${names.split('\n').join(', ')}`
+        : `git diff --exit-code ${PR2_TIP} exited ${diff.status}`,
+    );
+  }
+
+  // Every SFC style block was repointed off main.scss. These two files have
+  // that @import line and no other diff.
+  const typeahead = runGit([
+    'diff',
+    '--exit-code',
+    '-I',
+    '@import',
+    PR2_TIP,
+    '--',
+    ...TYPEAHEAD_PATHS,
+  ]);
+  if (typeahead.status !== 0) {
+    const names = runGit([
+      'diff',
+      '--name-only',
+      PR2_TIP,
+      '--',
+      ...TYPEAHEAD_PATHS,
+    ]);
+    fail(
+      `typeahead differs from ${PR2_TIP} beyond the SFC @import repoint: ${names.stdout.trim()}`,
+    );
+  }
+
+  const expected = new Map();
+  const tree = runGit(['ls-tree', '-r', PR2_TIP]);
+  if (tree.status !== 0) {
+    fail(`git ls-tree ${PR2_TIP} exited ${tree.status}`);
+  } else {
+    for (const line of tree.stdout.split('\n')) {
+      const recorded = line.match(/^160000 commit ([0-9a-f]{40})\t(.+)$/);
+      if (recorded) expected.set(recorded[2], recorded[1]);
+    }
+  }
+  const status = runGit(['submodule', 'status']);
+  if (status.status !== 0) {
+    fail(`git submodule status exited ${status.status}`);
+  } else {
+    const seen = new Set();
+    for (const line of status.stdout.split('\n')) {
+      if (!line) continue;
+      const recorded = line.match(/^([ +-])([0-9a-f]{40}) ([^ ]+)/);
+      if (!recorded) {
+        fail(`unparsed submodule status line: ${line}`);
+        continue;
+      }
+      const [, flag, sha, submodulePath] = recorded;
+      seen.add(submodulePath);
+      const want = expected.get(submodulePath);
+      if (!want) {
+        fail(`submodule ${submodulePath} is not at ${PR2_TIP}`);
+        continue;
+      }
+      if (sha !== want || flag !== ' ') {
+        fail(
+          `submodule ${submodulePath} is ${flag}${sha}, expected ${want} at ${PR2_TIP}`,
+        );
+      }
+    }
+    for (const submodulePath of expected.keys()) {
+      if (!seen.has(submodulePath)) {
+        fail(`submodule ${submodulePath} missing from git submodule status`);
+      }
+    }
+  }
+
+  const panelThen = occurrenceCount(PANEL_RE, PR2_TIP, fail);
+  const panelNow = occurrenceCount(PANEL_RE, null, fail);
+  if (panelThen !== null && panelNow !== null && panelThen !== panelNow) {
+    fail(`panel-* count is ${panelNow}, expected ${panelThen} at ${PR2_TIP}`);
+  }
+  const faThen = occurrenceCount(FONT_AWESOME_RE, PR2_TIP, fail);
+  const faNow = occurrenceCount(FONT_AWESOME_RE, null, fail);
+  if (faThen !== null && faNow !== null && faThen !== faNow) {
+    fail(`Font Awesome count is ${faNow}, expected ${faThen} at ${PR2_TIP}`);
+  }
+  if (panelNow === null || faNow === null) return null;
+  return `panel-* ${panelNow}, Font Awesome ${faNow}, ${expected.size} submodules`;
+}
+
+const SECTIONS = { deps: depsSection, css: cssSection, scope: scopeSection };
 
 function parseArgs(argv) {
   const sections = [];
@@ -300,7 +462,9 @@ function parseArgs(argv) {
       if (!value) throw new Error('--section needs a value');
       if (!Object.hasOwn(SECTIONS, value)) {
         throw new Error(
-          `unknown section: ${value} (known: ${Object.keys(SECTIONS).join(', ')})`,
+          `unknown section: ${value} (known: ${Object.keys(SECTIONS).join(
+            ', ',
+          )})`,
         );
       }
       sections.push(value);
