@@ -1,0 +1,30 @@
+// Class-level Bootstrap 4 behavior that Bootstrap 5.3 dropped.
+// _bs4-parity.scss stays element-only. These rules name the class that changed.
+
+// .form-control { appearance: none } exists so Safari date inputs can be styled.
+// It also strips the arrow from <select class="form-control">. The replacement
+// arrow is on .form-select. Put that arrow back on the BS4 select class.
+select.form-control:not([multiple]):not([size]) {
+  --bs-form-select-bg-img: #{escape-svg($form-select-indicator)};
+
+  padding-right: 2.25rem;
+  background-image: var(--bs-form-select-bg-img);
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+}
+
+// BS4 set .form-check-label { margin-bottom: 0 }, which cancelled the reboot
+// label gap. BS5 dropped the reset, so radios inside a bordered control grow
+// a gap under the Yes/No labels.
+.form-check-label {
+  margin-bottom: 0;
+}
+
+// BS5 .row > * { width: 100% } makes a button that is a direct row child fill
+// the row. BS4 only assigned widths to .col-*. The button stays as wide as
+// its label.
+.row > .btn:not(.w-84),
+.row > a.btn:not(.w-84) {
+  width: auto;
+}

@@ -22,7 +22,7 @@
           width="385px"
         >
           <omegaup-problem-creator-layout-sidebar />
-          <div class="fixed-bottom">
+          <div class="layout-actions">
             <b-container>
               <b-row class="justify-content-center">
                 <b-button
@@ -559,6 +559,15 @@ export default toNative(Sidebar);
 
 .ml-6 {
   margin-left: 6%;
+}
+
+.layout-actions {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background: #fff;
 }
 
 .w-84 {

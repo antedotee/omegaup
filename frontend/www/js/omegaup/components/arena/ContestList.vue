@@ -32,7 +32,7 @@
                   &times;
                 </button>
                 <input
-                  class="btn btn-primary btn-style btn-md w-100 active nav-link"
+                  class="btn btn-primary btn-style btn-md active nav-link"
                   type="submit"
                   :value="T.wordsSearch"
                 />
@@ -42,10 +42,8 @@
           <b-col sm="12" class="d-flex col-md-6 btns-group p-0">
             <b-dropdown ref="dropdownOrderBy" no-caret data-dropdown-order>
               <template #button-content>
-                <div>
-                  <font-awesome-icon icon="sort-amount-down" />
-                  {{ T.contestOrderBy }}
-                </div>
+                <font-awesome-icon icon="sort-amount-down" />
+                {{ T.contestOrderBy }}
               </template>
               <b-dropdown-item href="#" data-order-by-ends @click="orderByEnds">
                 <font-awesome-icon

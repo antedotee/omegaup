@@ -105,7 +105,7 @@ import { Vue, Component, Prop, Emit, toNative } from 'vue-facing-decorator';
 import T from '../../lang';
 import * as ui from '../../ui';
 import { types } from '../../api_types';
-import Multiselect from 'vue-multiselect';
+import Multiselect from 'vue-multiselect/src/Multiselect.vue';
 import user_Username from '../user/Username.vue';
 
 @Component({

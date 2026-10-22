@@ -330,7 +330,7 @@ import T from '../../lang';
 import common_Typeahead from '../common/Typeahead.vue';
 import DatePicker from '../DatePicker.vue';
 import omegaup_RadioSwitch from '../RadioSwitch.vue';
-import Multiselect from 'vue-multiselect';
+import Multiselect from 'vue-multiselect/src/Multiselect.vue';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';

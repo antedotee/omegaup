@@ -28,7 +28,7 @@
             <div class="card-header">
               <h2 class="mb-0">
                 <button
-                  class="btn btn-link w-100 text-start"
+                  class="btn btn-link w-100 text-center"
                   :class="{ collapsed: !openSections['basic-info'] }"
                   type="button"
                   data-section-toggle="basic-info"
@@ -183,7 +183,7 @@
               <div class="card-header">
                 <h2 class="mb-0">
                   <button
-                    class="btn btn-link w-100 text-start"
+                    class="btn btn-link w-100 text-center"
                     :class="{ collapsed: !openSections['tags'] }"
                     type="button"
                     data-section-toggle="tags"
@@ -241,7 +241,7 @@
             <div class="card-header">
               <h2 class="mb-0">
                 <button
-                  class="btn btn-link w-100 text-start"
+                  class="btn btn-link w-100 text-center"
                   :class="{ collapsed: !openSections['validation'] }"
                   type="button"
                   data-section-toggle="validation"
@@ -301,7 +301,7 @@
             <div class="card-header">
               <h2 class="mb-0">
                 <button
-                  class="btn btn-link w-100 text-start"
+                  class="btn btn-link w-100 text-center"
                   :class="{ collapsed: !openSections['limits'] }"
                   type="button"
                   data-section-toggle="limits"
@@ -335,7 +335,7 @@
             <div class="card-header">
               <h2 class="mb-0">
                 <button
-                  class="btn btn-link w-100 text-start"
+                  class="btn btn-link w-100 text-center"
                   :class="{ collapsed: !openSections['access'] }"
                   type="button"
                   data-section-toggle="access"
@@ -416,7 +416,7 @@
               <div class="card-header">
                 <h2 class="mb-0">
                   <button
-                    class="btn btn-link w-100 text-start"
+                    class="btn btn-link w-100 text-center"
                     :class="{ collapsed: !openSections['evaluation'] }"
                     type="button"
                     data-section-toggle="evaluation"
