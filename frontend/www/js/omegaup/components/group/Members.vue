@@ -16,7 +16,7 @@
             ></omegaup-common-typeahead>
           </div>
           <div
-            class="mb-3 mb-0 col-md-3 d-flex align-items-center mt-4 margin-phone"
+            class="mb-0 col-md-3 d-flex align-items-center mt-4 margin-phone"
           >
             <button class="btn btn-primary" type="submit">
               {{ T.wordsAddMember }}

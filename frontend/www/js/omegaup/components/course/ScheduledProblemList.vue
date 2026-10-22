@@ -46,7 +46,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="row">
-              <div class="mb-3 col-md-8">
+              <div class="scheduled-problem-field mb-3 col-md-8">
                 <label
                   >{{ problemCardFooterLabel }}
                   <omegaup-common-typeahead
@@ -62,14 +62,14 @@
                   {{ addCardFooterDescLabel }}
                 </p>
               </div>
-              <div class="mb-3 col-md-4">
+              <div class="scheduled-problem-field mb-3 col-md-4">
                 <label
                   >{{ T.wordsPoints }}
                   <input v-model="points" type="number" class="form-control" />
                 </label>
               </div>
             </div>
-            <div class="mb-3 text-end">
+            <div class="scheduled-problem-field mb-3 text-end">
               <button
                 data-add-problem
                 class="btn btn-primary me-2"
@@ -237,7 +237,7 @@ export default toNative(CourseScheduledProblemList);
 </script>
 
 <style lang="scss" scoped>
-.form-group > label {
+.scheduled-problem-field > label {
   width: 100%;
 }
 </style>

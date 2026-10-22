@@ -218,11 +218,6 @@ export default toNative(ManageApiTokens);
 
   &__actions {
     margin-top: 0.75rem;
-
-    .btn-block {
-      display: block;
-      width: 100%;
-    }
   }
 }
 </style>

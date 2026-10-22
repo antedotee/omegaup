@@ -98,7 +98,7 @@
     >
       <form class="new">
         <div class="row">
-          <div class="mb-3 col-md-12 mb-0">
+          <div class="col-md-12 mb-0">
             <div class="text-end">
               <button
                 data-course-add-new-content

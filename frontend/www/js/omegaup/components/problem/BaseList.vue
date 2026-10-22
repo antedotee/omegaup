@@ -306,12 +306,12 @@ class BaseList extends Vue {
 
   getProblemStatusClass(problem: omegaup.Problem): string {
     if (this.solvedProblemAliasesSet.has(problem.alias)) {
-      return 'badge-success';
+      return 'bg-success';
     }
     if (this.attemptedProblemAliasesSet.has(problem.alias)) {
-      return 'badge-warning';
+      return 'bg-warning text-dark';
     }
-    return 'badge-secondary';
+    return 'bg-secondary';
   }
 
   QUALITY_TAGS = [

@@ -438,8 +438,8 @@ class ViewProfile extends Vue {
 
   get columnNames(): Array<{ name: string; style: string }> {
     return [
-      { name: T.profileContestsTableContest, style: 'text-left' },
-      { name: T.profileContestsTablePlace, style: 'text-right' },
+      { name: T.profileContestsTableContest, style: 'text-start' },
+      { name: T.profileContestsTablePlace, style: 'text-end' },
     ];
   }
 

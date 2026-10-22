@@ -486,7 +486,7 @@ class Carousel extends Vue {
     if (!item.is_active) {
       return {
         badge: true,
-        'badge-secondary': true,
+        'bg-secondary': true,
       };
     }
 
@@ -496,14 +496,14 @@ class Carousel extends Vue {
       if (expirationDate < now) {
         return {
           badge: true,
-          'badge-danger': true,
+          'bg-danger': true,
         };
       }
     }
 
     return {
       badge: true,
-      'badge-success': true,
+      'bg-success': true,
     };
   }
 }

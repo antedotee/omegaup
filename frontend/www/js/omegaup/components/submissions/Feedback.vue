@@ -22,7 +22,7 @@
         @click="showFeedbackForm = !showFeedbackForm"
         >{{ T.submissionFeedbackSendButton }}</a
       >
-      <div v-show="showFeedbackForm" class="mb-3">
+      <div v-show="showFeedbackForm" class="feedback-form mb-3">
         <p>{{ T.submissionFeedbackAnimationButton }}</p>
         <img
           v-show="showFeedbackForm"
@@ -75,7 +75,7 @@ export default toNative(SubmissionFeedback);
 @import '../../../../sass/site';
 .feedback-section {
   margin-top: 1.5em;
-  .form-group {
+  .feedback-form {
     margin-top: 0.5em;
     button {
       margin-top: 1em;

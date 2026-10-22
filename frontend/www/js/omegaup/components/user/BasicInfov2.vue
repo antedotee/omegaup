@@ -1,7 +1,7 @@
 <template>
   <div class="card-body">
     <div class="fields-border">
-      <div class="mb-3 row padding-field">
+      <div class="basic-info-field mb-3 row padding-field">
         <div class="col-sm-3">
           <strong>{{ T.profileUsername }}</strong>
         </div>
@@ -16,7 +16,7 @@
       </div>
       <div
         v-if="profile.is_own_profile || !profile.is_private"
-        class="mb-3 row padding-field"
+        class="basic-info-field mb-3 row padding-field"
       >
         <div class="col-sm-3">
           <strong>{{ T.profile }}</strong>
@@ -25,7 +25,10 @@
           {{ profile.name }}
         </div>
       </div>
-      <div v-if="profile.is_own_profile" class="mb-3 row padding-field">
+      <div
+        v-if="profile.is_own_profile"
+        class="basic-info-field mb-3 row padding-field"
+      >
         <div class="col-sm-3">
           <strong>{{ T.profileEmail }}</strong>
         </div>
@@ -35,7 +38,7 @@
       </div>
 
       <div v-if="profile.is_own_profile || !profile.is_private">
-        <div class="mb-3 row padding-field">
+        <div class="basic-info-field mb-3 row padding-field">
           <div class="col-sm-3">
             <strong>{{ T.profileCountry }}</strong>
           </div>
@@ -46,7 +49,7 @@
           </div>
         </div>
 
-        <div class="mb-3 row padding-field">
+        <div class="basic-info-field mb-3 row padding-field">
           <div class="col-sm-3">
             <strong>{{ T.profileState }}</strong>
           </div>
@@ -55,7 +58,7 @@
           </div>
         </div>
 
-        <div class="mb-3 row padding-field">
+        <div class="basic-info-field mb-3 row padding-field">
           <div class="col-sm-3">
             <strong>{{ T.profileSchool }}</strong>
           </div>
@@ -66,7 +69,7 @@
           </div>
         </div>
 
-        <div class="mb-3 row padding-field">
+        <div class="basic-info-field mb-3 row padding-field">
           <div class="col-sm-3">
             <strong>{{ T.profileGraduationDate }}</strong>
           </div>
@@ -75,7 +78,7 @@
           </div>
         </div>
 
-        <div class="mb-3 row padding-field">
+        <div class="basic-info-field mb-3 row padding-field">
           <div class="col-sm-3">
             <strong>{{ T.profileAuthorRank }}</strong
             ><a :href="CategoriesFeatureGuideURL" target="_blank"
@@ -147,8 +150,8 @@ export default toNative(UserBasicInfo);
 <style lang="scss" scoped>
 @import '../../../../sass/site';
 
-.fields-border > .form-group,
-.fields-border div > .form-group {
+.fields-border > .basic-info-field,
+.fields-border div > .basic-info-field {
   border-color: var(--user-basic-info-form-group-border-color) !important;
   border-style: solid !important;
   border-width: 0 0 0.05rem 0 !important;

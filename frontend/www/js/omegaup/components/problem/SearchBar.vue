@@ -7,7 +7,10 @@
       method="GET"
       class="d-flex justify-content-center align-items-center flex-wrap form-mobile"
     >
-      <div v-if="tags.length !== 0" class="mb-3 mb-sm-0 me-2 mw-100">
+      <div
+        v-if="tags.length !== 0"
+        class="search-bar-field mb-3 mb-sm-0 me-2 mw-100"
+      >
         <div v-for="tag in tags" :key="tag" class="me-1">
           <input type="hidden" name="tag[]" :value="tag" />
           <span class="badge bg-secondary m-1 p-2">{{
@@ -18,7 +21,7 @@
           <font-awesome-icon :icon="['fas', 'times']" />
         </a>
       </div>
-      <div class="mb-3 mb-sm-0 me-2">
+      <div class="search-bar-field mb-3 mb-sm-0 me-2">
         <omegaup-common-typeahead
           data-problem-keyword-search
           :only-existing-tags="false"
@@ -33,7 +36,7 @@
         ></omegaup-common-typeahead>
         <input type="hidden" name="query" :value="currentKeywordValue" />
       </div>
-      <div class="mb-3 mb-sm-0 me-2">
+      <div class="search-bar-field mb-3 mb-sm-0 me-2">
         <label class="d-flex align-items-center">
           {{ T.wordsFilterByLanguage }}
           <select
@@ -52,7 +55,7 @@
           </select>
         </label>
       </div>
-      <div class="mb-3 mb-sm-0 me-2">
+      <div class="search-bar-field mb-3 mb-sm-0 me-2">
         <label class="d-flex align-items-center ms-4 large:ml-0">
           <input
             v-model="currentOnlyQualitySeal"
@@ -120,7 +123,7 @@ export default toNative(ProblemSearchBar);
 </script>
 
 <style lang="scss" scoped>
-.form-group {
+.search-bar-field {
   label {
     font-weight: bold;
   }
