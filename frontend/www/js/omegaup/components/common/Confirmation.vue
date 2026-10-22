@@ -7,7 +7,6 @@
             class="btn-close"
             type="button"
             :aria-label="T.wordsClose"
-            data-dismiss="modal"
             @click.prevent="$emit('close')"
           ></button>
         </div>
@@ -18,7 +17,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            data-dismiss="modal"
+            data-modal-dismiss
             @click.prevent="$emit('yes')"
           >
             {{ answerYes }}
@@ -26,7 +25,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            data-dismiss="modal"
+            data-modal-dismiss
             @click.prevent="$emit('no')"
           >
             {{ answerNo }}

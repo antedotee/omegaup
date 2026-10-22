@@ -8,46 +8,45 @@
       <button
         type="button"
         class="btn btn-primary d-block mx-auto"
-        data-toggle="modal"
-        data-target=".modal"
+        @click="showModal = true"
       >
         {{ archiveButtonDescription }}
       </button>
-      <div class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-body">
-              {{ archiveConfirmText }}
-              <div class="d-flex justify-content-around mt-4">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  {{ T.wordsClose }}
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-dismiss="modal"
-                  @click="onArchive"
-                >
-                  {{ T.wordsConfirm }}
-                </button>
-              </div>
-            </div>
+      <BModal v-model="showModal" centered lazy unmount-lazy no-header>
+        {{ archiveConfirmText }}
+        <template #footer>
+          <div class="d-flex justify-content-around w-100">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-modal-dismiss
+              @click="showModal = false"
+            >
+              {{ T.wordsClose }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="
+                onArchive();
+                showModal = false;
+              "
+            >
+              {{ T.wordsConfirm }}
+            </button>
           </div>
-        </div>
-      </div>
+        </template>
+      </BModal>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BModal } from 'bootstrap-vue-next';
 import T from '../../lang';
 
-@Component({ emits: ['archive'] })
+@Component({ components: { BModal }, emits: ['archive'] })
 class Archive extends Vue {
   @Prop() alreadyArchived!: boolean;
   @Prop() archiveHelpText!: string;
@@ -56,6 +55,7 @@ class Archive extends Vue {
   @Prop() archiveConfirmText!: string;
 
   T = T;
+  showModal = false;
 
   onArchive(): void {
     this.$emit('archive', !this.alreadyArchived);

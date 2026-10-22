@@ -1,4 +1,4 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { flushPromises, mount, shallowMount } from '@vue/test-utils';
 
 import { types } from '../../api_types';
 import T from '../../lang';
@@ -37,6 +37,9 @@ describe('Certificates.vue', () => {
       props: {
         certificatesDetails,
       },
+      // BModal teleports to <body>; render it in place so the footer buttons
+      // are reachable through the wrapper.
+      global: { stubs: { teleport: true } },
     });
 
     expect(wrapper.text()).toContain(T.contestCertificatesGenerate);
@@ -46,8 +49,11 @@ describe('Certificates.vue', () => {
     expect(
       wrapper.find('button[data-button-generate]').attributes().disabled,
     ).not.toBe('disabled');
+    // The modal is lazy: its content is not rendered until it opens.
+    expect(wrapper.find('button[data-button-confirm]').exists()).toBe(false);
 
     await wrapper.find('button[data-button-generate]').trigger('click');
+    await flushPromises();
     await wrapper.find('button[data-button-confirm]').trigger('click');
     expect(wrapper.emitted('generate')).toEqual([[5]]);
   });
