@@ -66,16 +66,19 @@
           <button
             class="navbar-toggler me-2"
             type="button"
-            data-toggle="collapse"
-            data-target=".omegaup-navbar"
-            aria-expanded="false"
+            :aria-expanded="navbarExpanded ? 'true' : 'false'"
             aria-label="Toggle navigation"
+            @click="navbarExpanded = !navbarExpanded"
           >
             <span class="navbar-toggler-icon"></span>
           </button>
         </div>
 
-        <div class="collapse navbar-collapse omegaup-navbar">
+        <b-collapse
+          v-model="navbarExpanded"
+          is-nav
+          class="navbar-collapse omegaup-navbar"
+        >
           <omegaup-navbar-items
             :omega-up-lock-down="omegaUpLockDown"
             :in-contest="inContest"
@@ -232,13 +235,15 @@
                         <button
                           type="button"
                           class="btn dropdown-item dropdown-toggle dropdown-toggle-split"
-                          data-toggle="collapse"
-                          data-target=".collapse-links"
-                          aria-expanded="false"
+                          :aria-expanded="linksExpanded ? 'true' : 'false'"
                           aria-controls="collapse-links"
+                          @click="linksExpanded = !linksExpanded"
                         ></button>
                       </div>
-                      <div class="collapse collapse-links ps-3">
+                      <b-collapse
+                        v-model="linksExpanded"
+                        class="collapse-links ps-3"
+                      >
                         <a class="dropdown-item" href="/problem/mine">{{
                           T.navMyProblems
                         }}</a>
@@ -254,7 +259,7 @@
                           data-nav-user-contests
                           >{{ T.navMyContests }}</a
                         >
-                      </div>
+                      </b-collapse>
                     </form>
 
                     <a
@@ -307,7 +312,7 @@
               </span>
             </a>
           </div>
-        </div>
+        </b-collapse>
 
         <!-- Logout button for desktop - navbar -->
         <a
@@ -436,6 +441,8 @@ class Navbar extends Vue {
   ui = ui;
   AvailableTabs = AvailableTabs;
   logoutModalVisible = false;
+  navbarExpanded = false;
+  linksExpanded = false;
   scrollY: number = 0;
   teachingUserTypes = ['teacher', 'coach', 'independent-teacher'];
   hasTeachingObjective = this.teachingUserTypes.some((teachingType) =>
@@ -546,11 +553,7 @@ class Navbar extends Vue {
     const navbar = this.$el as HTMLElement;
 
     if (!navbar.contains(target)) {
-      const navbarCollapse = navbar.querySelector('.navbar-collapse.show');
-
-      if (!navbarCollapse) return;
-
-      ($(navbarCollapse) as any).collapse('hide');
+      this.navbarExpanded = false;
     }
   }
 }
@@ -700,8 +703,10 @@ nav.navbar {
     display: none;
   }
 
+  // BCollapse hides with an inline `display: none` (v-show), so the desktop
+  // hover reveal needs `!important` to win over it.
   .nav-user .collapse-submenu:is(:hover, :focus-within) .collapse-links {
-    display: block;
+    display: block !important;
   }
 }
 
