@@ -199,7 +199,7 @@ export default toNative(ProblemFinderWizard);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .modal-mask {
   position: fixed;
   z-index: 99999;
@@ -222,7 +222,7 @@ export default toNative(ProblemFinderWizard);
   overflow: auto;
 }
 
-.close {
+.btn-close {
   float: none;
   text-align: right;
   width: 100%;

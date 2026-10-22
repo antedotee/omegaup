@@ -2,7 +2,7 @@
   <div class="root d-flex flex-row h-100">
     <textarea
       v-model="contents"
-      class="col pl-1"
+      class="col ps-1"
       :class="theme"
       :disabled="readOnly"
       :data-title="title"
@@ -52,7 +52,7 @@ export default toNative(TextEditor);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 
 textarea {
   font-family: 'Droid Sans Mono', 'Courier New', monospace,

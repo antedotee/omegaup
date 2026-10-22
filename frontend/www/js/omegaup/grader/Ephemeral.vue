@@ -6,10 +6,12 @@
         <sup>&alpha;</sup>
       </span>
 
-      <form class="form-inline my-2 my-lg-0 ephemeral-form">
+      <form
+        class="d-flex flex-wrap align-items-center my-2 my-lg-0 ephemeral-form"
+      >
         <template v-if="!isEmbedded">
-          <label>
-            <a class="btn btn-secondary btn-sm mr-sm-2" role="button">
+          <label class="d-flex align-items-center mb-0">
+            <a class="btn btn-secondary btn-sm me-sm-2" role="button">
               <font-awesome-icon
                 :icon="['fas', 'upload']"
                 :title="T.wordsUpload"
@@ -24,9 +26,9 @@
               @change="handleUpload"
             />
           </label>
-          <label>
+          <label class="d-flex align-items-center mb-0">
             <a
-              class="btn btn-secondary btn-sm mr-sm-2"
+              class="btn btn-secondary btn-sm me-sm-2"
               role="button"
               :href="zipHref"
               :download="zipDownload"
@@ -40,9 +42,9 @@
               />
             </a>
           </label>
-          <label>
+          <label class="d-flex align-items-center mb-0">
             <button
-              class="btn btn-secondary btn-sm mr-2"
+              class="btn btn-secondary btn-sm me-2"
               @click.prevent="toggleTheme"
             >
               <font-awesome-icon
@@ -55,7 +57,7 @@
               v-clipboard:success="handleCopyFeedback"
               v-clipboard:error="handleCopyError"
               type="button"
-              class="btn btn-sm mr-2 my-sm-0"
+              class="btn btn-sm me-2 my-sm-0"
               :class="isCopySuccess ? 'btn-success' : 'btn-secondary'"
               data-copy-button
               :title="T.wordsCopyToClipboard"
@@ -68,7 +70,7 @@
         </template>
         <select
           v-model="selectedLanguage"
-          class="form-control form-control-sm mr-sm-2"
+          class="form-control form-control-sm w-auto me-sm-2"
           data-language-select
         >
           <optgroup v-if="languages.length > 1" :label="T.detectLanguage">
@@ -84,9 +86,9 @@
             </option>
           </optgroup>
         </select>
-        <label>
+        <label class="d-flex align-items-center mb-0">
           <button
-            class="btn btn-secondary btn-sm mr-2"
+            class="btn btn-secondary btn-sm me-2"
             :title="T.resetTemplate"
             @click.prevent="resetToTemplate"
           >
@@ -95,15 +97,15 @@
         </label>
         <div
           v-if="showDetectedLabel"
-          class="language-detected d-flex align-items-center mr-2"
+          class="language-detected d-flex align-items-center me-2"
         >
-          <span class="language-detected-text mr-2">
+          <span class="language-detected-text me-2">
             {{
               ui.formatString(T.languageDetected, { lang: detectedDisplayName })
             }}
           </span>
           <button
-            class="btn btn-sm btn-success mr-1"
+            class="btn btn-sm btn-success me-1"
             @click.prevent="acceptDetectedLanguage"
           >
             {{ T.switchLanguage }}
@@ -120,7 +122,7 @@
           v-if="isRunButton"
           :disabled="!canExecute"
           :class="{ disabled: !canExecute }"
-          class="btn btn-sm btn-secondary mr-2 my-sm-0"
+          class="btn btn-sm btn-secondary me-2 my-sm-0"
           data-run-button
           @click.prevent="handleRun"
         >
@@ -934,7 +936,7 @@ export default toNative(Ephemeral);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../sass/main.scss';
+@import '../../../sass/site';
 @import '../../../third_party/css/golden-layout/goldenlayout-base.css';
 
 div > section {

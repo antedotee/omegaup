@@ -28,21 +28,23 @@
             <div class="card-header">
               <h2 class="mb-0">
                 <button
-                  ref="basic-info"
-                  class="btn btn-link btn-block text-left"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['basic-info'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".basic-info"
-                  aria-expanded="true"
-                  aria-controls="problem-form-problem"
+                  data-section-toggle="basic-info"
+                  :aria-expanded="openSections['basic-info'] ? 'true' : 'false'"
+                  @click="toggleSection('basic-info')"
                 >
                   {{ T.problemEditBasicInfo }}
                 </button>
               </h2>
             </div>
-            <div class="collapse show card-body px-2 px-sm-4 basic-info">
+            <BCollapse
+              v-model="openSections['basic-info']"
+              class="card-body px-2 px-sm-4 basic-info"
+            >
               <div class="row">
-                <div class="form-group col-md-6 introjs-title">
+                <div class="mb-3 col-md-6 introjs-title">
                   <label class="control-label">{{ T.wordsTitle }}</label>
                   <input
                     v-model="title"
@@ -54,7 +56,7 @@
                     @blur="onGenerateAlias"
                   />
                 </div>
-                <div class="form-group col-md-6 introjs-short-title">
+                <div class="mb-3 col-md-6 introjs-short-title">
                   <label class="control-label">{{ T.wordsAlias }}</label>
                   <input
                     ref="alias"
@@ -71,7 +73,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-md-6 introjs-origin">
+                <div class="mb-3 col-md-6 introjs-origin">
                   <label class="control-label">{{ T.problemEditSource }}</label>
                   <input
                     v-model="source"
@@ -84,7 +86,7 @@
                 </div>
                 <div
                   v-if="!isUpdate && showCreationMethodSelector"
-                  class="form-group col-md-6 introjs-creation-method"
+                  class="mb-3 col-md-6 introjs-creation-method"
                 >
                   <div class="btn-group btn-group-toggle d-flex" role="group">
                     <button
@@ -156,7 +158,7 @@
                     />
                   </div>
                 </div>
-                <div v-else class="form-group col-md-6 introjs-file">
+                <div v-else class="mb-3 col-md-6 introjs-file">
                   <label class="control-label">{{
                     T.problemEditFormFile
                   }}</label>
@@ -173,7 +175,7 @@
                   />
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
 
           <template v-if="!isUpdate">
@@ -181,19 +183,21 @@
               <div class="card-header">
                 <h2 class="mb-0">
                   <button
-                    ref="tags"
-                    class="btn btn-link btn-block text-left"
+                    class="btn btn-link w-100 text-start"
+                    :class="{ collapsed: !openSections['tags'] }"
                     type="button"
-                    data-toggle="collapse"
-                    data-target=".tags"
-                    aria-expanded="true"
-                    aria-controls="problem-form-problem"
+                    data-section-toggle="tags"
+                    :aria-expanded="openSections['tags'] ? 'true' : 'false'"
+                    @click="toggleSection('tags')"
                   >
                     {{ T.problemEditTags }}
                   </button>
                 </h2>
               </div>
-              <div class="collapse show card-body px-2 px-sm-4 tags">
+              <BCollapse
+                v-model="openSections['tags']"
+                class="card-body px-2 px-sm-4 tags"
+              >
                 <div
                   v-show="
                     (selectedPublicTags.length === 0 || !problemLevel) &&
@@ -230,28 +234,30 @@
                     type="hidden"
                   />
                 </div>
-              </div>
+              </BCollapse>
             </div>
           </template>
           <div class="card">
             <div class="card-header">
               <h2 class="mb-0">
                 <button
-                  ref="validation"
-                  class="btn btn-link btn-block text-left collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['validation'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".validation"
-                  aria-expanded="true"
-                  aria-controls="problem-form-problem"
+                  data-section-toggle="validation"
+                  :aria-expanded="openSections['validation'] ? 'true' : 'false'"
+                  @click="toggleSection('validation')"
                 >
                   {{ T.problemEditValidation }}
                 </button>
               </h2>
             </div>
-            <div class="card-body px-2 px-sm-4 validation">
+            <BCollapse
+              v-model="openSections['validation']"
+              class="card-body px-2 px-sm-4 validation"
+            >
               <div class="row">
-                <div class="form-group col-md-6 introjs-type">
+                <div class="mb-3 col-md-6 introjs-type">
                   <label>{{ T.problemEditFormLanguages }}</label>
                   <select
                     v-model="currentLanguages"
@@ -269,7 +275,7 @@
                     </option>
                   </select>
                 </div>
-                <div class="form-group col-md-6 introjs-validator">
+                <div class="mb-3 col-md-6 introjs-validator">
                   <label>{{ T.problemEditFormValidatorType }}</label>
                   <select
                     v-model="validator"
@@ -289,25 +295,27 @@
                   </select>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
           <div class="card">
             <div class="card-header">
               <h2 class="mb-0">
                 <button
-                  ref="limits"
-                  class="btn btn-link btn-block text-left collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['limits'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".limits"
-                  aria-expanded="true"
-                  aria-controls="problem-form-problem"
+                  data-section-toggle="limits"
+                  :aria-expanded="openSections['limits'] ? 'true' : 'false'"
+                  @click="toggleSection('limits')"
                 >
                   {{ T.problemEditLimits }}
                 </button>
               </h2>
             </div>
-            <div class="collapse card-body px-2 px-sm-4 limits">
+            <BCollapse
+              v-model="openSections['limits']"
+              class="card-body px-2 px-sm-4 limits"
+            >
               <omegaup-problem-settings
                 :errors="errors"
                 :current-languages="currentLanguages"
@@ -321,26 +329,29 @@
                 :validator-time-limit="validatorTimeLimit"
                 :has-visited-section="hasVisitedSection"
               ></omegaup-problem-settings>
-            </div>
+            </BCollapse>
           </div>
           <div class="card">
             <div class="card-header">
               <h2 class="mb-0">
                 <button
-                  class="btn btn-link btn-block text-left collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['access'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".access"
-                  aria-expanded="true"
-                  aria-controls="problem-form-problem"
+                  data-section-toggle="access"
+                  :aria-expanded="openSections['access'] ? 'true' : 'false'"
+                  @click="toggleSection('access')"
                 >
                   {{ T.problemEditAccess }}
                 </button>
               </h2>
             </div>
-            <div class="collapse card-body px-2 px-sm-4 access">
+            <BCollapse
+              v-model="openSections['access']"
+              class="card-body px-2 px-sm-4 access"
+            >
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>{{ T.problemEditEmailClarifications }}</label>
                   <div class="form-control">
                     <div class="form-check form-check-inline">
@@ -369,7 +380,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>{{ T.problemEditFormAppearsAsPublic }}</label>
                   <div class="form-control">
                     <label class="form-check form-check-inline">
@@ -398,27 +409,32 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
           <template v-if="!isUpdate">
             <div class="card">
               <div class="card-header">
                 <h2 class="mb-0">
                   <button
-                    class="btn btn-link btn-block text-left collapsed"
+                    class="btn btn-link w-100 text-start"
+                    :class="{ collapsed: !openSections['evaluation'] }"
                     type="button"
-                    data-toggle="collapse"
-                    data-target=".evaluation"
-                    aria-expanded="true"
-                    aria-controls="problem-form-problem"
+                    data-section-toggle="evaluation"
+                    :aria-expanded="
+                      openSections['evaluation'] ? 'true' : 'false'
+                    "
+                    @click="toggleSection('evaluation')"
                   >
                     {{ T.problemEditEvaluation }}
                   </button>
                 </h2>
               </div>
-              <div class="collapse card-body px-2 px-sm-4 evaluation">
+              <BCollapse
+                v-model="openSections['evaluation']"
+                class="card-body px-2 px-sm-4 evaluation"
+              >
                 <div class="row">
-                  <div class="form-group col-md-6">
+                  <div class="mb-3 col-md-6">
                     <label>{{ T.wordsShowCasesDiff }}</label>
                     <select
                       v-model="showDiff"
@@ -436,7 +452,7 @@
                       <option value="all">{{ T.wordsAll }}</option>
                     </select>
                   </div>
-                  <div class="form-group col-md-6">
+                  <div class="mb-3 col-md-6">
                     <label>{{ T.problemEditGroupScorePolicy }}</label>
                     <select
                       v-model="groupScorePolicy"
@@ -456,13 +472,13 @@
                     </select>
                   </div>
                 </div>
-              </div>
+              </BCollapse>
             </div>
           </template>
         </div>
         <template v-if="isUpdate">
           <div class="mt-8 row">
-            <div class="form-group col-md-4">
+            <div class="mb-3 col-md-4">
               <label>{{ T.wordsShowCasesDiff }}</label>
               <select
                 v-model="showDiff"
@@ -475,7 +491,7 @@
                 <option value="all">{{ T.wordsAll }}</option>
               </select>
             </div>
-            <div class="form-group col-md-4">
+            <div class="mb-3 col-md-4">
               <label>{{ T.problemEditGroupScorePolicy }}</label>
               <select
                 v-model="groupScorePolicy"
@@ -492,7 +508,7 @@
                 </option>
               </select>
             </div>
-            <div class="form-group col-md-4">
+            <div class="mb-3 col-md-4">
               <label class="control-label">{{
                 T.problemEditCommitMessage
               }}</label>
@@ -516,7 +532,7 @@
         <input name="request" value="submit" type="hidden" />
         <input name="update_published" value="non-problemset" type="hidden" />
         <div class="row">
-          <div class="form-group col-md-6 no-bottom-margin">
+          <div class="mb-3 col-md-6 no-bottom-margin">
             <button
               type="submit"
               class="btn btn-primary"
@@ -587,6 +603,19 @@ import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
 VueGlobal.use(VueCookies, { expires: -1 });
 import { CreationMethods } from './Form_types';
+import { BCollapse } from 'bootstrap-vue-next';
+
+/**
+ * Collapsible accordion sections. Each name is also the value of the
+ * `data-section-toggle` hook on that section's header button.
+ */
+type FormSection =
+  | 'basic-info'
+  | 'tags'
+  | 'validation'
+  | 'limits'
+  | 'access'
+  | 'evaluation';
 
 // CreationMethods is declared in ./Form_types and re-exported here so existing
 // SFC importers keep working while plain `.ts` entry points import it from the
@@ -595,6 +624,7 @@ export { CreationMethods };
 
 @Component({
   components: {
+    BCollapse,
     'omegaup-problem-settings': problem_Settings,
     'omegaup-problem-tags': problem_Tags,
     'omegaup-problem-creator': problem_CreatorWrapper,
@@ -609,15 +639,21 @@ class ProblemForm extends Vue {
   @Prop({ default: false }) showCreationMethodSelector!: boolean;
   @Prop({ default: CreationMethods.Creator }) creationMethod!: CreationMethods;
 
-  @Ref('basic-info') basicInfoRef!: HTMLDivElement;
-  @Ref('tags') tagsRef!: HTMLDivElement;
-  @Ref('limits') limitsRef!: HTMLDivElement;
-  @Ref('validation') validationRef!: HTMLButtonElement;
   @Ref('form') formRef!: HTMLFormElement;
   @Ref('creatorFileInput') creatorFileInputRef!: HTMLInputElement;
   @Ref('problemCreator') problemCreatorRef!: problem_CreatorWrapper;
 
   T = T;
+  // Seeded from the PR2 markup: basic info, tags and validation start
+  // expanded; limits, access and evaluation start collapsed.
+  openSections: Record<FormSection, boolean> = {
+    'basic-info': true,
+    tags: true,
+    validation: true,
+    limits: false,
+    access: false,
+    evaluation: false,
+  };
   title = this.data.title;
   alias = this.data.alias;
   timeLimit = this.data.timeLimit;
@@ -937,50 +973,42 @@ class ProblemForm extends Vue {
     this.alias = generatedAlias;
   }
 
+  toggleSection(section: FormSection): void {
+    this.openSections[section] = !this.openSections[section];
+  }
+
   openCollapsedIfRequired() {
     const formData = new FormData(this.formRef);
-
-    let basicInfoCollapsed = this.basicInfoRef.classList.contains('collapsed');
-    let limitsCollapsed = this.limitsRef.classList.contains('collapsed');
-    let tagsCollapsed = !this.isUpdate
-      ? this.tagsRef.classList.contains('collapsed')
-      : false;
-    let validationCollapsed = this.validationRef
-      ? this.validationRef.classList.contains('collapsed')
-      : false;
+    const open = this.openSections;
 
     for (const [key, value] of formData.entries()) {
       const isEmpty = value === '';
       if (isEmpty) {
         if (
-          basicInfoCollapsed &&
+          !open['basic-info'] &&
           (key === 'title' || key === 'alias' || key === 'source')
         ) {
-          this.basicInfoRef.click();
-          basicInfoCollapsed = false;
+          open['basic-info'] = true;
           continue;
         }
         // To avoid making a complex logic check
-        if (basicInfoCollapsed && !this.isUpdate && !this.hasFile) {
-          this.basicInfoRef.click();
-          basicInfoCollapsed = false;
+        if (!open['basic-info'] && !this.isUpdate && !this.hasFile) {
+          open['basic-info'] = true;
           continue;
         }
 
-        if (tagsCollapsed && key === 'problem_level') {
-          this.tagsRef.click();
-          tagsCollapsed = false;
+        if (!this.isUpdate && !open.tags && key === 'problem_level') {
+          open.tags = true;
           continue;
         }
 
-        if (validationCollapsed && key === 'languages') {
-          this.validationRef.click();
-          validationCollapsed = false;
+        if (!open.validation && key === 'languages') {
+          open.validation = true;
           continue;
         }
 
         if (
-          limitsCollapsed &&
+          !open.limits &&
           (key === 'time_limit' ||
             key === 'overall_wall_time_limit' ||
             key === 'extra_wall_time' ||
@@ -988,8 +1016,7 @@ class ProblemForm extends Vue {
             key === 'output_limit' ||
             key === 'input_limit')
         ) {
-          this.limitsRef.click();
-          limitsCollapsed = false;
+          open.limits = true;
           continue;
         }
       }

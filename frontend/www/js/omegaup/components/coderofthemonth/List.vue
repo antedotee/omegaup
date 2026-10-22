@@ -1,21 +1,20 @@
 <template>
   <div class="card w-100">
-    <ul class="nav nav-tabs justify-content-around" role="tablist">
-      <li v-for="tab in availableTabs" :key="tab.id" class="nav-item">
-        <a
-          :href="getTabName(tab)"
-          class="nav-link"
-          data-toggle="tab"
-          role="tab"
-          :aria-controls="tab.id"
-          :class="{ active: currentSelectedTab === tab.id }"
-          :aria-selected="currentSelectedTab === tab.id"
-          @click="getSelectedTab(tab)"
-        >
-          {{ tab.title }}
-        </a>
-      </li>
-    </ul>
+    <BNav tabs align="around">
+      <BNavItem
+        v-for="tab in availableTabs"
+        :key="tab.id"
+        :active="currentSelectedTab === tab.id"
+        :href="'#' + tab.id"
+        :link-attrs="{
+          'aria-controls': tab.id,
+          'aria-selected': currentSelectedTab === tab.id ? 'true' : 'false',
+        }"
+        @click="getSelectedTab(tab)"
+      >
+        {{ tab.title }}
+      </BNavItem>
+    </BNav>
     <component
       :is="currentTabComponent"
       class="tab"
@@ -47,6 +46,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import T from '../../lang';
 import user_Username from '../user/Username.vue';
 import coderofthemonth_CodersList from './CodersList.vue';
@@ -57,6 +57,8 @@ import { types } from '../../api_types';
 
 @Component({
   components: {
+    BNav,
+    BNavItem,
     'omegaup-user-username': user_Username,
     'omegaup-countryflag': country_Flag,
     'omegaup-coders-list': coderofthemonth_CodersList,
@@ -131,32 +133,29 @@ class CoderOfTheMonthList extends Vue {
     this.currentSelectedTab = tab.id;
     window.location.hash = tab.id;
   }
-
-  getTabName(tab: { id: string; component: string; title: string }): string {
-    return `#${tab.id}`;
-  }
 }
 export default toNative(CoderOfTheMonthList);
 </script>
 
 <style scoped>
-.nav-link.active,
-.nav-link:hover {
+/* BNavItem renders the anchor, so these rules have to cross that boundary. */
+>>> .nav-link.active,
+>>> .nav-link:hover {
   border: none;
   border-left: 0.0625rem solid #dee2e6;
   border-right: 0.0625rem solid #dee2e6;
-  border-top-left-radius: 0rem;
-  border-top-right-radius: 0rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .nav-tabs {
-  border-bottom: 0rem;
+  border-bottom: 0;
   flex-wrap: nowrap !important;
   overflow-x: auto;
   overflow-y: hidden;
 }
 
-.nav-link {
+>>> .nav-link {
   font-weight: medium;
   letter-spacing: 0.022rem;
   padding: 0.65rem 1rem;

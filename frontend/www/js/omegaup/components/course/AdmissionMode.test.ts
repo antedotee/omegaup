@@ -27,6 +27,13 @@ describe('AdmissionMode.vue', () => {
     expect(
       wrapper.find('div[data-toggle-public-course-list]>label').text(),
     ).toBe(T.courseEditShowInPublicCoursesList);
+    // vBTooltip moves the native title into data-original-title on mount.
+    const help = wrapper.find('a[data-original-title]');
+    expect(help.attributes('data-original-title')).toBe(
+      T.courseEditAdmissionModeDescription,
+    );
+    expect(help.attributes('title')).toBeUndefined();
+    expect(help.attributes('data-toggle')).toBeUndefined();
   });
 
   it('Should handle admission mode as normal user', () => {

@@ -32,7 +32,7 @@
       </template>
 
       <template #cell(verdict)="data">
-        <span class="mr-1">{{ status(data.item) }}</span>
+        <span class="me-1">{{ status(data.item) }}</span>
         <b-button
           v-if="data.item.status === 'ready' && data.item.verdict !== 'AC'"
           v-b-tooltip.right="statusHelp(data.item)"
@@ -52,7 +52,6 @@ import T from '../../lang';
 import { types } from '../../api_types';
 import * as time from '../../time';
 
-import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export enum PopupDisplayed {
@@ -158,7 +157,7 @@ class Runs extends Vue {
         key: 'percentage',
         class: 'align-middle',
         thClass: 'text-center',
-        tdClass: 'text-right',
+        tdClass: 'text-end',
       },
       {
         label: T.wordsLanguage,
@@ -170,14 +169,14 @@ class Runs extends Vue {
         key: 'memory',
         class: 'align-middle',
         thClass: 'text-center',
-        tdClass: 'text-right',
+        tdClass: 'text-end',
       },
       {
         label: T.wordsRuntime,
         key: 'runtime',
         class: 'align-middle',
         thClass: 'text-center',
-        tdClass: 'text-right',
+        tdClass: 'text-end',
       },
       {
         label: T.wordsActions,

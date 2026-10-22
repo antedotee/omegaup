@@ -14,12 +14,11 @@
       </template>
       <button
         v-if="currentFeedback.status === FeedbackStatus.InProgress"
-        class="close btn-sm"
+        class="btn-close float-end"
         type="button"
+        :aria-label="T.wordsDelete"
         @click.prevent="onDeleteFeedback"
-      >
-        ❌
-      </button>
+      ></button>
     </div>
     <div class="card-body">
       <textarea
@@ -36,7 +35,7 @@
       ></omegaup-markdown>
     </div>
     <div v-if="!saved" class="card-footer text-muted">
-      <div class="form-group my-2">
+      <div class="mb-3 my-2">
         <button
           data-button-submit
           :disabled="!currentFeedback.text"

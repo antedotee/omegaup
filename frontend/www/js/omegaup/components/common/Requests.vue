@@ -3,7 +3,7 @@
     <h5 class="card-header">
       {{ T.pendingRegistrations }}
     </h5>
-    <label class="text-right m-3">
+    <label class="text-end m-3">
       <input v-model="showAllRequests" type="checkbox" />
       {{ T.pendingRegistrationsShowAll }}
     </label>
@@ -47,11 +47,10 @@
           <td v-else></td>
           <td v-if="!request.accepted" class="text-center">
             <button
-              class="close float-none text-danger mx-2"
+              class="btn-close text-danger mx-2"
+              :aria-label="T.wordsDeny"
               @click="toggleFeedbackModal(request.username)"
-            >
-              ×
-            </button>
+            ></button>
             <b-modal
               v-model="modalStates[request.username]"
               :title="T.submitFeedbackRequireConfirmation"
@@ -67,7 +66,8 @@
               ></b-form-input>
             </b-modal>
             <button
-              class="close float-none text-success mx-2"
+              class="btn btn-link p-0 mx-2 text-success text-decoration-none fw-bold fs-4 lh-1"
+              :aria-label="T.wordsAccept"
               @click="$emit('accept-request', { username: request.username })"
             >
               ✓
@@ -86,8 +86,6 @@ import { types } from '../../api_types';
 import T from '../../lang';
 import * as time from '../../time';
 import omegaup_Username from '../user/Username.vue';
-
-import 'bootstrap/dist/css/bootstrap.css';
 
 @Component({
   emits: ['deny-request'],

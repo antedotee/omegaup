@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const sassLoaderOptions = require('./stuff/webpack/sass-loader-options');
 const defaultBadgeIcon = fs.readFileSync('./frontend/badges/default_icon.svg');
 
 module.exports = {
@@ -279,7 +280,11 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          { loader: 'sass-loader', options: sassLoaderOptions },
+        ],
       },
       {
         test: /\.ttf$/,

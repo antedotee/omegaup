@@ -102,9 +102,9 @@
                   </th>
                 </tr>
                 <tr>
-                  <th class="text-right">{{ T.rankScore }}</th>
+                  <th class="text-end">{{ T.rankScore }}</th>
                   <th class="text-center">{{ T.wordsVerdict }}</th>
-                  <th class="text-right">{{ T.rankScore }}</th>
+                  <th class="text-end">{{ T.rankScore }}</th>
                   <th class="text-center">{{ T.wordsVerdict }}</th>
                 </tr>
               </thead>
@@ -120,11 +120,11 @@
                     >
                   </td>
                   <td class="text-center">{{ diffEntry[0].username }}</td>
-                  <td class="text-right">
+                  <td class="text-end">
                     {{ diffEntry[0].old_score.toFixed(2) }}
                   </td>
                   <td class="text-center">{{ diffEntry[0].old_verdict }}</td>
-                  <td class="text-right">
+                  <td class="text-end">
                     {{ diffEntry[0].new_score.toFixed(2) }}
                   </td>
                   <td class="text-center">{{ diffEntry[0].new_verdict }}</td>
@@ -272,7 +272,7 @@ export default toNative(ProblemVersions);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .scrollable {
   max-height: 600px;
   overflow-y: auto;

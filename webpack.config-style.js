@@ -2,6 +2,7 @@ const path = require('path');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveSourceWebpackPlugin = require('remove-source-webpack-plugin');
+const sassLoaderOptions = require('./stuff/webpack/sass-loader-options');
 
 const omegaupStylesRegExp = /omegaup_styles\.js/;
 
@@ -24,8 +25,15 @@ module.exports = {
     rules: [
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          { loader: 'sass-loader', options: sassLoaderOptions },
+        ],
       },
     ],
+  },
+  optimization: {
+    emitOnErrors: false,
   },
 };

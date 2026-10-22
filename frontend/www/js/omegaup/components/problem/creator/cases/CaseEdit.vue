@@ -2,7 +2,7 @@
   <div v-if="getSelectedCase && getSelectedGroup">
     <div class="d-flex justify-content-between">
       <div>
-        <h3 class="mb-0 d-md-inline mr-2">{{ getSelectedCase.name }}</h3>
+        <h3 class="mb-0 d-md-inline me-2">{{ getSelectedCase.name }}</h3>
         <h5 class="mb-0 d-none d-md-inline text-muted">
           {{ getSelectedGroup.name }}
         </h5>
@@ -10,12 +10,12 @@
       <div>
         <b-button
           variant="light"
-          class="mr-2"
+          class="me-2"
           @click="editCaseModal = !editCaseModal"
         >
           <div class="container">
             <div class="row">
-              <i class="bi bi-pencil-fill text-info mr-1 pt-1" />
+              <i class="bi bi-pencil-fill text-info me-1 pt-1" />
               {{ T.problemCreatorEditCase }}
             </div>
           </div>
@@ -44,7 +44,7 @@
         <b-button
           data-delete-case
           variant="light"
-          class="mr-2"
+          class="me-2"
           @click="
             deleteCase({
               groupID: getSelectedGroup.groupID,
@@ -54,7 +54,7 @@
         >
           <div class="container">
             <div class="row">
-              <i class="bi bi-trash-fill text-danger mr-1 pt-1" />
+              <i class="bi bi-trash-fill text-danger me-1 pt-1" />
               {{ T.problemCreatorDeleteCase }}
             </div>
           </div>
@@ -77,7 +77,7 @@
             @click="deleteLines()"
           >
             <div class="d-flex">
-              <i class="bi bi-trash text-danger pt-1 mr-3" />
+              <i class="bi bi-trash text-danger pt-1 me-3" />
               {{ T.problemCreatorLinesDelete }}
             </div>
           </b-button>
@@ -89,7 +89,7 @@
             @click="downloadInputFile('.in')"
           >
             <div class="d-flex">
-              <i class="bi bi-box-arrow-down text-info pt-1 mr-3" />
+              <i class="bi bi-box-arrow-down text-info pt-1 me-3" />
               {{ T.problemCreatorCaseDownloadIn }}
             </div>
           </b-button>
@@ -100,7 +100,7 @@
             @click="downloadInputFile('.txt')"
           >
             <div class="d-flex">
-              <i class="bi bi-text-left text-info pt-1 mr-3" />
+              <i class="bi bi-text-left text-info pt-1 me-3" />
               {{ T.problemCreatorCaseDownloadTxt }}
             </div>
           </b-button>
@@ -131,14 +131,14 @@
                       <i class="bi bi-arrow-down-up" />
                     </b-button>
                   </b-col>
-                  <b-col cols="2" class="pl-0 pr-2">
+                  <b-col cols="2" class="ps-0 pe-2">
                     <b-form-input
                       v-model="line.label"
                       size="sm"
                       :placeholder="T.problemCreatorLabelPlaceHolder"
                     />
                   </b-col>
-                  <b-col cols="5" class="pr-0 text-center">
+                  <b-col cols="5" class="pe-0 text-center">
                     <b-form-input
                       v-if="getLineDisplay(line) === LineDisplayOption.LINE"
                       v-model="line.data.value"
@@ -157,7 +157,7 @@
                       :placeholder="T.problemCreatorContentPlaceHolder"
                     ></b-form-textarea>
                   </b-col>
-                  <b-col cols="3" class="pl-2 pr-0 text-center">
+                  <b-col cols="3" class="ps-2 pe-0 text-center">
                     <b-dropdown
                       :data-array-modal-dropdown="line.lineID"
                       :text="getLineNameFromKind(line.data.kind)"
@@ -207,7 +207,7 @@
                     >
                       <b-container>
                         <b-row class="mb-4">
-                          <b-col class="text-left">
+                          <b-col class="text-start">
                             {{ T.arrayModalSize }}
                             <b-form-input
                               v-model="line.data.size"
@@ -215,7 +215,7 @@
                               data-array-modal-size
                             />
                           </b-col>
-                          <b-col class="text-left">
+                          <b-col class="text-start">
                             {{ T.arrayModalMinimum }}
                             <b-form-input
                               v-model="line.data.min"
@@ -223,7 +223,7 @@
                               data-array-modal-min
                             />
                           </b-col>
-                          <b-col class="text-left">
+                          <b-col class="text-start">
                             {{ T.arrayModalMaximum }}
                             <b-form-input
                               v-model="line.data.max"
@@ -233,7 +233,7 @@
                           </b-col>
                         </b-row>
                         <b-row class="mt-2 mb-4">
-                          <b-col class="text-left">
+                          <b-col class="text-start">
                             <b-form-checkbox
                               v-model="line.data.distinct"
                               data-array-modal-checkbox
@@ -243,7 +243,7 @@
                           </b-col>
                         </b-row>
                         <b-row class="mt-4">
-                          <b-col class="text-left">
+                          <b-col class="text-start">
                             <b-button
                               variant="primary"
                               data-array-modal-generate
@@ -260,7 +260,7 @@
                           </b-col>
                         </b-row>
                         <hr />
-                        <div class="text-left">
+                        <div class="text-start">
                           {{ T.arrayModalGeneratedArray }}
                         </div>
                         <b-form-input
@@ -289,7 +289,7 @@
                     >
                       <b-container>
                         <b-row class="mb-4">
-                          <b-col class="text-left">
+                          <b-col class="text-start">
                             {{ T.matrixModalRows }}
                             <b-form-input
                               v-model="line.data.rows"
@@ -305,7 +305,7 @@
                               data-matrix-modal-columns
                             />
                           </b-col>
-                          <b-col class="text-left">
+                          <b-col class="text-start">
                             {{ T.matrixModalMinimum }}
                             <b-form-input
                               v-model="line.data.min"
@@ -323,8 +323,8 @@
                           </b-col>
                         </b-row>
                         <b-row class="mt-2 mb-4">
-                          <b-col class="text-left">
-                            <div class="mb-1 font-weight-bold">
+                          <b-col class="text-start">
+                            <div class="mb-1 fw-bold">
                               {{ T.matrixModalDistinct }}
                             </div>
                             <b-dropdown
@@ -354,7 +354,7 @@
                           </b-col>
                         </b-row>
                         <b-row class="mt-4">
-                          <b-col class="text-left">
+                          <b-col class="text-start">
                             <b-button
                               variant="primary"
                               data-matrix-modal-generate
@@ -372,7 +372,7 @@
                           </b-col>
                         </b-row>
                         <hr />
-                        <div class="text-left">
+                        <div class="text-start">
                           {{ T.matrixModalGeneratedArray }}
                         </div>
                         <b-form-textarea
@@ -404,7 +404,7 @@
             <td>
               <b-container fluid class="bg-light">
                 <b-row class="d-flex justify-content-between" align-v="center">
-                  <b-col class="pr-1 text-center">
+                  <b-col class="pe-1 text-center">
                     <b-form-textarea
                       v-model="getSelectedCase.output"
                       data-output-textarea
@@ -438,12 +438,12 @@
       <b-button
         data-edit-case-add-line
         variant="light"
-        class="mr-2"
+        class="me-2"
         @click="addNewLine"
       >
         <div class="container">
           <div class="row">
-            <i class="bi bi-plus-square text-info mr-2 pt-1" />
+            <i class="bi bi-plus-square text-info me-2 pt-1" />
             {{ T.problemCreatorAddLine }}
           </div>
         </div>
@@ -467,7 +467,6 @@ import {
   CaseRequest,
   GroupID,
 } from '@/js/omegaup/problem/creator/types';
-import 'bootstrap/dist/css/bootstrap.css';
 import draggable from 'vuedraggable';
 
 // vuedraggable 2.x is a Vue 2 component whose render function reads

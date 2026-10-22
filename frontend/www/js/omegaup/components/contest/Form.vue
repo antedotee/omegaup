@@ -52,25 +52,28 @@
               <h2 class="mb-0">
                 <button
                   ref="basicInfo"
-                  class="btn btn-link btn-block text-left"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['basic-info'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".basic-info"
-                  aria-expanded="true"
-                  aria-controls="basic-info-collapse"
+                  data-section-toggle="basic-info"
+                  :aria-expanded="openSections['basic-info'] ? 'true' : 'false'"
+                  @click="toggleSection('basic-info')"
                 >
                   {{ T.contestNewFormBasicInfo }}
                   <font-awesome-icon
                     v-if="hasErrorsInSection(SectionName.Basic)"
                     icon="exclamation-circle"
-                    class="text-danger ml-2"
+                    class="text-danger ms-2"
                   />
                 </button>
               </h2>
             </div>
-            <div class="collapse show card-body basic-info">
+            <BCollapse
+              v-model="openSections['basic-info']"
+              class="card-body basic-info"
+            >
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.wordsTitle }}
                     <span
@@ -120,7 +123,7 @@
                     }}
                   </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormShortTitleAlias }}
                     <span
@@ -135,7 +138,7 @@
                     <font-awesome-icon
                       :title="T.contestNewFormShortTitleAliasDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <input
@@ -175,14 +178,14 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormStartDate }}
                     <span class="required-asterisk">*</span>
                     <font-awesome-icon
                       :title="T.contestNewFormStartDateDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <omegaup-datetimepicker
@@ -193,7 +196,7 @@
                     @input="validateDates"
                   ></omegaup-datetimepicker>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormEndDate }}
                     <span
@@ -208,7 +211,7 @@
                     <font-awesome-icon
                       :title="T.contestNewFormEndDateDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <omegaup-datetimepicker
@@ -230,9 +233,9 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-md-6 introjs-description">
+                <div class="mb-3 col-md-6 introjs-description">
                   <div class="d-flex align-items-center mb-1">
-                    <label class="mb-0 mr-2">
+                    <label class="mb-0 me-2">
                       {{ T.contestNewFormDescription }}
                       <span
                         class="required-asterisk"
@@ -244,7 +247,7 @@
                         >*</span
                       >
                     </label>
-                    <div class="btn-group btn-group-sm ml-auto">
+                    <div class="btn-group btn-group-sm ms-auto">
                       <button
                         type="button"
                         class="btn"
@@ -319,7 +322,7 @@
                     }}
                   </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.wordsLanguages }}
                     <span
@@ -358,7 +361,7 @@
                   </small>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
 
           <!-- Logistics Section -->
@@ -367,32 +370,34 @@
               <h2 class="mb-0">
                 <button
                   ref="logistics"
-                  class="btn btn-link btn-block text-left collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['logistics'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".logistics"
-                  aria-expanded="false"
-                  aria-controls="logistics-collapse"
-                  @click.prevent
+                  data-section-toggle="logistics"
+                  :aria-expanded="openSections['logistics'] ? 'true' : 'false'"
+                  @click="toggleSection('logistics')"
                 >
                   {{ T.contestNewFormLogistics }}
                   <font-awesome-icon
                     v-if="hasErrorsInSection(SectionName.Logistics)"
                     icon="exclamation-circle"
-                    class="text-danger ml-2"
+                    class="text-danger ms-2"
                   />
                 </button>
               </h2>
             </div>
-            <div class="collapse card-body logistics">
+            <BCollapse
+              v-model="openSections['logistics']"
+              class="card-body logistics"
+            >
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormDifferentStarts }}
                     <font-awesome-icon
                       :title="T.contestNewFormDifferentStartsDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <div class="checkbox">
@@ -430,13 +435,13 @@
                     {{ localErrors[FieldName.WindowLength] }}
                   </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormForTeams }}
                     <font-awesome-icon
                       :title="T.contestNewFormForTeamsDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <div class="checkbox">
@@ -479,13 +484,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormScoreboardAtEnd }}
                     <font-awesome-icon
                       :title="T.contestNewFormScoreboardAtEndDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <select
@@ -498,7 +503,7 @@
                     <option :value="false">{{ T.wordsNo }}</option>
                   </select>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormScoreboardTimePercent }}
                     <span
@@ -513,7 +518,7 @@
                     <font-awesome-icon
                       :title="T.contestNewFormScoreboardTimePercentDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <input
@@ -546,7 +551,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormRecommended }}
                     <font-awesome-icon
@@ -556,7 +561,7 @@
                           : T.contestNewFormRecommendedTextNonAdmin
                       "
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <div v-if="canSetRecommended" class="checkbox form-check">
@@ -571,7 +576,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
 
           <!-- Scoring Rules Section -->
@@ -580,30 +585,36 @@
               <h2 class="mb-0">
                 <button
                   ref="scoringRules"
-                  class="btn btn-link btn-block text-left collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['scoring-rules'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".scoring-rules"
-                  aria-expanded="false"
+                  data-section-toggle="scoring-rules"
+                  :aria-expanded="
+                    openSections['scoring-rules'] ? 'true' : 'false'
+                  "
+                  @click="toggleSection('scoring-rules')"
                 >
                   {{ T.contestNewFormScoringRules }}
                   <font-awesome-icon
                     v-if="hasErrorsInSection(SectionName.Scoring)"
                     icon="exclamation-circle"
-                    class="text-danger ml-2"
+                    class="text-danger ms-2"
                   />
                 </button>
               </h2>
             </div>
-            <div class="collapse card-body scoring-rules">
+            <BCollapse
+              v-model="openSections['scoring-rules']"
+              class="card-body scoring-rules"
+            >
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormScoreMode }}
                     <font-awesome-icon
                       :title="T.contestNewFormScoreModeDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <select
@@ -623,13 +634,13 @@
                     </option>
                   </select>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.wordsFeedback }}
                     <font-awesome-icon
                       :title="T.contestNewFormImmediateFeedbackDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <select
@@ -644,7 +655,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormSubmissionsSeparation }}
                     <span
@@ -659,7 +670,7 @@
                     <font-awesome-icon
                       :title="T.contestNewFormSubmissionsSeparationDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <input
@@ -689,13 +700,13 @@
                     T.contestNewFormSubmissionsGapHelp
                   }}</small>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormPenaltyType }}
                     <font-awesome-icon
                       :title="T.contestNewFormPenaltyTypeDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <select
@@ -719,7 +730,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.wordsPenalty }}
                     <span
@@ -734,7 +745,7 @@
                     <font-awesome-icon
                       :title="T.contestNewFormPenaltyDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <input
@@ -761,7 +772,7 @@
                     {{ localErrors[FieldName.Penalty] }}
                   </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormPointDecrementFactor }}
                     <span
@@ -776,7 +787,7 @@
                     <font-awesome-icon
                       :title="T.contestNewFormPointDecrementFactorDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <input
@@ -808,7 +819,7 @@
                   }}</small>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
 
           <!-- Privacy Section -->
@@ -817,25 +828,29 @@
               <h2 class="mb-0">
                 <button
                   ref="privacy"
-                  class="btn btn-link btn-block text-left collapsed"
+                  class="btn btn-link w-100 text-start"
+                  :class="{ collapsed: !openSections['privacy'] }"
                   type="button"
-                  data-toggle="collapse"
-                  data-target=".privacy"
-                  aria-expanded="false"
+                  data-section-toggle="privacy"
+                  :aria-expanded="openSections['privacy'] ? 'true' : 'false'"
+                  @click="toggleSection('privacy')"
                 >
                   {{ T.contestNewFormPrivacy }}
                 </button>
               </h2>
             </div>
-            <div class="collapse card-body privacy">
+            <BCollapse
+              v-model="openSections['privacy']"
+              class="card-body privacy"
+            >
               <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormBasicInformationRequired }}
                     <font-awesome-icon
                       :title="T.contestNewFormBasicInformationRequiredDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <div class="checkbox form-check">
@@ -851,13 +866,13 @@
                     </label>
                   </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                   <label>
                     {{ T.contestNewFormUserInformationRequired }}
                     <font-awesome-icon
                       :title="T.contestNewFormUserInformationRequiredDesc"
                       icon="info-circle"
-                      class="ml-1 text-muted"
+                      class="ms-1 text-muted"
                     />
                   </label>
                   <select
@@ -872,11 +887,11 @@
                   </select>
                 </div>
               </div>
-            </div>
+            </BCollapse>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <button
             class="btn btn-primary introjs-schedule"
             type="submit"
@@ -884,7 +899,7 @@
           >
             <span v-if="isSubmitting">
               <span
-                class="spinner-border spinner-border-sm mr-2"
+                class="spinner-border spinner-border-sm me-2"
                 role="status"
                 aria-hidden="true"
               ></span>
@@ -937,7 +952,7 @@ import introJs from 'intro.js';
 import VueCookies from 'vue-cookies';
 import 'v-tooltip/dist/v-tooltip.css';
 import { VTooltip } from 'v-tooltip';
-import { BModal } from 'bootstrap-vue-next';
+import { BCollapse, BModal } from 'bootstrap-vue-next';
 
 import {
   FontAwesomeIcon,
@@ -986,6 +1001,12 @@ export enum SectionName {
   Logistics = 'logistics',
   Scoring = 'scoring',
 }
+
+/**
+ * Collapsible accordion sections. Each name is also the value of the
+ * `data-section-toggle` hook on that section's header button.
+ */
+type FormSection = 'basic-info' | 'logistics' | 'scoring-rules' | 'privacy';
 
 interface LocalErrors {
   [key: string]: string;
@@ -1110,6 +1131,7 @@ const markdownConverter = new markdownModule.Converter({ preview: true });
 
 @Component({
   components: {
+    BCollapse,
     BModal,
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-datetimepicker': DateTimePicker,
@@ -1165,6 +1187,13 @@ class Form extends Vue {
   @Prop({ default: false }) canSetRecommended!: boolean;
   @Prop({ default: false }) initialRecommended!: boolean;
 
+  // Basic info starts expanded; the other sections start collapsed.
+  openSections: Record<FormSection, boolean> = {
+    'basic-info': true,
+    logistics: false,
+    'scoring-rules': false,
+    privacy: false,
+  };
   alias = this.initialAlias;
   description = this.initialDescription;
   feedback = this.initialFeedback;
@@ -1324,6 +1353,10 @@ class Form extends Vue {
         invalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
+  }
+
+  toggleSection(section: FormSection): void {
+    this.openSections[section] = !this.openSections[section];
   }
 
   hasErrorsInSection(section: SectionName): boolean {
@@ -1615,7 +1648,7 @@ export default toNative(Form);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 @import '../../../../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css';
 @import '../../../../third_party/js/pagedown/demo/browser/demo.css';
 
@@ -1655,13 +1688,13 @@ export default toNative(Form);
 }
 
 .form-control:disabled,
-.custom-control-input:disabled ~ .custom-control-label,
+.form-check-input:disabled ~ .form-check-label,
 .btn:disabled {
   cursor: not-allowed;
 }
 
 .form-control:disabled,
-.custom-control-input:disabled ~ .custom-control-label {
+.form-check-input:disabled ~ .form-check-label {
   opacity: 0.6;
 }
 

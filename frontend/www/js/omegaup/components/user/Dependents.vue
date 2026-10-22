@@ -32,10 +32,7 @@
             ></omegaup-user-username>
           </td>
           <td class="d-block mt-1" :class="bannerColor(dependent)">
-            <small
-              class="font-italic font-weight-bold"
-              :class="textColor(dependent)"
-            >
+            <small class="fst-italic fw-bold" :class="textColor(dependent)">
               {{ dependentsStatusMessage(dependent) }}
             </small>
           </td>
@@ -136,7 +133,7 @@ export default toNative(UserDependents);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .background-success {
   background-color: var(--status-success-color);

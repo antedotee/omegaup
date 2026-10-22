@@ -2,13 +2,13 @@
   <div data-course-clone>
     <form class="form" @submit.prevent="$emit('clone', alias, name, startTime)">
       <div class="row">
-        <div class="form-group col-md-6">
+        <div class="clone-field mb-3 col-md-6">
           <label
             >{{ T.wordsName }}
             <input v-model="name" class="form-control" type="text"
           /></label>
         </div>
-        <div class="form-group col-md-3">
+        <div class="clone-field mb-3 col-md-3">
           <label
             >{{ T.courseNewFormShortTitleAlias }}
             <font-awesome-icon
@@ -17,7 +17,7 @@
             <input v-model="alias" class="form-control" type="text"
           /></label>
         </div>
-        <div class="form-group col-md-3">
+        <div class="clone-field mb-3 col-md-3">
           <label
             >{{ T.courseNewFormStartDate }}
             <font-awesome-icon
@@ -27,7 +27,7 @@
           ></label>
         </div>
       </div>
-      <div class="form-group text-right">
+      <div class="clone-field mb-3 text-end">
         <button class="btn btn-primary" type="submit">
           {{ T.wordsCloneCourse }}
         </button>
@@ -71,7 +71,7 @@ export default toNative(CourseClone);
 </script>
 
 <style scoped>
-.form-group > label {
+.clone-field > label {
   width: 100%;
 }
 

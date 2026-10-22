@@ -24,76 +24,62 @@
           student_count: course.student_count,
         })
       }}</span>
-      <div class="mt-2 row float-sm-right">
+      <div class="mt-2 row float-sm-end">
         <div v-if="course.is_admin" class="col">
-          <div class="dropdown">
+          <BDropdown
+            variant="primary"
+            no-fade
+            toggle-class="p-1 p-sm-2"
+            :toggle-attrs="{ 'data-button-statistics': '' }"
+            :text="T.wordsStatistics"
+          >
             <a
-              data-button-statistics
-              class="btn btn-primary dropdown-toggle p-1 p-sm-2"
-              href="#"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
+              data-button-progress-students
+              class="dropdown-item"
+              :href="`/course/${course.alias}/students/`"
+              >{{ T.courseStudentsProgress }}</a
             >
-              {{ T.wordsStatistics }}
-            </a>
-            <div class="dropdown-menu">
-              <a
-                data-button-progress-students
-                class="dropdown-item"
-                :href="`/course/${course.alias}/students/`"
-                >{{ T.courseStudentsProgress }}</a
-              >
-              <a
-                data-button-activity-report
-                class="dropdown-item"
-                :href="`/course/${course.alias}/activity/`"
-                >{{ T.activityReport }}</a
-              >
-              <a
-                data-button-activity-report
-                class="dropdown-item"
-                :href="`/course/${course.alias}/statistics/`"
-                >{{ T.omegaupTitleCourseStatistics }}</a
-              >
-            </div>
-          </div>
+            <a
+              data-button-activity-report
+              class="dropdown-item"
+              :href="`/course/${course.alias}/activity/`"
+              >{{ T.activityReport }}</a
+            >
+            <a
+              data-button-activity-report
+              class="dropdown-item"
+              :href="`/course/${course.alias}/statistics/`"
+              >{{ T.omegaupTitleCourseStatistics }}</a
+            >
+          </BDropdown>
         </div>
         <div v-if="course.is_admin" class="col d-flex justify-content-center">
-          <div class="dropdown">
+          <BDropdown
+            variant="primary"
+            no-fade
+            toggle-class="p-1 p-sm-2"
+            :toggle-attrs="{ 'data-button-manage-course': '' }"
+            :text="T.courseDetailsSettings"
+          >
             <a
-              data-button-manage-course
-              class="btn btn-primary dropdown-toggle p-1 p-sm-2"
-              href="#"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
+              data-button-manage-students
+              class="dropdown-item"
+              :href="`/course/${course.alias}/edit/#students`"
+              >{{ T.wordsAddStudent }}</a
             >
-              {{ T.courseDetailsSettings }}
-            </a>
-            <div class="dropdown-menu">
-              <a
-                data-button-manage-students
-                class="dropdown-item"
-                :href="`/course/${course.alias}/edit/#students`"
-                >{{ T.wordsAddStudent }}</a
-              >
-              <a
-                data-button-manage-content
-                class="dropdown-item"
-                :href="`/course/${course.alias}/edit/#content`"
-                >{{ T.wordsContentEdit }}</a
-              >
-              <a
-                data-button-manage-content
-                class="dropdown-item"
-                :href="`/course/${course.alias}/edit/#clone`"
-                >{{ T.wordsCloneThisCourse }}</a
-              >
-            </div>
-          </div>
+            <a
+              data-button-manage-content
+              class="dropdown-item"
+              :href="`/course/${course.alias}/edit/#content`"
+              >{{ T.wordsContentEdit }}</a
+            >
+            <a
+              data-button-manage-content
+              class="dropdown-item"
+              :href="`/course/${course.alias}/edit/#clone`"
+              >{{ T.wordsCloneThisCourse }}</a
+            >
+          </BDropdown>
         </div>
         <div class="col">
           <a
@@ -147,15 +133,15 @@
                 <td class="align-middle">
                   <template v-if="assignment.assignment_type === 'homework'">
                     <font-awesome-icon icon="file-alt" />
-                    <span class="ml-2">{{ T.wordsHomework }}</span>
+                    <span class="ms-2">{{ T.wordsHomework }}</span>
                   </template>
                   <template v-else-if="assignment.assignment_type === 'lesson'">
                     <font-awesome-icon icon="chalkboard-teacher" />
-                    <span class="ml-2">{{ T.wordsLesson }}</span>
+                    <span class="ms-2">{{ T.wordsLesson }}</span>
                   </template>
                   <template v-else>
                     <font-awesome-icon icon="list-alt" />
-                    <span class="ml-2">{{ T.wordsExam }}</span>
+                    <span class="ms-2">{{ T.wordsExam }}</span>
                   </template>
                 </td>
                 <td>
@@ -176,7 +162,7 @@
                 <td v-if="isAdminOrTeachingAssistant" class="align-middle">
                   <a
                     data-course-scoreboard-button
-                    class="mr-2"
+                    class="me-2"
                     :href="`/course/${course.alias}/assignment/${assignment.alias}/scoreboard/${assignment.scoreboard_url}/`"
                   >
                     <font-awesome-icon :icon="['fas', 'link']" />{{
@@ -185,7 +171,7 @@
                   >
                   <a
                     data-course-submisson-button
-                    class="mr-2"
+                    class="me-2"
                     :href="`/course/${course.alias}/assignment/${assignment.alias}/#runs`"
                   >
                     <font-awesome-icon :icon="['fas', 'tachometer-alt']" />
@@ -224,50 +210,30 @@
         </div>
       </div>
       <div class="d-flex justify-content-end py-3 px-5 mx-3 p-sm-0 mx-sm-0">
-        <div class="dropdown">
+        <BDropdown variant="primary" no-fade :text="T.wordsActions">
           <a
-            class="btn btn-primary dropdown-toggle"
-            href="#"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
+            :href="`/course/${course.alias}/clarification/`"
+            class="dropdown-item"
+            >{{ T.wordsMyClarifications }}</a
           >
-            {{ T.wordsActions }}
-          </a>
-          <div class="dropdown-menu">
-            <a
-              :href="`/course/${course.alias}/clarification/`"
-              class="dropdown-item"
-              >{{ T.wordsMyClarifications }}</a
-            >
-            <a
-              v-if="course.admission_mode === 'public'"
-              :href="`/course/${course.alias}/clone/`"
-              class="dropdown-item"
-              >{{ T.wordsCloneThisCourse }}</a
-            >
-          </div>
-        </div>
+          <a
+            v-if="course.admission_mode === 'public'"
+            :href="`/course/${course.alias}/clone/`"
+            class="dropdown-item"
+            >{{ T.wordsCloneThisCourse }}</a
+          >
+        </BDropdown>
       </div>
-      <ul class="nav nav-tabs" role="tablist">
-        <li
+      <BNav tabs>
+        <BNavItem
           v-for="(tabName, tabKey) in tabNames"
           :key="tabKey"
-          class="nav-item"
-          role="presentation"
+          :active="selectedTab === tabKey"
+          :href="'#' + tabKey"
+          @click="selectedTab = tabKey"
+          >{{ tabName }}</BNavItem
         >
-          <a
-            class="nav-link"
-            :href="`#${tabKey}`"
-            :class="{ active: selectedTab === tabKey }"
-            data-toggle="tab"
-            role="tab"
-            @click="selectedTab = tabKey"
-            >{{ tabName }}</a
-          >
-        </li>
-      </ul>
+      </BNav>
       <div class="tab-content">
         <div
           class="tab-pane fade py-4 px-2"
@@ -283,7 +249,7 @@
             :full-width="true"
           ></omegaup-markdown>
           <div class="row m-0 mt-4">
-            <div v-if="course.objective" class="col-md-8 mb-4 p-0 pr-md-5">
+            <div v-if="course.objective" class="col-md-8 mb-4 p-0 pe-md-5">
               <h5 class="intro-subtitle pb-1">
                 {{ T.courseNewFormObjective }}
               </h5>
@@ -328,6 +294,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import { BNav, BNavItem } from 'bootstrap-vue-next';
 import T from '../../lang';
 import * as ui from '../../ui';
 import * as time from '../../time';
@@ -353,6 +320,8 @@ export enum Tab {
 
 @Component({
   components: {
+    BNav,
+    BNavItem,
     FontAwesomeIcon,
     'omegaup-markdown': omegaup_Markdown,
     'omegaup-assignment-card': course_AssignmentCard,
@@ -425,7 +394,7 @@ export default toNative(CourseDetails);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .progress-text {
   font-size: 0.85rem;

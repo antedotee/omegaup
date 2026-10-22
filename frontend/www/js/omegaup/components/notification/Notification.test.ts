@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 
+import T from '../../lang';
 import notification_Notification from './Notification.vue';
 
 describe('Notification.vue', () => {
@@ -24,7 +25,9 @@ describe('Notification.vue', () => {
       },
     });
 
-    expect(wrapper.find('button.close').text()).toBe('❌');
+    const closeButton = wrapper.find('button.btn-close');
+    expect(closeButton.text()).toBe('');
+    expect(closeButton.attributes('aria-label')).toBe(T.wordsClose);
     expect(wrapper.text()).toEqual(expect.stringContaining(courseName));
   });
 });

@@ -31,6 +31,14 @@ const faStubs = {
   },
 };
 
+// shallowMount stubs every child, including the BootstrapVueNext dropdown
+// parts. Render them for real so item clicks reach the component handlers.
+const dropdownStubs = {
+  BDropdown: false,
+  BButton: false,
+  BDropdownItemButton: false,
+  BDropdownDivider: false,
+};
 describe('RunsForCourses.vue', () => {
   it('Should handle empty runs', () => {
     const wrapper = shallowMount(arena_RunsForCourses, {
@@ -412,6 +420,7 @@ describe('RunsForCourses.vue', () => {
       type: 'disqualified',
     });
     const wrapper = shallowMount(arena_RunsForCourses, {
+      global: { stubs: dropdownStubs },
       props: {
         contestAlias: 'admin',
         problemAlias: 'alias',

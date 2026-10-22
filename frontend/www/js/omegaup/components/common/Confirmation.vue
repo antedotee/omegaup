@@ -4,13 +4,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <button
-            class="close"
+            class="btn-close"
             type="button"
-            data-dismiss="modal"
+            :aria-label="T.wordsClose"
             @click.prevent="$emit('close')"
-          >
-            ×
-          </button>
+          ></button>
         </div>
         <div class="modal-body">
           <p>{{ question }}</p>
@@ -19,7 +17,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            data-dismiss="modal"
+            data-modal-dismiss
             @click.prevent="$emit('yes')"
           >
             {{ answerYes }}
@@ -27,7 +25,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            data-dismiss="modal"
+            data-modal-dismiss
             @click.prevent="$emit('no')"
           >
             {{ answerNo }}
@@ -40,9 +38,11 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import T from '../../lang';
 
 @Component
 class Paginator extends Vue {
+  T = T;
   @Prop() question!: string;
   @Prop() answerYes!: string;
   @Prop() answerNo!: string;

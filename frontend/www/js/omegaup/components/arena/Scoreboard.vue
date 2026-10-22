@@ -33,7 +33,7 @@
       />
       {{ T.scoreboardShowOnlyInvitedIdentities }}</label
     >
-    <label class="float-right"
+    <label class="float-end"
       >{{ T.scoreboardShowParticipantsNames }}:
       <select
         v-model="nameDisplayOptions"
@@ -259,7 +259,7 @@ export default toNative(ArenaScoreboard);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 .omegaup-scoreboard {
   margin: 0 auto;
 

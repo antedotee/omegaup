@@ -61,8 +61,8 @@
               <th scope="col" class="text-center fixed-with-column">
                 {{ T.wordsVerdict }}
               </th>
-              <th scope="col" class="text-right">{{ T.wordsRuntime }}</th>
-              <th scope="col" class="text-right">{{ T.wordsMemory }}</th>
+              <th scope="col" class="text-end">{{ T.wordsRuntime }}</th>
+              <th scope="col" class="text-end">{{ T.wordsMemory }}</th>
             </tr>
           </thead>
           <tbody>
@@ -182,7 +182,7 @@ export default toNative(SubmissionsList);
 </script>
 
 <style lang="scss">
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 table.submissions-table > tbody > tr > td {
   vertical-align: middle;

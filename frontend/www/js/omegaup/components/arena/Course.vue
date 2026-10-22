@@ -480,7 +480,7 @@ export default toNative(ArenaCourse);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .navleft {
   overflow: hidden;

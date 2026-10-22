@@ -1,69 +1,41 @@
-# Bootstrap 4 to 5 and BootstrapVue to BootstrapVueNext migration
+# Bootstrap 5 migration
 
-This document tracks the staged migration of the omegaUp frontend from Bootstrap 4
-plus BootstrapVue 2 (Vue 2) to Bootstrap 5 plus BootstrapVueNext, routed through Vue 3
-compatibility mode. The work ships as a stack of reviewable pull requests. Each PR
-builds on the previous one and ends in a green state (install, Jest, webpack build).
+omegaUp is moving from Bootstrap 4 and BootstrapVue 2 to Bootstrap 5 and bootstrap-vue-next. Vue 3 compatibility mode is the bridge, because BootstrapVue 2 runs only on Vue 2 and bootstrap-vue-next runs only on Vue 3. Bootstrap 5 CSS comes after that library is in place.
 
-## Why the order is what it is
+The work is four pull requests. Each branch starts from the previous branch tip. PR4 stays unstarted until PR3 CI is green.
 
-BootstrapVue 2 runs only on Vue 2. BootstrapVueNext requires Vue 3. BootstrapVueNext
-targets Bootstrap 5. That chain fixes the sequence. Vue 3 (compat) comes first, then the
-component library swap, then the Bootstrap 5 CSS cutover. Compat mode suppresses the Vue 3
-migration warnings so unrelated application behavior is not rewritten in the same pass.
+## Pull requests
 
-## Starting point (this PR)
+| PR | Branch | Base | Status |
+| --- | --- | --- | --- |
+| 1 | `bs5/01-baseline-tooling` | `main` | Open as antedotee/omegaup#13. Docs and the measured baseline. |
+| 2 | `bs5/02-vue3-compat` | PR1 | Open as antedotee/omegaup#14. Vue 3 compat and bootstrap-vue-next. Bootstrap 4 CSS still loads. CI is green. Tip `eb27ddf48`. |
+| 3 | `bs5/03-bootstrap5-cutover` | PR2 | This branch. Bootstrap 5.3.8 CSS, class and data-attribute cutover, and the remaining widgets on bootstrap-vue-next. |
+| 4 | not created | PR3 | Not started. Removes the Vue 3 compat shim. |
 
-Baseline captured on the branch `bs5/01-baseline-tooling`, verified green:
+An earlier plan split the library swap into three family pull requests and left the CSS cutover as PR6. PR2 already swapped the library while Bootstrap 4 CSS was still loaded. That six-PR plan is superseded.
 
-- Node 24 (the `engines` field already requires `>=24`).
-- `yarn install` with the committed lockfile.
-- `git submodule update --init --recursive` (pagedown and the other `third_party`
-  submodules are required for the Jest suite to resolve).
-- `yarn test` (frontend Jest): 193 suites pass, 927 tests pass, 3 skipped.
-- `yarn build-development-frontend` (webpack): succeeds.
+## Left for later
 
-The current stack is Vue 2.7.16, Bootstrap 4.6.0, BootstrapVue 2.21.2,
-`vue-property-decorator` 8, `vuex` 3 with `vuex-class`, and `@vue/test-utils` 1.
+- `karel.js` and `rekarel` ship their own Bootstrap. They are submodules and this cutover does not edit them.
+- Sass `@import` becomes `@use` in PR4.
+- The datepicker and datetimepicker files under `frontend/www/third_party` stay as they are. PR3 only sets their popup `z-index`.
 
-## Surface area (measured on `main`)
+## Commands
 
-- 274 files import `vue-property-decorator` (nearly every component).
-- 103 `new Vue(...)` entry points.
-- 267 `.vue` single-file components.
-- 44 files import `bootstrap-vue`; 37 `.vue` files use `<b-*>` components.
-- 19 Jest test files import `bootstrap-vue`.
-- One `v-b-tooltip` directive usage. A large set of `b-icon-*` icons, which
-  BootstrapVueNext does not ship. Those map to an external icon library.
-
-## The stacked PRs
-
-1. **Baseline and tooling (this PR).** Document the verified green starting point and
-   the plan. No source change.
-2. **Vue 3 compatibility runtime.** Move to the Vue 3 migration build with compat mode
-   on. Migrate the class-component runtime (`vue-property-decorator`, `vuex-class`) and
-   the Jest / `@vue/test-utils` runtime. BootstrapVue 2 stays in place. Gate: full Jest
-   suite green under compat.
-3. **BootstrapVueNext swap, part 1.** Replace `bootstrap-vue` with `bootstrap-vue-next`
-   in the user, common, admin, teams, and libinteractive families.
-4. **BootstrapVueNext swap, part 2.** The problem and arena/contest families.
-5. **BootstrapVueNext swap, part 3.** The problem creator (the densest `<b-*>` user).
-6. **Bootstrap 5 CSS cutover.** Flip `bootstrap` 4 to 5 and rewrite remaining raw
-   Bootstrap 4 classes and data attributes to Bootstrap 5. The Vue 3 compat shim stays;
-   it is reused by the ongoing Vue 2 to Vue 3 migration.
-
-The exact split of PRs 3 to 5 may shift once per-family render failures are known. The
-component migrations follow the BootstrapVueNext migration knowledge base.
-
-## Local verification per PR
-
-Run on Node 24 from the PR's branch:
+Run these from the PR3 worktree. Put Node 24.21.0 on `PATH` first.
 
 ```sh
-yarn install
-git submodule update --init --recursive   # first checkout only
+export PATH="$HOME/.nvm/versions/node/v24.21.0/bin:$PATH"
+yarn jest --config stuff/bs5-cutover/jest.config.cjs
+node stuff/bs5-cutover/codemod.mjs --check
+node stuff/bs5-cutover/integrity.mjs --commit 4e88dc6bd
+node stuff/bs5-cutover/scan.mjs
+node stuff/bs5-cutover/smoke.mjs
+node stuff/bs5-cutover/check-trail.mjs
 yarn test
 yarn build-development-frontend
+yarn webpack --config-name=style --mode=development
 ```
 
-Cypress and other end-to-end checks run in CI on the fork rather than locally.
+Run `yarn test` and a webpack build one after the other. Running them together has crashed Jest workers in this repo.

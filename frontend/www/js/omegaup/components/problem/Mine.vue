@@ -1,20 +1,13 @@
 <template>
   <div>
-    <div
+    <BAlert
       v-if="privateProblemsAlert"
-      class="alert alert-info alert-dismissible fade show"
-      role="alert"
+      :model-value="true"
+      dismissible
+      variant="info"
     >
       {{ T.messageMakeYourProblemsPublic }}
-      <button
-        type="button"
-        class="close"
-        data-dismiss="alert"
-        aria-label="Close"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+    </BAlert>
     <div class="card">
       <h5 class="card-header">{{ T.myproblemsListMyProblems }}</h5>
       <div class="card-body px-2 px-sm-4">
@@ -38,7 +31,7 @@
             >{{ T.wordsSearch }}</a
           >
         </div>
-        <div class="form-row">
+        <div class="row g-2">
           <div class="col">
             <div class="form-check">
               <label class="form-check-label">
@@ -60,7 +53,7 @@
             <select
               v-model="allProblemsVisibilityOption"
               data-selected-problems
-              class="custom-select pl-1 pl-sm-3"
+              class="form-select ps-1 ps-sm-3"
             >
               <option selected value="-1">{{ T.forSelectedItems }}</option>
               <option value="1">{{ T.makePublic }}</option>
@@ -105,12 +98,12 @@
                   :value="problem"
                 />
               </td>
-              <td class="text-right align-middle">
+              <td class="text-end align-middle">
                 {{ problem.problem_id }}
               </td>
               <td class="d-flex align-items-center">
-                <div class="d-inline-block ml-2">
-                  <a class="mr-1" :href="`/arena/problem/${problem.alias}/`">{{
+                <div class="d-inline-block ms-2">
+                  <a class="me-1" :href="`/arena/problem/${problem.alias}/`">{{
                     problem.title
                   }}</a>
                   <font-awesome-icon
@@ -272,11 +265,12 @@ library.add(
   faExclamationTriangle,
   faBan,
 );
-import { BModal } from 'bootstrap-vue-next';
+import { BAlert, BModal } from 'bootstrap-vue-next';
 
 @Component({
   emits: ['change-visibility'],
   components: {
+    BAlert,
     BModal,
     FontAwesomeIcon,
     'omegaup-common-paginator': common_Paginator,

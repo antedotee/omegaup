@@ -126,7 +126,6 @@ import omegaup_Markdown from '../Markdown.vue';
 import arena_Scoreboard from './Scoreboard.vue';
 import problem_Details from '../problem/Detailsv2.vue';
 
-import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import { Tabs } from './Coursev2_types';
@@ -188,5 +187,5 @@ export default toNative(ArenaCourse);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 </style>

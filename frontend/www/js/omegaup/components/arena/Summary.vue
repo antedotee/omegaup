@@ -157,7 +157,7 @@ export default toNative(Summary);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 
 .summary {
   background: var(--arena-summary-background-color);

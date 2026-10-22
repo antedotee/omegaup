@@ -280,7 +280,7 @@ describe('Test IDE', () => {
     cy.clearAllSessionStorage();
     cy.reload();
 
-    cy.get('.close:visible').each(($button) => {
+    cy.get('.btn-close:visible').each(($button) => {
       cy.wrap($button).click();
     });
 

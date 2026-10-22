@@ -50,5 +50,5 @@ export default toNative(EmptyState);
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../sass/main.scss';
+@import '../../../../sass/site';
 </style>

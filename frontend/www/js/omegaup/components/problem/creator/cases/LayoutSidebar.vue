@@ -49,7 +49,7 @@
               "
             >
               <div class="d-flex">
-                <i class="bi bi-pencil text-success pt-1 mr-3" />
+                <i class="bi bi-pencil text-success pt-1 me-3" />
                 {{ T.problemCreatorRenameLayout }}
               </div>
             </b-dropdown-item>
@@ -58,7 +58,7 @@
               @click="enforceLayoutToTheSelectedCase(layout.layoutID)"
             >
               <div class="d-flex">
-                <i class="bi bi-arrow-left-right text-success pt-1 mr-3" />
+                <i class="bi bi-arrow-left-right text-success pt-1 me-3" />
                 {{ T.problemCreatorLayoutLoadToSelected }}
               </div>
             </b-dropdown-item>
@@ -67,7 +67,7 @@
               @click="enforceLayoutToAllCases(layout.layoutID)"
             >
               <div class="d-flex">
-                <i class="bi bi-arrow-repeat text-success pt-1 mr-3" />
+                <i class="bi bi-arrow-repeat text-success pt-1 me-3" />
                 {{ T.problemCreatorLayoutLoadToAll }}
               </div>
             </b-dropdown-item>
@@ -76,7 +76,7 @@
               @click="copyLayout(layout.layoutID)"
             >
               <div class="d-flex">
-                <i class="bi bi-box-arrow-in-down text-success pt-1 mr-3" />
+                <i class="bi bi-box-arrow-in-down text-success pt-1 me-3" />
                 {{ T.problemCreatorLayoutCopy }}
               </div>
             </b-dropdown-item>
@@ -85,7 +85,7 @@
               @click="removeLayout(layout.layoutID)"
             >
               <div class="d-flex">
-                <i class="bi bi-trash text-danger pt-1 mr-3" />
+                <i class="bi bi-trash text-danger pt-1 me-3" />
                 {{ T.problemCreatorLayoutDelete }}
               </div>
             </b-dropdown-item>
@@ -102,7 +102,7 @@
                         class="d-flex justify-content-between"
                         align-v="center"
                       >
-                        <b-col cols="4" class="mt-2 mb-2 pl-2 pr-1">
+                        <b-col cols="4" class="mt-2 mb-2 ps-2 pe-1">
                           <b-form-input
                             :model-value="lineInfo.label"
                             size="sm"
@@ -110,7 +110,7 @@
                             @update:model-value="lineInfo.label = $event"
                           />
                         </b-col>
-                        <b-col cols="6" class="pl-0 pr-0 text-center">
+                        <b-col cols="6" class="ps-0 pe-0 text-center">
                           <b-dropdown
                             data-line-info-dropdown
                             :text="getLineNameFromKind(lineInfo.data.kind)"
@@ -173,12 +173,12 @@
             <b-button
               data-layout-add-line-info
               variant="light"
-              class="mr-2"
+              class="me-2"
               @click="addNewLineInfoToLayout(layout.layoutID)"
             >
               <div class="container">
                 <div class="row">
-                  <i class="bi bi-plus-square text-info mr-2 pt-1" />
+                  <i class="bi bi-plus-square text-info me-2 pt-1" />
                   {{ T.problemCreatorLayoutAddLineInfo }}
                 </div>
               </div>
