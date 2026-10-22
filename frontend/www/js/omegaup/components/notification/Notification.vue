@@ -7,10 +7,9 @@
       </div>
       <button
         class="btn-close"
+        :aria-label="T.wordsClose"
         @click.prevent="$emit('remove', notification, null)"
-      >
-        ❌
-      </button>
+      ></button>
     </div>
     <div
       class="w-100 d-flex align-items-center pt-1"
@@ -55,6 +54,7 @@ import omegaup_Markdown from '../Markdown.vue';
 })
 class Notification extends Vue {
   @Prop() notification!: types.Notification;
+  T = T;
 
   get iconUrl(): string {
     if (this.notification.contents.body) {

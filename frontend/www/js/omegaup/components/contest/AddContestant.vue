@@ -80,9 +80,10 @@
             </td>
             <td class="text-center">
               <button
-                class="btn-close float-none"
+                class="btn-close"
                 type="button"
                 :title="T.contestAdduserRegisteredUserDelete"
+                :aria-label="T.contestAdduserRegisteredUserDelete"
                 @click="$emit('remove-user', user)"
               ></button>
             </td>

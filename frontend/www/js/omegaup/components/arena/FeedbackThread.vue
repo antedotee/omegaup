@@ -15,12 +15,11 @@
           :linkify="true"
         ></omegaup-user-username>
         <button
-          class="btn-close btn-sm"
+          class="btn-close float-end"
           type="button"
+          :aria-label="T.wordsDelete"
           @click.prevent="onDeleteFeedbackThread"
-        >
-          ❌
-        </button>
+        ></button>
       </div>
       <div class="card-body">
         <textarea

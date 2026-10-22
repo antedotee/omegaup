@@ -71,8 +71,9 @@
             </td>
             <td>
               <button
-                class="btn-close"
+                class="btn-close float-end"
                 type="button"
+                :aria-label="T.wordsDelete"
                 @click="$emit('emit-remove-student', student)"
               ></button>
             </td>

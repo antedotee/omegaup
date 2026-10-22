@@ -14,12 +14,11 @@
       </template>
       <button
         v-if="currentFeedback.status === FeedbackStatus.InProgress"
-        class="btn-close btn-sm"
+        class="btn-close float-end"
         type="button"
+        :aria-label="T.wordsDelete"
         @click.prevent="onDeleteFeedback"
-      >
-        ❌
-      </button>
+      ></button>
     </div>
     <div class="card-body">
       <textarea

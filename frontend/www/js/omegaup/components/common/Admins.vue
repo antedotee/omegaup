@@ -2,7 +2,7 @@
   <div class="card mb-3">
     <div class="card-body">
       <form class="form" @submit.prevent="$emit('add-admin', username.key)">
-        <div class="mb-3 mb-0">
+        <div class="mb-0">
           <label class="fw-bold w-100"
             >{{ T.wordsAdmin }}
             <font-awesome-icon
@@ -19,7 +19,7 @@
             ></omegaup-common-typeahead>
           </label>
         </div>
-        <div class="mb-3 mb-0">
+        <div class="mb-0">
           <label>
             <input
               v-model="showSiteAdmins"
@@ -67,7 +67,8 @@
               <button
                 v-if="admin.role === 'admin'"
                 type="button"
-                class="btn-close float-none"
+                class="btn btn-link p-0 text-body"
+                :aria-label="T.wordsDelete"
                 @click="$emit('remove-admin', admin.username)"
               >
                 <font-awesome-icon :icon="['fas', 'trash']" size="xs" />

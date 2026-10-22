@@ -6,7 +6,8 @@
     <div class="justify-content-end">
       <button
         type="button"
-        class="btn-close"
+        class="btn-close float-end"
+        :aria-label="T.wordsClose"
         @click="showContestInfo = false"
       ></button>
     </div>

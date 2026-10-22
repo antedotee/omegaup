@@ -5,7 +5,7 @@
         class="form"
         @submit.prevent="$emit('add-group-teaching-assistant', group.key)"
       >
-        <div class="mb-3 mb-0">
+        <div class="mb-0">
           <label class="fw-bold w-100"
             >{{ T.courseEditGroupTeachingAssistant }}
             <font-awesome-icon
@@ -56,8 +56,9 @@
           <td class="text-center">
             <button
               v-if="groupTeachingAssistant.name !== 'teaching_assistant'"
-              class="btn-close float-none"
+              class="btn-close"
               type="button"
+              :aria-label="T.wordsDelete"
               @click="
                 $emit(
                   'remove-group-teaching-assistant',

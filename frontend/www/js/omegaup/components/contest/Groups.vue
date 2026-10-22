@@ -37,8 +37,9 @@
           </td>
           <td class="text-center">
             <button
-              class="btn-close float-none"
+              class="btn-close"
               type="button"
+              :aria-label="T.wordsDelete"
               @click="$emit('emit-remove-group', group.alias)"
             ></button>
           </td>

@@ -347,7 +347,12 @@
         class="alert alert-info alert-dismissible fade show mentor-can-choose-coder"
         role="alert"
       >
-        <button type="button" class="btn-close" data-dismiss="alert"></button>
+        <button
+          type="button"
+          class="btn-close"
+          :aria-label="T.wordsClose"
+          data-dismiss="alert"
+        ></button>
         <omegaup-markdown
           :markdown="T.coderOfTheMonthCanBeChosenManually"
         ></omegaup-markdown>

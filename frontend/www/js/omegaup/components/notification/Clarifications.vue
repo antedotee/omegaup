@@ -32,11 +32,10 @@
           <hr class="w-100 my-2" />
           <div class="w-100 justify-content-between">
             <button
-              class="btn-close"
+              class="btn-close float-end"
+              :aria-label="T.wordsClose"
               @click.prevent="onCloseClicked(clarification)"
-            >
-              ❌
-            </button>
+            ></button>
           </div>
           <div class="w-100 align-items-center pt-1 notification-link">
             <a :href="anchor(clarification)">

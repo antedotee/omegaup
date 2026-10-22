@@ -6,6 +6,7 @@
           <button
             class="btn-close"
             type="button"
+            :aria-label="T.wordsClose"
             data-dismiss="modal"
             @click.prevent="$emit('close')"
           ></button>
@@ -38,9 +39,11 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, toNative } from 'vue-facing-decorator';
+import T from '../../lang';
 
 @Component
 class Paginator extends Vue {
+  T = T;
   @Prop() question!: string;
   @Prop() answerYes!: string;
   @Prop() answerNo!: string;

@@ -1,17 +1,23 @@
 <template>
   <div data-overlay-popup>
-    <button type="button" class="btn-close" @click="$emit('dismiss')">
-      ❌
-    </button>
+    <button
+      type="button"
+      class="btn-close float-end"
+      :aria-label="T.wordsClose"
+      @click="$emit('dismiss')"
+    ></button>
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, toNative } from 'vue-facing-decorator';
+import T from '../lang';
 
 @Component
-class OverlayPopup extends Vue {}
+class OverlayPopup extends Vue {
+  T = T;
+}
 export default toNative(OverlayPopup);
 </script>
 

@@ -47,7 +47,8 @@
           <td v-else></td>
           <td v-if="!request.accepted" class="text-center">
             <button
-              class="btn-close float-none text-danger mx-2"
+              class="btn-close text-danger mx-2"
+              :aria-label="T.wordsDeny"
               @click="toggleFeedbackModal(request.username)"
             ></button>
             <b-modal
@@ -65,7 +66,8 @@
               ></b-form-input>
             </b-modal>
             <button
-              class="btn-close float-none text-success mx-2"
+              class="btn btn-link p-0 mx-2 text-success text-decoration-none fw-bold fs-4 lh-1"
+              :aria-label="T.wordsAccept"
               @click="$emit('accept-request', { username: request.username })"
             >
               ✓
