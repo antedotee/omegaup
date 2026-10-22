@@ -331,11 +331,10 @@
                 <button
                   v-if="!!statusHelp(run)"
                   type="button"
-                  :data-content="statusHelp(run)"
-                  data-toggle="popover"
-                  data-trigger="focus"
+                  v-b-popover.focus.right="{ body: statusHelp(run) }"
+                  data-run-status-help
                   class="btn-outline-dark btn-sm"
-                  @click="showVerdictHelp"
+                  @click="focusStatusHelp"
                 >
                   <font-awesome-icon :icon="['fas', 'question-circle']" />
                 </button>
@@ -522,6 +521,7 @@ import {
   faCheckCircle,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import { vBPopover } from 'bootstrap-vue-next';
 
 library.add(faQuestionCircle);
 library.add(faRedoAlt);
@@ -534,13 +534,6 @@ library.add(faClock);
 library.add(faCalendarAlt);
 library.add(faCheckCircle);
 library.add(faTimesCircle);
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface JQuery {
-    popover(action: string): JQuery;
-  }
-}
 
 export enum MemoryStatus {
   NotAvailable = 'MEMORY_NOT_AVAILABLE',
@@ -591,6 +584,9 @@ export enum PopupDisplayed {
     'omegaup-countdown': omegaup_Countdown,
     'omegaup-common-typeahead': common_Typeahead,
     'omegaup-user-username': user_Username,
+  },
+  directives: {
+    'b-popover': vBPopover,
   },
 })
 class RunsForCourses extends Vue {
@@ -816,8 +812,8 @@ class RunsForCourses extends Vue {
     return `${(run.runtime / 1000).toFixed(2)} s`;
   }
 
-  showVerdictHelp(ev: Event): void {
-    $(ev.target as HTMLElement).popover('show');
+  focusStatusHelp(ev: Event): void {
+    (ev.currentTarget as HTMLElement).focus();
   }
 
   statusClass(run: types.Run): string {

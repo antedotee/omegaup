@@ -74,10 +74,13 @@ describe('Runs.vue', () => {
         username: null,
       },
     });
-    const selectedRun = wrapper.find('td button[data-toggle=popover]');
-
-    expect(selectedRun.attributes('data-content')).toContain(T.verdictWA);
-    expect(selectedRun.attributes('data-content')).toContain(T.verdictHelpWA);
+    const selectedRun = wrapper.find('[data-run-status-help]');
+    expect(selectedRun.exists()).toBe(true);
+    expect(selectedRun.attributes('data-toggle')).toBeUndefined();
+    await selectedRun.trigger('focus');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain(T.verdictWA);
+    expect(wrapper.text()).toContain(T.verdictHelpWA);
   });
 
   const baseRunData: types.Run = {

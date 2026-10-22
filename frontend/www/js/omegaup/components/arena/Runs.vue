@@ -297,11 +297,10 @@
                 <button
                   v-if="!!statusHelp(run)"
                   type="button"
-                  :data-content="statusHelp(run)"
-                  data-toggle="popover"
-                  data-trigger="focus"
+                  v-b-popover.focus.right="{ body: statusHelp(run) }"
+                  data-run-status-help
                   class="btn-outline-dark btn-sm"
-                  @click="showVerdictHelp"
+                  @click="focusStatusHelp"
                 >
                   <font-awesome-icon :icon="['fas', 'question-circle']" />
                 </button>
@@ -465,19 +464,13 @@ import {
   faExternalLinkAlt,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
+import { vBPopover } from 'bootstrap-vue-next';
 library.add(faQuestionCircle);
 library.add(faRedoAlt);
 library.add(faBan);
 library.add(faSearchPlus);
 library.add(faExternalLinkAlt);
 library.add(faTimes);
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface JQuery {
-    popover(action: string): JQuery;
-  }
-}
 
 // DisqualificationType and PopupDisplayed are declared in ./Runs_types and
 // re-exported here so existing SFC importers keep working while plain `.ts`
@@ -495,6 +488,7 @@ export { DisqualificationType, PopupDisplayed };
   },
   directives: {
     infiniteScroll,
+    'b-popover': vBPopover,
   },
 })
 class Runs extends Vue {
@@ -693,8 +687,8 @@ class Runs extends Vue {
     return '—';
   }
 
-  showVerdictHelp(ev: Event): void {
-    $(ev.target as HTMLElement).popover('show');
+  focusStatusHelp(ev: Event): void {
+    (ev.currentTarget as HTMLElement).focus();
   }
 
   statusClass(run: types.Run): string {
