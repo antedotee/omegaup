@@ -1,0 +1,18 @@
+ts	phase	decision	why	evidence	result
+2026-10-19	A-frame	discard prior worktrees + chore/bootstrap-5-* + codex/* branches	user says prior attempt failed; start fresh from main	git worktree list showed 5 superpowers worktrees + 3 codex worktrees	neglected
+2026-10-19	A-frame	baseline is vue 2.7.16 + bootstrap 4.6 + bootstrap-vue 2.21.2	package.json on main	read package.json	recorded
+2026-10-19	A-frame	surface: 274 vpd files, 103 new-Vue entrypoints, 44 bootstrap-vue imports, 37 .vue with <b-*>, 19 bvue test files	grep counts under frontend/www/js	quantified	recorded
+2026-10-19	A-frame	local node_modules/bootstrap-vue dist is incomplete (missing common.js + .css); node is v20 but engines wants >=24	jest run failed to resolve bootstrap-vue; ls of dist	clean reinstall required before trusting baseline	flagged
+2026-10-19	A-frame	stacked PRs target origin (antedotee fork), each PR base = prior branch	user confirmed fork-based stacked review	user instruction	decided
+2026-10-19	A-frame	keep compat shim in PR6 (reused by ongoing vue2->vue3 work)	user instruction	user instruction	decided
+2026-10-19	A-frame	cypress/e2e deferred to CI at antedotee/omegaup; jest runs locally	user instruction	user instruction	decided
+2026-10-19	A-frame	cannot write .kiro/settings/mcp.json (kiro-scope deny); will web_fetch BVN docs URL for migration guidance instead	fs_write denied	tool denial	workaround
+2026-10-19	B-design	BVN MCP confirmed reachable; fetched migration overview	user added mcp	fetch_migration_overview returned KB index	confirmed
+2026-10-19	B-design	component inventory: alert badge breadcrumb button card grid collapse dropdown form(checkbox/group/input/select/textarea) modal nav pagination popover sidebar tabs table + v-b-tooltip + many b-icon-*	grep distinct tags	enumerated	recorded
+2026-10-19	B-design	b-icon-* pack dropped in BVN -> must map to external icon lib; biggest known migration risk	BVN KB has no bicon entry; known BVN change	inferred	flagged
+2026-10-19	B-design	Node 24 available: nvm v24.21.0 and brew node@24 v24.6.0	version check	measured	recorded
+2026-10-19	PR1	baseline GREEN on node24 after yarn install + submodule init: 193/193 suites, 927 pass 3 skip	jest full run	measured	VERIFIED
+2026-10-19	PR1	63 suite failures were uninitialized submodules (pagedown et al), NOT a source regression	submodule status showed uninitialized; passed after init	root-caused	resolved
+2026-10-19	PR1	PR1 ships docs (migration plan + setup note) only, no source change; it pins the verified green starting point	foundational-thinking: scaffold+verify before features	decision	decided
+2026-10-19	PR1	webpack build-development-frontend compiled successfully in ~19s on node24	build log	measured	VERIFIED
+2026-10-19	PR1	wrote docs/migration/bootstrap5-bootstrapvuenext-plan.md	PR1 deliverable	authored	done
