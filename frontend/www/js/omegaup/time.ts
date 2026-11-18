@@ -1,3 +1,4 @@
+// ci-demo: throwaway edit to exercise the frontend CI path.
 import formatDuration from 'date-fns/formatDuration';
 import intervalToDuration from 'date-fns/intervalToDuration';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
